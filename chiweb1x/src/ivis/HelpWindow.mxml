@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+	horizontalAlign="left"
+	showCloseButton="true"
+	close="closeHandler(event)"
+	initialize="init(event)"
+	title="Quick Help"
+	verticalGap="0"
+	xmlns:ivis="ivis.*">
+	
+	<!--mx:Form verticalGap="0">
+		<mx:Label text="Editing" fontWeight="bold"/>
+		<mx:FormItem label="Selection">
+			<mx:Label text="Click on Node/Edge" />
+		</mx:FormItem>
+		<mx:FormItem label="Delete Selection">
+			<mx:HBox>
+				<mx:Label text="Press Delete toolbar button" />
+				<mx:Image source="@Embed(source='assets/delete.png')" height="16"/>
+			</mx:HBox>
+		</mx:FormItem>
+		<mx:FormItem label="Show Inspector">
+			<mx:Label text="Double click on Node/Edge/Canvas" />
+		</mx:FormItem>
+		<mx:FormItem label="Create Node">
+			<mx:Label text="Select'Create Node' tool, click on canvas"/>
+		</mx:FormItem>
+		<mx:FormItem label="Create Compound Node">
+			<mx:Label text="Select'Create Compound Node' tool, click on canvas" />
+		</mx:FormItem>
+		<mx:FormItem label="Create Edge">
+			<mx:Label text="Select'Create Edge' tool, click on the source Node, then on the target Node" />
+		</mx:FormItem>
+		<mx:FormItem label="Move Node into a Compound Node">
+			<mx:Label text="Ctrl+Click on a Node, drag into a compound Node, then release" />
+		</mx:FormItem>
+	</mx:Form-->
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Label;
+			import mx.containers.FormItem;
+			import mx.containers.Form;
+			import mx.containers.Canvas;
+			import mx.controls.Spacer;
+			import mx.controls.Image;
+			import mx.core.ScrollPolicy;
+			import mx.controls.TextArea;
+			import mx.containers.HBox;
+			import mx.managers.PopUpManager;
+			
+			[Embed(source="assets/zoom-in.png")]
+			private var zoomInIcon: Class
+
+			[Embed(source="assets/zoom-out.png")]
+			private var zoomOutIcon: Class
+
+			[Embed(source="assets/delete.png")]
+			private var deleteIcon: Class
+
+			private var items: Array = [
+					{ label: "Pan", desc: "Alt + mouse drag" }, 
+					{ label: "Zoom in", desc: "Mouse wheel up", icon: zoomInIcon }, 
+					{ label: "Zoom out", desc: "Mouse wheel down", icon: zoomOutIcon }, 
+					{ label: "Select", desc: "Click on Node/Edge" }, 
+					{ label: "Multiple Selection", desc: "Ctrl + click on Node/Edge" }, 
+					{ label: "Multiple Selection", desc: "Click on canvas, draw a selection rectangle" }, 
+					{ label: "Delete", desc: "Press Dlt or use toolbar button", icon: deleteIcon }, 
+					{ label: "Show Inspector", desc: "Double click on Node/Edge/Canvas" }, 
+					{ label: "Create Node", desc: "Select 'Create Node' tool, click on canvas" }, 
+					{ label: "Create Compound Node", desc: "Select 'Create Compound Node' tool, click on canvas" }, 
+					{ label: "Create Edge", desc: "Select 'Create Edge' tool, click on a source Node, then on a target Node" }, 
+					{ label: "Create Bend", desc: "Click on an Edge and drag" }, 
+					{ label: "Remove Bend", desc: "Click on a Bend and drag to straighten edge" }, 
+					{ label: "Resize Node", desc: "Select Node(s), click on a grapple and drag" }, 
+					{ label: "Move Node into a Compound Node", desc: "Ctrl + click on a Node, drag into a Compound Node, then release" }, 
+					{ label: "Move Node out of a Compound Node", desc: "Ctrl + click on a child Node, drag out of its Compound Node, then release" }, 
+					{ label: "Marquee Zoom", desc: "Select 'Marquee Zoom' tool, click on canvas and drag" }, 
+					{ label: "Marquee Zoom", desc: "Click on a point in Overview window and drag" }, 
+				]
+			
+			private function init(e: Event): void
+			{
+				var form:Form = new Form
+				
+				for each(var i:* in items)
+				{
+					var fi: FormItem = new FormItem
+					fi.label = i.label
+					var l: Label = new Label
+					l.text = i.desc
+					fi.addChild(l)
+					form.addChild(fi)
+				}
+				
+				this.addChild(form)
+/*				for each(var i:* in items)
+				{
+					var hb: HBox = new HBox
+					
+					var ta: AutoResizeTextArea = new AutoResizeTextArea
+					ta.explicitWidth = 85
+					ta.text = i.label
+					ta.editable = false
+					ta.selectable = false
+//					ta.condenseWhite = true
+					ta.setStyle("fontWeight", "bold")
+					ta.setStyle("textAlign", "right")
+					ta.setStyle("borderThickness", "0")
+					ta.addEventListener("creationComplete", function(e: Event): void {
+						trace("h1=" + e.target.height)
+					})
+					hb.addChild(ta)
+					
+					if(i.icon)
+					{
+						var img: Image = new Image
+						img.source = i.icon
+						img.width = 16
+						hb.addChild(img)
+					}
+					else
+					{
+						var sp: Spacer = new Spacer
+						sp.width = 16
+						hb.addChild(sp)
+					}
+
+					ta = new AutoResizeTextArea
+					ta.explicitWidth = 300
+					ta.text = i.desc
+					ta.selectable = false
+					ta.editable = false
+//					ta.condenseWhite = true
+					ta.setStyle("borderThickness", "0")
+					hb.addChild(ta)
+					ta.addEventListener("creationComplete", function(e: Event): void {
+						trace("h2=" + e.target.height)
+					})
+					
+					this.addChild(hb)
+				}*/
+			}
+			
+			private function closeHandler(e: Event): void
+			{
+				PopUpManager.removePopUp(this)
+			}
+
+		]]>
+	</mx:Script>
+</mx:TitleWindow>

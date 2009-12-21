@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+* Authors: Ebrahim Rajabzadeh
+*
+* Copyright: i-Vis Research Group, Bilkent University, 2009 - present 
+-->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+	layout="vertical"
+	width="450"
+	height="330"
+	title="Layout Properties"
+	showCloseButton="true"
+	close="closeHandler(event)"
+	creationComplete="initValues(event)"
+	xmlns:ivis="ivis.*">
+	
+	<mx:VBox width="100%" height="100%">
+		
+	<mx:TabNavigator id="tn" width="100%" height="100%">
+		<mx:VBox label="General">
+			<mx:HBox paddingLeft="10" paddingRight="10" width="100%" height="100%">
+				<ivis:TitledBorderBox title="Animation" width="100%" layout="vertical" borderColor="0xaaaaaa">
+					<mx:CheckBox id="aol" label="Animate on Layout"/>
+				</ivis:TitledBorderBox>
+				<ivis:TitledBorderBox title="Layout Quality" width="100%" layout="vertical" borderColor="0xaaaaaa">
+				<mx:Spacer width="100" />
+					<mx:RadioButtonGroup id="quality" />
+					<mx:RadioButton id="q1" label="Draft" groupName="quality" value="{Graph.DRAFT_QUALITY}"/>
+					<mx:RadioButton id="q2" label="Default" groupName="quality" value="{Graph.DEFAULT_QUALITY}"/>
+					<mx:RadioButton id="q3" label="Proof" groupName="quality" value="{Graph.PROOF_QUALITY}" />
+				</ivis:TitledBorderBox>
+
+			</mx:HBox>
+		</mx:VBox>
+		<mx:VBox label="CoSE">
+			<mx:VBox label="Tuning" paddingLeft="10" paddingRight="10" width="100%">
+				<ivis:TitledBorderBox title="Tuning" width="100%" layout="vertical" borderColor="0xaaaaaa">
+				<mx:Form creationComplete="initCoSEValues(event)">
+					<mx:FormItem label="Spring Strength" height="22">
+						<mx:HSlider id="ssSlider" minimum="0.1" maximum="10" showTrackHighlight="true"/>
+					</mx:FormItem>
+					<mx:FormItem label="Repulsion Strength" height="22">
+						<mx:HSlider id="rsSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
+					</mx:FormItem>
+					<mx:FormItem label="Gravity Strength" height="22">
+						<mx:HSlider id="gsSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
+					</mx:FormItem>
+					<mx:FormItem label="Compound Gravity Strength" height="22">
+						<mx:HSlider id="cgsSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
+					</mx:FormItem>
+					<mx:FormItem label="Desired Edge Length" height="22">
+						<mx:TextInput id="delInput" width="60" />
+					</mx:FormItem>
+				</mx:Form>
+				</ivis:TitledBorderBox>
+			</mx:VBox>
+		</mx:VBox>
+		<mx:VBox label="CiSE">
+			<mx:VBox label="Tuning">
+				<mx:Form>
+					<mx:FormItem label="Node Separation" height="22">
+						<mx:TextInput width="60" />
+					</mx:FormItem>
+					<mx:FormItem label="Desired Edge Length" height="22">
+						<mx:TextInput width="60" />
+					</mx:FormItem>
+					<mx:FormItem label="Inter-Cluster Edge Length Factor" height="22">
+						<mx:HSlider  showTrackHighlight="true"/>
+					</mx:FormItem>
+				</mx:Form>
+			</mx:VBox>
+		</mx:VBox>
+	</mx:TabNavigator>
+	
+	</mx:VBox>
+	
+	<mx:ControlBar width="100%">
+		<mx:Spacer width="100%" />
+		<mx:Button id="okButton" label="OK" width="70" click="closeHandler(event)"/>
+		<mx:Button id="cancelButton" label="Cancel" width="70" click="closeHandler(event)"/>
+	</mx:ControlBar>
+
+	<mx:Binding source="ssSlider.value" destination="springStrength" />
+	<mx:Binding source="rsSlider.value" destination="repulsionStrength" />
+	<mx:Binding source="gsSlider.value" destination="gravityStrength" />
+	<mx:Binding source="cgsSlider.value" destination="compoundGravityStrength" />
+	<mx:Binding source="delInput.text" destination="idealEdgeLength" />
+
+	<mx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.containers.TabNavigator;
+			import mx.managers.PopUpManager;
+			import mx.events.CloseEvent;
+			
+//			[Bindable]
+//			private var quality: int
+
+			public var animateOnLayout: Boolean
+
+			public var springStrength: Number
+
+			public var repulsionStrength: Number
+
+			public var gravityStrength: Number
+
+			public var compoundGravityStrength: Number
+
+			public var idealEdgeLength: String
+
+			private function initValues(e: Event): void
+			{
+				// initialize geenral options
+				var opts:* = Graph.getInstance().generalOptions
+				animateOnLayout = opts.animateOnLayout
+				aol.selected = Boolean(animateOnLayout)
+				quality.selectedValue = int(opts.quality)
+			}
+			
+			private function initCoSEValues(e: Event):void
+			{
+				// initialize CoSE options
+				var opts:* = Graph.getInstance().CoSEOptions
+				ssSlider.value = springStrength = opts.springStrength
+				rsSlider.value = repulsionStrength = opts.repulsionStrength
+				gsSlider.value = gravityStrength = opts.gravityStrength
+				cgsSlider.value = compoundGravityStrength = opts.compoundGravityStrength
+				delInput.text = idealEdgeLength = opts.idealEdgeLength
+				
+			}
+			
+			private function closeHandler(e: Event): void
+			{
+				if(e.target == okButton)
+				{
+					var g: Graph = Graph.getInstance()
+					g.generalOptions = {
+						quality: int(quality.selectedValue),
+						animateOnLayout: Boolean(aol.selected)
+					}
+					
+					g.CoSEOptions = {
+						springStrength: int(springStrength),
+						repulsionStrength: int(repulsionStrength),
+						gravityStrength: int(gravityStrength),
+						compoundGravityStrength: int(compoundGravityStrength),
+						idealEdgeLength: int(idealEdgeLength)
+					}
+				}
+				PopUpManager.removePopUp(this)
+			}
+		]]>
+	</mx:Script>
+</mx:TitleWindow>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+	horizontalAlign="center" showCloseButton="true"
+	close="closeHandler(event)"
+	paddingTop="6" paddingBottom="6">
+
+	<mx:Image source="@Embed(source='assets/ivis-logo.png')"/>
+	<mx:Text>
+		<mx:htmlText>
+			<![CDATA[
+				<b><font size="14" weight="bold">Layout Demo version 1.0</font></b>
+				&#169; i-Vis Research Group, Bilkent University, 2009 - present
+				Computer Engineering Department,
+				Bilkent University,
+				Ankara 06800, TURKEY
+			]]>
+		</mx:htmlText>
+	</mx:Text>
+	<mx:Text textAlign="center" fontSize="10" fontWeight="bold" selectable="true" paddingTop="0" paddingBottom="0" condenseWhite="true" link="linkClicked(event)">
+		<mx:htmlText>
+			<![CDATA[
+				<a href='event:mailto:ivis@cs.bilkent.edu.tr'><font color="#F8B584">ivis@cs.bilkent.edu.tr</font></a>
+				<br>
+				<a href='event:http://www.cs.bilkent.edu.tr/~ivis'><font color="#F8B584">http://www.cs.bilkent.edu.tr/~ivis</font></a>
+			]]>
+		</mx:htmlText>
+	</mx:Text>	
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			private function closeHandler(e: Event): void
+			{
+				PopUpManager.removePopUp(this)
+			}
+			
+			private function linkClicked(e: TextEvent): void
+			{
+				var url:URLRequest = new URLRequest(e.text)
+            	navigateToURL(url)
+			}
+
+		]]>
+	</mx:Script>
+</mx:TitleWindow>
