@@ -155,8 +155,8 @@
 			import ivis.*;
 			
 			private var loader: MultipartURLLoader = new MultipartURLLoader;
-			private var coseUrl: String = "http://localhost:8080/ls1x/layout.jsp"
-			private var ciseUrl: String = "http://localhost:8080/ls1x/layout.jsp"
+			private var coseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
+			private var ciseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
 			
 			private var editMenu: Object
 			private var cursorID: int = -1;
