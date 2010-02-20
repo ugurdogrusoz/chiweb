@@ -155,8 +155,10 @@
 			import ivis.*;
 			
 			private var loader: MultipartURLLoader = new MultipartURLLoader;
-			private var coseUrl: String = "http://139.179.21.69:8080/chilay1x/layout.jsp"
-			private var ciseUrl: String = "http://139.179.21.69:8080/chilay1x/layout.jsp"
+			private var coseUrl: String = "http://139.179.21.69/chilay1x/layout.jsp"
+			private var ciseUrl: String = "http://139.179.21.69/chilay1x/layout.jsp"
+//			private var coseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
+//			private var ciseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
 			
 			private var editMenu: Object
 			private var cursorID: int = -1;
@@ -404,6 +406,7 @@
 				// append options
 				var go:* = g.generalOptions
 				loader.addVariable("layoutQuality", go.quality)
+				loader.addVariable("incremental", go.incremental)
 				loader.addVariable("animateOnLayout", go.animateOnLayout)
 				
 				CursorManager.setBusyCursor();
@@ -418,13 +421,16 @@
 					loader.addVariable("compoundGravityStrength", co.compoundGravityStrength)
 					loader.addVariable("idealEdgeLength", co.idealEdgeLength)
 					loader.addVariable("layoutStyle", "cose")
-					
 					loader.load(coseUrl);
 				}
 				else
 				{
 					// CiSE options
 					ciseLayoutButton.enabled = false;
+					var ci:* = g.CiSEOptions
+					loader.addVariable("nodeSeparation", ci.nodeSeparation)
+					loader.addVariable("desiredEdgeLength", ci.desiredEdgeLength)
+					loader.addVariable("interClusterEdgeLengthFactor", ci.interClusterEdgeLengthFactor)
 					loader.addVariable("layoutStyle", "cise")
 					loader.load(ciseUrl);
 				}				

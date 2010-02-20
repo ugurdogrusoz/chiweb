@@ -21,7 +21,8 @@
 	<mx:TabNavigator id="tn" width="100%" height="100%">
 		<mx:VBox label="General">
 			<mx:HBox paddingLeft="10" paddingRight="10" width="100%" height="100%">
-				<ivis:TitledBorderBox title="Animation" width="100%" layout="vertical" borderColor="0xaaaaaa">
+				<ivis:TitledBorderBox title="General" width="100%" layout="vertical" borderColor="0xaaaaaa">
+					<mx:CheckBox id="inc" label="Incremental Layout"/>
 					<mx:CheckBox id="aol" label="Animate on Layout"/>
 				</ivis:TitledBorderBox>
 				<ivis:TitledBorderBox title="Layout Quality" width="100%" layout="vertical" borderColor="0xaaaaaa">
@@ -36,7 +37,6 @@
 		</mx:VBox>
 		<mx:VBox label="CoSE">
 			<mx:VBox label="Tuning" paddingLeft="10" paddingRight="10" width="100%">
-				<ivis:TitledBorderBox title="Tuning" width="100%" layout="vertical" borderColor="0xaaaaaa">
 				<mx:Form creationComplete="initCoSEValues(event)">
 					<mx:FormItem label="Spring Strength" height="22">
 						<mx:HSlider id="ssSlider" minimum="0.1" maximum="10" showTrackHighlight="true"/>
@@ -51,23 +51,22 @@
 						<mx:HSlider id="cgsSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
 					</mx:FormItem>
 					<mx:FormItem label="Desired Edge Length" height="22">
-						<mx:TextInput id="delInput" width="60" />
+						<mx:TextInput id="odelInput" width="60" />
 					</mx:FormItem>
 				</mx:Form>
-				</ivis:TitledBorderBox>
 			</mx:VBox>
 		</mx:VBox>
 		<mx:VBox label="CiSE">
-			<mx:VBox label="Tuning">
-				<mx:Form>
+			<mx:VBox label="Tuning" paddingLeft="10" paddingRight="10" width="100%">
+				<mx:Form creationComplete="initCiSEValues(event)">
 					<mx:FormItem label="Node Separation" height="22">
-						<mx:TextInput width="60" />
+						<mx:TextInput id="nsInput" width="60" />
 					</mx:FormItem>
 					<mx:FormItem label="Desired Edge Length" height="22">
-						<mx:TextInput width="60" />
+						<mx:TextInput id="idelInput" width="60" />
 					</mx:FormItem>
 					<mx:FormItem label="Inter-Cluster Edge Length Factor" height="22">
-						<mx:HSlider  showTrackHighlight="true"/>
+						<mx:HSlider id="icelfSlider" showTrackHighlight="true"/>
 					</mx:FormItem>
 				</mx:Form>
 			</mx:VBox>
@@ -86,7 +85,10 @@
 	<mx:Binding source="rsSlider.value" destination="repulsionStrength" />
 	<mx:Binding source="gsSlider.value" destination="gravityStrength" />
 	<mx:Binding source="cgsSlider.value" destination="compoundGravityStrength" />
-	<mx:Binding source="delInput.text" destination="idealEdgeLength" />
+	<mx:Binding source="odelInput.text" destination="idealEdgeLength" />
+	<mx:Binding source="nsInput.text" destination="nodeSeparation" />
+	<mx:Binding source="idelInput.text" destination="desiredEdgeLength" />
+	<mx:Binding source="icelfSlider.value" destination="interClusterEdgeLengthFactor" />
 
 	<mx:Script>
 		<![CDATA[
@@ -97,23 +99,23 @@
 			
 //			[Bindable]
 //			private var quality: int
-
+			public var incremental: Boolean
 			public var animateOnLayout: Boolean
-
 			public var springStrength: Number
-
 			public var repulsionStrength: Number
-
 			public var gravityStrength: Number
-
 			public var compoundGravityStrength: Number
-
 			public var idealEdgeLength: String
+			public var nodeSeparation: String
+			public var desiredEdgeLength: String
+			public var interClusterEdgeLengthFactor: Number
 
-			private function initValues(e: Event): void
+			private function initValues(e: Event):void
 			{
-				// initialize geenral options
+				// initialize General options
 				var opts:* = Graph.getInstance().generalOptions
+				incremental = opts.incremental
+				inc.selected = Boolean(incremental)
 				animateOnLayout = opts.animateOnLayout
 				aol.selected = Boolean(animateOnLayout)
 				quality.selectedValue = int(opts.quality)
@@ -122,13 +124,21 @@
 			private function initCoSEValues(e: Event):void
 			{
 				// initialize CoSE options
-				var opts:* = Graph.getInstance().CoSEOptions
-				ssSlider.value = springStrength = opts.springStrength
-				rsSlider.value = repulsionStrength = opts.repulsionStrength
-				gsSlider.value = gravityStrength = opts.gravityStrength
-				cgsSlider.value = compoundGravityStrength = opts.compoundGravityStrength
-				delInput.text = idealEdgeLength = opts.idealEdgeLength
-				
+				var coseOpts:* = Graph.getInstance().CoSEOptions
+				ssSlider.value = springStrength = coseOpts.springStrength
+				rsSlider.value = repulsionStrength = coseOpts.repulsionStrength
+				gsSlider.value = gravityStrength = coseOpts.gravityStrength
+				cgsSlider.value = compoundGravityStrength = coseOpts.compoundGravityStrength
+				odelInput.text = idealEdgeLength = coseOpts.idealEdgeLength
+			}
+
+			private function initCiSEValues(e: Event):void
+			{
+				// initialize CiSE options
+				var ciseOpts:* = Graph.getInstance().CiSEOptions
+				nsInput.text = nodeSeparation = ciseOpts.nodeSeparation
+				idelInput.text = desiredEdgeLength = ciseOpts.desiredEdgeLength
+				icelfSlider.value = interClusterEdgeLengthFactor = ciseOpts.interClusterEdgeLengthFactor
 			}
 			
 			private function closeHandler(e: Event): void
@@ -136,8 +146,10 @@
 				if(e.target == okButton)
 				{
 					var g: Graph = Graph.getInstance()
+
 					g.generalOptions = {
 						quality: int(quality.selectedValue),
+						incremental: Boolean(inc.selected),
 						animateOnLayout: Boolean(aol.selected)
 					}
 					
@@ -147,6 +159,12 @@
 						gravityStrength: int(gravityStrength),
 						compoundGravityStrength: int(compoundGravityStrength),
 						idealEdgeLength: int(idealEdgeLength)
+					}
+
+					g.CiSEOptions = {
+						nodeSeparation: int(nodeSeparation),
+						desiredEdgeLength: int(desiredEdgeLength),
+						interClusterEdgeLengthFactor: int(interClusterEdgeLengthFactor)
 					}
 				}
 				PopUpManager.removePopUp(this)

@@ -62,20 +62,25 @@ package ivis
 		private namespace gmlns = "http://graphml.graphdrawing.org/xmlns";
 		private static var _instance: Graph;
 
-		// general options consts		
+		// General options consts		
 		public static const PROOF_QUALITY:int = 0;
 		public static const DEFAULT_QUALITY:int = 1;
 		public static const DRAFT_QUALITY:int = 2;
 		// CoSE options consts
 		public static const DEFAULT_EDGE_LENGTH:uint = 60;
-		public static const DEFAULT_UNIFORM_LEAFS:Boolean = false;
 		public static const DEFAULT_SPRING_STRENGTH:Number = 1.0;
 		public static const DEFAULT_REPULSION_STRENGTH:Number = 70;
 		public static const DEFAULT_GRAVITY_STRENGTH:Number = 50;
 		public static const DEFAULT_COMPOUND_GRAVITY_STRENGTH:Number = 10;
+		// CiSE options consts
+		public static const DEFAULT_NODE_SEPARATION:uint = 60;
+		public static const DEFAULT_CISE_EDGE_LENGTH:uint = 60;
+		public static const DEFAULT_INTER_CLUSTER_EDGE_LENGTH_FACTOR:Number = 50;
+		
 
 		public var _generalOptions:Object = {
 			quality: DEFAULT_QUALITY,
+			incremental: false,
 			animateOnLayout: true
 		} 
 
@@ -86,7 +91,13 @@ package ivis
 			gravityStrength: DEFAULT_GRAVITY_STRENGTH,
 			compoundGravityStrength: DEFAULT_COMPOUND_GRAVITY_STRENGTH
 		} 
-		
+
+		public var _CiSEOptions:Object = {
+			nodeSeparation: DEFAULT_NODE_SEPARATION,
+			desiredEdgeLength: DEFAULT_CISE_EDGE_LENGTH,
+			interClusterEdgeLengthFactor: DEFAULT_INTER_CLUSTER_EDGE_LENGTH_FACTOR
+		}
+				
 		public function Graph()
 		{
 // 			if (_instance != null)
@@ -1746,6 +1757,16 @@ package ivis
 		public function set CoSEOptions(value: Object): void
 		{
 			this._CoSEOptions = value
+		}
+
+		public function get CiSEOptions(): Object
+		{
+			return this._CiSEOptions
+		}
+		
+		public function set CiSEOptions(value: Object): void
+		{
+			this._CiSEOptions = value
 		}
 	}
 }
