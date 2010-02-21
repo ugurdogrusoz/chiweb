@@ -78,13 +78,13 @@ package ivis
 		public static const DEFAULT_INTER_CLUSTER_EDGE_LENGTH_FACTOR:Number = 50;
 		
 
-		public var _generalOptions:Object = {
+		private var _generalOptions:Object = {
 			quality: DEFAULT_QUALITY,
 			incremental: false,
 			animateOnLayout: true
 		} 
 
-		public var _CoSEOptions:Object = {
+		private var _CoSEOptions:Object = {
 			idealEdgeLength: DEFAULT_EDGE_LENGTH,
 			springStrength: DEFAULT_SPRING_STRENGTH,
 			repulsionStrength: DEFAULT_REPULSION_STRENGTH,
@@ -92,7 +92,7 @@ package ivis
 			compoundGravityStrength: DEFAULT_COMPOUND_GRAVITY_STRENGTH
 		} 
 
-		public var _CiSEOptions:Object = {
+		private var _CiSEOptions:Object = {
 			nodeSeparation: DEFAULT_NODE_SEPARATION,
 			desiredEdgeLength: DEFAULT_CISE_EDGE_LENGTH,
 			interClusterEdgeLengthFactor: DEFAULT_INTER_CLUSTER_EDGE_LENGTH_FACTOR
@@ -1306,7 +1306,8 @@ package ivis
 			n.y = d.(@key == "y");
 			n.width = d.(@key == "width");
 			n.height = d.(@key == "height");
-
+			n.clusterID = d.(@key == "clusterID");
+			
 			var nv: NodeComponent = n.view as NodeComponent;
 			nv.color2 = Utils.colorFromString(d.(@key == "color"));
 			nv.shape = d.(@key == "shape");

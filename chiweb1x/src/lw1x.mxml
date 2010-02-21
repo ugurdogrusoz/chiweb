@@ -138,6 +138,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.core.ByteArrayAsset;
+			import flash.utils.describeType;
 			import mx.collections.ListCollectionView;
 			import mx.core.IFlexDisplayObject;
 			import mx.collections.ArrayCollection;
@@ -161,7 +163,7 @@
 //			private var ciseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
 			
 			private var editMenu: Object
-			private var cursorID: int = -1;
+//			private var cursorID: int = -1;
 			
 			[Embed('assets/cursors/node-cursor.gif')]
    			private var nodeCursor:Class;
@@ -171,6 +173,15 @@
 
 			[Embed('assets/cursors/edge-cursor.gif')]
    			private var edgeCursor:Class;
+
+			[Embed(source='samples/sample-general01.graphml', mimeType='application/octet-stream')]
+			private var sample_general01: Class;
+			
+			[Embed(source='samples/sample-compound01.graphml', mimeType='application/octet-stream')]
+			private var sample_compound01: Class;
+			
+			[Embed(source='samples/sample-clustered01.graphml', mimeType='application/octet-stream')]
+			private var sample_clustered01: Class;
 			
 			[Bindable]
 			private var itemsCollection: ArrayCollection = new ArrayCollection(
@@ -179,6 +190,13 @@
 						[
 							{ label: "New" },
 							{ label: "Load" },
+							{ label: "Sample", children:
+								[
+									{ label: "sample-general01.graphml", xml: sample_general01 }, 
+									{ label: "sample-compound01.graphml", xml: sample_compound01 },
+									{ label: "sample-clustered01.graphml", xml: sample_clustered01 }
+								]
+							},
 							{ label: "Save" } ,
 							{ label: "Save as Image", children:
 								[
@@ -247,11 +265,11 @@
 					return
 				}
 				
-				if(cursorID > 0)
-				{
- 					CursorManager.removeCursor(cursorID)
- 					cursorID = -1
- 				}
+//				if(cursorID > 0)
+//				{
+// 					CursorManager.removeCursor(cursorID)
+// 					cursorID = -1
+// 				}
 				
 				var i: int
 				for(i = 0; i < 5; ++i) {
@@ -263,24 +281,24 @@
 				editMenu.children[i].toggled = true
 				itemsCollection.itemUpdated(editMenu.children[i], "toggled", false, true)
 				
-				if(i == 2) {
-					 cursorID = CursorManager.setCursor(nodeCursor)
-				}
-				else if(i == 3) {
-					 cursorID = CursorManager.setCursor(compNodeCursor)
-				}
-				else if(i == 4) {
-					 cursorID = CursorManager.setCursor(edgeCursor)
-				}
+//				if(i == 2) {
+//					 cursorID = CursorManager.setCursor(nodeCursor)
+//				}
+//				else if(i == 3) {
+//					 cursorID = CursorManager.setCursor(compNodeCursor)
+//				}
+//				else if(i == 4) {
+//					 cursorID = CursorManager.setCursor(edgeCursor)
+//				}
 			}
 			
 			private function menuHandler(e: MenuEvent): void
 			{
 				
-				if(cursorID > 0) {
- 					CursorManager.removeCursor(cursorID)
- 					cursorID = -1
- 				}
+//				if(cursorID > 0) {
+// 					CursorManager.removeCursor(cursorID)
+// 					cursorID = -1
+// 				}
 	
 	 			var l: String = e.label.toString().toLowerCase()
 	
@@ -288,8 +306,12 @@
 					g.reset();
 				else if(l == "load")
 					loadXML()
+				else if(l.search(/sample.+/) == 0) {
+					var s: String = String(new e.item.xml)
+					g.fromGraphML(XML(s))
+				}
 				else if(l == "save")
-					saveXML("xml")
+					saveXML("graphml")
 				else if(l == "png" || l == "jpeg" || l == "svg")
 					saveAsImage(l)
 				else if(l == "select")
@@ -298,15 +320,15 @@
 					g.isMarqueeZooming = true
 				else if(l == "create simple node") {
  					g.isCreatingSimpleNode = true
- 					cursorID = CursorManager.setCursor(nodeCursor)
+// 					cursorID = CursorManager.setCursor(nodeCursor)
  				}
 				else if(l == "create compound node") {
 					g.isCreatingCompoundNode = true
- 					cursorID = CursorManager.setCursor(compNodeCursor)
+// 					cursorID = CursorManager.setCursor(compNodeCursor)
 				}
 				else if(l == "create edge") {
 					g.isAddingEdges = true
- 					cursorID = CursorManager.setCursor(edgeCursor)
+// 					cursorID = CursorManager.setCursor(edgeCursor)
 				}
 				else if(l == "delete selected")
 					deleteSelected()
@@ -346,6 +368,11 @@
                 
 				props.x = (this.width - props.width) / 2
 				props.y = (this.height- props.height) / 2
+			}
+			
+			private function loadSample(xml: XML): void
+			{
+				g.fromGraphML(xml)				
 			}
 			
 			private function loadXML():void {
