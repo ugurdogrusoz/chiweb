@@ -68,10 +68,10 @@ package ivis
 		public static const DRAFT_QUALITY:int = 2;
 		// CoSE options consts
 		public static const DEFAULT_EDGE_LENGTH:uint = 60;
-		public static const DEFAULT_SPRING_STRENGTH:Number = 1.0;
-		public static const DEFAULT_REPULSION_STRENGTH:Number = 70;
+		public static const DEFAULT_SPRING_STRENGTH:Number = 50;
+		public static const DEFAULT_REPULSION_STRENGTH:Number = 50;
 		public static const DEFAULT_GRAVITY_STRENGTH:Number = 50;
-		public static const DEFAULT_COMPOUND_GRAVITY_STRENGTH:Number = 10;
+		public static const DEFAULT_COMPOUND_GRAVITY_STRENGTH:Number = 50;
 		// CiSE options consts
 		public static const DEFAULT_NODE_SEPARATION:uint = 60;
 		public static const DEFAULT_CISE_EDGE_LENGTH:uint = 60;

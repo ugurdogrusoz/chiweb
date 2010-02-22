@@ -38,7 +38,7 @@
 			<mx:VBox label="Tuning" paddingLeft="10" paddingRight="10" width="100%">
 				<mx:Form>
 					<mx:FormItem label="Spring Strength" height="22">
-						<mx:HSlider id="ssSlider" minimum="0.1" maximum="10" showTrackHighlight="true"/>
+						<mx:HSlider id="ssSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
 					</mx:FormItem>
 					<mx:FormItem label="Repulsion Strength" height="22">
 						<mx:HSlider id="rsSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
@@ -65,7 +65,7 @@
 						<mx:TextInput id="idelInput" width="60" />
 					</mx:FormItem>
 					<mx:FormItem label="Inter-Cluster Edge Length Factor" height="22">
-						<mx:HSlider id="icelfSlider" showTrackHighlight="true"/>
+						<mx:HSlider id="icelfSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
 					</mx:FormItem>
 				</mx:Form>
 			</mx:VBox>
