@@ -109,7 +109,10 @@
 			public var _desiredEdgeLength: String
 			public var _interClusterEdgeLengthFactor: Number
 			private static var _lastTab:int = -1;
-			
+			private var _genInited: Boolean = false;
+			private var _coseInited: Boolean = false;
+			private var _ciseInited: Boolean = false;
+
 			private function initTabNavigator(e: Event): void
 			{
 				if(_lastTab >= 0)
@@ -124,6 +127,8 @@
 				this._animateOnLayout = opts.animateOnLayout
 				this.aol.selected = Boolean(this._animateOnLayout)
 				this.quality.selectedValue = int(opts.quality)
+				
+				this._genInited = true
 			}
 			
 			private function initCoSEValues(e: Event):void
@@ -143,6 +148,8 @@
 				 
 				this._idealEdgeLength = coseOpts.idealEdgeLength
 				this.odelInput.text = this._idealEdgeLength 
+				
+				this._coseInited = true
 			}
 
 			private function initCiSEValues(e: Event):void
@@ -156,6 +163,8 @@
 				
 				this._interClusterEdgeLengthFactor = ciseOpts.interClusterEdgeLengthFactor
 				this.icelfSlider.value = this._interClusterEdgeLengthFactor
+				
+				this._ciseInited = true
 			}
 			
 			private function onTabChange(e: Event): void
@@ -169,25 +178,28 @@
 				{
 					var g: Graph = Graph.getInstance()
 
-					g.generalOptions = {
-						quality: int(quality.selectedValue),
-						incremental: Boolean(inc.selected),
-						animateOnLayout: Boolean(aol.selected)
-					}
-					
-					g.CoSEOptions = {
-						springStrength: int(this._springStrength),
-						repulsionStrength: int(this._repulsionStrength),
-						gravityStrength: int(this._gravityStrength),
-						compoundGravityStrength: int(this._compoundGravityStrength),
-						idealEdgeLength: int(this._idealEdgeLength)
-					}
+					if(this._genInited)
+						g.generalOptions = {
+							quality: int(quality.selectedValue),
+							incremental: Boolean(inc.selected),
+							animateOnLayout: Boolean(aol.selected)
+						}
 
-					g.CiSEOptions = {
-						nodeSeparation: int(this._nodeSeparation),
-						desiredEdgeLength: int(this._desiredEdgeLength),
-						interClusterEdgeLengthFactor: int(this._interClusterEdgeLengthFactor)
-					}
+					if(this._coseInited)					
+						g.CoSEOptions = {
+							springStrength: int(this._springStrength),
+							repulsionStrength: int(this._repulsionStrength),
+							gravityStrength: int(this._gravityStrength),
+							compoundGravityStrength: int(this._compoundGravityStrength),
+							idealEdgeLength: int(this._idealEdgeLength)
+						}
+
+					if(this._ciseInited)
+						g.CiSEOptions = {
+							nodeSeparation: int(this._nodeSeparation),
+							desiredEdgeLength: int(this._desiredEdgeLength),
+							interClusterEdgeLengthFactor: int(this._interClusterEdgeLengthFactor)
+						}
 				}
 				PopUpManager.removePopUp(this)
 			}

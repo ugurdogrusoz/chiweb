@@ -61,8 +61,8 @@ package ivis
 					var cp: ColorPicker = new ColorPicker;
 					cp.selectedColor = uint(valueText);
 					_nodeComponent.addEventListener("color1Changed", function(e: Event): void {
-						cp2.selectedColor = _nodeComponent.color1
-					}, false, 0, true)
+						cp.selectedColor = _nodeComponent.color1
+					})
 					cp.addEventListener("change", function(e: ColorPickerEvent): void {
 						_nodeComponent.color1 = e.color;
 					});
@@ -73,7 +73,7 @@ package ivis
 					cp2.selectedColor = uint(valueText);
 					cp2.addEventListener("change", function(e: ColorPickerEvent): void {
 						_nodeComponent.color2 = e.color;
-					}, false, 0, true);
+					});
 					_nodeComponent.addEventListener("color2Changed", function(e: Event): void {
 						cp2.selectedColor = _nodeComponent.color2
 					})

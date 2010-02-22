@@ -25,6 +25,7 @@ package ivis
 	import mx.core.UIComponent;
 	import mx.events.ScrollEvent;
 	import mx.events.SliderEvent;
+	import mx.managers.BrowserManager;
 
 	public class Graph extends Canvas
 	{
@@ -1429,6 +1430,8 @@ package ivis
 		
 		public function reset(): void {
 			
+			BrowserManager.getInstance().setTitle("i-Vis Layout Demo - Untitled");
+
 			// TODO: remove graph inspector??
 			
 			TweenMax.killAllTweens();

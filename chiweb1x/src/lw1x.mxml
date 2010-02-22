@@ -6,7 +6,8 @@
 -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	initialize="init()" xmlns:ivis="ivis.*"
-	width="100%">
+	width="100%"
+	pageTitle="i-Vis Layout Demo - Untitled">
 
 	<mx:Style source="lw.css"/>
 
@@ -138,6 +139,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.managers.BrowserManager;
 			import mx.core.ByteArrayAsset;
 			import flash.utils.describeType;
 			import mx.collections.ListCollectionView;
@@ -174,13 +176,13 @@
 			[Embed('assets/cursors/edge-cursor.gif')]
    			private var edgeCursor:Class;
 
-			[Embed(source='samples/sample-general01.graphml', mimeType='application/octet-stream')]
+			[Embed(source='../samples/sample-general01.graphml', mimeType='application/octet-stream')]
 			private var sample_general01: Class;
 			
-			[Embed(source='samples/sample-compound01.graphml', mimeType='application/octet-stream')]
+			[Embed(source='../samples/sample-compound01.graphml', mimeType='application/octet-stream')]
 			private var sample_compound01: Class;
 			
-			[Embed(source='samples/sample-clustered01.graphml', mimeType='application/octet-stream')]
+			[Embed(source='../samples/sample-clustered01.graphml', mimeType='application/octet-stream')]
 			private var sample_clustered01: Class;
 			
 			[Bindable]
@@ -306,10 +308,8 @@
 					g.reset();
 				else if(l == "load")
 					loadXML()
-				else if(l.search(/sample.+/) == 0) {
-					var s: String = String(new e.item.xml)
-					g.fromGraphML(XML(s))
-				}
+				else if(l.search(/(general|compound|clustered).+/) == 0)
+					loadSample(XML(new e.item.xml))
 				else if(l == "save")
 					saveXML("graphml")
 				else if(l == "png" || l == "jpeg" || l == "svg")
@@ -372,13 +372,15 @@
 			
 			private function loadSample(xml: XML): void
 			{
-				g.fromGraphML(xml)				
+				g.fromGraphML(xml)
 			}
 			
 			private function loadXML():void {
 				var fr: FileReference = new FileReference();
 				fr.addEventListener(Event.COMPLETE, function(e:Event):void {
 					g.fromGraphML(XML(fr.data))
+					var fileName: String = fr.name.replace(/\..*/, "")  
+					BrowserManager.getInstance().setTitle("i-Vis Layout Demo - " + fileName);
 				});
 				fr.addEventListener(IOErrorEvent.IO_ERROR, function():void {
 					trace("error laoding file");
@@ -393,6 +395,8 @@
 			internal function saveXML(format: String = "graphml"):void {
 				var fr: FileReference = new FileReference();
 				fr.addEventListener(Event.COMPLETE, function(e:Event):void {
+					var fileName: String = fr.name.replace(/\..*/, "")  
+					BrowserManager.getInstance().setTitle("i-Vis Layout Demo - " + fileName);
 					trace("file saved successfully");
 				});
 				fr.addEventListener(IOErrorEvent.IO_ERROR, function():void {
@@ -401,8 +405,7 @@
 				fr.addEventListener(Event.SELECT, function(e:Event):void {
 					trace("saving file");
 				});
-				
-				
+			
 				var data: String = format == "graphml" ? g.toGraphML() : ""
 				fr.save(data, "graph." + format);
 			}
