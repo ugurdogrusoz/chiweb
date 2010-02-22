@@ -54,7 +54,7 @@ package ivis
 		private var _inspector: InspectorComponent;
 		private var _overlay: Container;
 		private var _inspectorPos: Point;
-		private var _margin: uint = 0;
+		private var _margin: uint = 10;
 		private var _selectionRect: UIComponent
 		private var _vscroll: ScrollBar = null
 		private var _hscroll: ScrollBar = null
