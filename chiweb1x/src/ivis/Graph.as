@@ -35,6 +35,7 @@ package ivis
 		public static const ZOOM_MAX: Number = 10;
 		public static const DEFAULT_ANIMATION_TIME: Number = 1.0
 		public static const ANIMATION_EASING:* = gs.easing.Expo.easeOut
+		public static const CANVAS_BACKGROUND_COLOR: int = 0xffffff
 		private static const MAP_BACKGROUND_COLOR: uint = 0xffffff
 		
 		private var _animationTime: Number = DEFAULT_ANIMATION_TIME
@@ -131,6 +132,7 @@ package ivis
 			this.verticalScrollPolicy = ScrollPolicy.OFF
 			this.clipContent = true;
 			this._surface.clipContent = false;
+			this._surface.opaqueBackground = CANVAS_BACKGROUND_COLOR;
 			this.addChild(_surface);
 
 			var mask:UIComponent = new UIComponent(); 
@@ -1311,6 +1313,9 @@ package ivis
 			
 			var nv: NodeComponent = n.view as NodeComponent;
 			nv.color2 = Utils.colorFromString(d.(@key == "color"));
+			var s: String = d.(@key == "color1");
+			if('' != s)
+				nv.color1 = Utils.colorFromString(s);
 			nv.shape = d.(@key == "shape");
 			nv.longLabelText = d.(@key == "text")
 
@@ -1353,12 +1358,23 @@ package ivis
 				ev.weight = d.(@key == "width");
 				ev.targetArrow = d.(@key == "arrow");
 			}
-			
+
+			centerView()			
 		}	
 
+		private function centerView(): void
+		{
+			
+			var b:* = this.bounds
+			var xs: int = (this.width - b.width) / 2
+			var ys: int = (this.height - b.height) / 2
+			this._surface.x = xs > 0 ? xs : 0
+			this._surface.y = ys > 0 ? ys : 0
+		}
+		
 		public function toGraphML(): XML
 		{
-			var res: String = '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"> <key id="x" for="node" attr.name="x" attr.type="int"/> <key id="y" for="node" attr.name="y" attr.type="int"/> <key id="height" for="node" attr.name="height" attr.type="int"/> <key id="width" for="node" attr.name="width" attr.type="int"/> <key id="shape" for="node" attr.name="shape" attr.type="string"/> <key id="clusterID" for="node" attr.name="clusterID" attr.type="string"/> <key id="margin" for="graph" attr.name="margin" attr.type="int"/> <key id="style" for="edge" attr.name="style" attr.type="string"/> <key id="arrow" for="edge" attr.name="arrow" attr.type="string"/> <key id="bendpoint" for="edge" attr.name="bendpoint" attr.type="string"/> <key id="color" for="all" attr.name="color" attr.type="string"/> <key id="borderColor" for="all" attr.name="borderColor" attr.type="string"/> <key id="text" for="all" attr.name="text" attr.type="string"/> <key id="textFont" for="all" attr.name="textFont" attr.type="string"/> <key id="textColor" for="all" attr.name="textColor" attr.type="string"/> <key id="highlightColor" for="all" attr.name="highlightColor" attr.type="string"/>';
+			var res: String = '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"> <key id="x" for="node" attr.name="x" attr.type="int"/> <key id="y" for="node" attr.name="y" attr.type="int"/> <key id="height" for="node" attr.name="height" attr.type="int"/> <key id="width" for="node" attr.name="width" attr.type="int"/> <key id="shape" for="node" attr.name="shape" attr.type="string"/> <key id="clusterID" for="node" attr.name="clusterID" attr.type="string"/> <key id="margin" for="graph" attr.name="margin" attr.type="int"/> <key id="style" for="edge" attr.name="style" attr.type="string"/> <key id="arrow" for="edge" attr.name="arrow" attr.type="string"/> <key id="bendpoint" for="edge" attr.name="bendpoint" attr.type="string"/> <key id="color" for="all" attr.name="color" attr.type="string"/> <key id="color1" for="node" attr.name="color1" attr.type="string"/> <key id="borderColor" for="all" attr.name="borderColor" attr.type="string"/> <key id="text" for="all" attr.name="text" attr.type="string"/> <key id="textFont" for="all" attr.name="textFont" attr.type="string"/> <key id="textColor" for="all" attr.name="textColor" attr.type="string"/> <key id="highlightColor" for="all" attr.name="highlightColor" attr.type="string"/>';
 			res += '<graph id="" edgedefault="undirected">';
 			
 			for each(var n: Node in _nodes)
@@ -1495,6 +1511,7 @@ package ivis
 
 			tm.addEventListener(TweenEvent.COMPLETE, function(e: Event): void {
 				refreshMinimap(null)
+//				centerView()				
 			}, false, 0, true)
 		}
 		
@@ -1564,6 +1581,7 @@ package ivis
 		
 		public function set surface(value: Canvas): void {
 			_surface = value;
+//			this._surface.opaqueBackground = CANVAS_BACKGROUND_COLOR;
 		}
 		
 		public function get margin(): uint

@@ -511,7 +511,8 @@
 						return		// empty image!
 						
 					g.drawOnBitmap(bm)
-					data = encoder.encode(bm)
+					//var pixs: ByteArray = bm.getPixels(new Rectangle(0, 0, bm.width, bm.height))
+					data = encoder.encode(bm)//encodeByteArray(pixs, bm.width, bm.height, false)
 				}
 				else
 					data = g.toSvg()

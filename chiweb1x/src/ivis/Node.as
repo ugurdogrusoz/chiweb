@@ -214,6 +214,8 @@ package ivis
 			
 			var cs: Array = Utils.intToRgb((this.view as NodeComponent).color2)
 			res += '<data key="color">' + cs[2] + ' ' +  cs[1]+ ' ' + cs[0] + '</data>';
+			cs = Utils.intToRgb((this.view as NodeComponent).color1)
+			res += '<data key="color1">' + cs[2] + ' ' +  cs[1]+ ' ' + cs[0] + '</data>';
 			//res += '<data key='borderColor'>14 112 130</data>';
 			res += '<data key="text">' + (this.view as NodeComponent).longLabelText + '</data>';
 			//res += '<data key='textFothis.'>1|Arial|8|0|WIthis.OWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>';
