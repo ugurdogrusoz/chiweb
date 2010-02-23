@@ -176,14 +176,34 @@
 			[Embed('assets/cursors/edge-cursor.gif')]
    			private var edgeCursor:Class;
 
-			[Embed(source='../samples/sample-general01.graphml', mimeType='application/octet-stream')]
-			private var sample_general01: Class;
-			
 			[Embed(source='../samples/sample-compound01.graphml', mimeType='application/octet-stream')]
 			private var sample_compound01: Class;
+			[Embed(source='../samples/sample-compound02.graphml', mimeType='application/octet-stream')]
+			private var sample_compound02: Class;
+			[Embed(source='../samples/sample-compound03.graphml', mimeType='application/octet-stream')]
+			private var sample_compound03: Class;
+			[Embed(source='../samples/sample-compound04.graphml', mimeType='application/octet-stream')]
+			private var sample_compound04: Class;
 			
 			[Embed(source='../samples/sample-clustered01.graphml', mimeType='application/octet-stream')]
 			private var sample_clustered01: Class;
+			[Embed(source='../samples/sample-clustered02.graphml', mimeType='application/octet-stream')]
+			private var sample_clustered02: Class;
+			[Embed(source='../samples/sample-clustered03.graphml', mimeType='application/octet-stream')]
+			private var sample_clustered03: Class;
+			[Embed(source='../samples/sample-clustered04.graphml', mimeType='application/octet-stream')]
+			private var sample_clustered04: Class;
+			[Embed(source='../samples/sample-clustered05.graphml', mimeType='application/octet-stream')]
+			private var sample_clustered05: Class;
+			
+			[Embed(source='../samples/sample-general01.graphml', mimeType='application/octet-stream')]
+			private var sample_general01: Class;
+			[Embed(source='../samples/sample-general02.graphml', mimeType='application/octet-stream')]
+			private var sample_general02: Class;
+			[Embed(source='../samples/sample-general03.graphml', mimeType='application/octet-stream')]
+			private var sample_general03: Class;
+			[Embed(source='../samples/sample-general04.graphml', mimeType='application/octet-stream')]
+			private var sample_general04: Class;
 			
 			[Bindable]
 			private var itemsCollection: ArrayCollection = new ArrayCollection(
@@ -194,9 +214,19 @@
 							{ label: "Load" },
 							{ label: "Sample", children:
 								[
-									{ label: "General 1", xml: sample_general01 }, 
 									{ label: "Compound 1", xml: sample_compound01 },
-									{ label: "Clustered 1", xml: sample_clustered01 }
+									{ label: "Compound 2", xml: sample_compound02 },
+									{ label: "Compound 3", xml: sample_compound03 },
+									{ label: "Compound 4", xml: sample_compound04 },
+									{ label: "Clustered 1", xml: sample_clustered01 },
+									{ label: "Clustered 2", xml: sample_clustered02 },
+									{ label: "Clustered 3", xml: sample_clustered03 },
+									{ label: "Clustered 4", xml: sample_clustered04 },
+									{ label: "Clustered 5", xml: sample_clustered05 },
+									{ label: "General 1", xml: sample_general01 }, 
+									{ label: "General 2", xml: sample_general02 }, 
+									{ label: "General 3", xml: sample_general03 }, 
+									{ label: "General 4", xml: sample_general04 } 
 								]
 							},
 							{ label: "Save" } ,
