@@ -338,8 +338,10 @@
 					g.reset();
 				else if(l == "load")
 					loadXML()
-				else if(l.search(/(general|compound|clustered).+/) == 0)
+				else if(l.search(/(general|compound|clustered).+/) == 0) {
 					loadSample(XML(new e.item.xml))
+					BrowserManager.getInstance().setTitle("i-Vis Layout Demo - " + e.label);
+				}
 				else if(l == "save")
 					saveXML("graphml")
 				else if(l == "png" || l == "jpeg" || l == "svg")

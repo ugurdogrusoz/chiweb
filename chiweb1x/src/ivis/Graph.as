@@ -1503,6 +1503,8 @@ package ivis
 		{
 			var tm: TweenMax
 			
+			this.smoothPanTo(0, 0)
+			
 			for each(var xmlNode: XML in xml..node)
 			{
 				var node: Node = nodeFromId(xmlNode.@id)
