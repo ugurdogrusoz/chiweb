@@ -20,9 +20,9 @@ package ivis
 	public class CompoundNodeComponent extends NodeComponent
 	{
 		protected var _margin: uint = 10
-		protected var _bodyColor:uint = 0x004358//0x40627C//0x98946C;
-		protected var _labelColor:uint = 0xBEDB39
-		protected var _labelHeight:int = 10;
+		protected var _bodyColor:uint = 0x004358 //0x40627C//0x98946C
+		protected var _labelColor:uint = 0x004358 //0xBEDB39
+		protected var _labelHeight:int = 10
 	
 		public function CompoundNodeComponent(node: CompoundNode)
 		{
@@ -210,7 +210,7 @@ package ivis
 
 			m.createGradientBox(w, h, 45)
             graphics.beginGradientFill(GradientType.LINEAR, [color1, color2],
-            	[.27, .27], [32, 255], m, SpreadMethod.REFLECT, InterpolationMethod.RGB, 1)
+            	[.17, .17], [32, 255], m, SpreadMethod.REFLECT, InterpolationMethod.RGB, 1)
  
  			// normal fill
 // 			graphics.beginFill(fillColor, .2)

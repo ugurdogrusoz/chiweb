@@ -10,6 +10,7 @@
   <key id="arrow" for="edge" attr.name="arrow" attr.type="string"/>
   <key id="bendpoint" for="edge" attr.name="bendpoint" attr.type="string"/>
   <key id="color" for="all" attr.name="color" attr.type="string"/>
+  <key id="color1" for="node" attr.name="color1" attr.type="string"/>
   <key id="borderColor" for="all" attr.name="borderColor" attr.type="string"/>
   <key id="text" for="all" attr.name="text" attr.type="string"/>
   <key id="textFont" for="all" attr.name="textFont" attr.type="string"/>
@@ -19,9 +20,9 @@
     <node id="n0">
       <data key="x">68</data>
       <data key="y">69.75</data>
-      <data key="height">253.4</data>
+      <data key="height">253.85</data>
       <data key="width">282</data>
-      <data key="color">204 255 255</data>
+      <data key="color">88 67 0</data>
       <data key="text">2</data>
       <data key="clusterID">0</data>
       <graph id="">
@@ -31,6 +32,7 @@
           <data key="height">40</data>
           <data key="width">40</data>
           <data key="color">153 153 255</data>
+          <data key="color1">204 102 0</data>
           <data key="text">13</data>
           <data key="clusterID">0</data>
           <data key="shape">Rectangle</data>
@@ -41,6 +43,7 @@
           <data key="height">40</data>
           <data key="width">40</data>
           <data key="color">153 153 255</data>
+          <data key="color1">204 102 0</data>
           <data key="text">12</data>
           <data key="clusterID">0</data>
           <data key="shape">Rectangle</data>
@@ -48,9 +51,9 @@
         <node id="n0:n2">
           <data key="x">141</data>
           <data key="y">79.75</data>
-          <data key="height">113.15</data>
+          <data key="height">113.6</data>
           <data key="width">155.75</data>
-          <data key="color">204 255 255</data>
+          <data key="color">88 67 0</data>
           <data key="text">16</data>
           <data key="clusterID">0</data>
           <graph id="">
@@ -60,6 +63,7 @@
               <data key="height">40</data>
               <data key="width">40</data>
               <data key="color">102 255 153</data>
+              <data key="color1">204 102 0</data>
               <data key="text">22</data>
               <data key="clusterID">0</data>
               <data key="shape">Rectangle</data>
@@ -70,6 +74,7 @@
               <data key="height">40</data>
               <data key="width">40</data>
               <data key="color">102 255 153</data>
+              <data key="color1">204 102 0</data>
               <data key="text">23</data>
               <data key="clusterID">0</data>
               <data key="shape">Rectangle</data>
@@ -82,6 +87,7 @@
           <data key="height">40</data>
           <data key="width">40</data>
           <data key="color">153 153 255</data>
+          <data key="color1">204 102 0</data>
           <data key="text">14</data>
           <data key="clusterID">0</data>
           <data key="shape">Rectangle</data>
@@ -92,6 +98,7 @@
           <data key="height">40</data>
           <data key="width">40</data>
           <data key="color">153 153 255</data>
+          <data key="color1">204 102 0</data>
           <data key="text">15</data>
           <data key="clusterID">0</data>
           <data key="shape">Rectangle</data>
@@ -101,9 +108,9 @@
     <node id="n1">
       <data key="x">312.1</data>
       <data key="y">364</data>
-      <data key="height">152.15</data>
+      <data key="height">152.6</data>
       <data key="width">62.89999999999998</data>
-      <data key="color">204 255 255</data>
+      <data key="color">88 67 0</data>
       <data key="text">10</data>
       <data key="clusterID">0</data>
       <graph id="">
@@ -113,6 +120,7 @@
           <data key="height">40</data>
           <data key="width">40</data>
           <data key="color">153 153 255</data>
+          <data key="color1">204 102 0</data>
           <data key="text">18</data>
           <data key="clusterID">0</data>
           <data key="shape">Rectangle</data>
@@ -123,6 +131,7 @@
           <data key="height">40</data>
           <data key="width">40</data>
           <data key="color">153 153 255</data>
+          <data key="color1">204 102 0</data>
           <data key="text">17</data>
           <data key="clusterID">0</data>
           <data key="shape">Rectangle</data>
@@ -135,6 +144,7 @@
       <data key="height">40</data>
       <data key="width">40</data>
       <data key="color">153 204 255</data>
+      <data key="color1">204 102 0</data>
       <data key="text">1</data>
       <data key="clusterID">0</data>
       <data key="shape">Rectangle</data>
@@ -145,6 +155,7 @@
       <data key="height">40</data>
       <data key="width">40</data>
       <data key="color">153 204 255</data>
+      <data key="color1">204 102 0</data>
       <data key="text">3</data>
       <data key="clusterID">0</data>
       <data key="shape">Rectangle</data>
@@ -155,6 +166,7 @@
       <data key="height">40</data>
       <data key="width">40</data>
       <data key="color">153 204 255</data>
+      <data key="color1">204 102 0</data>
       <data key="text">8</data>
       <data key="clusterID">0</data>
       <data key="shape">Rectangle</data>
@@ -165,6 +177,7 @@
       <data key="height">40</data>
       <data key="width">40</data>
       <data key="color">153 204 255</data>
+      <data key="color1">204 102 0</data>
       <data key="text">9</data>
       <data key="clusterID">0</data>
       <data key="shape">Rectangle</data>
@@ -172,9 +185,9 @@
     <node id="n6">
       <data key="x">427.7</data>
       <data key="y">367</data>
-      <data key="height">253.25000000000003</data>
+      <data key="height">254.15000000000006</data>
       <data key="width">169.45</data>
-      <data key="color">204 255 255</data>
+      <data key="color">88 67 0</data>
       <data key="text">11</data>
       <data key="clusterID">0</data>
       <graph id="">
@@ -184,6 +197,7 @@
           <data key="height">42</data>
           <data key="width">42</data>
           <data key="color">153 153 255</data>
+          <data key="color1">204 102 0</data>
           <data key="text">21</data>
           <data key="clusterID">0</data>
           <data key="shape">Rectangle</data>
@@ -191,9 +205,9 @@
         <node id="n6:n1">
           <data key="x">437.7</data>
           <data key="y">453</data>
-          <data key="height">139.10000000000005</data>
+          <data key="height">139.55000000000004</data>
           <data key="width">149.45</data>
-          <data key="color">204 255 255</data>
+          <data key="color">88 67 0</data>
           <data key="text">19</data>
           <data key="clusterID">0</data>
           <graph id="">
@@ -203,6 +217,7 @@
               <data key="height">40</data>
               <data key="width">40</data>
               <data key="color">102 255 153</data>
+              <data key="color1">204 102 0</data>
               <data key="text">25</data>
               <data key="clusterID">0</data>
               <data key="shape">Rectangle</data>
@@ -213,6 +228,7 @@
               <data key="height">40</data>
               <data key="width">40</data>
               <data key="color">102 255 153</data>
+              <data key="color1">204 102 0</data>
               <data key="text">24</data>
               <data key="clusterID">0</data>
               <data key="shape">Rectangle</data>
@@ -225,6 +241,7 @@
           <data key="height">40</data>
           <data key="width">40</data>
           <data key="color">153 153 255</data>
+          <data key="color1">204 102 0</data>
           <data key="text">20</data>
           <data key="clusterID">0</data>
           <data key="shape">Rectangle</data>
@@ -237,6 +254,7 @@
       <data key="height">40</data>
       <data key="width">40</data>
       <data key="color">153 204 255</data>
+      <data key="color1">204 102 0</data>
       <data key="text">4</data>
       <data key="clusterID">0</data>
       <data key="shape">Rectangle</data>
@@ -247,6 +265,7 @@
       <data key="height">40</data>
       <data key="width">40</data>
       <data key="color">153 204 255</data>
+      <data key="color1">204 102 0</data>
       <data key="text">6</data>
       <data key="clusterID">0</data>
       <data key="shape">Rectangle</data>
@@ -257,6 +276,7 @@
       <data key="height">40</data>
       <data key="width">40</data>
       <data key="color">153 204 255</data>
+      <data key="color1">204 102 0</data>
       <data key="text">5</data>
       <data key="clusterID">0</data>
       <data key="shape">Rectangle</data>
@@ -267,6 +287,7 @@
       <data key="height">40</data>
       <data key="width">40</data>
       <data key="color">153 204 255</data>
+      <data key="color1">204 102 0</data>
       <data key="text">7</data>
       <data key="clusterID">0</data>
       <data key="shape">Rectangle</data>

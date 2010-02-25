@@ -29,7 +29,7 @@ package ivis
 		
 		private var _data: Object = null
 		protected var _view: Component = null;
-		protected static const DEFAULT_WIDTH: uint = 60;
+		protected static const DEFAULT_WIDTH: uint = 40;
 		protected static const DEFAULT_HEIGHT: uint = 40;		
 		protected var _clusterID: uint
 		

@@ -28,7 +28,7 @@ package ivis
 		
 		protected static const LINE_COLOR:uint = 0xFF45523B;
 		protected static const DEFAULT_FILL_COLOR1:uint = 0xFFFFFF;
-		public static const DEFAULT_FILL_COLOR2:uint = 0xA4C290;
+		public static const DEFAULT_FILL_COLOR2:uint = 0xFF0000; //0xA4C290;
 		protected static const HIGHLIGHT_COLOR:uint = 0xFFF3E843;
 		
 		protected var _font: String = 'Calibri';
@@ -58,7 +58,6 @@ package ivis
 				refreshGrapples()
 			})
 			setupChildren();
-			
 		}
 
 		override public function showInspector(p: Point = null): void
@@ -173,12 +172,12 @@ package ivis
 			this._label.selectable = false;
 			this._label.autoSize = TextFieldAutoSize.CENTER;
 			this._label.mouseEnabled = false;
-			refreshLabel();
+			this.refreshLabel();
 //			this._label.antiAliasType = AntiAliasType.ADVANCED;
 //			this._label.gridFitType = GridFitType.SUBPIXEL;
 			this.addChild(_label);
 
-			_inspector = new NodeInspector(this);
+			this._inspector = new NodeInspector(this);
 			
 			this.addEventListener("doubleClick", onDoubleClick);
 			this.addEventListener("remove", function(e: Event): void {
