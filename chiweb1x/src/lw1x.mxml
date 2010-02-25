@@ -59,7 +59,7 @@
 				click="{g.zoomOut()}"/>
 			<mx:Button icon="@Embed(source='assets/fit-in-canvas.png')"
 				width="32"
-				toolTip="Fit In Canvas"
+				toolTip="Fit in Canvas"
 				click="{g.zoomToFit()}"/>
 			<mx:Spacer width="10" />
 
