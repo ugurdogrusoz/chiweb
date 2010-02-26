@@ -184,6 +184,8 @@
 			private var sample_compound03: Class;
 			[Embed(source='../samples/sample-compound04.graphml', mimeType='application/octet-stream')]
 			private var sample_compound04: Class;
+			[Embed(source='../samples/sample-compound05.graphml', mimeType='application/octet-stream')]
+			private var sample_compound05: Class;
 			
 			[Embed(source='../samples/sample-clustered01.graphml', mimeType='application/octet-stream')]
 			private var sample_clustered01: Class;
@@ -218,6 +220,7 @@
 									{ label: "Compound 2", xml: sample_compound02 },
 									{ label: "Compound 3", xml: sample_compound03 },
 									{ label: "Compound 4", xml: sample_compound04 },
+									{ label: "Compound 5", xml: sample_compound05 },
 									{ label: "Clustered 1", xml: sample_clustered01 },
 									{ label: "Clustered 2", xml: sample_clustered02 },
 									{ label: "Clustered 3", xml: sample_clustered03 },
