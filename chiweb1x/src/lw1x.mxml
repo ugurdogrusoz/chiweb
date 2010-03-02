@@ -471,8 +471,9 @@
 				// append options
 				var go:* = g.generalOptions
 				loader.addVariable("layoutQuality", go.quality)
-				loader.addVariable("incremental", go.incremental)
 				loader.addVariable("animateOnLayout", go.animateOnLayout)
+				loader.addVariable("incremental", go.incremental)
+//				loader.addVariable("uniformNodeSize", go.uniformNodeSize)
 				
 				CursorManager.setBusyCursor();
 

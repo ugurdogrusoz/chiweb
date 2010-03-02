@@ -83,7 +83,8 @@ package ivis
 		private var _generalOptions:Object = {
 			quality: DEFAULT_QUALITY,
 			incremental: false,
-			animateOnLayout: true
+			animateOnLayout: true//,
+//			uniformNodeSize: false
 		} 
 
 		private var _CoSEOptions:Object = {

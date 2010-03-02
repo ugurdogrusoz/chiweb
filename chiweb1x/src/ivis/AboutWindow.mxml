@@ -21,7 +21,7 @@
 			<![CDATA[
 				<a href='event:mailto:ivis@cs.bilkent.edu.tr'><font color="#F8B584">ivis@cs.bilkent.edu.tr</font></a>
 				<br>
-				<a href='event:http://www.cs.bilkent.edu.tr/~ivis'><font color="#F8B584">http://www.cs.bilkent.edu.tr/~ivis</font></a>
+				<a href='event:http://www.cs.bilkent.edu.tr/~ivis/demo.html'><font color="#F8B584">http://www.cs.bilkent.edu.tr/~ivis/demo.html</font></a>
 			]]>
 		</mx:htmlText>
 	</mx:Text>	

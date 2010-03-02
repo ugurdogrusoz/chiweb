@@ -23,6 +23,7 @@
 				<ivis:TitledBorderBox title="General" width="100%" layout="vertical" borderColor="0xaaaaaa">
 					<mx:CheckBox id="inc" label="Incremental Layout"/>
 					<mx:CheckBox id="aol" label="Animate on Layout"/>
+<!--				<mx:CheckBox id="uns" label="Uniform Node Size"/> -->
 				</ivis:TitledBorderBox>
 				<ivis:TitledBorderBox title="Layout Quality" width="100%" layout="vertical" borderColor="0xaaaaaa">
 				<mx:Spacer width="100" />
@@ -100,6 +101,7 @@
 //			private var quality: int
 			public var _incremental: Boolean
 			public var _animateOnLayout: Boolean
+//			public var _uniformNodeSize: Boolean
 			public var _springStrength: Number
 			public var _repulsionStrength: Number
 			public var _gravityStrength: Number
@@ -127,6 +129,8 @@
 				this._animateOnLayout = opts.animateOnLayout
 				this.aol.selected = Boolean(this._animateOnLayout)
 				this.quality.selectedValue = int(opts.quality)
+//				this._uniformNodeSize = opts.uniformNodeSize
+//				this.uns.selected = Boolean(this._uniformNodeSize)
 				
 				this._genInited = true
 			}
@@ -182,7 +186,8 @@
 						g.generalOptions = {
 							quality: int(quality.selectedValue),
 							incremental: Boolean(inc.selected),
-							animateOnLayout: Boolean(aol.selected)
+							animateOnLayout: Boolean(aol.selected)//,
+//							uniformNodeSize: Boolean(uns.selected)
 						}
 
 					if(this._coseInited)					
