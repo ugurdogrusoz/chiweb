@@ -206,6 +206,8 @@
 			private var sample_general03: Class;
 			[Embed(source='../samples/sample-general04.graphml', mimeType='application/octet-stream')]
 			private var sample_general04: Class;
+			[Embed(source='../samples/sample-general05.graphml', mimeType='application/octet-stream')]
+			private var sample_general05: Class;
 			
 			[Bindable]
 			private var itemsCollection: ArrayCollection = new ArrayCollection(
@@ -229,7 +231,8 @@
 									{ label: "General 1", xml: sample_general01 }, 
 									{ label: "General 2", xml: sample_general02 }, 
 									{ label: "General 3", xml: sample_general03 }, 
-									{ label: "General 4", xml: sample_general04 } 
+									{ label: "General 4", xml: sample_general04 }, 
+									{ label: "General 5", xml: sample_general05 } 
 								]
 							},
 							{ label: "Save" } ,
