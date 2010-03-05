@@ -3,39 +3,189 @@
 	horizontalAlign="left"
 	showCloseButton="true"
 	close="closeHandler(event)"
-	initialize="init(event)"
 	title="Quick Help"
 	verticalGap="0"
 	xmlns:ivis="ivis.*">
 	
-	<!--mx:Form verticalGap="0">
-		<mx:Label text="Editing" fontWeight="bold"/>
-		<mx:FormItem label="Selection">
-			<mx:Label text="Click on Node/Edge" />
-		</mx:FormItem>
-		<mx:FormItem label="Delete Selection">
-			<mx:HBox>
-				<mx:Label text="Press Delete toolbar button" />
-				<mx:Image source="@Embed(source='assets/delete.png')" height="16"/>
-			</mx:HBox>
-		</mx:FormItem>
-		<mx:FormItem label="Show Inspector">
-			<mx:Label text="Double click on Node/Edge/Canvas" />
-		</mx:FormItem>
-		<mx:FormItem label="Create Node">
-			<mx:Label text="Select'Create Node' tool, click on canvas"/>
-		</mx:FormItem>
-		<mx:FormItem label="Create Compound Node">
-			<mx:Label text="Select'Create Compound Node' tool, click on canvas" />
-		</mx:FormItem>
-		<mx:FormItem label="Create Edge">
-			<mx:Label text="Select'Create Edge' tool, click on the source Node, then on the target Node" />
-		</mx:FormItem>
-		<mx:FormItem label="Move Node into a Compound Node">
-			<mx:Label text="Ctrl+Click on a Node, drag into a compound Node, then release" />
-		</mx:FormItem>
-	</mx:Form-->
-	
+	<mx:Grid>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Load Sample Graph"/>
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/load.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="File | Sample | ..." />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Pan" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Spacer width="24" height="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Alt + mouse drag" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Zoom in/out" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/zoom-in.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Mouse wheel up/down" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Multiple Selection" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/select.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Ctrl + click on Node/Edge" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Multiple Selection" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/select.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Click on canvas, draw a selection rectangle" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Delete" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/delete.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Press Dlt or use toolbar button" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Show Inspector" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Spacer width="24" height="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Double click on Node/Edge/Canvas" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Create (Compound) Node" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/create-compound-node.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Select 'Create (Compound) Node' tool, click on canvas" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Create Edge" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/create-edge.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Select 'Create Edge' tool, click on a source, then on a target Node" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Create Bend" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Spacer width="24" height="24" />
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Click on an Edge and drag" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Remove Bend" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Spacer width="24" height="24" />
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Click on a Bend and drag to straighten edge" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Resize Node" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Spacer width="24" height="24" />
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Select Node(s), click on a grapple and drag" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Move Node into a Compound Node" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Spacer width="24" height="24" />
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Ctrl + click on a Node, drag into a Compound Node" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Move Node out of a Compound Node" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Spacer width="24" height="24" />
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Ctrl + click on a child Node, drag out of its Compound Node" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Marquee Zoom" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/zoom-marquee.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Select 'Marquee Zoom' tool, click on canvas and drag" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Marquee Zoom" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/zoom-marquee.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Click on a point in Overview window and drag" />
+			</mx:GridItem>
+		</mx:GridRow>
+		
+	</mx:Grid>
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Label;
@@ -48,7 +198,7 @@
 			import mx.controls.TextArea;
 			import mx.containers.HBox;
 			import mx.managers.PopUpManager;
-			
+/*			
 			[Embed(source="assets/zoom-in.png")]
 			private var zoomInIcon: Class
 
@@ -76,22 +226,39 @@
 					{ label: "Marquee Zoom", desc: "Select 'Marquee Zoom' tool, click on canvas and drag" }, 
 					{ label: "Marquee Zoom", desc: "Click on a point in Overview window and drag" }, 
 				]
-			
+*/			
 			private function init(e: Event): void
 			{
-				var form:Form = new Form
+/*				var form:Form = new Form
 				
 				for each(var i:* in items)
 				{
 					var fi: FormItem = new FormItem
 					fi.label = i.label
+
+					if(i.icon)
+					{
+						var icon:Image = new Image
+						icon.source = i.icon
+						icon.width = 16
+						fi.addChild(icon);
+					}
+					else
+					{
+						var s:Spacer = new Spacer
+						s.width = 16
+						fi.addChild(s)
+					}
+
 					var l: Label = new Label
-					l.text = i.desc
+					l.text = i.desc					
 					fi.addChild(l)
+
 					form.addChild(fi)
 				}
-				
+			
 				this.addChild(form)
+*/
 /*				for each(var i:* in items)
 				{
 					var hb: HBox = new HBox
