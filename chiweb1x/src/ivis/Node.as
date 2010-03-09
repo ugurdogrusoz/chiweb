@@ -199,6 +199,8 @@ package ivis
 					'clusterID="' + clusterID + '">' + 
 					'<bounds height="' + this.height + 
 					'" width="' + this.width + 
+					'" x="' + this.x + 
+					'" y="' + this.y + 
 					'" />' + 
 					'</node>')
 		} 
