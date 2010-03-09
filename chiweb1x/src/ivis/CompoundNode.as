@@ -214,7 +214,9 @@ package ivis
 			res += '<data key="color">' + cs[2] + ' ' +  cs[1]+ ' ' + cs[0] + '</data>';
 			//res += '<data key='borderColor'>14 112 130</data>';
 			res += '<data key="text">' + (this.view as CompoundNodeComponent).longLabelText + '</data>';
-			//res += '<data key='textFont'>1|Arial|8|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>';
+			res += '<data key="textFont">1|"' + (this.view as NodeComponent).font +
+				'|' + (this.view as NodeComponent).fontSize +
+				'|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>';
 			//res += '<data key='textColor'>0 0 0</data>';
 			res += '<data key="clusterID">' + this.clusterID + '</data>';
 

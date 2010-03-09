@@ -1320,6 +1320,12 @@ package ivis
 			nv.shape = d.(@key == "shape");
 			nv.longLabelText = d.(@key == "text")
 
+			var fontStr: String = d.(@key == "textFont");
+			if(fontStr != null) {
+				var fs:Array = fontStr.split("|");
+				nv.font = fs[1];
+				nv.fontSize = fs[2];
+			} 
 			this.addNode(n)
 			
 			for each(node in xml.graph.node)

@@ -7,13 +7,13 @@
 	verticalGap="0"
 	xmlns:ivis="ivis.*">
 	
-	<mx:Grid>
+	<mx:Grid height="300" width="650">
 		<mx:GridRow>	
 			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
 				<mx:Label text="Load Sample Graph"/>
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
-				<mx:Image source="@Embed('assets/load.png')" width="24"/>
+				<mx:Image source="@Embed('assets/icons/24/load.png')" width="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
 				<mx:Label text="File | Sample | ..." />
@@ -35,7 +35,7 @@
 				<mx:Label text="Zoom in/out" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
-				<mx:Image source="@Embed('assets/zoom-in.png')" width="24"/>
+				<mx:Image source="@Embed('assets/icons/24/zoom-in.png')" width="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
 				<mx:Label text="Mouse wheel up/down" />
@@ -46,7 +46,7 @@
 				<mx:Label text="Multiple Selection" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
-				<mx:Image source="@Embed('assets/select.png')" width="24"/>
+				<mx:Image source="@Embed('assets/icons/24/select.png')" width="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
 				<mx:Label text="Ctrl + click on Node/Edge" />
@@ -57,7 +57,7 @@
 				<mx:Label text="Multiple Selection" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
-				<mx:Image source="@Embed('assets/select.png')" width="24"/>
+				<mx:Image source="@Embed('assets/icons/24/select.png')" width="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
 				<mx:Label text="Click on canvas, draw a selection rectangle" />
@@ -68,7 +68,7 @@
 				<mx:Label text="Delete" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
-				<mx:Image source="@Embed('assets/delete.png')" width="24"/>
+				<mx:Image source="@Embed('assets/icons/24/delete.png')" width="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
 				<mx:Label text="Press Dlt or use toolbar button" />
@@ -90,7 +90,7 @@
 				<mx:Label text="Create (Compound) Node" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
-				<mx:Image source="@Embed('assets/create-compound-node.png')" width="24"/>
+				<mx:Image source="@Embed('assets/icons/24/create-compound-node.png')" width="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
 				<mx:Label text="Select 'Create (Compound) Node' tool, click on canvas" />
@@ -101,7 +101,7 @@
 				<mx:Label text="Create Edge" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
-				<mx:Image source="@Embed('assets/create-edge.png')" width="24"/>
+				<mx:Image source="@Embed('assets/icons/24/create-edge.png')" width="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
 				<mx:Label text="Select 'Create Edge' tool, click on a source, then on a target Node" />
@@ -167,7 +167,7 @@
 				<mx:Label text="Marquee Zoom" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
-				<mx:Image source="@Embed('assets/zoom-marquee.png')" width="24"/>
+				<mx:Image source="@Embed('assets/icons/24/zoom-marquee.png')" width="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
 				<mx:Label text="Select 'Marquee Zoom' tool, click on canvas and drag" />
@@ -178,7 +178,7 @@
 				<mx:Label text="Marquee Zoom" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
-				<mx:Image source="@Embed('assets/zoom-marquee.png')" width="24"/>
+				<mx:Image source="@Embed('assets/icons/24/zoom-marquee.png')" width="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
 				<mx:Label text="Click on a point in Overview window and drag" />
@@ -199,13 +199,13 @@
 			import mx.containers.HBox;
 			import mx.managers.PopUpManager;
 /*			
-			[Embed(source="assets/zoom-in.png")]
+			[Embed(source="assets/icons/24/zoom-in.png")]
 			private var zoomInIcon: Class
 
-			[Embed(source="assets/zoom-out.png")]
+			[Embed(source="assets/icons/24/zoom-out.png")]
 			private var zoomOutIcon: Class
 
-			[Embed(source="assets/delete.png")]
+			[Embed(source="assets/icons/24/delete.png")]
 			private var deleteIcon: Class
 
 			private var items: Array = [
