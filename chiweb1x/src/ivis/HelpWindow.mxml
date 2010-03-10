@@ -32,13 +32,46 @@
 		</mx:GridRow>
 		<mx:GridRow>	
 			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
-				<mx:Label text="Zoom in/out" />
+				<mx:Label text="Zoom in" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
 				<mx:Image source="@Embed('assets/icons/24/zoom-in.png')" width="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
-				<mx:Label text="Mouse wheel up/down" />
+				<mx:Label text="Mouse wheel up" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Zoom out" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/icons/24/zoom-out.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Mouse wheel down" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Marquee Zoom" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/icons/24/zoom-marquee.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Select 'Marquee Zoom' tool, click on canvas and drag" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Marquee Zoom" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/icons/24/zoom-marquee.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Click on a point in Overview window and drag" />
 			</mx:GridItem>
 		</mx:GridRow>
 		<mx:GridRow>	
@@ -65,35 +98,24 @@
 		</mx:GridRow>
 		<mx:GridRow>	
 			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
-				<mx:Label text="Delete" />
+				<mx:Label text="Create Node" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
-				<mx:Image source="@Embed('assets/icons/24/delete.png')" width="24"/>
+				<mx:Image source="@Embed('assets/icons/24/create-node.png')" width="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
-				<mx:Label text="Press Dlt or use toolbar button" />
+				<mx:Label text="Select 'Create Node' tool, click on canvas" />
 			</mx:GridItem>
 		</mx:GridRow>
 		<mx:GridRow>	
 			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
-				<mx:Label text="Show Inspector" />
-			</mx:GridItem>
-			<mx:GridItem verticalAlign="middle">
-				<mx:Spacer width="24" height="24"/>
-			</mx:GridItem>			
-			<mx:GridItem verticalAlign="middle">
-				<mx:Label text="Double click on Node/Edge/Canvas" />
-			</mx:GridItem>
-		</mx:GridRow>
-		<mx:GridRow>	
-			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
-				<mx:Label text="Create (Compound) Node" />
+				<mx:Label text="Create Compound Node" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
 				<mx:Image source="@Embed('assets/icons/24/create-compound-node.png')" width="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
-				<mx:Label text="Select 'Create (Compound) Node' tool, click on canvas" />
+				<mx:Label text="Select 'Create Compound Node' tool, click on canvas" />
 			</mx:GridItem>
 		</mx:GridRow>
 		<mx:GridRow>	
@@ -105,6 +127,17 @@
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
 				<mx:Label text="Select 'Create Edge' tool, click on a source, then on a target Node" />
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>	
+			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
+				<mx:Label text="Delete" />
+			</mx:GridItem>
+			<mx:GridItem verticalAlign="middle">
+				<mx:Image source="@Embed('assets/icons/24/delete.png')" width="24"/>
+			</mx:GridItem>			
+			<mx:GridItem verticalAlign="middle">
+				<mx:Label text="Press Dlt or use toolbar button" />
 			</mx:GridItem>
 		</mx:GridRow>
 		<mx:GridRow>	
@@ -131,17 +164,6 @@
 		</mx:GridRow>
 		<mx:GridRow>	
 			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
-				<mx:Label text="Resize Node" />
-			</mx:GridItem>
-			<mx:GridItem verticalAlign="middle">
-				<mx:Spacer width="24" height="24" />
-			</mx:GridItem>			
-			<mx:GridItem verticalAlign="middle">
-				<mx:Label text="Select Node(s), click on a grapple and drag" />
-			</mx:GridItem>
-		</mx:GridRow>
-		<mx:GridRow>	
-			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
 				<mx:Label text="Move Node into a Compound Node" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
@@ -164,27 +186,26 @@
 		</mx:GridRow>
 		<mx:GridRow>	
 			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
-				<mx:Label text="Marquee Zoom" />
+				<mx:Label text="Show Inspector" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
-				<mx:Image source="@Embed('assets/icons/24/zoom-marquee.png')" width="24"/>
+				<mx:Spacer width="24" height="24"/>
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
-				<mx:Label text="Select 'Marquee Zoom' tool, click on canvas and drag" />
+				<mx:Label text="Double click on Node/Edge/Canvas" />
 			</mx:GridItem>
 		</mx:GridRow>
 		<mx:GridRow>	
 			<mx:GridItem verticalAlign="middle" horizontalAlign="right">
-				<mx:Label text="Marquee Zoom" />
+				<mx:Label text="Resize Node" />
 			</mx:GridItem>
 			<mx:GridItem verticalAlign="middle">
-				<mx:Image source="@Embed('assets/icons/24/zoom-marquee.png')" width="24"/>
+				<mx:Spacer width="24" height="24" />
 			</mx:GridItem>			
 			<mx:GridItem verticalAlign="middle">
-				<mx:Label text="Click on a point in Overview window and drag" />
+				<mx:Label text="Select Node(s), click on a grapple and drag" />
 			</mx:GridItem>
 		</mx:GridRow>
-		
 	</mx:Grid>
 	<mx:Script>
 		<![CDATA[
