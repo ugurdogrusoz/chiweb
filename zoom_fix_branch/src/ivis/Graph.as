@@ -138,7 +138,7 @@ package ivis
 
 			var mask:UIComponent = new UIComponent(); 
 			mask.graphics.beginFill(0,1); 
-			mask.graphics.drawRect(0, 0, 10000, 10000);
+			mask.graphics.drawRect(0, 0, 800, 500);
 			mask.graphics.endFill();
 			this.mask = mask;
 			this.addChild(mask);
@@ -478,6 +478,7 @@ package ivis
 				
 		public function refreshMinimap(e: Event): void
 		{
+			/*
 			if(!_miniMap)
 				return
 			
@@ -564,6 +565,7 @@ package ivis
 									
 			this._miniMap.graphics.drawRect(x, y, w, h)
  			_prevMap = map
+ 			*/
 		}
 
 		private var _zoom: Number = 1.0;
