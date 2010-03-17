@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TextArea xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			private var _autoSize : Boolean = true;
+ 
+			[Inspectable(defaultValue="true", variable = "autoSize", type = "Boolean", name = "autoSize", format = "Boolean")]
+			public function set autoSize(value : Boolean) : void
+			{
+				_autoSize = value;
+				invalidateSize();
+			}
+ 
+			public function get autoSize() : Boolean
+			{
+				return _autoSize;
+			}
+ 
+			override protected function measure() : void
+			{
+				super.measure();
+ 
+				if (_autoSize)
+				{
+					var lineHeight : uint = 0;
+					for (var i : int = 0; i < this.mx_internal::getTextField().numLines; i++)
+					{
+						lineHeight += this.mx_internal::getTextField().getLineMetrics(i).height;
+					}
+					this.measuredHeight = lineHeight;
+					this.verticalScrollPolicy = "off";
+				}
+			}
+		]]>
+	</mx:Script>
+</mx:TextArea>

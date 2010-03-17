@@ -1,0 +1,238 @@
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+  <key id="x" for="node" attr.name="x" attr.type="int"/>
+  <key id="y" for="node" attr.name="y" attr.type="int"/>
+  <key id="height" for="node" attr.name="height" attr.type="int"/>
+  <key id="width" for="node" attr.name="width" attr.type="int"/>
+  <key id="shape" for="node" attr.name="shape" attr.type="string"/>
+  <key id="clusterID" for="node" attr.name="clusterID" attr.type="string"/>
+  <key id="margin" for="graph" attr.name="margin" attr.type="int"/>
+  <key id="style" for="edge" attr.name="style" attr.type="string"/>
+  <key id="arrow" for="edge" attr.name="arrow" attr.type="string"/>
+  <key id="bendpoint" for="edge" attr.name="bendpoint" attr.type="string"/>
+  <key id="color" for="all" attr.name="color" attr.type="string"/>
+  <key id="color1" for="node" attr.name="color1" attr.type="string"/>
+  <key id="borderColor" for="all" attr.name="borderColor" attr.type="string"/>
+  <key id="text" for="all" attr.name="text" attr.type="string"/>
+  <key id="textFont" for="all" attr.name="textFont" attr.type="string"/>
+  <key id="textColor" for="all" attr.name="textColor" attr.type="string"/>
+  <key id="highlightColor" for="all" attr.name="highlightColor" attr.type="string"/>
+  <graph id="" edgedefault="undirected">
+    <node id="n0">
+      <data key="x">423</data>
+      <data key="y">87</data>
+      <data key="height">169</data>
+      <data key="width">169</data>
+      <data key="color">88 67 0</data>
+      <data key="text">Compound</data>
+      <data key="clusterID">0</data>
+      <graph id="">
+        <node id="n0:n0">
+          <data key="x">434</data>
+          <data key="y">176</data>
+          <data key="height">40</data>
+          <data key="width">40</data>
+          <data key="color">51 102 204</data>
+          <data key="color1">255 255 255</data>
+          <data key="text">Node</data>
+          <data key="clusterID">0</data>
+          <data key="shape">Ellipse</data>
+        </node>
+        <node id="n0:n1">
+          <data key="x">434</data>
+          <data key="y">97</data>
+          <data key="height">40</data>
+          <data key="width">40</data>
+          <data key="color">51 102 204</data>
+          <data key="color1">255 255 255</data>
+          <data key="text">Node</data>
+          <data key="clusterID">0</data>
+          <data key="shape">Ellipse</data>
+        </node>
+        <node id="n0:n2">
+          <data key="x">503</data>
+          <data key="y">114</data>
+          <data key="height">90</data>
+          <data key="width">70</data>
+          <data key="color">88 67 0</data>
+          <data key="text">Compound</data>
+          <data key="clusterID">0</data>
+          <graph id="">
+            <node id="n0:n2:n0">
+              <data key="x">513</data>
+              <data key="y">124</data>
+              <data key="height">40</data>
+              <data key="width">40</data>
+              <data key="color">255 102 153</data>
+              <data key="color1">255 255 255</data>
+              <data key="text">Node</data>
+              <data key="clusterID">0</data>
+              <data key="shape">Ellipse</data>
+            </node>
+          </graph>
+        </node>
+      </graph>
+    </node>
+    <node id="n1">
+      <data key="x">223</data>
+      <data key="y">108</data>
+      <data key="height">139</data>
+      <data key="width">152</data>
+      <data key="color">88 67 0</data>
+      <data key="text">Compound</data>
+      <data key="clusterID">0</data>
+      <graph id="">
+        <node id="n1:n0">
+          <data key="x">232</data>
+          <data key="y">166</data>
+          <data key="height">40</data>
+          <data key="width">40</data>
+          <data key="color">51 102 204</data>
+          <data key="color1">255 255 255</data>
+          <data key="text">Node</data>
+          <data key="clusterID">0</data>
+          <data key="shape">Ellipse</data>
+        </node>
+        <node id="n1:n1">
+          <data key="x">314</data>
+          <data key="y">118</data>
+          <data key="height">40</data>
+          <data key="width">40</data>
+          <data key="color">51 102 204</data>
+          <data key="color1">255 255 255</data>
+          <data key="text">Node</data>
+          <data key="clusterID">0</data>
+          <data key="shape">Ellipse</data>
+        </node>
+      </graph>
+    </node>
+    <node id="n2">
+      <data key="x">135</data>
+      <data key="y">100</data>
+      <data key="height">40</data>
+      <data key="width">40</data>
+      <data key="color">102 102 0</data>
+      <data key="color1">255 255 255</data>
+      <data key="text">Node</data>
+      <data key="clusterID">0</data>
+      <data key="shape">Ellipse</data>
+    </node>
+    <node id="n3">
+      <data key="x">289</data>
+      <data key="y">10</data>
+      <data key="height">40</data>
+      <data key="width">40</data>
+      <data key="color">102 102 0</data>
+      <data key="color1">255 255 255</data>
+      <data key="text">Node</data>
+      <data key="clusterID">0</data>
+      <data key="shape">Ellipse</data>
+    </node>
+    <node id="n4">
+      <data key="x">10</data>
+      <data key="y">173</data>
+      <data key="height">40</data>
+      <data key="width">40</data>
+      <data key="color">102 102 0</data>
+      <data key="color1">255 255 255</data>
+      <data key="text">Node</data>
+      <data key="clusterID">0</data>
+      <data key="shape">Ellipse</data>
+    </node>
+    <node id="n5">
+      <data key="x">38</data>
+      <data key="y">229</data>
+      <data key="height">144</data>
+      <data key="width">146</data>
+      <data key="color">88 67 0</data>
+      <data key="text">Compound</data>
+      <data key="clusterID">0</data>
+      <graph id="">
+        <node id="n5:n0">
+          <data key="x">122</data>
+          <data key="y">236</data>
+          <data key="height">42</data>
+          <data key="width">42</data>
+          <data key="color">51 102 204</data>
+          <data key="color1">255 255 255</data>
+          <data key="text">Node</data>
+          <data key="clusterID">0</data>
+          <data key="shape">Ellipse</data>
+        </node>
+        <node id="n5:n1">
+          <data key="x">47</data>
+          <data key="y">291</data>
+          <data key="height">40</data>
+          <data key="width">40</data>
+          <data key="color">51 102 204</data>
+          <data key="color1">255 255 255</data>
+          <data key="text">Node</data>
+          <data key="clusterID">0</data>
+          <data key="shape">Ellipse</data>
+        </node>
+      </graph>
+    </node>
+    <edge id="e0" source="n1:n0" target="n5:n0">
+      <data key="color">153 153 102</data>
+      <data key="text"/>
+      <data key="style">Solid</data>
+      <data key="arrow">None</data>
+      <data key="width">1</data>
+    </edge>
+    <edge id="e1" source="n0:n0" target="n0:n1">
+      <data key="color">0 0 0</data>
+      <data key="text"/>
+      <data key="style">Solid</data>
+      <data key="arrow">None</data>
+      <data key="width">1</data>
+    </edge>
+    <edge id="e2" source="n5:n0" target="n5:n1">
+      <data key="color">0 0 0</data>
+      <data key="text"/>
+      <data key="style">Solid</data>
+      <data key="arrow">None</data>
+      <data key="width">1</data>
+    </edge>
+    <edge id="e3" source="n5:n1" target="n4">
+      <data key="color">153 153 102</data>
+      <data key="text"/>
+      <data key="style">Solid</data>
+      <data key="arrow">None</data>
+      <data key="width">1</data>
+    </edge>
+    <edge id="e4" source="n3" target="n1:n1">
+      <data key="color">153 153 102</data>
+      <data key="text"/>
+      <data key="style">Solid</data>
+      <data key="arrow">None</data>
+      <data key="width">1</data>
+    </edge>
+    <edge id="e5" source="n0" target="n1">
+      <data key="color">0 0 0</data>
+      <data key="text"/>
+      <data key="style">Solid</data>
+      <data key="arrow">None</data>
+      <data key="width">1</data>
+    </edge>
+    <edge id="e6" source="n1:n0" target="n1:n1">
+      <data key="color">0 0 0</data>
+      <data key="text"/>
+      <data key="style">Solid</data>
+      <data key="arrow">None</data>
+      <data key="width">1</data>
+    </edge>
+    <edge id="e7" source="n1:n0" target="n2">
+      <data key="color">153 153 102</data>
+      <data key="text"/>
+      <data key="style">Solid</data>
+      <data key="arrow">None</data>
+      <data key="width">1</data>
+    </edge>
+    <edge id="e8" source="n5:n0" target="n4">
+      <data key="color">153 153 102</data>
+      <data key="text"/>
+      <data key="style">Solid</data>
+      <data key="arrow">None</data>
+      <data key="width">1</data>
+    </edge>
+  </graph>
+</graphml>
