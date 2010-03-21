@@ -126,12 +126,18 @@
 					miniMap="{mmap}"
 					vscroll="{vsb}"
 					hscroll="{hsb}"
+					debugArea="{debugTextArea}"
 				/>
 				<mx:Canvas x="{g.x}" y="{g.y}" width="800" height="500" id="gOverlay" mouseEnabled="false"/>
 			</mx:Canvas>
 			<mx:Box paddingLeft="10">
 				<mx:Panel title="Overview" backgroundAlpha="0" >
 					<mx:UIComponent width="200" height="125" id="mmap"/>
+				</mx:Panel>
+				<mx:Spacer height="20" />
+				<mx:Panel title="Debug" width="300" height="300" visible="true">
+					<mx:TextArea id="debugTextArea" width="100%" height="100%" wordWrap="false" editable="false"/>
+					<mx:Button label="Clear" click="debugTextArea.text = ''"/>
 				</mx:Panel>
 			</mx:Box>
 		</mx:HBox>

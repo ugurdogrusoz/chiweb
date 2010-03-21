@@ -18,6 +18,7 @@ package ivis
 	import ivis.events.*;
 	
 	import mx.containers.Canvas;
+	import mx.controls.TextArea;
 	import mx.controls.scrollClasses.ScrollBar;
 	import mx.controls.sliderClasses.Slider;
 	import mx.core.Container;
@@ -153,21 +154,41 @@ package ivis
 
 		}
 
+		private var _debugArea:TextArea = null
+		
+		public function get debugArea(): TextArea
+		{
+			return this._debugArea
+		}
+		
+		public function set debugArea(value: TextArea): void
+		{
+			this._debugArea = value
+		}
+		
+		private function log(s: String): void
+		{
+			if(this._debugArea) {
+				this._debugArea.text += s + "\n"
+				this._debugArea.verticalScrollPosition = this._debugArea.maxVerticalScrollPosition
+			}
+		}
+		
 		private function revalidateSurfaceBounds(e: Event): void
 		{
-			var b:* = this.bounds
+
+			var surfaceBounds: Rectangle = this._surface.transform.pixelBounds;
+			var graphBounds: Rectangle = this.transform.pixelBounds;
 			
-			b.left += this._surface.x
-			b.top += this._surface.y
+			surfaceBounds.offset(-graphBounds.x, -graphBounds.y);
 			
 			vscroll.minScrollPosition = 0
-			vscroll.maxScrollPosition = Math.max(0, -b.top) + Math.max(_surface.y + _surface.height * zoom - this.height, 0)
-			vscroll.scrollPosition = Math.max(0, -b.top)
-//			trace("min=" + vscroll.minScrollPosition + ", cur=" + vscroll.scrollPosition + ", max=" + vscroll.maxScrollPosition)
+			vscroll.maxScrollPosition = Math.max(0, -surfaceBounds.top) + Math.max(surfaceBounds.bottom - this.height, 0)
+			vscroll.scrollPosition = Math.max(0, -surfaceBounds.top)
 			
 			hscroll.minScrollPosition = 0
-			hscroll.maxScrollPosition = Math.max(0, -b.left) + Math.max(_surface.x + _surface.width * zoom - this.width, 0)
-			hscroll.scrollPosition = Math.max(0, -b.left)
+			hscroll.maxScrollPosition = Math.max(0, -surfaceBounds.left) + Math.max(surfaceBounds.right - this.width, 0)
+			hscroll.scrollPosition = Math.max(0, -surfaceBounds.left)
 			
 		}
 
@@ -271,7 +292,7 @@ package ivis
 				z = h / (sh + 2*_margin);
 				z = Math.min(z, ZOOM_MAX)
 				z = Math.max(z, ZOOM_MIN)
-				zoom = z / zoom
+				zoom = z
 //				_surface.move(-b.left*z + (w - sw*z)/2, -b.top*z + _margin*z);
 				smoothPanTo(-b.left*z + (w - sw*z)/2, -b.top*z + _margin*z)
 			}
@@ -280,7 +301,7 @@ package ivis
 				z = w / (sw + 2*_margin);
 				z = Math.min(z, ZOOM_MAX)
 				z = Math.max(z, ZOOM_MIN)
-				zoom = z / zoom;
+				zoom = z
 //				_surface.move(-b.left*z + _margin*z, -b.top*z + (h - sh*z)/2);
 				smoothPanTo(-b.left*z + _margin*z, -b.top*z + (h - sh*z)/2)
 			}
@@ -399,14 +420,14 @@ package ivis
 			this.zoomToBounds(this.bounds)
 		}
 
-		public function zoomIn(inc: Number = 1.15): void
+		public function zoomIn(value: Number = 1.10): void
 		{
-			this.zoom = inc
+			this.zoom *= value;
 		}
 		
-		public function zoomOut(inc: Number = .85): void
+		public function zoomOut(value: Number = .90): void
 		{
-			this.zoom = inc
+			this.zoom *= value;
 		}
 		
 		public function get overlay(): Container
@@ -462,14 +483,16 @@ package ivis
 		
 		private function onMouseWheel(e: MouseEvent): void {
 			
-			var inc: Number = e.delta > 0 ? 1.15 : .85;
+			var inc: Number = e.delta > 0 ? 1.1 : .9;
 
 			var p: Point  = new Point(e.localX, e.localY);
 			p = e.target.localToGlobal(p);
 			p = this.globalToLocal(p);
 
-			this.zoomTo(inc, p.x, p.y);
+			this.zoomBy(inc, p.x, p.y);
 
+			log(e.toString())
+			
 			e.stopImmediatePropagation();
 		}
 
@@ -570,57 +593,45 @@ package ivis
 
 		private var _zoom: Number = 1.0;
 		
-		public function get zoom(): Number {
-//			return this._surface.scaleX; // == scaleY
-			return this._zoom;
-		}
-		
+		[Bindable(event="zoomChanged")]
 		public function set zoom(value: Number): void
 		{
-			value = Math.min(value, ZOOM_MAX)			
-			value = Math.max(value, ZOOM_MIN)
-
 			// TODO: correct zooming wrt mouse position			
-			this.zoomTo(value)	
+			this.zoomBy(value / this._zoom)	
 
 //			var t: TweenMax = TweenMax.to(_surface, .65, { scaleX: Number(value), scaleY: Number(value), ease:Expo.easeOut, overwrite: 2 } );
 //			t.addEventListener(TweenEvent.UPDATE, onZoomUpdate, false, 0, true);
 //			t.addEventListener(TweenEvent.COMPLETE, onZoomComplete, false, 0, true);
 
-//			this.onZoomUpdate(null)
 		}
-		
-		private function onZoomUpdate(e: Event): void
-		{
-			this.dispatchEvent(new Event("zoomChanged"));
-		}
-		
-		private function onZoomComplete(e: Event):void
-		{
-			var tm: TweenMax = e.target as TweenMax
-//			tm.removeEventListener(TweenEvent.UPDATE, onZoomUpdate, false);
-			tm.removeEventListener(TweenEvent.COMPLETE, onZoomComplete, false);
 
-			this.refreshMinimap(null)
-
-			dispatchEvent(new Event("zoomChanged"));
+		public function get zoom(): Number {
+//			return this._surface.scaleX; // == scaleY
+			return this._zoom;
 		}
 		
-		private function zoomTo(value: Number, x: Number = 400, y: Number = 250): void
+		private function zoomBy(value: Number, x: Number = 400, y: Number = 250): void
 		{
+			if(this._zoom >= ZOOM_MAX && value >= 1 ||
+				this._zoom <= ZOOM_MIN && value <=1)
+				return;
+				
+			this._zoom *= value;
+			this._zoom = Math.max(this._zoom, ZOOM_MIN);
+			this._zoom = Math.min(this._zoom, ZOOM_MAX);
+
 			var t: Matrix= this._surface.transform.matrix
 			t.translate(-x, -y)
 			t.scale(value, value)
 			t.translate(x, y)
 			this._surface.transform.matrix = t
 			
-			this._zoom *= value;
-			
 			this._surface.invalidateSize()
 			this.invalidateSize()
 			this.invalidateDisplayList()
+
+			this.dispatchEvent(new Event("zoomChanged"));
 			
-			this.onZoomUpdate(null)
 		}
 		
 		public function resetTools(): void
@@ -1648,7 +1659,12 @@ package ivis
 	
 		public function smoothPanTo(x: Number, y: Number, time: Number = .75): void
 		{
-			TweenMax.to(_surface, time, { x: Number(x), y: Number(y), ease: gs.easing.Expo.easeOut })
+			TweenMax.to(_surface, time, { x: Number(x), y: Number(y), ease: gs.easing.Expo.easeOut, onComplete: onSmoothPanComplete })
+		}
+		
+		private function onSmoothPanComplete(): void
+		{
+			this.revalidateSurfaceBounds(null);
 		}
 		
 		public function assignClusterIDs(): void

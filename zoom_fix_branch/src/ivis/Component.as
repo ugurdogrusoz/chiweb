@@ -143,6 +143,8 @@ package ivis
 		{				
 			_stageStart = new Point(e.stageX, e.stageY);
 			Graph.getInstance().overlay.mouseChildren= false
+			
+			trace("edge mouse down")
 		}
 		
 		public function buddy(): UIComponent { return null; }
