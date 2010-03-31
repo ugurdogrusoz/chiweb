@@ -91,27 +91,12 @@ package ivis
 		
 		public static function cloneArray(a: Array): Array
 		{
-			var r: Array = new Array(a.length)
-			
-			for(var i: int = 0; i < a.length; ++i)
-				r[i] = a[i]
-				
-			return r
+			return a.concat([])
 		}
 		
-		public static function merge(a: Array, b: Array): Array
+		public static function mergeArrays(a: Array, b: Array): Array
 		{
-			var res: Array = new Array(a.length + b.length)
-			var i: int = 0
-			
-			for(; i < a.length; ++i)
-				res[i] = a[i]
-
-			for(; i < res.length; ++i)
-				res[i] = b[i - a.length]
-				
-								
-			return res
+			return a.concat(b);
 		}
 
 		public static function colorToString(color: uint): String

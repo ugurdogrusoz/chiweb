@@ -265,14 +265,14 @@ package ivis
 			
 			for each(var e: Edge in _edges) {
 				if(e.bends.length > 0)
-					pts = Utils.merge(pts, e.bendPoints)
+					pts = Utils.mergeArrays(pts, e.bendPoints)
 			}
 			var b:* = Utils.boundingRect(pts)
 
 			return { left: b.left, top: b.top, width: b.width, height: b.height }			
 		}
 
-		private function zoomToBounds(b: Object): void
+		private function zoomTo(b: Object): void
 		{
 				
 			var car: Number;
@@ -411,13 +411,13 @@ package ivis
 			y = Math.min((_mapLocalStart.y - y)/ scale, (_mapLocalStart.y - y + dy)/ scale)
 			dx = Math.abs(dx) / scale
 			dy = Math.abs(dy) / scale
-			this.zoomToBounds(
+			this.zoomTo(
 				{ left: x, top: y, width: dx, height: dy })
 		}
 		
 		public function zoomToFit(): void
 		{
-			this.zoomToBounds(this.bounds)
+			this.zoomTo(this.bounds)
 		}
 
 		public function zoomIn(value: Number = 1.10): void
@@ -905,7 +905,7 @@ package ivis
 		
 		public function clearSelection(): void {
 			
-			var all: Array = Utils.merge(_nodes, _edges) 
+			var all: Array = Utils.mergeArrays(_nodes, _edges) 
 			for each(var c:* in all) {
 				c.view.highlight = false;
 				c.view.selected = false;
@@ -1026,7 +1026,7 @@ package ivis
 
 			this.updateSelectionRectangle(dx, dy)
 			
-			var all: Array = Utils.merge(_nodes, _edges)
+			var all: Array = Utils.mergeArrays(_nodes, _edges)
 			for each(var c:* in all)
 			{
 				var i: int = _prevSelection.indexOf(c.view)
@@ -1115,7 +1115,7 @@ package ivis
 			{
 				var rect: Rectangle = this._selectionRect.getBounds(this.surface)
 				if(rect.width > 5 || rect.height > 5) 
-					this.zoomToBounds(rect)
+					this.zoomTo(rect)
 			}
 			
 			removeSelectioRectangle()
