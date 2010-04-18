@@ -139,6 +139,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import ivis.model.CompoundNode;
 			import mx.managers.BrowserManager;
 			import mx.core.ByteArrayAsset;
 			import flash.utils.describeType;
@@ -544,28 +545,6 @@
 
 				loader.addEventListener("complete", onLayoutComplete)
 				loader.addEventListener("ioError", onLayoutError);
-				
-//				g = Graph.getInstance();
-//				var n1: Node = new Node("100", 30, 30)
-//				n1.clusterID = 1;
-//				g.addNode(n1);
-//				
-//				var n2: Node = new Node("200", 70, 190)
-//				n2.clusterID = 1;
-//				g.addNode(n2);
-//
-//				var n3: Node = new Node("300", 350, 100)
-//				n3.clusterID = 1;
-//				g.addNode(n3);
-//
-//				var n4: Node = new Node("400", 100, 150)
-//				g.addNode(n4)
-//
-//				g.addEdge("100_200", "100", "200")
-//				g.addEdge("100_300", "100", "300")
-//				g.addEdge("200_400", "200", "400")
-//				
-//				g.colorUsingClusterIDs()
 			}
 			
 			private function deleteSelected(): void {
