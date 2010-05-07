@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				layout="absolute"
+				xmlns:cw="ivis.ui.*"
+				initialize="chiWebInit()">
+
+	<cw:GraphComponent width="800"
+					   height="600"
+					   id="graph"
+					   backgroundColor="0xf0f0f0">
+	</cw:GraphComponent>
+
+	<mx:Script>
+		<![CDATA[
+			import ivis.ui.RectangleNodeShape;
+			import ivis.ui.ShapeNodeRenderer;
+			import ivis.ui.NodeComponent;
+			import ivis.ui.EdgeComponent;
+
+			private function chiWebInit():void
+			{
+				var nodes:Array=[];
+				for (var i:int=0; i < 5; ++i)
+				{
+					nodes[i]=new ivis.ui.NodeComponent;
+					nodes[i].x=500 * Math.random();
+					nodes[i].y=500 * Math.random();
+					graph.addNode(nodes[i]);
+				}
+				var r: ShapeNodeRenderer = new ShapeNodeRenderer(nodes[0]);
+				r.shape = new RectangleNodeShape(r);
+				
+				(nodes[0] as NodeComponent).renderer = r;
+				graph.addEdge(new EdgeComponent(nodes[3], nodes[4]));
+				graph.addEdge(new EdgeComponent(nodes[3], nodes[2]));
+				graph.addEdge(new EdgeComponent(nodes[0], nodes[2]));
+			}
+		]]>
+	</mx:Script>
+</mx:Application>

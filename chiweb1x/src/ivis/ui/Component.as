@@ -1,5 +1,7 @@
 package ivis.ui
 {
+	import flash.events.MouseEvent;
+	
 	import ivis.model.GraphObject;
 	import ivis.model.events.*;
 	
@@ -18,9 +20,13 @@ package ivis.ui
 		 */
 		private var _model: GraphObject;
 		
-		// visual cues are added as children..do we need a separate list?
-//		private var _cues: Vector.<VisualCue>;
 		//inspector
+
+		/**
+		 * 
+		 * @default 
+		 */
+		private var _mouseAdapter: IMouseAdapter;
 		
 		/**
 		 * 
@@ -42,6 +48,7 @@ package ivis.ui
 			super();
 			
 			this.model = go;
+			this._mouseAdapter = null;
 		}
 		
 		//
@@ -99,47 +106,30 @@ package ivis.ui
 		 */
 		public function set model(m: GraphObject): void
 		{
-			if(this._model != null)
-			{
-				this._model.removeEventListener(XChangeEvent, onModelXChanged);
-				this._model.removeEventListener(YChangeEvent, onModelYChanged);
-				this._model.removeEventListener(WidthChangeEvent, onModelWidthChanged);
-				this._model.removeEventListener(HeightChangeEvent, onModelHeightChanged);
-			}
-			
 			this._model = m;
+		}
 
-			this._model.addEventListener(XChangeEvent, onModelXChanged);
-			this._model.addEventListener(YChangeEvent, onModelYChanged);
-			this._model.addEventListener(WidthChangeEvent, onModelWidthChanged);
-			this._model.addEventListener(HeightChangeEvent, onModelHeightChanged);
+		/**
+		 * 
+		 * @return 
+		 */
+		public function get mouseAdapter(): IMouseAdapter
+		{
+			return this._mouseAdapter;
+		} 
+		
+		/**
+		 * 
+		 * @param ma
+		 */
+		public function set mouseAdapter(ma: IMouseAdapter): void
+		{
+			this._mouseAdapter = ma;
 		}
 		
 		//
 		// public methods
 		//
-		
-		/**
-		 * 
-		 * @param v
-		 */
-		public function addVisualCue(v: VisualCue): void
-		{
-			// use model's width/height?
-			v.x = this.width * v.relativeX + v.offsetX;
-			v.y = this.height * v.relativeY + v.offsetY;
-			
-			this.addChild(v);
-		}
-		
-		/**
-		 * 
-		 * @param v
-		 */
-		public function removeVisualCue(v: VisualCue): void
-		{
-			this.removeChild(v);
-		}
 		
 		/**
 		 * this should be overriden by subclasses (NodeComponent, EdgeComponent, etc.)
@@ -150,45 +140,28 @@ package ivis.ui
 		{
 			return new Component(this.model);
 		}
-		
-		//
-		// protected methods
-		//
-		
-		//
-		// private methods
-		//
-		
-		/**
-		 * 
-		 * @param event
-		 */
-		private function onModelXChanged(event: XChangeEvent): void
-		{
-		}
 
 		/**
+		 * this should be overriden by subclasses (NodeComponent, EdgeComponent, etc.)
 		 * 
-		 * @param event
+		 * @return 
 		 */
-		private function onModelYChanged(event: YChangeEvent): void
+		public function asXML(): XML
 		{
+			// TODO: stub
+			return null;
 		}
 		
 		/**
+		 * this should be overriden by subclasses (NodeComponent, EdgeComponent, etc.)
 		 * 
-		 * @param event
+		 * @return 
 		 */
-		private function onModelWidthChanged(event: WidthChangeEvent): void
+		public function asGraphML(): XML
 		{
+			// TODO: stub
+			return null;			
 		}
 		
-		/**
-		 * 
-		 * @param event
-		 */
-		private function onModelHeightChanged(event: HeightChangeEvent): void
-		{
-		}
 	}
 }

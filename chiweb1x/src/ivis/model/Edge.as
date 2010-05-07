@@ -22,9 +22,9 @@ package ivis.model
 		 * @param target
 		 * @param data
 		 */
-		public function Edge(id:String, source: Node = null, target: Node = null, data:Object = null)
+		public function Edge(id:String = null, source: Node = null, target: Node = null, data:Object = null)
 		{
-			super(id, x, y, data);
+			super(id, data);
 			
 			this._source = source;
 			this._target = target;
@@ -75,77 +75,10 @@ package ivis.model
 		// public methods
 		//
 		
-		/**
-		 * 
-		 * @param p
-		 */
-		public function addBend(p: Point): void
-		{
-			this._bends.push(p);
-		}
-		
-		/**
-		 * 
-		 * @param p
-		 * @return 
-		 */
-		public function removeBend(p: Point): Boolean
-		{
-			var index: int;
-			
-			index = this.findBend(p);
-			if(index >= 0) {
-				this._bends.splice(index, 1)
-				return true;
-			}
-			
-			return false; 
-		}
-		
 		//
 		// private methods
 		//
 		
-		/**
-		 * 
-		 * @param p
-		 * @return 
-		 */
-		private function findBend(p: Point): int
-		{
-			var result: int = -1;
-			
-			this._bends.some(
-				function (item: Point, index: int, vector: Vector.<Point>): Boolean {
-					if(item.x != p.x || item.y != p.y)
-						return false;
-						
-					result = index;
-					return true;
-				}
-			);
-			
-			return result;
-		}
-		
-		//
-		// overriden public methods
-		//
-
-		/**
-		 * 
-		 * @return 
-		 */
-		override public function bounds(): Rectangle
-		{
-			var xMin: Number = Math.min(source.x, target.x);
-			var xMax: Number = Math.max(source.x, target.x);
-			var yMin: Number = Math.min(source.y, target.y);
-			var yMax: Number = Math.max(source.y, target.y);
-			
-			// TODO: include bend points
-			return new Rectangle(xMin, yMin, xMax - xMin, yMax - yMin);
-		}
 		
 	}
 }

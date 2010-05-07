@@ -20,13 +20,11 @@ package ivis.model
 		/**
 		 * 
 		 * @param id
-		 * @param x
-		 * @param y
 		 * @param data
 		 */
-		public function CompoundNode(id:String, x:Number=0, y:Number=0, data:Object=null)
+		public function CompoundNode(id:String = null, data:Object=null)
 		{
-			super(id, x, y, data);
+			super(id, data);
 			
 			this._nodes = new Vector.<Node>;
 		}
@@ -59,6 +57,7 @@ package ivis.model
 			var index: int;
 			
 			index = this._nodes.indexOf(node);
+			
 			if(index >= 0) {
 				this._nodes.splice(index, 1);
 				return true;
@@ -78,24 +77,6 @@ package ivis.model
 		override public function isCompound(): Boolean
 		{
 			return true;
-		}
-		
-		/**
-		 * 
-		 * @return 
-		 */
-		override public function bounds(): Rectangle
-		{
-			var result: Rectangle = new Rectangle;
-			
-			this._nodes.forEach(
-				function(item: Node, index: int, v: Vector.<Node>): Boolean {
-					result = result.union(item.bounds());
-					return true;
-				}
-			);
-			
-			return result;
 		}
 		
 	}

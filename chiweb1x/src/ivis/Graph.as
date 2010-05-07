@@ -133,7 +133,7 @@ package ivis
 			this.verticalScrollPolicy = ScrollPolicy.OFF
 			this.clipContent = true;
 			this._surface.clipContent = false;
-			this._surface.opaqueBackground = CANVAS_BACKGROUND_COLOR;
+			this._surface.opaqueBackground = 0xaaaaaa;///CANVAS_BACKGROUND_COLOR;
 			this.addChild(_surface);
 
 			var mask:UIComponent = new UIComponent(); 

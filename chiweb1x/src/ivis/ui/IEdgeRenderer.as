@@ -4,6 +4,6 @@ package ivis.ui
 	
 	public interface IEdgeRenderer
 	{
-		public function draw(g: Graphics): void;
+		function draw(g: Graphics): void;
 	}
 }

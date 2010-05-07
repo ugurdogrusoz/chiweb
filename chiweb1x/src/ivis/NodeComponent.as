@@ -350,6 +350,8 @@ package ivis
 				
 			_moved = true
 			pa.dispatchEvent(new Event("boundsChanged"))
+			
+			e.updateAfterEvent();
 		}
 		
 		override public function onMouseUp(e: MouseEvent): void

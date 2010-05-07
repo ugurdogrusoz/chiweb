@@ -1,7 +1,7 @@
 package ivis.model
 {
 	import __AS3__.vec.Vector;
-	
+
 	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
 
@@ -121,29 +121,5 @@ package ivis.model
 			return false;
 		}
 		
-		/**
-		 * 
-		 * @return 
-		 */
-		public function bounds(): Rectangle
-		{
-			var result: Rectangle = new Rectangle;
-			
-			this._nodes.forEach(
-				function (item: Node, index: int, v: Vector.<Node>): Boolean {
-					result = result.union(item.bounds());
-					return true;
-				}
-			);
-			
-			this._edges.forEach(
-				function (item: Edge, index: int, v: Vector.<Edge>): Boolean {
-					result = result.union(item.bounds());
-					return true;
-				}
-			);
-			
-			return result;
-		}
 	}
 }
