@@ -3,6 +3,8 @@ package ivis.ui
 	import flash.display.Loader;
 	import flash.net.URLRequest;
 	
+	import mx.controls.Text;
+	
 	/**
 	 * 
 	 * @author Ebrahim
@@ -14,7 +16,7 @@ package ivis.ui
 		 * 
 		 * @default 
 		 */
-		private var _label: mx.controls.Label;
+		private var _label: Text;
 		
 		/**
 		 * 

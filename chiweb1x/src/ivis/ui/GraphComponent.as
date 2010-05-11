@@ -82,12 +82,7 @@ package ivis.ui
 		//
 		// private methods
 		//
-		
-		private function initScrollRect(): void
-		{
-			this.scrollRect = new Rectangle(0, 0, 1000, 1000);
-		}
-		
+				
 		private function onMouseDown(e: MouseEvent): void
 		{
 			this._mouseTarget = e.target as DisplayObject;
@@ -120,7 +115,6 @@ package ivis.ui
 			this._stageX = e.stageX;
 			this._stageY = e.stageY;
 			
-			e.updateAfterEvent();
 		}
 
 		private function onMouseMove(e: MouseEvent): void
@@ -134,6 +128,8 @@ package ivis.ui
 				var c: Component = this._mouseTarget as Component;
 				c.mouseAdapter.onMouseMove(e);
 			}
+			
+			e.updateAfterEvent();
 		}
 		
 		private function onMouseUp(e: MouseEvent): void

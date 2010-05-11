@@ -16,10 +16,22 @@ package ivis.ui
 	public class EdgeComponent extends Component
 	{
 		
+		/**
+		 * 
+		 * @default 
+		 */
 		private var _bends: Vector.<Point>;
 		
+		/**
+		 * 
+		 * @default 
+		 */
 		private var _sourceComponent: NodeComponent;
 		
+		/**
+		 * 
+		 * @default 
+		 */
 		private var _targetComponent: NodeComponent;
 		
 		/**
@@ -41,17 +53,26 @@ package ivis.ui
 			this.model = new Edge(null, source.model as Node, target.model as Node);
 			this._renderer = new EdgeRenderer(this);
 			this._bends = new Vector.<Point>
+			this.mouseAdapter = new EdgeMouseAdapter
 		}
 		
 		//
 		// getters and setters
 		//
 		
+		/**
+		 * 
+		 * @return 
+		 */
 		public function get sourceComponent(): NodeComponent
 		{
 			return this._sourceComponent;
 		}
 		
+		/**
+		 * 
+		 * @param sc
+		 */
 		public function set sourceComponent(sc: NodeComponent): void
 		{
 			if(this._sourceComponent != null)
@@ -62,11 +83,19 @@ package ivis.ui
 			this.registerSourceEventHadlers();			
 		}
 		
+		/**
+		 * 
+		 * @return 
+		 */
 		public function get targetComponent(): NodeComponent
 		{
 			return this._targetComponent;
 		}
 		
+		/**
+		 * 
+		 * @param tc
+		 */
 		public function set targetComponent(tc: NodeComponent): void
 		{
 			if(this._targetComponent != null)
@@ -99,6 +128,10 @@ package ivis.ui
 		// public methods
 		//
 		
+		/**
+		 * 
+		 * @return 
+		 */
 		override public function clone(): Component
 		{
 			var result: EdgeComponent = new EdgeComponent(
@@ -157,26 +190,42 @@ package ivis.ui
 		// private methods
 		// 
 
+		/**
+		 * 
+		 */
 		private function registerSourceEventHadlers(): void
 		{
 			this._sourceComponent.addEventListener(MoveEvent.MOVE, this.onNodeMoved);
 		}
 		
+		/**
+		 * 
+		 */
 		private function unregisterSourceEventHadlers(): void
 		{
 			this._sourceComponent.removeEventListener(MoveEvent.MOVE, this.onNodeMoved);
 		}
 		
+		/**
+		 * 
+		 */
 		private function registerTargetEventHadlers(): void
 		{
 			this._targetComponent.addEventListener(MoveEvent.MOVE, this.onNodeMoved);
 		}
 		
+		/**
+		 * 
+		 */
 		private function unregisterTargetEventHadlers(): void
 		{
 			this._targetComponent.removeEventListener(MoveEvent.MOVE, this.onNodeMoved);
 		}
 		
+		/**
+		 * 
+		 * @param e
+		 */
 		private function onNodeMoved(e: MoveEvent): void
 		{
 			this.invalidateDisplayList();
