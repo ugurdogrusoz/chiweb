@@ -13,7 +13,7 @@ package ivis.ui
 		 * 
 		 * @param renderer
 		 */
-		public function RectangleNodeShape(renderer: ShapeNodeRenderer)
+		public function RectangleNodeShape(renderer: INodeRenderer)
 		{
 			super(renderer);
 		}

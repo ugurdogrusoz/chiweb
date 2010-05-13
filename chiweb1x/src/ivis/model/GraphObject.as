@@ -2,10 +2,6 @@ package ivis.model
 {
 	// imports
 	import flash.events.EventDispatcher;
-	import flash.geom.Rectangle;
-	
-	import ivis.model.events.XChangeEvent;
-	import ivis.model.events.YChangeEvent;
 
 	/**
 	 * 
@@ -27,6 +23,12 @@ package ivis.model
 		
 		/**
 		 * 
+		 * @default 
+		 */
+		private static var _idCounter: uint = 0;
+		 
+		/**
+		 * 
 		 * @param id
 		 * @param data
 		 */
@@ -34,7 +36,7 @@ package ivis.model
 		{
 			super(null);
 			
-			this._id = id != null ? id : ""/*this.getNewId()*/;
+			this._id = id != null ? id : generateId();
 			this._data = data;
 		}
 	
@@ -74,12 +76,15 @@ package ivis.model
 		//
 		
 		//
-		// private methods
+		// protected methods
 		//
-		private static function generateId(): String
+		/**
+		 * 
+		 * @return 
+		 */
+		protected static function generateId(): String
 		{
-			// TODO: id generation code goes here (use int, string hash?)
-			return null;
+			return String(++_idCounter);
 		}
 		
 	}

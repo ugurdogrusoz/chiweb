@@ -7,5 +7,7 @@ package ivis.ui
 	{
 		function draw(g: Graphics): void;
 		function intersection(p: Point): Point;
+		function set node(n: NodeComponent): void;
+		function get node(): NodeComponent;
 	}
 }

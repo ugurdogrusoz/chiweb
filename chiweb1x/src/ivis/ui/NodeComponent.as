@@ -1,7 +1,13 @@
 package ivis.ui
 {
+	import __AS3__.vec.Vector;
+	
 	import flash.filters.DropShadowFilter;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	
+	import gs.TweenMax;
+	import gs.easing.Elastic;
 	
 	import ivis.model.Node;
 	
@@ -34,6 +40,12 @@ package ivis.ui
 		 * 
 		 * @default 
 		 */
+		private var _clusterId: uint = 0;
+		
+		/**
+		 * 
+		 * @default 
+		 */
 		private var _margin: Number;
 
 		/**
@@ -48,20 +60,24 @@ package ivis.ui
 		 */
 		private var _shaodw: Boolean;
 		
+		internal var _incidentEdges: Vector.<EdgeComponent>;
+		
 		/**
 		 * 
 		 */
-		public function NodeComponent(model: Node = null)
+		public function NodeComponent(id: String = null)
 		{
-			super();
-
+			super(new Node(id));
+			
 			this.width = DEFAULT_WIDTH;
 			this.height = DEFAULT_HEIGHT;
 			this.margin = DEFAULT_MARGIN;
-			this.model = model != null ? model : new Node;
-			this.renderer = new ShapeNodeRenderer(this);
-			this.mouseAdapter = new NodeMouseAdapter(this);
+
+			this.renderer = new ShapeNodeRenderer;
+			this.mouseAdapter = new NodeMouseAdapter;
 		
+			this._incidentEdges = new Vector.<EdgeComponent>;
+			
 			this.cacheHeuristic = true;
 			this.cachePolicy = UIComponentCachePolicy.AUTO;
 			
@@ -71,6 +87,24 @@ package ivis.ui
 		//
 		// getters and setters
 		//
+		
+		/**
+		 * 
+		 * @return 
+		 */
+		public function get clusterId(): uint
+		{
+			return this._clusterId;
+		}
+		
+		/**
+		 * 
+		 * @param cid
+		 */
+		public function set clusterId(cid: uint): void
+		{
+			this._clusterId = cid;
+		}
 		
 		/**
 		 * 
@@ -109,7 +143,7 @@ package ivis.ui
 		public function set renderer(r: INodeRenderer): void
 		{
 			this._renderer = r;
-			this.invalidateDisplayList();
+			r.node = this;
 		}
 		
 		/**
@@ -148,11 +182,27 @@ package ivis.ui
 				this.filters = [];	
 
 		}
-		
+
 		//
 		// public methods
 		//
 		
+		/**
+		 * 
+		 * @param xmlNode
+		 */
+		public function animateToNewPositon(xmlNode: XML): void
+		{
+			var tm: TweenMax = TweenMax.to(this, 1.0, 
+				{ 
+					x: Number(xmlNode.bounds.@x),
+				  	y: Number(xmlNode.bounds.@y),
+				  	ease: gs.easing.Elastic.easeOut,
+				  	//paused: true,
+				  	overwrite: 2
+				})
+		}
+
 		/**
 		 * 
 		 * @return 
@@ -163,7 +213,7 @@ package ivis.ui
 			result.model = this.model;
 			
 			// TOOD: clone the renderer?
-			result.renderer = this.renderer;
+			//result.renderer = this.renderer;
 			
 			return result;
 		}
@@ -174,14 +224,23 @@ package ivis.ui
 		 */
 		override public function asXML(): XML
 		{
-			return XML('<node id="' + id + '" ' + 
-//					'clusterID="' + clusterID + '">' + 
+			return XML('<node id="' + this.model.id + '" ' + 
+					'clusterID="' + clusterId + '">' + 
 					'<bounds height="' + this.height + 
 					'" width="' + this.width + 
 					'" x="' + this.x + 
 					'" y="' + this.y + 
 					'" />' + 
 					'</node>')
+		}
+		
+		/**
+		 * 
+		 * @return 
+		 */
+		override public function get bounds(): Rectangle
+		{
+			return new Rectangle(this.x, this.y, this.width, this.height);
 		}
 		
 		//

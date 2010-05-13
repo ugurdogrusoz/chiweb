@@ -48,11 +48,28 @@ package ivis.ui
 		 * 
 		 * @param nodeComponent
 		 */
-		public function NodeMouseAdapter(nodeComponent: NodeComponent)
+		public function NodeMouseAdapter()
 		{
-			this._nodeComponent = nodeComponent;
 		}
 
+		//
+		// getters & setters
+		//
+		
+		public function get component(): Component
+		{
+			return this._nodeComponent;
+		}
+		
+		public function set component(n: Component): void
+		{
+			this._nodeComponent = n as NodeComponent;
+		}
+		
+		//
+		// public methods
+		//
+		
 		/**
 		 * 
 		 * @param e

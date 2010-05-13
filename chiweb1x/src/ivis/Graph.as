@@ -1366,7 +1366,8 @@ package ivis
 				ev.targetArrow = d.(@key == "arrow");
 			}
 
-			centerView()			
+			centerView()
+			
 		}	
 
 		private function centerView(): void
@@ -1503,7 +1504,6 @@ package ivis
 					graph.addEdge(edge.@id, fromId, toId);
 				}
 			}
-			
 		}
 		
 		public function animateToNewPositions(xml: XML): void

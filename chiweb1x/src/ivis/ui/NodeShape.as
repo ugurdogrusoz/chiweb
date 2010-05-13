@@ -14,13 +14,13 @@ package ivis.ui
 		 * 
 		 * @default 
 		 */
-		private var _renderer: ShapeNodeRenderer;
+		private var _renderer: INodeRenderer;
 		
 		/**
 		 * 
 		 * @param renderer
 		 */
-		public function NodeShape(renderer: ShapeNodeRenderer)
+		public function NodeShape(renderer: INodeRenderer)
 		{
 			super();
 			
@@ -31,7 +31,7 @@ package ivis.ui
 		 * 
 		 * @return 
 		 */
-		protected function get renderer(): ShapeNodeRenderer
+		protected function get renderer(): INodeRenderer
 		{
 			return this._renderer;
 		}

@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
-				layout="absolute"
+				layout="vertical"
 				xmlns:cw="ivis.ui.*"
+				xmlns:cwl="ivis.layout.*"
 				initialize="chiWebInit()">
+
+
+	<mx:Button label="Layout">
+		<mx:click>
+			<![CDATA[
+				coseLayout.layout(function(s:String):void
+					{
+						graph.animateToNewPositions(XML(s));
+					});
+			]]>
+		</mx:click>
+	</mx:Button>
 
 	<cw:GraphComponent width="800"
 					   height="600"
@@ -10,8 +23,16 @@
 					   backgroundColor="0xf0f0f0">
 	</cw:GraphComponent>
 
+	<cwl:CoSELayoutService graph="{graph}"
+						   id="coseLayout"/>
+
 	<mx:Script>
 		<![CDATA[
+			import ivis.ui.CompoundNodeComponent;
+			import ivis.layout.*;
+			import flash.utils.setTimeout;
+			import __AS3__.vec.Vector;
+			import ivis.ui.ImageNodeRenderer;
 			import ivis.ui.RectangleNodeShape;
 			import ivis.ui.ShapeNodeRenderer;
 			import ivis.ui.NodeComponent;
@@ -19,21 +40,30 @@
 
 			private function chiWebInit():void
 			{
-				var nodes:Array=[];
-				for (var i:int=0; i < 5; ++i)
+				var i:int;
+
+				var nodes:Vector.<NodeComponent>=new Vector.<NodeComponent>();
+				for (i=0; i < 6; ++i)
 				{
 					nodes[i]=new ivis.ui.NodeComponent;
 					nodes[i].x=500 * Math.random();
 					nodes[i].y=500 * Math.random();
 					graph.addNode(nodes[i]);
 				}
-				var r: ShapeNodeRenderer = new ShapeNodeRenderer(nodes[0]);
-				r.shape = new RectangleNodeShape(r);
-				
-				(nodes[0] as NodeComponent).renderer = r;
-				graph.addEdge(new EdgeComponent(nodes[3], nodes[4]));
-				graph.addEdge(new EdgeComponent(nodes[3], nodes[2]));
+
+				nodes[0].renderer=new ImageNodeRenderer("assets/social-net/duncan/duncan.jpeg");
+				nodes[1].renderer=new ImageNodeRenderer("assets/social-net/duncan/wei.jpg");
+				nodes[2].renderer=new ImageNodeRenderer("assets/social-net/duncan/lucy.jpg");
+				nodes[3].renderer=new ImageNodeRenderer("assets/social-net/duncan/andrej.jpg");
+				nodes[4].renderer=new ImageNodeRenderer("assets/social-net/duncan/ching.jpg");
+				nodes[5].renderer=new ImageNodeRenderer("assets/social-net/duncan/bilal.jpg");
+
+				graph.addEdge(new EdgeComponent(nodes[0], nodes[1]));
 				graph.addEdge(new EdgeComponent(nodes[0], nodes[2]));
+				graph.addEdge(new EdgeComponent(nodes[0], nodes[3]));
+				graph.addEdge(new EdgeComponent(nodes[0], nodes[4]));
+				graph.addEdge(new EdgeComponent(nodes[0], nodes[5]));
+
 			}
 		]]>
 	</mx:Script>

@@ -45,12 +45,11 @@ package ivis.ui
 		 */
 		public function EdgeComponent(source: NodeComponent, target: NodeComponent)
 		{
-			super();
+			super(new Edge(source.model.id + "_" + target.model.id));
 		
 			this.sourceComponent = source;
 			this.targetComponent = target;
 				
-			this.model = new Edge(null, source.model as Node, target.model as Node);
 			this._renderer = new EdgeRenderer(this);
 			this._bends = new Vector.<Point>
 			this.mouseAdapter = new EdgeMouseAdapter
@@ -79,6 +78,7 @@ package ivis.ui
 				this.unregisterSourceEventHadlers();
 				
 			this._sourceComponent = sc;
+			this._sourceComponent._incidentEdges.push(this);
 			
 			this.registerSourceEventHadlers();			
 		}
@@ -102,6 +102,7 @@ package ivis.ui
 				this.unregisterTargetEventHadlers();
 			
 			this._targetComponent = tc;
+			this._targetComponent._incidentEdges.push(this);
 			
 			this.registerTargetEventHadlers();
 		}
@@ -143,6 +144,13 @@ package ivis.ui
 			return result;
 		}
 
+		override public function asXML():XML
+		{
+			return XML('<edge id="' + this.model.id + '">' + 
+				'<sourceNode id="' + this._sourceComponent.model.id + '"/>' + 
+				'<targetNode id="' + this._targetComponent.model.id + '"/></edge>')
+		}
+		
 		/**
 		 * 
 		 * @param p

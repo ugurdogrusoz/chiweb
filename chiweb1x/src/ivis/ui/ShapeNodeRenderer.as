@@ -34,12 +34,15 @@ package ivis.ui
 		 * 
 		 * @param n
 		 */
-		public function ShapeNodeRenderer(n: NodeComponent)
+		public function ShapeNodeRenderer()
 		{
-			this._nodeComponent = n;
-			this._shape = new TriangleNodeShape(this);//new RectangleNodeShape(this);
+			this._shape = new RectangleNodeShape(this);
 		}
 
+		//
+		// getters & setters
+		//
+		
 		public function get node(): NodeComponent
 		{
 			return this._nodeComponent;
@@ -53,14 +56,22 @@ package ivis.ui
 		public function set shape(s: NodeShape): void
 		{
 			this._shape = s;
-//			this._nodeComponent.invalidateDisplayList();
 		}
 		
 		public function intersection(p: Point): Point
 		{
 			return this._shape.intersection(p);
 		}
-			
+		
+		public function set node(n: NodeComponent): void
+		{
+			this._nodeComponent = n;
+		}
+		
+		//
+		// public methods
+		//
+		
 		/**
 		 * 
 		 * @param g

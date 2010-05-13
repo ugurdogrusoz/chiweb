@@ -39,8 +39,8 @@ package ivis.ui
 			var p1: Point = n1.renderer.intersection(n2.center);
 			var p2: Point = n2.renderer.intersection(n1.center);
 						
-			g.moveTo(n1.x + p1.x, n1.y + p1.y);
-			g.lineTo(n2.x + p2.x, n2.y + p2.y);
+			g.moveTo(n1.bounds.x + p1.x, n1.bounds.y + p1.y);
+			g.lineTo(n2.bounds.x + p2.x, n2.bounds.y + p2.y);
 		}
 	}
 }

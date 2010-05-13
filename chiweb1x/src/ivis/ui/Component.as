@@ -1,6 +1,6 @@
 package ivis.ui
 {
-	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
 	
 	import ivis.model.GraphObject;
 	import ivis.model.events.*;
@@ -125,6 +125,7 @@ package ivis.ui
 		public function set mouseAdapter(ma: IMouseAdapter): void
 		{
 			this._mouseAdapter = ma;
+			this._mouseAdapter.component = this;
 		}
 		
 		//
@@ -161,6 +162,15 @@ package ivis.ui
 		{
 			// TODO: stub
 			return null;			
+		}
+		
+		/**
+		 * this is a stub to be overriden by subcalsses
+		 * @return 
+		 */
+		public function get bounds(): Rectangle
+		{
+			return null;
 		}
 		
 	}
