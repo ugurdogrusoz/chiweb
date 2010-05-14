@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
 				layout="vertical"
-				xmlns:cw="ivis.ui.*"
+				xmlns:cwu="ivis.ui.*"
 				xmlns:cwl="ivis.layout.*"
 				initialize="chiWebInit()">
 
@@ -9,19 +9,21 @@
 	<mx:Button label="Layout">
 		<mx:click>
 			<![CDATA[
-				coseLayout.layout(function(s:String):void
+				coseLayout.layout(
+					function(s:String):void
 					{
 						graph.animateToNewPositions(XML(s));
-					});
+					}
+				);
 			]]>
 		</mx:click>
 	</mx:Button>
 
-	<cw:GraphComponent width="800"
+	<cwu:GraphComponent width="800"
 					   height="600"
 					   id="graph"
 					   backgroundColor="0xf0f0f0">
-	</cw:GraphComponent>
+	</cwu:GraphComponent>
 
 	<cwl:CoSELayoutService graph="{graph}"
 						   id="coseLayout"/>
@@ -64,6 +66,13 @@
 				graph.addEdge(new EdgeComponent(nodes[0], nodes[4]));
 				graph.addEdge(new EdgeComponent(nodes[0], nodes[5]));
 
+				var cn: CompoundNodeComponent = new CompoundNodeComponent;
+				cn.addNode(nodes[1]);
+				cn.addNode(nodes[2]);
+				graph.addNode(cn);
+				graph.addEdge(new EdgeComponent(cn, nodes[0]));
+				
+				//trace(graph.asXML());
 			}
 		]]>
 	</mx:Script>

@@ -32,6 +32,8 @@ package ivis.ui
 		{
 			var r: Rectangle = this.node.bounds;
 			
+			trace("[" + new Date().time + "]" + r);
+			
 			g.clear();
 			g.beginFill(0xaabbaa, .3);
 			g.drawRect(r.x, r.y, r.width, r.height);

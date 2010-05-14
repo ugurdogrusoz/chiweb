@@ -2,6 +2,7 @@ package ivis.ui
 {
 	import flash.display.Graphics;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	/**
 	 * 
 	 * @author Ebrahim
@@ -32,13 +33,19 @@ package ivis.ui
 		{
 			var n1: NodeComponent = this._edgeComponent.sourceComponent;
 			var n2: NodeComponent = this._edgeComponent.targetComponent;
+			var b1: Rectangle = n1.bounds;
+			var b2: Rectangle = n2.bounds;
 			
 			g.clear();
+
+			if(b1.intersects(b2))
+				return;
+				
 			g.lineStyle(2.0, 0x222222, .6, true);
 			
 			var p1: Point = n1.renderer.intersection(n2.center);
 			var p2: Point = n2.renderer.intersection(n1.center);
-						
+			
 			g.moveTo(n1.bounds.x + p1.x, n1.bounds.y + p1.y);
 			g.lineTo(n2.bounds.x + p2.x, n2.bounds.y + p2.y);
 		}

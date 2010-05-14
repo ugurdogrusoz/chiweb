@@ -74,13 +74,8 @@ package ivis.ui
 		 */
 		public function set sourceComponent(sc: NodeComponent): void
 		{
-			if(this._sourceComponent != null)
-				this.unregisterSourceEventHadlers();
-				
 			this._sourceComponent = sc;
 			this._sourceComponent._incidentEdges.push(this);
-			
-			this.registerSourceEventHadlers();			
 		}
 		
 		/**
@@ -98,13 +93,8 @@ package ivis.ui
 		 */
 		public function set targetComponent(tc: NodeComponent): void
 		{
-			if(this._targetComponent != null)
-				this.unregisterTargetEventHadlers();
-			
 			this._targetComponent = tc;
 			this._targetComponent._incidentEdges.push(this);
-			
-			this.registerTargetEventHadlers();
 		}
 		
 		/**
@@ -198,47 +188,6 @@ package ivis.ui
 		// private methods
 		// 
 
-		/**
-		 * 
-		 */
-		private function registerSourceEventHadlers(): void
-		{
-			this._sourceComponent.addEventListener(MoveEvent.MOVE, this.onNodeMoved);
-		}
-		
-		/**
-		 * 
-		 */
-		private function unregisterSourceEventHadlers(): void
-		{
-			this._sourceComponent.removeEventListener(MoveEvent.MOVE, this.onNodeMoved);
-		}
-		
-		/**
-		 * 
-		 */
-		private function registerTargetEventHadlers(): void
-		{
-			this._targetComponent.addEventListener(MoveEvent.MOVE, this.onNodeMoved);
-		}
-		
-		/**
-		 * 
-		 */
-		private function unregisterTargetEventHadlers(): void
-		{
-			this._targetComponent.removeEventListener(MoveEvent.MOVE, this.onNodeMoved);
-		}
-		
-		/**
-		 * 
-		 * @param e
-		 */
-		private function onNodeMoved(e: MoveEvent): void
-		{
-			this.invalidateDisplayList();
-		}
-		
 		/**
 		 * 
 		 * @param p

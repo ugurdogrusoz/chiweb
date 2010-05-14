@@ -1,6 +1,7 @@
 package ivis.layout
 {
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
 	import flash.utils.ByteArray;
 	
 	import ivis.ui.GraphComponent;
@@ -19,7 +20,7 @@ package ivis.layout
 		 * 
 		 * @default 
 		 */
-		public static const DEFAULT_URL: String = "http://139.179.21.69/chilay1x/layout.jsp";
+		public static const DEFAULT_URL: String = "http://localhost:8080/chilay1x/layout.jsp";
 
 		/**
 		 * 
@@ -45,6 +46,10 @@ package ivis.layout
 		 */
 		private var _graph: GraphComponent;
 		
+		/**
+		 * 
+		 * @default 
+		 */
 		private var _callback: Function;
 		
 		/**
@@ -147,6 +152,10 @@ package ivis.layout
 		// private methods
 		//
 
+		/**
+		 * 
+		 * @param e
+		 */
 		private function invokeCallback(e: Event): void
 		{
 			if(this._callback == null)
@@ -159,9 +168,9 @@ package ivis.layout
 		 * 
 		 * @param e
 		 */
-		private function onLayoutError(e: Event): void
+		private function onLayoutError(e: IOErrorEvent): void
 		{
-			Alert.show("An IO error occured during layout");
+			Alert.show(e.text, "Error");
 		}
 
 	}

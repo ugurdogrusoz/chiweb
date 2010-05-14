@@ -1,6 +1,9 @@
 package ivis.ui
 {
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
+	
+	import mx.events.MoveEvent;
 
 	/**
 	 * 
@@ -26,23 +29,13 @@ package ivis.ui
 		 */
 		private var _stageStartY: Number;
 		
+		private var _starts: Object;
+
 		/**
 		 * 
 		 * @default 
 		 */
-		private var _nodeStartX: Number;
-		
-		/**
-		 * 
-		 * @default 
-		 */
-		private var _nodeStartY: Number;
-		
-		/**
-		 * 
-		 * @default 
-		 */
-		private var _drag: Boolean = false;
+		private var _down: Boolean = false;
 		
 		/**
 		 * 
@@ -79,10 +72,14 @@ package ivis.ui
 			this._stageStartX = e.stageX;
 			this._stageStartY = e.stageY;
 		
-			this._nodeStartX = this._nodeComponent.x;
-			this._nodeStartY = this._nodeComponent.y;
+			this._starts = new Object;
+			
+			this._nodeComponent.forEachNode(
+				function (n: NodeComponent): void {
+					_starts[n] = new Point(n.x, n.y);
+				});
 				
-			this._drag = true;
+			this._down = true;
 			
 			e.updateAfterEvent();
 		}
@@ -93,15 +90,20 @@ package ivis.ui
 		 */
 		public function onMouseMove(e:MouseEvent):void
 		{
-			if(this._drag)
+			if(this._down)
 			{
 				var dx: Number = e.stageX - this._stageStartX; 
 				var dy: Number = e.stageY - this._stageStartY;
 				
-				this._nodeComponent.x = this._nodeStartX + dx; 
-				this._nodeComponent.y = this._nodeStartY + dy;
+			this._nodeComponent.forEachNode(
+				function (n: NodeComponent): void {
+					var p: Point = _starts[n];
+					n.x = p.x + dx;
+					n.y = p.y + dy;
+				});
 			}
 			
+			this._nodeComponent.dispatchEvent(new MoveEvent(MoveEvent.MOVE));
 			e.updateAfterEvent();
 		}
 		
@@ -111,7 +113,7 @@ package ivis.ui
 		 */
 		public function onMouseUp(e:MouseEvent):void
 		{
-			this._drag = false;
+			this._down = false;
 		}
 		
 	}

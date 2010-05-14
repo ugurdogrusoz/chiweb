@@ -98,8 +98,7 @@ package ivis.ui
 				var dx: Number = e.stageX - this._stageStartX; 
 				var dy: Number = e.stageY - this._stageStartY;
 				
-				this._nodeComponent.x = this._nodeStartX + dx; 
-				this._nodeComponent.y = this._nodeStartY + dy;
+				this._nodeComponent.move(this._nodeStartX + dx, this._nodeStartY + dy);
 			}
 			
 			e.updateAfterEvent();

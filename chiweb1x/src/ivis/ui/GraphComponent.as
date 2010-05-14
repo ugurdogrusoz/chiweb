@@ -130,6 +130,7 @@ package ivis.ui
 			this.model.addNode(n);
 			this._surface.addChild(nodeComponent);
 			this._nodes.push(nodeComponent);
+			nodeComponent.parentComponent = this;
 		}
 		
 		/**

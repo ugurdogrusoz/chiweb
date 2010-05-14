@@ -2,6 +2,7 @@ package ivis.ui
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.events.Event;
 	import flash.filters.DropShadowFilter;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -12,6 +13,8 @@ package ivis.ui
 	import ivis.model.Node;
 	
 	import mx.core.UIComponentCachePolicy;
+	import mx.events.MoveEvent;
+	import mx.events.ResizeEvent;
 
 	/**
 	 * 
@@ -58,6 +61,12 @@ package ivis.ui
 		 * 
 		 * @default 
 		 */
+		protected var _parentComponent: Object;
+		
+		/**
+		 * 
+		 * @default 
+		 */
 		private var _shaodw: Boolean;
 		
 		internal var _incidentEdges: Vector.<EdgeComponent>;
@@ -75,6 +84,7 @@ package ivis.ui
 
 			this.renderer = new ShapeNodeRenderer;
 			this.mouseAdapter = new NodeMouseAdapter;
+			this.parentComponent = null;
 		
 			this._incidentEdges = new Vector.<EdgeComponent>;
 			
@@ -82,6 +92,8 @@ package ivis.ui
 			this.cachePolicy = UIComponentCachePolicy.AUTO;
 			
 			this.shadow = true;
+			
+			this.registerEventHandlers();
 		}
 		
 		//
@@ -152,8 +164,7 @@ package ivis.ui
 		 */
 		public function get center(): Point
 		{
-			return new Point(this.x + this.width / 2,
-				this.y + this.height / 2);
+			return new Point(this.x + this.width / 2, this.y + this.height / 2);
 		}
 		
 		/**
@@ -182,10 +193,33 @@ package ivis.ui
 				this.filters = [];	
 
 		}
-
+		
+		/**
+		 * 
+		 * @return 
+		 */
+		public function get parentComponent(): Object
+		{
+			return this._parentComponent;
+		}
+		
+		public function set parentComponent(p: Object): void
+		{
+			this._parentComponent = p;
+		}
+		
 		//
 		// public methods
 		//
+
+		/**
+		 * 
+		 * @return 
+		 */
+		public function isCompound(): Boolean
+		{
+			return false;
+		}
 		
 		/**
 		 * 
@@ -255,8 +289,31 @@ package ivis.ui
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number): void
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+			trace("[" + new Date().time + "] " + this);
 			
 			this._renderer.draw(this.graphics);
+		}
+		
+		protected function registerEventHandlers(): void
+		{
+			this.addEventListener(MoveEvent.MOVE, this.onGeometryChanged);
+			this.addEventListener(ResizeEvent.RESIZE, this.onGeometryChanged);
+		}
+		
+		//
+		// private methods
+		//
+		
+		private function onGeometryChanged(e: Event): void
+		{
+			if(this.parentComponent is CompoundNodeComponent) {
+				this.parentComponent.invalidateBounds();
+			}
+			
+			this._incidentEdges.forEach(function (item: EdgeComponent, i: int, v: Vector.<EdgeComponent>): void {
+				item.invalidateDisplayList();
+			});
 		}
 	}
 }

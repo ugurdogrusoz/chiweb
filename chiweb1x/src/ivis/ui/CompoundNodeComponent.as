@@ -6,9 +6,6 @@ package ivis.ui
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import mx.events.MoveEvent;
-	import mx.events.ResizeEvent;
-	
 	/**
 	 * 
 	 * @author Ebrahim
@@ -53,10 +50,8 @@ package ivis.ui
 		public function addNode(n: NodeComponent): void
 		{
 			this._nodes.push(n);
-			this.addChild(n);
-			
-			n.addEventListener(MoveEvent.MOVE, onChildChanged); 
-			n.addEventListener(ResizeEvent.RESIZE, onChildChanged);
+			n.parentComponent = this;
+			this.invalidateBounds();
 		}	
 		
 		/**
@@ -66,8 +61,16 @@ package ivis.ui
 		public function removeNode(n: NodeComponent): void
 		{
 			this._nodes.splice(this._nodes.indexOf(n), 1);
+			this.invalidateBounds();
 		}	
 
+		public function forEachNode(f: Function): void
+		{
+			this._nodes.forEach(function (item: NodeComponent, i: int, v: Vector.<NodeComponent>): void {
+				f.call(item, item);
+			});
+		}
+		
 		/**
 		 * 
 		 * @return 
@@ -130,10 +133,36 @@ package ivis.ui
 		 */
 		override public function get center(): Point
 		{
-			return new Point(this._cachedBounds.x + this.x + this._cachedBounds.width / 2,
-				this._cachedBounds.y + this.y + this._cachedBounds.height / 2);
+			return new Point(this._cachedBounds.x + this._cachedBounds.width / 2,
+				this._cachedBounds.y + this._cachedBounds.height / 2);
 		}
 		
+		//
+		// public methods
+		//
+		
+		/**
+		 * 
+		 * @return 
+		 */
+		override public function isCompound(): Boolean
+		{
+			return true;
+		}
+		
+		/**
+		 * 
+		 */
+		public function invalidateBounds(): void
+		{
+			this._cachedBounds.setEmpty();
+			
+			this._nodes.forEach(function (item: NodeComponent, i: int, v: Vector.<NodeComponent>): void {
+				_cachedBounds = _cachedBounds.union(item.bounds);
+			}, this);
+			this.invalidateDisplayList();
+		}
+
 		//
 		// protected methods
 		//
@@ -160,22 +189,10 @@ package ivis.ui
 		 */
 		private function onChildChanged(e: Event): void
 		{
-			this.refreshBounds();
+			this.invalidateBounds();
 			this.invalidateDisplayList();
 		}
 		
-		/**
-		 * 
-		 */
-		private function refreshBounds(): void
-		{
-			this._cachedBounds.setEmpty();
-			
-			this._nodes.forEach(function (item: NodeComponent, i: int, v: Vector.<NodeComponent>): void {
-				_cachedBounds = _cachedBounds.union(item.bounds);
-			}, this);
-		}
-
 		/**
 		 * 
 		 * @param id
