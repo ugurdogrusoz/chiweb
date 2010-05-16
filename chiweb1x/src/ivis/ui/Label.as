@@ -1,9 +1,6 @@
 package ivis.ui
 {
-	import flash.display.Loader;
-	import flash.net.URLRequest;
-	
-	import mx.controls.Text;
+	import flash.geom.Point;
 	
 	/**
 	 * 
@@ -16,81 +13,85 @@ package ivis.ui
 		 * 
 		 * @default 
 		 */
-		private var _label: Text;
+		protected var _relativePosition: Point;
 		
 		/**
 		 * 
 		 * @default 
 		 */
-		private var _url: String;
+		protected var _component: Component;
 		
 		/**
 		 * 
 		 * @default 
 		 */
-		private var _image: Loader;
+		protected var _offset: Point;
 		
 		/**
 		 * 
 		 */
-		public function Label()
+		public function Label(relPos: Point = null, absPos: Point = null)
 		{
-			this._label = null;
-			this._image = null;
-			this._url = "";
-		}
-		
-		//
-		// setters and getters
-		//
-		
-		/**
-		 * 
-		 * @return 
-		 */
-		public function get text(): String
-		{
-			if(this._label != null)
-				return this._label.text;
-			
-			return null;
-		}
-		
-		/**
-		 * 
-		 * @param s
-		 */
-		public function set text(s: String): void
-		{
-			
-			if(this._label == null)
-				this._label = new mx.controls.Label;
-				
-			this._label.text = s;
+			this._offset = absPos != null ? absPos : new Point;
+			this._relativePosition = relPos != null ? relPos : new Point;
 		}
 		
 		/**
 		 * 
 		 * @return 
 		 */
-		public function get imageUrl(): String
+		public function get relativeposition(): Point
 		{
-			return this._url;
+			return this._relativePosition;
 		}
 		
 		/**
 		 * 
-		 * @param s
+		 * @param x
+		 * @param y
 		 */
-		public function set imageUrl(s: String): void
+		public function set relativePosition(p: Point): void
 		{
-			this._url = s;
-			
-			if(this._image == null)
-				this._image = new Loader;
-				
-			var req: URLRequest = new URLRequest(s);
-			this._image.load(req);
+			this._relativePosition = p;
+		}
+		
+		/**
+		 * 
+		 * @return 
+		 */
+		public function get offset(): Point
+		{
+			return this._offset;
+		}
+		
+		/**
+		 * 
+		 * @param x
+		 * @param y
+		 */
+		public function set offset(p: Point): void
+		{
+			this._offset = p;
+		}
+		
+		/**
+		 * 
+		 * @return 
+		 */
+		public function get component(): Component
+		{
+			return this._component;
+		}
+		
+		/**
+		 * 
+		 * @param c
+		 */
+		public function set component(c: Component): void
+		{
+			this._component = c;
 		}
 	}
+	
+	
 }

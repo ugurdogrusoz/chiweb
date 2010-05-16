@@ -61,6 +61,8 @@ package ivis.ui
 		 */
 		private var _edges: Vector.<EdgeComponent>;
 		
+		private var _prevComponent: Component;
+		
 		/**
 		 * 
 		 * @param model
@@ -76,6 +78,8 @@ package ivis.ui
 			
 			this.horizontalScrollPolicy = ScrollPolicy.OFF;
 			this.verticalScrollPolicy = ScrollPolicy.OFF;
+			
+			this._prevComponent = null;
 			
 			this.registerMouseHandlers();
 		}
@@ -241,9 +245,14 @@ package ivis.ui
 		{
 			this._mouseTarget = e.target as DisplayObject;
 			
+			if(this._mouseTarget !== this._prevComponent && this._prevComponent != null)
+				this._prevComponent.highlighted = false;
+				
 			if(this._mouseTarget == this)
 			{
 				this._panning = true;
+				
+				this.mouseChildren = false;
 				
 				this._stageX = e.stageX; 				
 				this._stageY = e.stageY;
@@ -251,10 +260,16 @@ package ivis.ui
 			else if(this._mouseTarget is Component)
 			{
 				var c: Component = e.target as Component;
+				
+				if(c !== this._prevComponent) {
+					c.highlighted = true;
+				}
+				
 				c.mouseAdapter.onMouseDown(e);
-				trace("mouse down on: " + c.model.id + ", bounds=" + c.bounds);
 			}
 
+			this._prevComponent = this._mouseTarget as Component;
+			
 			this.addEventListener(MouseEvent.MOUSE_MOVE, this.onMouseMove);
 			this.addEventListener(MouseEvent.MOUSE_UP, this.onMouseUp);
 		}
@@ -313,6 +328,9 @@ package ivis.ui
 			
 			this.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			this.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+
+			this.mouseChildren = true;
+
 		}
 				
 		/**

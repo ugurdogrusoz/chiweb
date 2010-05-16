@@ -81,7 +81,7 @@ package ivis.ui
 		
 			this._nodeStartX = this._nodeComponent.x;
 			this._nodeStartY = this._nodeComponent.y;
-				
+			
 			this._drag = true;
 			
 			e.updateAfterEvent();

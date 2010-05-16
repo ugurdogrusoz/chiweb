@@ -30,6 +30,9 @@
 
 	<mx:Script>
 		<![CDATA[
+			import ivis.ui.Label;
+			import ivis.ui.ImageLabel;
+			import ivis.ui.TextLabel;
 			import ivis.ui.CompoundNodeComponent;
 			import ivis.layout.*;
 			import flash.utils.setTimeout;
@@ -60,6 +63,12 @@
 				nodes[4].renderer=new ImageNodeRenderer("assets/social-net/duncan/ching.jpg");
 				nodes[5].renderer=new ImageNodeRenderer("assets/social-net/duncan/bilal.jpg");
 
+				var l: TextLabel = new TextLabel("Duncan", new Point(.5, 1));
+				l.font = "Verdana";
+				l.fontSize = 14;
+				nodes[0].addLabel(l);
+				nodes[0].addLabel(new ImageLabel("assets/social-net/facebook.png", new Point(1.0, 1.0), new Point(-20, -20)));
+				
 				graph.addEdge(new EdgeComponent(nodes[0], nodes[1]));
 				graph.addEdge(new EdgeComponent(nodes[0], nodes[2]));
 				graph.addEdge(new EdgeComponent(nodes[0], nodes[3]));
@@ -77,7 +86,7 @@
 				cn2.addNode(cn);
 				graph.addNode(cn2);
 				
-				graph.addEdge(new EdgeComponent(cn, nodes[0]));
+				graph.addEdge(new EdgeComponent(cn2, nodes[0]));
 				
 				//trace(graph.asXML());
 			}

@@ -145,6 +145,8 @@ package ivis.layout
 			this._loader.addFile(ba, "graph");
 			this._loader.addVariable("layoutStyle", "cose")
 			
+			// TODO: attach layout options...
+			
 			this._loader.load(this._url);
 		}
 		

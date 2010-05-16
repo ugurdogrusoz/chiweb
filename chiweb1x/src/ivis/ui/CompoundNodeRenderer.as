@@ -23,7 +23,7 @@ package ivis.ui
 		 */
 		private var _node: CompoundNodeComponent;
 		
-		private var _color: uint = 0x004358;
+		private var _color: uint = 0x273445;
 		
 		/**
 		 * 
@@ -42,11 +42,11 @@ package ivis.ui
 			m.createGradientBox(this.node.width, this.node.height, 45);
 			
 			var c1: uint = this._color;
-			var c2: uint = ColorUtil.adjustBrightness(c1, -80);
+			var c2: uint = ColorUtil.adjustBrightness(c1, 80);
 			
 			g.clear();
             g.beginGradientFill(GradientType.LINEAR, [c1, c2],
-            	[.17, .17], [32, 255], m, SpreadMethod.REFLECT, InterpolationMethod.RGB, 1)
+            	[.27, .27], [32, 255], m, SpreadMethod.REFLECT, InterpolationMethod.RGB, 1)
 
 			g.drawRoundRect(0, 0, this.node.width, this.node.height, 10, 10);
 			 

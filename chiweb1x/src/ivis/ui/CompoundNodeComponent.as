@@ -197,9 +197,12 @@ package ivis.ui
 		{
 			this._cachedBounds.setEmpty();
 			
-			this._nodes.forEach(function (item: NodeComponent, i: int, v: Vector.<NodeComponent>): void {
-				this._cachedBounds = this._cachedBounds.union(item.bounds);
-			}, this);
+			if(this._nodes.length == 0)
+				this._cachedBounds = new Rectangle(this.x, this.y, this.MIN_WIDTH, this.MIN_HEIGHT);
+			else
+				this._nodes.forEach(function (item: NodeComponent, i: int, v: Vector.<NodeComponent>): void {
+					this._cachedBounds = this._cachedBounds.union(item.bounds);
+				}, this);
 			
 			this._cachedBounds.inflate(this.margin, this.margin);
 			
@@ -207,7 +210,6 @@ package ivis.ui
 			this.y = this._cachedBounds.y;
 			this.width = this._cachedBounds.width;
 			this.height = this._cachedBounds.height;
-			
 		}
 
 		//

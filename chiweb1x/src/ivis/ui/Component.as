@@ -2,6 +2,8 @@ package ivis.ui
 {
 	import flash.geom.Rectangle;
 	
+	import gs.TweenMax;
+	
 	import ivis.model.GraphObject;
 	import ivis.model.events.*;
 	
@@ -38,7 +40,9 @@ package ivis.ui
 		 * @default 
 		 */
 		private var _highlighted: Boolean;
-		
+
+		protected static var _highlightColor: uint = 0xFF9900
+	
 		/**
 		 * 
 		 * @param go
@@ -88,7 +92,20 @@ package ivis.ui
 		 */
 		public function set highlighted(h: Boolean): void
 		{
+			if(h == this._highlighted)
+				return;
+
 			this._highlighted = h;
+
+			var _selectFilter:* = {color: uint(_highlightColor), alpha:.5, blurX:4, blurY:4, strength:3, quality: 1, inner: false};
+			var _unselectFilter:* = {color: uint(_highlightColor), alpha:0, blurX:4, blurY:4, strength:3, quality: 1, inner: false, remove: true};
+
+			if(h) {
+				TweenMax.to(this, .7, {glowFilter: _selectFilter });
+			}
+			else {
+				TweenMax.to(this, .7, {glowFilter: _unselectFilter });
+			}
 		}
 		
 		/**
@@ -131,6 +148,16 @@ package ivis.ui
 		//
 		// public methods
 		//
+		
+		public function addLabel(l: ivis.ui.Label): void
+		{
+			l.component = this;
+		}
+		
+		public function removeLabel(l: ivis.ui.Label): void
+		{
+			l.component = null;
+		}
 		
 		/**
 		 * this should be overriden by subclasses (NodeComponent, EdgeComponent, etc.)
