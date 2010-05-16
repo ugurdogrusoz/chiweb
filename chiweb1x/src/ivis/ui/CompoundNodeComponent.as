@@ -2,6 +2,7 @@ package ivis.ui
 {
 	import __AS3__.vec.Vector;
 	
+	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -31,12 +32,6 @@ package ivis.ui
 		public function CompoundNodeComponent()
 		{
 			super();
-	
-			this.renderer = new CompoundNodeRenderer;
-			this.mouseAdapter = new CompoundNodeMouseAdapter;
-			
-			this._nodes = new Vector.<NodeComponent>;
-			this._cachedBounds = new Rectangle;
 		}
 		
 		//
@@ -49,8 +44,12 @@ package ivis.ui
 		 */
 		public function addNode(n: NodeComponent): void
 		{
+			if(n.parentComponent != null)
+				n.parentComponent.detachNode(n);
+				
 			this._nodes.push(n);
 			n.parentComponent = this;
+			
 			this.invalidateBounds();
 		}	
 		
@@ -62,8 +61,21 @@ package ivis.ui
 		{
 			this._nodes.splice(this._nodes.indexOf(n), 1);
 			this.invalidateBounds();
-		}	
+		}
+		
+		/**
+		 * 
+		 * @param n
+		 */
+		public function detachNode(n: NodeComponent): void
+		{
+			this._nodes.splice(this._nodes.indexOf(n), 1);
+		}
 
+		/**
+		 * 
+		 * @param f
+		 */
 		public function forEachNode(f: Function): void
 		{
 			this._nodes.forEach(function (item: NodeComponent, i: int, v: Vector.<NodeComponent>): void {
@@ -143,11 +155,39 @@ package ivis.ui
 		
 		/**
 		 * 
+		 * @param doc
+		 */
+		public function bringUpChildren(doc: DisplayObjectContainer): void
+		{
+			this._nodes.forEach(function (item: NodeComponent, i: int, v: Vector.<NodeComponent>): void {
+				if(item.isCompound())
+					(item as CompoundNodeComponent).bringUpChildren(doc);
+			}, this);
+
+			doc.setChildIndex(this, 0);
+		}
+		
+		/**
+		 * 
 		 * @return 
 		 */
 		override public function isCompound(): Boolean
 		{
 			return true;
+		}
+		
+		/**
+		 * 
+		 * @param dx
+		 * @param dy
+		 */
+		override public function translate(dx: Number, dy: Number): void
+		{
+			this._nodes.forEach(function (item: NodeComponent, i: int, v: Vector.<NodeComponent>): void {
+				item.translate(dx, dy);
+			});
+			
+			this.invalidateBounds();
 		}
 		
 		/**
@@ -158,9 +198,16 @@ package ivis.ui
 			this._cachedBounds.setEmpty();
 			
 			this._nodes.forEach(function (item: NodeComponent, i: int, v: Vector.<NodeComponent>): void {
-				_cachedBounds = _cachedBounds.union(item.bounds);
+				this._cachedBounds = this._cachedBounds.union(item.bounds);
 			}, this);
-			this.invalidateDisplayList();
+			
+			this._cachedBounds.inflate(this.margin, this.margin);
+			
+			this.x = this._cachedBounds.x;
+			this.y = this._cachedBounds.y;
+			this.width = this._cachedBounds.width;
+			this.height = this._cachedBounds.height;
+			
 		}
 
 		//
@@ -177,6 +224,29 @@ package ivis.ui
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
 			this._renderer.draw(this.graphics);
+		}
+
+		/**
+		 * 
+		 */
+		override protected function initializeComponent(): void
+		{
+			this.margin = DEFAULT_MARGIN;
+
+			this.renderer = new CompoundNodeRenderer;
+			this.mouseAdapter = new CompoundNodeMouseAdapter;
+			
+			this._nodes = new Vector.<NodeComponent>;
+
+			this._cachedBounds = new Rectangle;
+
+			this.parentComponent = null;
+		
+			this._incidentEdges = new Vector.<EdgeComponent>;
+			
+			this.shadow = true;
+			
+			this.registerEventHandlers();
 		}
 		
 		//
@@ -212,7 +282,23 @@ package ivis.ui
 			
 			return result;
 		}
-		
+	
+		/**
+		 * 
+		 * @param e
+		 */
+		override protected function onGeometryChanged(e: Event): void
+		{
+			if(this.parentComponent is CompoundNodeComponent) {
+				this.parentComponent.invalidateBounds();
+			}
+			
+			this._incidentEdges.forEach(function (item: EdgeComponent, i: int, v: Vector.<EdgeComponent>): void {
+				item.invalidateDisplayList();
+			});
+			
+			
+		}
 		
 	}
 }

@@ -67,9 +67,16 @@
 				graph.addEdge(new EdgeComponent(nodes[0], nodes[5]));
 
 				var cn: CompoundNodeComponent = new CompoundNodeComponent;
+				var cn2: CompoundNodeComponent = new CompoundNodeComponent;
+
 				cn.addNode(nodes[1]);
 				cn.addNode(nodes[2]);
 				graph.addNode(cn);
+
+				cn2.addNode(nodes[3]);
+				cn2.addNode(cn);
+				graph.addNode(cn2);
+				
 				graph.addEdge(new EdgeComponent(cn, nodes[0]));
 				
 				//trace(graph.asXML());

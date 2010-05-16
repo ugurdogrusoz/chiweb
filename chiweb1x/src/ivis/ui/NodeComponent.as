@@ -77,23 +77,8 @@ package ivis.ui
 		public function NodeComponent(id: String = null)
 		{
 			super(new Node(id));
-			
-			this.width = DEFAULT_WIDTH;
-			this.height = DEFAULT_HEIGHT;
-			this.margin = DEFAULT_MARGIN;
 
-			this.renderer = new ShapeNodeRenderer;
-			this.mouseAdapter = new NodeMouseAdapter;
-			this.parentComponent = null;
-		
-			this._incidentEdges = new Vector.<EdgeComponent>;
-			
-			this.cacheHeuristic = true;
-			this.cachePolicy = UIComponentCachePolicy.AUTO;
-			
-			this.shadow = true;
-			
-			this.registerEventHandlers();
+			this.initializeComponent();			
 		}
 		
 		//
@@ -220,7 +205,13 @@ package ivis.ui
 		{
 			return false;
 		}
-		
+
+		public function translate(dx: Number, dy: Number): void
+		{
+			this.x += dx;
+			this.y += dy;
+		}
+				
 		/**
 		 * 
 		 * @param xmlNode
@@ -290,9 +281,27 @@ package ivis.ui
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 
-			trace("[" + new Date().time + "] " + this);
-			
 			this._renderer.draw(this.graphics);
+		}
+		
+		protected function initializeComponent(): void
+		{
+			this.width = DEFAULT_WIDTH;
+			this.height = DEFAULT_HEIGHT;
+			this.margin = DEFAULT_MARGIN;
+
+			this.renderer = new ShapeNodeRenderer;
+			this.mouseAdapter = new NodeMouseAdapter;
+			this.parentComponent = null;
+		
+			this._incidentEdges = new Vector.<EdgeComponent>;
+			
+			this.cacheHeuristic = true;
+			this.cachePolicy = UIComponentCachePolicy.AUTO;
+			
+			this.shadow = true;
+			
+			this.registerEventHandlers();
 		}
 		
 		protected function registerEventHandlers(): void
@@ -300,12 +309,8 @@ package ivis.ui
 			this.addEventListener(MoveEvent.MOVE, this.onGeometryChanged);
 			this.addEventListener(ResizeEvent.RESIZE, this.onGeometryChanged);
 		}
-		
-		//
-		// private methods
-		//
-		
-		private function onGeometryChanged(e: Event): void
+				
+		protected function onGeometryChanged(e: Event): void
 		{
 			if(this.parentComponent is CompoundNodeComponent) {
 				this.parentComponent.invalidateBounds();

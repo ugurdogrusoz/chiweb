@@ -1,8 +1,14 @@
 package ivis.ui
 {
+	import flash.display.GradientType;
 	import flash.display.Graphics;
+	import flash.display.InterpolationMethod;
+	import flash.display.SpreadMethod;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	
+	import mx.utils.ColorUtil;
 
 	/**
 	 * 
@@ -17,6 +23,8 @@ package ivis.ui
 		 */
 		private var _node: CompoundNodeComponent;
 		
+		private var _color: uint = 0x004358;
+		
 		/**
 		 * 
 		 */
@@ -30,13 +38,18 @@ package ivis.ui
 		 */
 		public function draw(g:Graphics):void
 		{
-			var r: Rectangle = this.node.bounds;
+			var m: Matrix = new Matrix;
+			m.createGradientBox(this.node.width, this.node.height, 45);
 			
-			trace("[" + new Date().time + "]" + r);
+			var c1: uint = this._color;
+			var c2: uint = ColorUtil.adjustBrightness(c1, -80);
 			
 			g.clear();
-			g.beginFill(0xaabbaa, .3);
-			g.drawRect(r.x, r.y, r.width, r.height);
+            g.beginGradientFill(GradientType.LINEAR, [c1, c2],
+            	[.17, .17], [32, 255], m, SpreadMethod.REFLECT, InterpolationMethod.RGB, 1)
+
+			g.drawRoundRect(0, 0, this.node.width, this.node.height, 10, 10);
+			 
 			g.endFill();
 		}
 		

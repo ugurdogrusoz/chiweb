@@ -1,9 +1,6 @@
 package ivis.ui
 {
 	import flash.events.MouseEvent;
-	import flash.geom.Point;
-	
-	import mx.events.MoveEvent;
 
 	/**
 	 * 
@@ -29,8 +26,6 @@ package ivis.ui
 		 */
 		private var _stageStartY: Number;
 		
-		private var _starts: Object;
-
 		/**
 		 * 
 		 * @default 
@@ -71,14 +66,13 @@ package ivis.ui
 		{
 			this._stageStartX = e.stageX;
 			this._stageStartY = e.stageY;
-		
-			this._starts = new Object;
+
+			this._nodeComponent.mouseChildren = false;
 			
-			this._nodeComponent.forEachNode(
-				function (n: NodeComponent): void {
-					_starts[n] = new Point(n.x, n.y);
-				});
-				
+			this._nodeComponent.forEachNode(function (item: NodeComponent): void {
+				item.mouseAdapter.onMouseDown(e);
+			});
+			
 			this._down = true;
 			
 			e.updateAfterEvent();
@@ -92,18 +86,11 @@ package ivis.ui
 		{
 			if(this._down)
 			{
-				var dx: Number = e.stageX - this._stageStartX; 
-				var dy: Number = e.stageY - this._stageStartY;
-				
-			this._nodeComponent.forEachNode(
-				function (n: NodeComponent): void {
-					var p: Point = _starts[n];
-					n.x = p.x + dx;
-					n.y = p.y + dy;
+				this._nodeComponent.forEachNode(function (item: NodeComponent): void {
+					item.mouseAdapter.onMouseMove(e);
 				});
-			}
+			}				
 			
-			this._nodeComponent.dispatchEvent(new MoveEvent(MoveEvent.MOVE));
 			e.updateAfterEvent();
 		}
 		
@@ -113,6 +100,8 @@ package ivis.ui
 		 */
 		public function onMouseUp(e:MouseEvent):void
 		{
+			this._nodeComponent.mouseChildren = true;
+			this._nodeComponent.stopDrag();
 			this._down = false;
 		}
 		

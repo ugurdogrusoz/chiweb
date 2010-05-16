@@ -78,7 +78,7 @@ package ivis.ui
 			if(this._bitmapData != null && this._nodeComponent != null) {
 				this._nodeComponent.width = this._bitmapData.width;
 				this._nodeComponent.height = this._bitmapData.height;
-			}	
+			}
 		}
 		
 		/**

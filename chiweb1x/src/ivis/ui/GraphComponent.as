@@ -7,8 +7,6 @@ package ivis.ui
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	
-	import gs.TweenMax;
-	
 	import ivis.model.Edge;
 	import ivis.model.Graph;
 	import ivis.model.Node;
@@ -124,13 +122,17 @@ package ivis.ui
 		 * 
 		 * @param nodeComponent
 		 */
-		public function addNode(nodeComponent: NodeComponent): void
+		public function addNode(nc: NodeComponent): void
 		{
-			var n: Node = nodeComponent.model as Node;
+			var n: Node = nc.model as Node;
 			this.model.addNode(n);
-			this._surface.addChild(nodeComponent);
-			this._nodes.push(nodeComponent);
-			nodeComponent.parentComponent = this;
+			this._surface.addChild(nc);
+			this._nodes.push(nc);
+			nc.parentComponent = this;
+			
+			if(nc.isCompound()) {
+				(nc as CompoundNodeComponent).bringUpChildren(this._surface);
+			}
 		}
 		
 		/**
@@ -150,6 +152,11 @@ package ivis.ui
 			
 			this._nodes.splice(this._nodes.indexOf(n), 1);
 
+		}
+		
+		public function detachNode(n: NodeComponent): void
+		{
+			this._nodes.splice(this._nodes.indexOf(n), 1);
 		}
 		
 		/**
@@ -245,6 +252,7 @@ package ivis.ui
 			{
 				var c: Component = e.target as Component;
 				c.mouseAdapter.onMouseDown(e);
+				trace("mouse down on: " + c.model.id + ", bounds=" + c.bounds);
 			}
 
 			this.addEventListener(MouseEvent.MOUSE_MOVE, this.onMouseMove);
@@ -335,7 +343,7 @@ package ivis.ui
 			
 			e.stopImmediatePropagation();
 		}
-		
+
 		/**
 		 * 
 		 * @param id
