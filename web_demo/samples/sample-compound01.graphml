@@ -18,12 +18,13 @@
   <key id="highlightColor" for="all" attr.name="highlightColor" attr.type="string"/>
   <graph id="" edgedefault="undirected">
     <node id="n0">
-      <data key="x">423</data>
+      <data key="x">424</data>
       <data key="y">87</data>
-      <data key="height">169</data>
-      <data key="width">169</data>
+      <data key="height">145.4</data>
+      <data key="width">149</data>
       <data key="color">88 67 0</data>
       <data key="text">Compound</data>
+      <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
       <data key="clusterID">0</data>
       <graph id="">
         <node id="n0:n0">
@@ -34,6 +35,7 @@
           <data key="color">51 102 204</data>
           <data key="color1">255 255 255</data>
           <data key="text">Node</data>
+          <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
           <data key="clusterID">0</data>
           <data key="shape">Ellipse</data>
         </node>
@@ -45,16 +47,18 @@
           <data key="color">51 102 204</data>
           <data key="color1">255 255 255</data>
           <data key="text">Node</data>
+          <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
           <data key="clusterID">0</data>
           <data key="shape">Ellipse</data>
         </node>
         <node id="n0:n2">
           <data key="x">503</data>
           <data key="y">114</data>
-          <data key="height">90</data>
-          <data key="width">70</data>
+          <data key="height">66.4</data>
+          <data key="width">60</data>
           <data key="color">88 67 0</data>
           <data key="text">Compound</data>
+          <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
           <data key="clusterID">0</data>
           <graph id="">
             <node id="n0:n2:n0">
@@ -65,6 +69,7 @@
               <data key="color">255 102 153</data>
               <data key="color1">255 255 255</data>
               <data key="text">Node</data>
+              <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
               <data key="clusterID">0</data>
               <data key="shape">Ellipse</data>
             </node>
@@ -73,12 +78,13 @@
       </graph>
     </node>
     <node id="n1">
-      <data key="x">223</data>
+      <data key="x">222</data>
       <data key="y">108</data>
-      <data key="height">139</data>
-      <data key="width">152</data>
+      <data key="height">114.4</data>
+      <data key="width">142</data>
       <data key="color">88 67 0</data>
       <data key="text">Compound</data>
+      <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
       <data key="clusterID">0</data>
       <graph id="">
         <node id="n1:n0">
@@ -89,6 +95,7 @@
           <data key="color">51 102 204</data>
           <data key="color1">255 255 255</data>
           <data key="text">Node</data>
+          <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
           <data key="clusterID">0</data>
           <data key="shape">Ellipse</data>
         </node>
@@ -100,6 +107,7 @@
           <data key="color">51 102 204</data>
           <data key="color1">255 255 255</data>
           <data key="text">Node</data>
+          <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
           <data key="clusterID">0</data>
           <data key="shape">Ellipse</data>
         </node>
@@ -113,6 +121,7 @@
       <data key="color">102 102 0</data>
       <data key="color1">255 255 255</data>
       <data key="text">Node</data>
+      <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
       <data key="clusterID">0</data>
       <data key="shape">Ellipse</data>
     </node>
@@ -124,6 +133,7 @@
       <data key="color">102 102 0</data>
       <data key="color1">255 255 255</data>
       <data key="text">Node</data>
+      <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
       <data key="clusterID">0</data>
       <data key="shape">Ellipse</data>
     </node>
@@ -135,16 +145,18 @@
       <data key="color">102 102 0</data>
       <data key="color1">255 255 255</data>
       <data key="text">Node</data>
+      <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
       <data key="clusterID">0</data>
       <data key="shape">Ellipse</data>
     </node>
     <node id="n5">
-      <data key="x">38</data>
-      <data key="y">229</data>
-      <data key="height">144</data>
-      <data key="width">146</data>
+      <data key="x">37</data>
+      <data key="y">226</data>
+      <data key="height">121.4</data>
+      <data key="width">137</data>
       <data key="color">88 67 0</data>
       <data key="text">Compound</data>
+      <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
       <data key="clusterID">0</data>
       <graph id="">
         <node id="n5:n0">
@@ -155,6 +167,7 @@
           <data key="color">51 102 204</data>
           <data key="color1">255 255 255</data>
           <data key="text">Node</data>
+          <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
           <data key="clusterID">0</data>
           <data key="shape">Ellipse</data>
         </node>
@@ -166,6 +179,7 @@
           <data key="color">51 102 204</data>
           <data key="color1">255 255 255</data>
           <data key="text">Node</data>
+          <data key="textFont">1|Calibri|12|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>
           <data key="clusterID">0</data>
           <data key="shape">Ellipse</data>
         </node>
