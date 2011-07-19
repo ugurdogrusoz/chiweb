@@ -7,7 +7,7 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	initialize="init()" xmlns:ivis="ivis.*"
 	width="100%"
-	pageTitle="i-Vis Layout Demo - Untitled">
+	pageTitle="i-Vis Layout Demo - Untitled" viewSourceURL="srcview/index.html">
 
 	<mx:Style source="lw.css"/>
 
@@ -159,8 +159,8 @@
 			import ivis.*;
 			
 			private var loader: MultipartURLLoader = new MultipartURLLoader;
-			private var coseUrl: String = "http://localhost:8080/chilay2x/layout.jsp"
-			private var ciseUrl: String = "http://localhost:8080/chilay2x/layout.jsp"
+			private var coseUrl: String = "http://139.179.21.69/chilay2x/layout.jsp"
+			private var ciseUrl: String = "http://139.179.21.69/chilay2x/layout.jsp"
 //			private var coseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
 //			private var ciseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
 			
