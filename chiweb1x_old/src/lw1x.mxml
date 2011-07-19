@@ -470,6 +470,7 @@
 				
 				var ba: ByteArray = new ByteArray;
 				ba.writeUTFBytes(g.toXML().toXMLString());
+				trace(g.toXML().toXMLString());
 				loader.addFile(ba, "graph");
 
 				// append options
