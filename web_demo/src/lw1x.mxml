@@ -159,8 +159,8 @@
 			import ivis.*;
 			
 			private var loader: MultipartURLLoader = new MultipartURLLoader;
-			private var coseUrl: String = "http://139.179.21.69/chilay1x/layout.jsp"
-			private var ciseUrl: String = "http://139.179.21.69/chilay1x/layout.jsp"
+			private var coseUrl: String = "http://localhost:8080/chilay2x/layout.jsp"
+			private var ciseUrl: String = "http://localhost:8080/chilay2x/layout.jsp"
 //			private var coseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
 //			private var ciseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
 			
@@ -451,6 +451,9 @@
 			private function onLayoutComplete(e: Event):void
 			{
 				var response: XML = XML(loader.getResponse())
+				trace("----------------------------------------------------");	
+				trace(response.toXMLString());
+				
 				g.animateToNewPositions(response);
 				coseLayoutButton.enabled = true;
 				ciseLayoutButton.enabled = true;
@@ -475,8 +478,11 @@
 				var go:* = g.generalOptions
 				loader.addVariable("layoutQuality", go.quality)
 				loader.addVariable("animateOnLayout", go.animateOnLayout)
+				loader.addVariable("animateDuringLayout", go.animateDuringLayout)
+				loader.addVariable("animationPeriod", go.animationPeriod)
 				loader.addVariable("incremental", go.incremental)
-//				loader.addVariable("uniformNodeSize", go.uniformNodeSize)
+				loader.addVariable("createBendsAsNeeded", go.createBends)
+				loader.addVariable("uniformLeafNodeSizes", go.uniformLeafNodeSize)
 				
 				CursorManager.setBusyCursor();
 
@@ -487,8 +493,13 @@
 					loader.addVariable("springStrength", co.springStrength)
 					loader.addVariable("repulsionStrength", co.repulsionStrength)
 					loader.addVariable("gravityStrength", co.gravityStrength)
+					loader.addVariable("gravityRange", co.gravityRange)
 					loader.addVariable("compoundGravityStrength", co.compoundGravityStrength)
-					loader.addVariable("idealEdgeLength", co.idealEdgeLength)
+					loader.addVariable("compoundGravityRange", co.compoundGravityRange)
+					loader.addVariable("idealEdgeLength", co.idealCoSEEdgeLength)
+					loader.addVariable("smartRepulsionRangeCalc", co.frGridVariant)
+					loader.addVariable("smartEdgeLengthCalc", co.smartEdgeLengthCalc)
+					loader.addVariable("multiLevelScaling", co.multiLevelScaling)
 					loader.addVariable("layoutStyle", "cose")
 					loader.load(coseUrl);
 				}
@@ -498,8 +509,10 @@
 					ciseLayoutButton.enabled = false;
 					var ci:* = g.CiSEOptions
 					loader.addVariable("nodeSeparation", ci.nodeSeparation)
-					loader.addVariable("desiredEdgeLength", ci.desiredEdgeLength)
+					loader.addVariable("desiredEdgeLength", ci.idealCiSEEdgeLength)
 					loader.addVariable("interClusterEdgeLengthFactor", ci.interClusterEdgeLengthFactor)
+					loader.addVariable("allowNodesInsideCircle", ci.allowNodesInsideCircle)
+					loader.addVariable("maxRatioOfNodesInsideCircle", ci.maxRatioOfNodesInsideCircle)
 					loader.addVariable("layoutStyle", "cise")
 					loader.load(ciseUrl);
 				}				

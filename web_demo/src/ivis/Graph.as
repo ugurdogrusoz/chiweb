@@ -68,37 +68,59 @@ package ivis
 		public static const PROOF_QUALITY:int = 0;
 		public static const DEFAULT_QUALITY:int = 1;
 		public static const DRAFT_QUALITY:int = 2;
+		public static const DEFAULT_ANIMATION_ON_LAYOUT:Boolean = true;
+		public static const DEFAULT_ANIMATION_DURING_LAYOUT:Boolean = false;
+		public static const DEFAULT_ANIMATION_PERIOD:Number = 50;
+		public static const DEFAULT_INCREMENTAL:Boolean = false;
+		public static const DEFAULT_CREATE_BENDS:Boolean = false;
+		public static const DEFAULT_UNIFORM_LEAF_NODE_SIZE:Boolean = false;
 		// CoSE options consts
-		public static const DEFAULT_EDGE_LENGTH:uint = 40;
 		public static const DEFAULT_SPRING_STRENGTH:Number = 50;
 		public static const DEFAULT_REPULSION_STRENGTH:Number = 50;
 		public static const DEFAULT_GRAVITY_STRENGTH:Number = 50;
+		public static const DEFAULT_GRAVITY_RANGE:Number = 50;
 		public static const DEFAULT_COMPOUND_GRAVITY_STRENGTH:Number = 50;
+		public static const DEFAULT_COMPOUND_GRAVITY_RANGE:Number = 50;
+		public static const DEFAULT_EDGE_LENGTH:uint = 50;
+		public static const DEFAULT_FR_GRID_VARIANT:Boolean = true;
+		public static const DEFAULT_SMART_EDGE_LENGTH_CALC:Boolean = true;
+		public static const DEFAULT_MULTI_LEVEL_SCALING:Boolean = false;
 		// CiSE options consts
-		public static const DEFAULT_NODE_SEPARATION:uint = 60;
-		public static const DEFAULT_CISE_EDGE_LENGTH:uint = 40;
+		public static const DEFAULT_NODE_SEPARATION:uint = 12;
+		public static const DEFAULT_CISE_EDGE_LENGTH:uint = 50;
 		public static const DEFAULT_INTER_CLUSTER_EDGE_LENGTH_FACTOR:Number = 50;
-		
+		public static const DEFAULT_ALLOW_NODES_INSIDE_CIRCLE:Boolean = false;
+		public static const DEFAULT_MAX_RATIO_OF_NODES_INSIDE_CIRCLE:Number = 20;
 
 		private var _generalOptions:Object = {
 			quality: DEFAULT_QUALITY,
-			incremental: false,
-			animateOnLayout: true//,
-//			uniformNodeSize: false
+			animateOnLayout: DEFAULT_ANIMATION_ON_LAYOUT,
+			animateDuringLayout: DEFAULT_ANIMATION_DURING_LAYOUT,
+			animationPeriod: DEFAULT_ANIMATION_PERIOD,
+			incremental: DEFAULT_INCREMENTAL,
+			createBends: DEFAULT_CREATE_BENDS,
+			uniformLeafNodeSize: DEFAULT_UNIFORM_LEAF_NODE_SIZE
 		} 
 
 		private var _CoSEOptions:Object = {
-			idealEdgeLength: DEFAULT_EDGE_LENGTH,
 			springStrength: DEFAULT_SPRING_STRENGTH,
 			repulsionStrength: DEFAULT_REPULSION_STRENGTH,
 			gravityStrength: DEFAULT_GRAVITY_STRENGTH,
-			compoundGravityStrength: DEFAULT_COMPOUND_GRAVITY_STRENGTH
+			gravityRange: DEFAULT_GRAVITY_RANGE,
+			compoundGravityStrength: DEFAULT_COMPOUND_GRAVITY_STRENGTH,
+			compoundGravityRange: DEFAULT_COMPOUND_GRAVITY_RANGE,
+			idealCoSEEdgeLength: DEFAULT_EDGE_LENGTH,
+			frGridVariant: DEFAULT_FR_GRID_VARIANT,
+			smartEdgeLengthCalc: DEFAULT_SMART_EDGE_LENGTH_CALC,
+			multiLevelScaling: DEFAULT_MULTI_LEVEL_SCALING
 		} 
 
 		private var _CiSEOptions:Object = {
 			nodeSeparation: DEFAULT_NODE_SEPARATION,
-			desiredEdgeLength: DEFAULT_CISE_EDGE_LENGTH,
-			interClusterEdgeLengthFactor: DEFAULT_INTER_CLUSTER_EDGE_LENGTH_FACTOR
+			idealCiSEEdgeLength: DEFAULT_CISE_EDGE_LENGTH,
+			interClusterEdgeLengthFactor: DEFAULT_INTER_CLUSTER_EDGE_LENGTH_FACTOR,
+			allowNodesInsideCircle: DEFAULT_ALLOW_NODES_INSIDE_CIRCLE,
+			maxRatioOfNodesInsideCircle: DEFAULT_MAX_RATIO_OF_NODES_INSIDE_CIRCLE
 		}
 				
 		public function Graph()

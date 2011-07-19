@@ -9,7 +9,7 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
 	layout="vertical"
 	width="450"
-	height="330"
+	height="450"
 	title="Layout Properties"
 	showCloseButton="true"
 	close="closeHandler(event)"
@@ -17,22 +17,35 @@
 	
 	<mx:VBox width="100%" height="100%">
 		
-	<mx:TabNavigator id="tn" width="100%" height="100%" change="onTabChange(event)" creationComplete="initTabNavigator(event)">
-		<mx:VBox label="General" creationComplete="initGeneralValues(event)">
+	<mx:TabNavigator id="tn" width="100%" height="100%"  change="onTabChange(event)" creationComplete="initTabNavigator(event)">
+		<mx:VBox label="General" bottom="10" creationComplete="initGeneralValues(event)">
 			<mx:HBox paddingLeft="10" paddingRight="10" width="100%" height="100%">
-				<ivis:TitledBorderBox title="General" width="100%" layout="vertical" borderColor="0xaaaaaa">
-					<mx:CheckBox id="inc" label="Incremental Layout"/>
-					<mx:CheckBox id="aol" label="Animate on Layout"/>
+				<ivis:TitledBorderBox title="Animation" 
+									  paddingTop="20" paddingLeft="5" paddingRight="5" paddingBottom="5"
+									  width="100%" layout="vertical" borderColor="0xaaaaaa">
+					<mx:CheckBox id="aol" label="Animate On Layout"/>
+					<mx:CheckBox id="adl" label="Animate During Layout"/>
+					<mx:HSlider id="animPeriodSlider" labels="Animation Period" minimum="0" maximum="100" showTrackHighlight="true"/>
 <!--				<mx:CheckBox id="uns" label="Uniform Node Size"/> -->
 				</ivis:TitledBorderBox>
-				<ivis:TitledBorderBox title="Layout Quality" width="100%" layout="vertical" borderColor="0xaaaaaa">
+				<ivis:TitledBorderBox title="Layout Quality"
+									  paddingTop="15" paddingLeft="5" paddingRight="5" paddingBottom="5"
+									  width="100%" layout="vertical" borderColor="0xaaaaaa">
 				<mx:Spacer width="100" />
 					<mx:RadioButtonGroup id="quality" />
 					<mx:RadioButton id="q1" label="Draft" groupName="quality" value="{Graph.DRAFT_QUALITY}"/>
 					<mx:RadioButton id="q2" label="Default" groupName="quality" value="{Graph.DEFAULT_QUALITY}"/>
 					<mx:RadioButton id="q3" label="Proof" groupName="quality" value="{Graph.PROOF_QUALITY}" />
 				</ivis:TitledBorderBox>
-
+			</mx:HBox>
+			<mx:HBox paddingLeft="10" paddingRight="10" paddingTop="5" width="50%" height="100%">
+				<ivis:TitledBorderBox title="General"
+									  paddingTop="20" paddingLeft="5" paddingRight="5" paddingBottom="5"
+									  width="100%" layout="vertical" borderColor="0xaaaaaa">
+					<mx:CheckBox id="inc" label="Incremental Layout"/>
+					<mx:CheckBox id="createBends" label="Create Bends as Needed"/>
+					<mx:CheckBox id="uniformLeafNodeSizes" label="Uniform Leaf Node Sizes"/>
+				</ivis:TitledBorderBox>
 			</mx:HBox>
 		</mx:VBox>
 		<mx:VBox label="CoSE" creationComplete="initCoSEValues(event)">
@@ -47,11 +60,26 @@
 					<mx:FormItem label="Gravity Strength" height="22">
 						<mx:HSlider id="gsSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
 					</mx:FormItem>
+					<mx:FormItem label="Gravity Range" height="22">
+						<mx:HSlider id="grSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
+					</mx:FormItem>
 					<mx:FormItem label="Compound Gravity Strength" height="22">
 						<mx:HSlider id="cgsSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
 					</mx:FormItem>
-					<mx:FormItem label="Desired Edge Length" height="22">
+					<mx:FormItem label="Compound Gravity Range" height="22">
+						<mx:HSlider id="cgrSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
+					</mx:FormItem>
+					<mx:FormItem label="Desired Edge Length" height="23">
 						<mx:TextInput id="odelInput" width="60" />
+					</mx:FormItem>
+					<mx:FormItem label="Smart Range Calculation" height="22">
+						<mx:CheckBox id="frGridVariant"/>
+					</mx:FormItem>
+					<mx:FormItem label="Smart Edge Length Calculation" height="22">
+						<mx:CheckBox id="smartEdgeLengthCalc"/>
+					</mx:FormItem>
+					<mx:FormItem label="Multi-Level Scaling" height="22">
+						<mx:CheckBox id="multiLevelScaling"/>
 					</mx:FormItem>
 				</mx:Form>
 			</mx:VBox>
@@ -59,14 +87,20 @@
 		<mx:VBox label="CiSE" creationComplete="initCiSEValues(event)">
 			<mx:VBox label="Tuning" paddingLeft="10" paddingRight="10" width="100%">
 				<mx:Form>
-					<mx:FormItem label="Node Separation" height="22">
+					<mx:FormItem label="Node Separation" height="23">
 						<mx:TextInput id="nsInput" width="60" />
 					</mx:FormItem>
-					<mx:FormItem label="Desired Edge Length" height="22">
+					<mx:FormItem label="Desired Edge Length" height="23">
 						<mx:TextInput id="idelInput" width="60" />
 					</mx:FormItem>
 					<mx:FormItem label="Inter-Cluster Edge Length Factor" height="22">
 						<mx:HSlider id="icelfSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
+					</mx:FormItem>
+					<mx:FormItem label="Allow Nodes Inside Circles" height="22">
+						<mx:CheckBox id="allowNodesInsideCircle"/>
+					</mx:FormItem>
+					<mx:FormItem label="Max. Ratio Of Nodes Inside Circle" height="22">
+						<mx:HSlider id="mronicSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
 					</mx:FormItem>
 				</mx:Form>
 			</mx:VBox>
@@ -81,15 +115,24 @@
 		<mx:Button id="cancelButton" label="Cancel" width="70" click="closeHandler(event)"/>
 	</mx:ControlBar>
 
+	
 	<mx:Binding source="ssSlider.value" destination="_springStrength" />
 	<mx:Binding source="rsSlider.value" destination="_repulsionStrength" />
 	<mx:Binding source="gsSlider.value" destination="_gravityStrength" />
+	<mx:Binding source="grSlider.value" destination="_gravityRange" />
 	<mx:Binding source="cgsSlider.value" destination="_compoundGravityStrength" />
-	<mx:Binding source="odelInput.text" destination="_idealEdgeLength" />
+	<mx:Binding source="cgrSlider.value" destination="_compoundGravityRange" />
+	<mx:Binding source="odelInput.text" destination="_idealCoSEEdgeLength" />
+	<mx:Binding source="frGridVariant.selected" destination="_frGridVariant" />
+	<mx:Binding source="smartEdgeLengthCalc.selected" destination="_smartEdgeLengthCalc" />
+	<mx:Binding source="multiLevelScaling.selected" destination="_multiLevelScaling" />
+	
 	<mx:Binding source="nsInput.text" destination="_nodeSeparation" />
-	<mx:Binding source="idelInput.text" destination="_desiredEdgeLength" />
+	<mx:Binding source="idelInput.text" destination="_idealCiSEEdgeLength" />
 	<mx:Binding source="icelfSlider.value" destination="_interClusterEdgeLengthFactor" />
-
+	<mx:Binding source="allowNodesInsideCircle.selected" destination="_allowNodesInsideCircle" />
+	<mx:Binding source="mronicSlider.value" destination="_maxRatioOfNodesInsideCircle" />
+	
 	<mx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
@@ -98,18 +141,35 @@
 			import mx.events.CloseEvent;
 			
 //			[Bindable]
+			
+			// General Parameters
 //			private var quality: int
-			public var _incremental: Boolean
 			public var _animateOnLayout: Boolean
-//			public var _uniformNodeSize: Boolean
+			public var _animateDuringLayout: Boolean
+			public var _animationPeriod: Number
+			public var _incremental: Boolean
+			public var _createBends: Boolean
+			public var _uniformLeafNodeSize: Boolean
+			
+			// CoSE Parameters
 			public var _springStrength: Number
 			public var _repulsionStrength: Number
 			public var _gravityStrength: Number
 			public var _compoundGravityStrength: Number
-			public var _idealEdgeLength: String
+			public var _gravityRange: Number
+			public var _compoundGravityRange: Number
+			public var _idealCoSEEdgeLength: String
+			public var _frGridVariant: Boolean
+			public var _smartEdgeLengthCalc: Boolean
+			public var _multiLevelScaling: Boolean
+			
+			// CiSE Parameter
 			public var _nodeSeparation: String
-			public var _desiredEdgeLength: String
+			public var _idealCiSEEdgeLength: String
 			public var _interClusterEdgeLengthFactor: Number
+			public var _allowNodesInsideCircle: Boolean
+			public var _maxRatioOfNodesInsideCircle: Number
+			
 			private static var _lastTab:int = -1;
 			private var _genInited: Boolean = false;
 			private var _coseInited: Boolean = false;
@@ -124,13 +184,26 @@
 			private function initGeneralValues(e: Event):void
 			{
 				var opts:* = Graph.getInstance().generalOptions
-				this._incremental = opts.incremental
-				this.inc.selected = Boolean(this._incremental)
+				
+				this.quality.selectedValue = int(opts.quality)
+				
 				this._animateOnLayout = opts.animateOnLayout
 				this.aol.selected = Boolean(this._animateOnLayout)
-				this.quality.selectedValue = int(opts.quality)
-//				this._uniformNodeSize = opts.uniformNodeSize
-//				this.uns.selected = Boolean(this._uniformNodeSize)
+				
+				this._animateDuringLayout = opts.animateDuringLayout
+				this.adl.selected = Boolean(this._animateDuringLayout)
+					
+				this._animationPeriod = opts.animationPeriod
+				this.animPeriodSlider.value = Number(this._animationPeriod)
+					
+				this._incremental = opts.incremental
+				this.inc.selected = Boolean(this._incremental)
+					
+				this._createBends = opts.createBends
+				this.createBends.selected = Boolean(this._createBends)
+					
+				this._uniformLeafNodeSize = opts.uniformLeafNodeSize
+				this.uniformLeafNodeSizes.selected = Boolean(this._uniformLeafNodeSize)
 				
 				this._genInited = true
 			}
@@ -138,6 +211,7 @@
 			private function initCoSEValues(e: Event):void
 			{
 				var coseOpts:* = Graph.getInstance().CoSEOptions
+				
 				this._springStrength = coseOpts.springStrength
 				this.ssSlider.value = this._springStrength
 				
@@ -147,26 +221,48 @@
 				this._gravityStrength = coseOpts.gravityStrength
 				this.gsSlider.value = this._gravityStrength
 				 
+				this._gravityRange = coseOpts.gravityRange
+				this.grSlider.value = this._gravityRange
+					
 				this._compoundGravityStrength = coseOpts.compoundGravityStrength
 				this.cgsSlider.value = this._compoundGravityStrength
 				 
-				this._idealEdgeLength = coseOpts.idealEdgeLength
-				this.odelInput.text = this._idealEdgeLength 
+				this._compoundGravityRange = coseOpts.compoundGravityRange
+				this.cgrSlider.value = this._compoundGravityRange
+					
+				this._idealCoSEEdgeLength = coseOpts.idealCoSEEdgeLength
+				this.odelInput.text = this._idealCoSEEdgeLength 
 				
+				this._frGridVariant = coseOpts.frGridVariant
+				this.frGridVariant.selected = Boolean(this._frGridVariant)
+				
+				this._smartEdgeLengthCalc = coseOpts.smartEdgeLengthCalc
+				this.smartEdgeLengthCalc.selected = Boolean(this._smartEdgeLengthCalc)
+				
+				this._multiLevelScaling = coseOpts.multiLevelScaling
+				this.multiLevelScaling.selected = Boolean(this._multiLevelScaling)
+					
 				this._coseInited = true
 			}
 
 			private function initCiSEValues(e: Event):void
 			{
 				var ciseOpts:* = Graph.getInstance().CiSEOptions
+				
 				this._nodeSeparation = ciseOpts.nodeSeparation
 				this.nsInput.text = this._nodeSeparation
 				
-				this._desiredEdgeLength = ciseOpts.desiredEdgeLength
-				this.idelInput.text = this._desiredEdgeLength 
+				this._idealCiSEEdgeLength = ciseOpts.idealCiSEEdgeLength
+				this.idelInput.text = this._idealCiSEEdgeLength 
 				
 				this._interClusterEdgeLengthFactor = ciseOpts.interClusterEdgeLengthFactor
 				this.icelfSlider.value = this._interClusterEdgeLengthFactor
+					
+				this._allowNodesInsideCircle = ciseOpts.allowNodesInsideCircle
+				this.allowNodesInsideCircle.selected = Boolean(this._allowNodesInsideCircle)
+					
+				this._maxRatioOfNodesInsideCircle = ciseOpts.maxRatioOfNodesInsideCircle
+				this.mronicSlider.value = this._maxRatioOfNodesInsideCircle 
 				
 				this._ciseInited = true
 			}
@@ -185,9 +281,12 @@
 					if(this._genInited)
 						g.generalOptions = {
 							quality: int(quality.selectedValue),
+							animateOnLayout: Boolean(aol.selected),
+							animateDuringLayout: Boolean(adl.selected),
+							animationPeriod: int(animPeriodSlider.value),
 							incremental: Boolean(inc.selected),
-							animateOnLayout: Boolean(aol.selected)//,
-//							uniformNodeSize: Boolean(uns.selected)
+							createBends: Boolean(createBends.selected),
+							uniformLeafNodeSize: Boolean(uniformLeafNodeSizes.selected)
 						}
 
 					if(this._coseInited)					
@@ -195,15 +294,22 @@
 							springStrength: int(this._springStrength),
 							repulsionStrength: int(this._repulsionStrength),
 							gravityStrength: int(this._gravityStrength),
+							gravityRange: int(this._gravityRange),
 							compoundGravityStrength: int(this._compoundGravityStrength),
-							idealEdgeLength: int(this._idealEdgeLength)
+							compoundGravityRange: int(this._compoundGravityRange),
+							idealCoSEEdgeLength: int(this._idealCoSEEdgeLength),
+							frGridVariant: Boolean(this._frGridVariant),
+							smartEdgeLengthCalc: Boolean(this._smartEdgeLengthCalc),
+							multiLevelScaling: Boolean(this._multiLevelScaling)
 						}
 
 					if(this._ciseInited)
 						g.CiSEOptions = {
 							nodeSeparation: int(this._nodeSeparation),
-							desiredEdgeLength: int(this._desiredEdgeLength),
-							interClusterEdgeLengthFactor: int(this._interClusterEdgeLengthFactor)
+							idealCiSEEdgeLength: int(this._idealCiSEEdgeLength),
+							interClusterEdgeLengthFactor: int(this._interClusterEdgeLengthFactor),
+							allowNodesInsideCircle: Boolean(this._allowNodesInsideCircle),
+							maxRatioOfNodesInsideCircle: int(this._maxRatioOfNodesInsideCircle)
 						}
 				}
 				PopUpManager.removePopUp(this)

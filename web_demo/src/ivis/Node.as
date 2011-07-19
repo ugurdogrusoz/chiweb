@@ -196,7 +196,7 @@ package ivis
 		public function asXML(): XML
 		{
 			return XML('<node id="' + id + '" ' + 
-					'clusterID="' + clusterID + '">' + 
+					'clusterId="' + clusterID + '">' + 
 					'<bounds height="' + this.height + 
 					'" width="' + this.width + 
 					'" x="' + this.x + 

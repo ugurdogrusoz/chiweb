@@ -187,7 +187,7 @@ package ivis
 		override public function asXML(): XML
 		{
 			var res: String = '<node id="' + id + '" ' +
-				'clusterID="' + clusterID + '">' +
+				'clusterId="' + clusterID + '">' +
 				'<bounds height="' + this.height +
 				'" width="' + this.width + 
 				'" />' + 
