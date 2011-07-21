@@ -7,7 +7,7 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	initialize="init()" xmlns:ivis="ivis.*"
 	width="100%"
-	pageTitle="i-Vis Layout Demo - Untitled" viewSourceURL="srcview/index.html">
+	pageTitle="i-Vis Layout Demo - Untitled">
 
 	<mx:Style source="lw.css"/>
 
@@ -139,24 +139,27 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import mx.managers.BrowserManager;
-			import mx.core.ByteArrayAsset;
 			import flash.utils.describeType;
-			import mx.collections.ListCollectionView;
-			import mx.core.IFlexDisplayObject;
+			
+			import ivis.*;
+			
 			import mx.collections.ArrayCollection;
-			import mx.managers.PopUpManager;
+			import mx.collections.ListCollectionView;
+			import mx.controls.Alert;
+			import mx.core.ByteArrayAsset;
+			import mx.core.IFlexDisplayObject;
 			import mx.events.ItemClickEvent;
+			import mx.events.MenuEvent;
 			import mx.graphics.codec.IImageEncoder;
 			import mx.graphics.codec.JPEGEncoder;
 			import mx.graphics.codec.PNGEncoder;
+			import mx.managers.BrowserManager;
 			import mx.managers.CursorManager;
-			import ru.inspirit.net.MultipartURLLoader;
+			import mx.managers.PopUpManager;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
-			import mx.controls.Alert;
-			import mx.events.MenuEvent;
-			import ivis.*;
+			
+			import ru.inspirit.net.MultipartURLLoader;
 			
 			private var loader: MultipartURLLoader = new MultipartURLLoader;
 			private var coseUrl: String = "http://139.179.21.69/chilay2x/layout.jsp"
@@ -451,8 +454,6 @@
 			private function onLayoutComplete(e: Event):void
 			{
 				var response: XML = XML(loader.getResponse())
-				trace("----------------------------------------------------");	
-				trace(response.toXMLString());
 				
 				g.animateToNewPositions(response);
 				coseLayoutButton.enabled = true;
@@ -478,8 +479,6 @@
 				var go:* = g.generalOptions
 				loader.addVariable("layoutQuality", go.quality)
 				loader.addVariable("animateOnLayout", go.animateOnLayout)
-				loader.addVariable("animateDuringLayout", go.animateDuringLayout)
-				loader.addVariable("animationPeriod", go.animationPeriod)
 				loader.addVariable("incremental", go.incremental)
 				loader.addVariable("createBendsAsNeeded", go.createBends)
 				loader.addVariable("uniformLeafNodeSizes", go.uniformLeafNodeSize)
@@ -512,7 +511,7 @@
 					loader.addVariable("desiredEdgeLength", ci.idealCiSEEdgeLength)
 					loader.addVariable("interClusterEdgeLengthFactor", ci.interClusterEdgeLengthFactor)
 					loader.addVariable("allowNodesInsideCircle", ci.allowNodesInsideCircle)
-					loader.addVariable("maxRatioOfNodesInsideCircle", ci.maxRatioOfNodesInsideCircle)
+					loader.addVariable("maxRatioOfNodesInsideCircle", ci.maxRatioOfNodesInsideCircle/100)
 					loader.addVariable("layoutStyle", "cise")
 					loader.load(ciseUrl);
 				}				

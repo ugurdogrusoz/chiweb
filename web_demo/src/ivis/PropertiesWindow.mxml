@@ -9,7 +9,7 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
 	layout="vertical"
 	width="450"
-	height="450"
+	height="405"
 	title="Layout Properties"
 	showCloseButton="true"
 	close="closeHandler(event)"
@@ -18,38 +18,28 @@
 	<mx:VBox width="100%" height="100%">
 		
 	<mx:TabNavigator id="tn" width="100%" height="100%"  change="onTabChange(event)" creationComplete="initTabNavigator(event)">
-		<mx:VBox label="General" bottom="10" creationComplete="initGeneralValues(event)">
-			<mx:HBox paddingLeft="10" paddingRight="10" width="100%" height="100%">
-				<ivis:TitledBorderBox title="Animation" 
-									  paddingTop="20" paddingLeft="5" paddingRight="5" paddingBottom="5"
-									  width="100%" layout="vertical" borderColor="0xaaaaaa">
-					<mx:CheckBox id="aol" label="Animate On Layout"/>
-					<mx:CheckBox id="adl" label="Animate During Layout"/>
-					<mx:HSlider id="animPeriodSlider" labels="Animation Period" minimum="0" maximum="100" showTrackHighlight="true"/>
-<!--				<mx:CheckBox id="uns" label="Uniform Node Size"/> -->
-				</ivis:TitledBorderBox>
+		<mx:HBox label="General" bottom="10" creationComplete="initGeneralValues(event)">
+			<mx:VBox paddingTop="7" paddingLeft="10" paddingRight="10" width="100%" height="100%">
+				<mx:CheckBox id="aol" label="Animate on Layout"/>
+				<mx:CheckBox id="inc" label="Incremental Layout"/>
+				<mx:CheckBox id="createBends" label="Create Bends as Needed"/>
+				<mx:CheckBox id="uniformLeafNodeSizes" label="Uniform Leaf Node Sizes"/>
+<!--			<mx:CheckBox id="uns" label="Uniform Node Size"/> -->
+			</mx:VBox>
+			<mx:VBox paddingLeft="10" paddingRight="10" width="100%" height="100%">
 				<ivis:TitledBorderBox title="Layout Quality"
 									  paddingTop="15" paddingLeft="5" paddingRight="5" paddingBottom="5"
-									  width="100%" layout="vertical" borderColor="0xaaaaaa">
+									  width="50%" layout="vertical" borderColor="0xaaaaaa">
 				<mx:Spacer width="100" />
 					<mx:RadioButtonGroup id="quality" />
 					<mx:RadioButton id="q1" label="Draft" groupName="quality" value="{Graph.DRAFT_QUALITY}"/>
 					<mx:RadioButton id="q2" label="Default" groupName="quality" value="{Graph.DEFAULT_QUALITY}"/>
 					<mx:RadioButton id="q3" label="Proof" groupName="quality" value="{Graph.PROOF_QUALITY}" />
 				</ivis:TitledBorderBox>
-			</mx:HBox>
-			<mx:HBox paddingLeft="10" paddingRight="10" paddingTop="5" width="50%" height="100%">
-				<ivis:TitledBorderBox title="General"
-									  paddingTop="20" paddingLeft="5" paddingRight="5" paddingBottom="5"
-									  width="100%" layout="vertical" borderColor="0xaaaaaa">
-					<mx:CheckBox id="inc" label="Incremental Layout"/>
-					<mx:CheckBox id="createBends" label="Create Bends as Needed"/>
-					<mx:CheckBox id="uniformLeafNodeSizes" label="Uniform Leaf Node Sizes"/>
-				</ivis:TitledBorderBox>
-			</mx:HBox>
-		</mx:VBox>
+			</mx:VBox>
+		</mx:HBox>
 		<mx:VBox label="CoSE" creationComplete="initCoSEValues(event)">
-			<mx:VBox label="Tuning" paddingLeft="10" paddingRight="10" width="100%">
+			<mx:VBox label="Tuning" paddingTop="-15" paddingBottom="-15" paddingLeft="10" paddingRight="10" height="100%" width="100%">
 				<mx:Form>
 					<mx:FormItem label="Spring Strength" height="22">
 						<mx:HSlider id="ssSlider" minimum="0" maximum="100" showTrackHighlight="true"/>
@@ -84,7 +74,7 @@
 				</mx:Form>
 			</mx:VBox>
 		</mx:VBox>
-		<mx:VBox label="CiSE" creationComplete="initCiSEValues(event)">
+		<mx:VBox label="CiSE" paddingTop="-15" paddingBottom="-15" creationComplete="initCiSEValues(event)">
 			<mx:VBox label="Tuning" paddingLeft="10" paddingRight="10" width="100%">
 				<mx:Form>
 					<mx:FormItem label="Node Separation" height="23">
@@ -145,8 +135,6 @@
 			// General Parameters
 //			private var quality: int
 			public var _animateOnLayout: Boolean
-			public var _animateDuringLayout: Boolean
-			public var _animationPeriod: Number
 			public var _incremental: Boolean
 			public var _createBends: Boolean
 			public var _uniformLeafNodeSize: Boolean
@@ -190,12 +178,6 @@
 				this._animateOnLayout = opts.animateOnLayout
 				this.aol.selected = Boolean(this._animateOnLayout)
 				
-				this._animateDuringLayout = opts.animateDuringLayout
-				this.adl.selected = Boolean(this._animateDuringLayout)
-					
-				this._animationPeriod = opts.animationPeriod
-				this.animPeriodSlider.value = Number(this._animationPeriod)
-					
 				this._incremental = opts.incremental
 				this.inc.selected = Boolean(this._incremental)
 					
@@ -282,8 +264,6 @@
 						g.generalOptions = {
 							quality: int(quality.selectedValue),
 							animateOnLayout: Boolean(aol.selected),
-							animateDuringLayout: Boolean(adl.selected),
-							animationPeriod: int(animPeriodSlider.value),
 							incremental: Boolean(inc.selected),
 							createBends: Boolean(createBends.selected),
 							uniformLeafNodeSize: Boolean(uniformLeafNodeSizes.selected)

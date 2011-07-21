@@ -69,8 +69,6 @@ package ivis
 		public static const DEFAULT_QUALITY:int = 1;
 		public static const DRAFT_QUALITY:int = 2;
 		public static const DEFAULT_ANIMATION_ON_LAYOUT:Boolean = true;
-		public static const DEFAULT_ANIMATION_DURING_LAYOUT:Boolean = false;
-		public static const DEFAULT_ANIMATION_PERIOD:Number = 50;
 		public static const DEFAULT_INCREMENTAL:Boolean = false;
 		public static const DEFAULT_CREATE_BENDS:Boolean = false;
 		public static const DEFAULT_UNIFORM_LEAF_NODE_SIZE:Boolean = false;
@@ -95,8 +93,6 @@ package ivis
 		private var _generalOptions:Object = {
 			quality: DEFAULT_QUALITY,
 			animateOnLayout: DEFAULT_ANIMATION_ON_LAYOUT,
-			animateDuringLayout: DEFAULT_ANIMATION_DURING_LAYOUT,
-			animationPeriod: DEFAULT_ANIMATION_PERIOD,
 			incremental: DEFAULT_INCREMENTAL,
 			createBends: DEFAULT_CREATE_BENDS,
 			uniformLeafNodeSize: DEFAULT_UNIFORM_LEAF_NODE_SIZE
