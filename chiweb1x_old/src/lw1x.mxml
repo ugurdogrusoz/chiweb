@@ -5,128 +5,128 @@
 * Copyright: i-Vis Research Group, Bilkent University, 2009 - present 
 -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
-	initialize="init()" xmlns:ivis="ivis.*"
-	width="100%"
-	pageTitle="i-Vis Layout Demo - Untitled">
-
+				initialize="init()" xmlns:ivis="ivis.*"
+				width="100%"
+				pageTitle="i-Vis Layout Demo - Untitled">
+	
 	<mx:Style source="lw.css"/>
-
+	
 	<mx:VBox width="100%" verticalGap="0" id="vbox1">
 		<mx:MenuBar id="mainMenu" dataProvider="{itemsCollection}" labelField="label" itemClick="menuHandler(event)" width="100%" />
 		<mx:HBox width="100%" horizontalGap="1" paddingBottom="5" paddingTop="5">
 			<mx:Spacer width="10"/>
 			
 			<mx:Button icon="@Embed(source='assets/new.png')"
-				width="32"
-				toolTip="New"
-				click="{g.reset()}"/>
+					   width="32"
+					   toolTip="New"
+					   click="{g.reset()}"/>
 			<mx:Button icon="@Embed(source='assets/load.png')"
-				width="32"
-				toolTip="Load"
-				click="loadXML()"/>
+					   width="32"
+					   toolTip="Load"
+					   click="loadXML()"/>
 			<mx:Button icon="@Embed(source='assets/save.png')"
-				width="32"
-				toolTip="Save"
-				click="saveXML()"/>
+					   width="32"
+					   toolTip="Save"
+					   click="saveXML()"/>
 			<mx:Spacer width="10"/>
-
+			
 			<mx:Button icon="@Embed(source='assets/select.png')"
-				width="32"
-				id="toolButton1"
-				toggle="true"
-				toolTip="Select"
-				selected="{g.isSeleting}"
-				mouseUp="toolClickHandler(event)"/>
+					   width="32"
+					   id="toolButton1"
+					   toggle="true"
+					   toolTip="Select"
+					   selected="{g.isSeleting}"
+					   mouseUp="toolClickHandler(event)"/>
 			<mx:Button icon="@Embed(source='assets/zoom-marquee.png')"
-				width="32"
-				id="toolButton2"
-				toggle="true"
-				toolTip="Marquee Zoom"
-				selected="{g.isMarqueeZooming}"
-				mouseUp="toolClickHandler(event)"/>
+					   width="32"
+					   id="toolButton2"
+					   toggle="true"
+					   toolTip="Marquee Zoom"
+					   selected="{g.isMarqueeZooming}"
+					   mouseUp="toolClickHandler(event)"/>
 			<ivis:ZoomSlider graph="{g}" id="zoomSlider" height="32"/>
 			<mx:Button icon="@Embed(source='assets/fit-to-100.png')"
-				width="32"
-				toolTip="Zoom to 100%"
-				click="{g.zoom = 1; g.smoothPanTo(0, 0)}"/>
+					   width="32"
+					   toolTip="Zoom to 100%"
+					   click="{g.zoom = 1; g.smoothPanTo(0, 0)}"/>
 			<mx:Button icon="@Embed(source='assets/zoom-in.png')"
-				width="32"
-				toolTip="Zoom In"
-				click="{g.zoomIn()}"/>
+					   width="32"
+					   toolTip="Zoom In"
+					   click="{g.zoomIn()}"/>
 			<mx:Button icon="@Embed(source='assets/zoom-out.png')"
-				width="32"
-				toolTip="Zoom Out"
-				click="{g.zoomOut()}"/>
+					   width="32"
+					   toolTip="Zoom Out"
+					   click="{g.zoomOut()}"/>
 			<mx:Button icon="@Embed(source='assets/fit-in-canvas.png')"
-				width="32"
-				toolTip="Fit in Canvas"
-				click="{g.zoomToFit()}"/>
+					   width="32"
+					   toolTip="Fit in Canvas"
+					   click="{g.zoomToFit()}"/>
 			<mx:Spacer width="10" />
-
+			
 			<mx:Button icon="@Embed(source='assets/create-node.png')"
-				width="32"
-				id="toolButton3"
-				toggle="true"
-				toolTip="Create Node"
-				selected="{g.isCreatingSimpleNode}"
-				mouseUp="toolClickHandler(event)"/>
+					   width="32"
+					   id="toolButton3"
+					   toggle="true"
+					   toolTip="Create Node"
+					   selected="{g.isCreatingSimpleNode}"
+					   mouseUp="toolClickHandler(event)"/>
 			<mx:Button icon="@Embed(source='assets/create-compound-node.png')"
-				width="32"
-				id="toolButton4"
-				toggle="true"
-				toolTip="Create Compound Node"
-				selected="{g.isCreatingCompoundNode}"
-				mouseUp="toolClickHandler(event)"/>
+					   width="32"
+					   id="toolButton4"
+					   toggle="true"
+					   toolTip="Create Compound Node"
+					   selected="{g.isCreatingCompoundNode}"
+					   mouseUp="toolClickHandler(event)"/>
 			<mx:Button icon="@Embed(source='assets/create-edge.png')"
-				width="32"
-				id="toolButton5"
-				toggle="true"
-				toolTip="Create Edge"
-				selected="{g.isAddingEdges}"
-				mouseUp="toolClickHandler(event)"/>
+					   width="32"
+					   id="toolButton5"
+					   toggle="true"
+					   toolTip="Create Edge"
+					   selected="{g.isAddingEdges}"
+					   mouseUp="toolClickHandler(event)"/>
 			<mx:Button icon="@Embed(source='assets/delete.png')"
-				width="32"
-				toolTip="Delete Selected"
-				click="deleteSelected()"/>
+					   width="32"
+					   toolTip="Delete Selected"
+					   click="deleteSelected()"/>
 			<mx:Spacer width="10" />
-
+			
 			<mx:Button icon="@Embed(source='assets/layout-cose.png')"
-				width="32"
-				id="coseLayoutButton"
-				toolTip="CoSE Layout"
-				click="requestLayout('cose')"/>
+					   width="32"
+					   id="coseLayoutButton"
+					   toolTip="CoSE Layout"
+					   click="requestLayout('cose')"/>
 			<mx:Button icon="@Embed(source='assets/layout-cise.png')"
-				width="32"
-				id="ciseLayoutButton"
-				toolTip="CiSE Layout"
-				click="requestLayout('cise')"/>
+					   width="32"
+					   id="ciseLayoutButton"
+					   toolTip="CiSE Layout"
+					   click="requestLayout('cise')"/>
 			<mx:Spacer width="10" />
-
+			
 			<mx:Button icon="@Embed(source='assets/help.png')"
-				width="32"
-				toolTip="How to Use"
-				click="showWindow(HelpWindow)"/>
+					   width="32"
+					   toolTip="How to Use"
+					   click="showWindow(HelpWindow)"/>
 			<mx:Button icon="@Embed(source='assets/about.png')"
-				width="32"
-				toolTip="About"
-				click="showWindow(AboutWindow)"/>
+					   width="32"
+					   toolTip="About"
+					   click="showWindow(AboutWindow)"/>
 		</mx:HBox>
 		<mx:HBox horizontalGap="0" id="hbox1">
 			<mx:Canvas id="container">
 				<mx:VScrollBar id="vsb" height="{g.height}" pageSize="200" x="{g.width}" y="0"/>
 				<mx:HScrollBar id="hsb" width="{g.width}" pageSize="200" y="{g.height}" x="0" />
 				<ivis:Graph id="g" x="0" y="0" width="800" height="500" 
-					backgroundColor="0xFFFFFF" overlay="{gOverlay}"
-					isSeleting="{toolButton1.selected}"
-					isMarqueeZooming="{toolButton2.selected}"
-					isCreatingSimpleNode="{toolButton3.selected}"
-					isCreatingCompoundNode="{toolButton4.selected}"
-					isAddingEdges="{toolButton5.selected}"
-					zoomBuddy="{zoomSlider.slider}"
-					miniMap="{mmap}"
-					vscroll="{vsb}"
-					hscroll="{hsb}"
-				/>
+							backgroundColor="0xFFFFFF" overlay="{gOverlay}"
+							isSeleting="{toolButton1.selected}"
+							isMarqueeZooming="{toolButton2.selected}"
+							isCreatingSimpleNode="{toolButton3.selected}"
+							isCreatingCompoundNode="{toolButton4.selected}"
+							isAddingEdges="{toolButton5.selected}"
+							zoomBuddy="{zoomSlider.slider}"
+							miniMap="{mmap}"
+							vscroll="{vsb}"
+							hscroll="{hsb}"
+							/>
 				<mx:Canvas x="{g.x}" y="{g.y}" width="800" height="500" id="gOverlay" mouseEnabled="false"/>
 			</mx:Canvas>
 			<mx:Box paddingLeft="10">
@@ -162,21 +162,21 @@
 			private var loader: MultipartURLLoader = new MultipartURLLoader;
 			private var coseUrl: String = "http://139.179.21.69/chilay1x/layout.jsp"
 			private var ciseUrl: String = "http://139.179.21.69/chilay1x/layout.jsp"
-//			private var coseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
-//			private var ciseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
+			//			private var coseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
+			//			private var ciseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
 			
 			private var editMenu: Object
-//			private var cursorID: int = -1;
+			//			private var cursorID: int = -1;
 			
 			[Embed('assets/cursors/node-cursor.gif')]
-   			private var nodeCursor:Class;
-
+			private var nodeCursor:Class;
+			
 			[Embed('assets/cursors/comp-node-cursor.gif')]
-   			private var compNodeCursor:Class;
-
+			private var compNodeCursor:Class;
+			
 			[Embed('assets/cursors/edge-cursor.gif')]
-   			private var edgeCursor:Class;
-
+			private var edgeCursor:Class;
+			
 			[Embed(source='../samples/sample-compound01.graphml', mimeType='application/octet-stream')]
 			private var sample_compound01: Class;
 			[Embed(source='../samples/sample-compound02.graphml', mimeType='application/octet-stream')]
@@ -286,7 +286,7 @@
 						]
 					}
 				])
-
+			
 			private function toolButtonChange(e: Event): void
 			{
 				var b: Button = e.target as Button
@@ -304,11 +304,11 @@
 					return
 				}
 				
-//				if(cursorID > 0)
-//				{
-// 					CursorManager.removeCursor(cursorID)
-// 					cursorID = -1
-// 				}
+				//				if(cursorID > 0)
+				//				{
+				// 					CursorManager.removeCursor(cursorID)
+				// 					cursorID = -1
+				// 				}
 				
 				var i: int
 				for(i = 0; i < 5; ++i) {
@@ -316,31 +316,31 @@
 						editMenu.children[i].toggled = false
 				}
 				i = int(b.id.substr(-1, 1)) - 1;
-
+				
 				editMenu.children[i].toggled = true
 				itemsCollection.itemUpdated(editMenu.children[i], "toggled", false, true)
 				
-//				if(i == 2) {
-//					 cursorID = CursorManager.setCursor(nodeCursor)
-//				}
-//				else if(i == 3) {
-//					 cursorID = CursorManager.setCursor(compNodeCursor)
-//				}
-//				else if(i == 4) {
-//					 cursorID = CursorManager.setCursor(edgeCursor)
-//				}
+				//				if(i == 2) {
+				//					 cursorID = CursorManager.setCursor(nodeCursor)
+				//				}
+				//				else if(i == 3) {
+				//					 cursorID = CursorManager.setCursor(compNodeCursor)
+				//				}
+				//				else if(i == 4) {
+				//					 cursorID = CursorManager.setCursor(edgeCursor)
+				//				}
 			}
 			
 			private function menuHandler(e: MenuEvent): void
 			{
 				
-//				if(cursorID > 0) {
-// 					CursorManager.removeCursor(cursorID)
-// 					cursorID = -1
-// 				}
-	
-	 			var l: String = e.label.toString().toLowerCase()
-	
+				//				if(cursorID > 0) {
+				// 					CursorManager.removeCursor(cursorID)
+				// 					cursorID = -1
+				// 				}
+				
+				var l: String = e.label.toString().toLowerCase()
+				
 				if(l == "new")
 					g.reset();
 				else if(l == "load")
@@ -358,16 +358,16 @@
 				else if(l == "marquee zoom")
 					g.isMarqueeZooming = true
 				else if(l == "create simple node") {
- 					g.isCreatingSimpleNode = true
-// 					cursorID = CursorManager.setCursor(nodeCursor)
- 				}
+					g.isCreatingSimpleNode = true
+					// 					cursorID = CursorManager.setCursor(nodeCursor)
+				}
 				else if(l == "create compound node") {
 					g.isCreatingCompoundNode = true
-// 					cursorID = CursorManager.setCursor(compNodeCursor)
+					// 					cursorID = CursorManager.setCursor(compNodeCursor)
 				}
 				else if(l == "create edge") {
 					g.isAddingEdges = true
-// 					cursorID = CursorManager.setCursor(edgeCursor)
+					// 					cursorID = CursorManager.setCursor(edgeCursor)
 				}
 				else if(l == "delete selected")
 					deleteSelected()
@@ -403,8 +403,8 @@
 			
 			private function showWindow(w: Class): void
 			{
-                var props: IFlexDisplayObject = PopUpManager.createPopUp(this, w, true)
-                
+				var props: IFlexDisplayObject = PopUpManager.createPopUp(this, w, true)
+				
 				props.x = (this.width - props.width) / 2
 				props.y = (this.height- props.height) / 2
 			}
@@ -430,7 +430,7 @@
 				});
 				fr.browse([new FileFilter("GraphML (*.xml, *graphml)", "*.xml; *.graphml") ]);
 			}
-
+			
 			internal function saveXML(format: String = "graphml"):void {
 				var fr: FileReference = new FileReference();
 				fr.addEventListener(Event.COMPLETE, function(e:Event):void {
@@ -444,7 +444,7 @@
 				fr.addEventListener(Event.SELECT, function(e:Event):void {
 					trace("saving file");
 				});
-			
+				
 				var data: String = format == "graphml" ? g.toGraphML() : ""
 				fr.save(data, "graph." + format);
 			}
@@ -470,18 +470,17 @@
 				
 				var ba: ByteArray = new ByteArray;
 				ba.writeUTFBytes(g.toXML().toXMLString());
-				trace(g.toXML().toXMLString());
 				loader.addFile(ba, "graph");
-
+				
 				// append options
 				var go:* = g.generalOptions
 				loader.addVariable("layoutQuality", go.quality)
 				loader.addVariable("animateOnLayout", go.animateOnLayout)
 				loader.addVariable("incremental", go.incremental)
-//				loader.addVariable("uniformNodeSize", go.uniformNodeSize)
+				//				loader.addVariable("uniformNodeSize", go.uniformNodeSize)
 				
 				CursorManager.setBusyCursor();
-
+				
 				if(type == "cose")
 				{
 					coseLayoutButton.enabled = false;
@@ -521,13 +520,13 @@
 					if(bm == null)
 						return		// empty image!
 						
-					g.drawOnBitmap(bm)
+						g.drawOnBitmap(bm)
 					//var pixs: ByteArray = bm.getPixels(new Rectangle(0, 0, bm.width, bm.height))
 					data = encoder.encode(bm)//encodeByteArray(pixs, bm.width, bm.height, false)
 				}
 				else
 					data = g.toSvg()
-					
+				
 				var fr: FileReference = new FileReference();
 				fr.addEventListener(Event.COMPLETE, function(e:Event):void {
 					trace("image saved successfully");
@@ -543,7 +542,7 @@
 			}
 			
 			public function init(): void {
-
+				
 				loader.addEventListener("complete", onLayoutComplete)
 				loader.addEventListener("ioError", onLayoutError);
 			}
