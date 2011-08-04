@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+				initialize="main()" xmlns:ivis="ivis.*"
+				width="100%"
+				pageTitle="i-Vis Layout Demo - Untitled">
+	
+	<mx:Canvas styleName="rawBox"
+			   width="100%" height="100%"
+			   verticalScrollPolicy="off" horizontalScrollPolicy="off"
+			   autoLayout="true">
+		
+		<mx:Box id="graphBox" styleName="rawBox" width="100%" height="100%"
+				verticalScrollPolicy="off" horizontalScrollPolicy="off"
+				verticalAlign="middle" horizontalAlign="center"
+				autoLayout="true"/>
+		
+	</mx:Canvas>
+	
+	<mx:HBox width="100%" horizontalGap="1" paddingBottom="5" paddingTop="5">
+	
+		<mx:Button id="addNode" 
+			label="N"
+			width="32"
+			toolTip="Add Node"
+			click="controller.toggle(ActionState.ADD_NODE)"/>	
+	
+		<mx:Button id="addBendPoint" 
+			   label="BP"
+			   width="32"
+			   toolTip="Add Bendpoint"
+			   click="controller.toggle(ActionState.ADD_BENDPOINT)"/>		
+	
+		<mx:Button id="addEdge" 
+			   label="E"
+			   width="32"
+			   toolTip="Add Edge"
+			   click="controller.toggle(ActionState.ADD_EDGE)"/>
+		
+		<mx:Button id="deleteSelected" 
+				   label="D"
+				   width="32"
+				   toolTip="Delete Selected Elements"
+				   click="controller.view.deleteSelected()"/>
+		
+		<mx:Button id="printGraph" 
+				   label="P"
+				   width="32"
+				   toolTip="Print Graph (debug)"
+				   click="controller.printGraph()"/>
+	</mx:HBox>
+		
+	
+	
+	
+	
+<mx:Script>
+	<![CDATA[
+		import flare.vis.data.DataSprite;
+		
+		import ivis.Controller;
+		import ivis.controls.ActionState;
+		import ivis.view.GraphView;
+		
+		[Bindable]
+		public var controller:Controller;
+		
+		private function main():void
+		{
+			trace("main function started...");
+			
+			controller = new Controller();
+			graphBox.addChild(controller.view);
+			//view.vis.update();
+			
+			/*
+			var nodeData:Object;
+			var edgeData:Object;
+			var node:DataSprite;
+			var compound:DataSprite;
+			var edge:DataSprite;
+			
+			nodeData = new Object();
+			nodeData.id = "n1";
+			node = view.addNode(nodeData, 0, 0);
+			
+			nodeData = new Object();
+			nodeData.id = "n2";
+			node = view.addNode(nodeData, 50, 50);
+			compound = node;
+			
+			nodeData = new Object();
+			nodeData.id = "n3";
+			node = view.addNode(nodeData, 60, 60, compound);
+			
+			nodeData = new Object();
+			nodeData.id = "n4";
+			node = view.addNode(nodeData, 15, 25, compound);
+			compound = node;
+			
+			nodeData = new Object();
+			nodeData.id = "n5";
+			node = view.addNode(nodeData, 19, 34, compound);
+			
+			nodeData = new Object();
+			nodeData.id = "n6";
+			node = view.addNode(nodeData, 19, 34, compound);
+			
+			edgeData = new Object();
+			edgeData.id = "e1";
+			edgeData.sourceId = "n1";
+			edgeData.targetId = "n2";
+			view.addEdge(edgeData);
+			
+			edgeData = new Object();
+			edgeData.id = "e2";
+			edgeData.sourceId = "n3";
+			edgeData.targetId = "n4";
+			view.addEdge(edgeData);
+			
+			edgeData = new Object();
+			edgeData.id = "e3";
+			edgeData.sourceId = "n5";
+			edgeData.targetId = "n6";
+			view.addEdge(edgeData);
+			
+			edgeData = new Object();
+			edgeData.id = "e4";
+			edgeData.sourceId = "n1";
+			edgeData.targetId = "n3";
+			edge = view.addEdge(edgeData);
+			
+			view.addBendPoint(edge);
+			*/
+			
+			//view.vis.updateAllCompoundBounds();
+		}
+	]]>
+	</mx:Script>
+	
+</mx:Application>
+		
