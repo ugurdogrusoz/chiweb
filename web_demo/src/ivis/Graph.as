@@ -1,5 +1,5 @@
 /** 
-* Authors: Ebrahim Rajabzadeh, Turgut Isik
+* Authors: Ebrahim Rajabzadeh, Turgut Isik, Ugur Dogrusoz
 *
 * Copyright: i-Vis Research Group, Bilkent University, 2009 - present 
 */
@@ -200,7 +200,8 @@ package ivis
 		{
 			this._vscroll = value
 			
-			if(this._vscroll) {
+			if (this._vscroll)
+			{
 				this._vscroll.addEventListener("scroll", function(e: ScrollEvent): void
 				{
 					if(e.position == _prevVPos)
@@ -221,7 +222,8 @@ package ivis
 		{
 			this._hscroll = value
 
-			if(this._hscroll) {
+			if (this._hscroll)
+			{
 				this._hscroll.addEventListener("scroll", function(e: ScrollEvent): void
 				{
 					if(e.position == _prevHPos)
@@ -235,34 +237,41 @@ package ivis
 		
 		private function keyboardHandler(e: KeyboardEvent): void
 		{
-			if(e.keyCode == Keyboard.ESCAPE) {
-				if(this.isAddingEdges && _sourceNode != null)
+			if (e.keyCode == Keyboard.ESCAPE)
+			{
+				if (this.isAddingEdges && _sourceNode != null)
 				{
 					this.removeNode(_dummyNode)
 					_sourceNode = null	
 				}
-				else if(isSeleting || isMarqueeZooming)
+				else if (isSeleting || isMarqueeZooming)
 				{
-					if(_selectionRect) {
+					if (_selectionRect) {
 						removeSelectioRectangle()
 					}
 					
-					if(isSeleting)
+					if (isSeleting)
 						clearSelection()
 				}
 			}
 			else if(e.keyCode == Keyboard.DELETE)
+			{
 				this.remove(this.selection)
+			}
 		}
 		
 		public function get bounds(): Object
 		{
 			var pts: Array = Utils.cloneArray(this._nodes)
 			
-			for each(var e: Edge in _edges) {
-				if(e.bends.length > 0)
+			for each (var e: Edge in _edges)
+			{
+				if (e.bends.length > 0)
+				{
 					pts = Utils.merge(pts, e.bendPoints)
+				}
 			}
+			
 			var b:* = Utils.boundingRect(pts)
 
 			return { left: b.left, top: b.top, width: b.width, height: b.height }			
@@ -283,7 +292,7 @@ package ivis
 			
 			var z: Number;
 			
-			if(car > sar)
+			if (car > sar)
 			{
 				z = h / (sh + 2*_margin);
 				z = Math.min(z, ZOOM_MAX)
@@ -313,7 +322,7 @@ package ivis
 		{
 			this._miniMap = value
 			
-			if(_miniMap)
+			if (_miniMap)
 			{
 				_miniMap.addEventListener("mouseDown", onMapZoomStart)
 			}
@@ -325,9 +334,11 @@ package ivis
 		
 		private function onMapZoomStart(e: MouseEvent): void
 		{
-			if(_mapSelectionRect)
+			if (_mapSelectionRect)
+			{
 				_miniMap.removeChild(_mapSelectionRect)
-				
+			}
+			
 			_mapLocalStart = new Point(e.localX, e.localY)
 			
 			
@@ -342,7 +353,7 @@ package ivis
 		
 		private function onMapMove(e: MouseEvent): void
 		{
-			if(!e.buttonDown)
+			if (!e.buttonDown)
 			{
 				_miniMap.removeChild(_mapSelectionRect)
 				_mapSelectionRect = null
@@ -370,9 +381,11 @@ package ivis
 			_miniMap.removeEventListener("mouseMove", onMapMove)
 			_miniMap.removeEventListener("mouseUp", onMapUp)
 
-			if(!_validMapSelection)
+			if (!_validMapSelection)
+			{
 				return
-
+			}
+			
 			var dx: Number =  e.localX - _mapLocalStart.x
 			var dy: Number =  e.localY - _mapLocalStart.y
 			
@@ -384,7 +397,7 @@ package ivis
 			var w: Number
 			var h: Number
 			
-			if(mar > sar)
+			if (mar > sar)
 			{
 				scale = _miniMap.height / _surface.height
 				w = scale*_surface.width
@@ -407,8 +420,7 @@ package ivis
 			y = Math.min((_mapLocalStart.y - y)/ scale, (_mapLocalStart.y - y + dy)/ scale)
 			dx = Math.abs(dx) / scale
 			dy = Math.abs(dy) / scale
-			this.zoomToBounds(
-				{ left: x, top: y, width: dx, height: dy })
+			this.zoomToBounds({ left: x, top: y, width: dx, height: dy })
 		}
 		
 		public function zoomToFit(): void
@@ -448,18 +460,23 @@ package ivis
 		
 		private function onDoubleClick(e: MouseEvent): void
 		{
-			if(e.target !== this)
+			if (e.target !== this)
+			{
 				return;
-				
+			}
+			
 			toggleInspector();
 		}
 		
 		public function toggleInspector(): void
 		{
-			if(_inspectorShown)
+			if (_inspectorShown)
 			{
-				if(this._overlay.contains(_inspector))
+				if (this._overlay.contains(_inspector))
+				{
 					this._overlay.removeChild(_inspector);
+				}
+				
 				_inspectorShown = false
 			}
 			else
@@ -497,7 +514,8 @@ package ivis
 				_prevMap.dispose()
 
 			map = this.getCompatibleBitmap()
-			if(map == null) {
+			
+			if (map == null) {
 				_miniMap.graphics.clear()
 				_miniMap.graphics.beginFill(MAP_BACKGROUND_COLOR)
 				_miniMap.graphics.drawRect(0, 0, _miniMap.width, _miniMap.height)
@@ -515,7 +533,7 @@ package ivis
 			var h: Number
 			var scale: Number
 			
-			if(mar > sar)
+			if (mar > sar)
 			{
 				scale = _miniMap.height / _surface.height
 				w = scale*_surface.width
@@ -546,7 +564,8 @@ package ivis
 			var scb: ScrollBar
 			var b:* = this.bounds
 			
-			if(hscroll.maxScrollPosition > 0) {
+			if (hscroll.maxScrollPosition > 0)
+			{
 				
 				scb = this.hscroll
 				x += Math.max(0, -this._surface.x) * scale
@@ -560,7 +579,8 @@ package ivis
 				w = Math.max(w, 0)
 			}
 			
-			if(vscroll.maxScrollPosition > 0) {
+			if (vscroll.maxScrollPosition > 0)
+			{
 				
 				scb = this.vscroll
 				y += Math.max(0, -this._surface.y) * scale
@@ -719,56 +739,56 @@ package ivis
 			var clickedComponent: Boolean = _target is Component
 
 
-			if(clickedComponent)
+			if (clickedComponent)
 				this._prevSelected = (_target as Component).selected
 				
 			_stageStart = new Point(e.stageX, e.stageY);
 
-			if(this.isAddingEdges)
+			if (this.isAddingEdges)
 			{
-				if(clickedNodeOrEdge)
+				if (clickedNodeOrEdge)
 					this.onAddingEdgeStart(e)
 			}
-			else if(this.isCreatingSimpleNode)
+			else if (this.isCreatingSimpleNode)
 			{
 				this.onSimpleNodeStart(e)
 			}
-			else if(this.isCreatingCompoundNode)
+			else if (this.isCreatingCompoundNode)
 			{
 				this.onCompoundNodeStart(e)
 			}
-			else if(this.isMarqueeZooming)
+			else if (this.isMarqueeZooming)
 			{
 				this.onMarqueeZoomStart(e)
 			}
-			else if(this.isSeleting)
+			else if (this.isSeleting)
 			{
-				if(e.altKey)
+				if (e.altKey)
 					this.onPanStart(e)
 				else
 				{
-					if(!e.ctrlKey && !((clickedNodeOrEdge && _target.selected) || _target is Grapple))
+					if (!e.ctrlKey && !((clickedNodeOrEdge && _target.selected) || _target is Grapple))
 					{
 						clearSelection()
 					}
 
-					if(clickedCanvas)
+					if (clickedCanvas)
 					{
 						this.onSelectionStart(e)
 					}
-					else if(clickedNodeOrEdge) 
+					else if (clickedNodeOrEdge) 
 					{
 						this.addToSelection(_target)
 					}
 					
-					if(clickedNode)
+					if (clickedNode)
 					{
 						for each(var c: Component in _selecteds)
-							if(c is NodeComponent)
+							if (c is NodeComponent)
 								c.onMouseDown(e)
 					}
 					
-					if(_target is EdgeComponent || _target is Grapple)
+					if (_target is EdgeComponent || _target is Grapple)
 					{
 						_target.onMouseDown(e)
 					}
@@ -786,18 +806,18 @@ package ivis
 		
 		private function onMouseUp(e: MouseEvent): void
 		{
-			if(!this.isSeleting)
+			if (!this.isSeleting)
 				return
 			
-			if(!e.ctrlKey && !this._selectionRect) 
+			if (!e.ctrlKey && !this._selectionRect) 
 			{
-				if(!this._clickedAndMoved || (e.target is Component &&
+				if (!this._clickedAndMoved || (e.target is Component &&
 					!(e.target as Component).selected) && !(e.target is Grapple)) {
 						this.clearSelection()
 					}
 			}
 
-			if(e.target is NodeComponent || e.target is EdgeComponent)
+			if (e.target is NodeComponent || e.target is EdgeComponent)
 			{
 				var c: Component = e.target as Component
 					this.addToSelection(c)
@@ -815,7 +835,7 @@ package ivis
 			for each(eg in _edges)
 				eg.view.mouseEnabled = false
 				
-			if(_target is NodeComponent)
+			if (_target is NodeComponent)
 			{
 				if(_sourceNode == null) {
 					_sourceNode = _target
@@ -872,7 +892,7 @@ package ivis
 		{
 			var i: int = _selecteds.indexOf(c)
 			
-			if(i < 0) {
+			if (i < 0) {
 				_selecteds.push(c)
 				c.highlight = true;
 				c.selected = true	
@@ -893,7 +913,8 @@ package ivis
 		public function clearSelection(): void {
 			
 			var all: Array = Utils.merge(_nodes, _edges) 
-			for each(var c:* in all) {
+
+			for each (var c:* in all) {
 				c.view.highlight = false;
 				c.view.selected = false;
 			}
@@ -905,7 +926,7 @@ package ivis
 		{
 			var i: int = this._selecteds.indexOf(c)
 			
-			if(i >= 0) {
+			if (i >= 0) {
 				this._selecteds[i].selected = false
 				this._selecteds[i].highlight = false
 				
@@ -956,7 +977,7 @@ package ivis
 		
 		private function updateSelectionRectangle(nw: Number, nh: Number): void
 		{
-			if(!_selectionRect)
+			if (!_selectionRect)
 				return
 				
 			this._selectionRect.width = nw
@@ -978,7 +999,7 @@ package ivis
 
 		private function removeSelectioRectangle(): void
 		{
-			if(this._selectionRect)
+			if (this._selectionRect)
 			{
 				this.overlay.removeChild(this._selectionRect)
 				this._selectionRect = null
@@ -1000,10 +1021,10 @@ package ivis
 		
 		private function onSelectionMove(e: MouseEvent): void
 		{
-			if(!this._selectionRect)
+			if (!this._selectionRect)
 				return
 			
-			if(!e.buttonDown) {
+			if (!e.buttonDown) {
 				this.onSelectionUp(e)
 				return
 			}
@@ -1014,21 +1035,22 @@ package ivis
 			this.updateSelectionRectangle(dx, dy)
 			
 			var all: Array = Utils.merge(_nodes, _edges)
+
 			for each(var c:* in all)
 			{
 				var i: int = _prevSelection.indexOf(c.view)
 				
-				if(this._selectionRect.getBounds(this.surface)
+				if (this._selectionRect.getBounds(this.surface)
 					.containsRect(c.view.getBounds(this.surface)))
 				{
 					addToSelection(c.view)
 					
-					if(i >= 0)
+					if (i >= 0)
 						_prevSelection.splice(i, 1)
 				}
 				else
 				{
-					if(i < 0) {
+					if (i < 0) {
 						removeFromSelection(c.view)
 					}
 				}
@@ -1064,13 +1086,14 @@ package ivis
 
 		private function onMarqueeZoomMove(e: MouseEvent): void
 		{
-			if(!_selectionRect)
+			if (!_selectionRect)
 				return
 				
-			if(!e.buttonDown) {
+			if (!e.buttonDown) {
 				onMarqueeZoomUp(e, false)
 				return
 			}
+			
 			var dx: Number = (e.stageX - _stageStart.x) ;/// _surface.scaleX;
 			var dy: Number = (e.stageY - _stageStart.y) ;/// _surface.scaleY;
 
@@ -1092,16 +1115,16 @@ package ivis
 		
 		private function onMarqueeZoomUp(e: MouseEvent, boundsValid: Boolean = true): void
 		{
-
 			this.removeEventListener("mouseMove", onMarqueeZoomMove);
 			this.removeEventListener("mouseUp", onMarqueeZoomUp);
 			this.mouseChildren = true;
 			this.overlay.mouseChildren = true;
 
-			if(boundsValid && _selectionRect)
+			if (boundsValid && _selectionRect)
 			{
 				var rect: Rectangle = this._selectionRect.getBounds(this.surface)
-				if(rect.width > 5 || rect.height > 5) 
+
+				if (rect.width > 5 || rect.height > 5) 
 					this.zoomToBounds(rect)
 			}
 			
@@ -1131,7 +1154,6 @@ package ivis
 
 		private function onPan(e: MouseEvent): void
 		{
-
 			var dx: Number = (e.stageX - _stageStart.x) ;/// _surface.scaleX;
 			var dy: Number = (e.stageY - _stageStart.y) ;/// _surface.scaleY;
 
@@ -1142,7 +1164,6 @@ package ivis
 			
 			_stageStart.x = e.stageX;
 			_stageStart.y = e.stageY;
-
 		}
 		
 		private function onPanStop(e: MouseEvent): void
@@ -1172,7 +1193,7 @@ package ivis
 			var i: int = 0;
 
 			i = 0;
-			while(i < a.length)
+			while (i < a.length)
 			{ 
 				if(a[i] is NodeComponent && (_nodes.indexOf(a[i].model) > -1))
 					removeNode(a[i].model);
@@ -1180,7 +1201,7 @@ package ivis
 			}
 
 			i = 0;
-			while(i < a.length)
+			while (i < a.length)
 			{
 				if(a[i] is EdgeComponent && (_edges.indexOf(a[i].model) > -1))
 					removeEdge((a[i] as EdgeComponent).model as Edge);
@@ -1191,9 +1212,9 @@ package ivis
 		
 		public function hasEdge(fromId: String, toId: String, directed: Boolean = false): Boolean
 		{
-			for each(var e: Edge in _edges)
-				if((e.source.id == fromId && e.target.id == toId) ||
-				 (!directed && e.source.id == toId && e.target.id == fromId))
+			for each (var e: Edge in _edges)
+				if ((e.source.id == fromId && e.target.id == toId) ||
+					(!directed && e.source.id == toId && e.target.id == fromId))
 					return true;
 			
 			return false;
@@ -1201,7 +1222,7 @@ package ivis
 		
 		public function removeNode(node: Node): void
 		{
-			if(node.isCompound())
+			if (node.isCompound())
 			{
 				var c: CompoundNode = node as CompoundNode
 				while(c.nodes.length > 0)
@@ -1209,8 +1230,9 @@ package ivis
 			}
 			
 			var i: int = 0;
-			while(i < _edges.length) {
-				if(_edges[i].source === node || _edges[i].target === node)
+
+			while (i < _edges.length) {
+				if (_edges[i].source === node || _edges[i].target === node)
 					removeEdge(_edges[i]);
 				else
 					++i;
@@ -1224,7 +1246,7 @@ package ivis
 			this._surface.removeChild(node.view)
 				
 			i = _nodes.indexOf(node)
-			if(i < 0)
+			if (i < 0)
 				trace("WARNING: node index out of bounds")
 			
 			_nodes.splice(i, 1);
@@ -1244,7 +1266,7 @@ package ivis
 			this._surface.removeChild(edge.view);
 			var ei: int = _edges.indexOf(edge)
 			
-			if(ei < 0)
+			if (ei < 0)
 				trace("WARNING: edge index out of bounds")
 		
 			_edges.splice(ei, 1);
@@ -1260,7 +1282,7 @@ package ivis
 			
 			var e: Edge = new Edge(edgeId, source, target)
 			
-			if(source === target)
+			if (source === target)
 			{
 				var p: Point = new Point(source.width/2, 1.5*source.height)
 				var bnd:* = { point: p, index: 0, isNew: true }	
@@ -1283,7 +1305,7 @@ package ivis
 			var anc2: Node = e.target.parent
 			var i: int = -1
 			
-			while(anc1 || anc2)
+			while (anc1 || anc2)
 			{
 				var pi1: int = anc1 ? surface.getChildIndex(anc1.view) : -1
 				var pi2: int = anc2 ? surface.getChildIndex(anc2.view) : -1
@@ -1295,8 +1317,10 @@ package ivis
 					anc2 = anc2.parent
 									
 			}
+
 			var ci: int = surface.getChildIndex(e.view)
-			if(i > ci)
+
+			if (i > ci)
 				surface.setChildIndex(e.view, i)
 			
 //			this.refreshMinimap(null)
@@ -1306,10 +1330,10 @@ package ivis
 
 		public function nodeFromId(id: String): Node
 		{
-			for each(var n: Node in _nodes)
+			for each (var n: Node in _nodes)
 			{
 				var m: Node = n.findNode(id)
-				if(m != null)
+				if (m != null)
 					return m
 			}
 			
@@ -1323,12 +1347,20 @@ package ivis
 			var d: XMLList= xml.data;
 			var n: Node = isCompound ? new CompoundNode(xml.@id): new Node(xml.@id)
 			var node: XML
+			var clusterIDString: String
+			var clusterIDArray : Array
 			
 			n.x = d.(@key == "x");
 			n.y = d.(@key == "y");
 			n.width = d.(@key == "width");
 			n.height = d.(@key == "height");
-			n.clusterID = d.(@key == "clusterID");
+			clusterIDString = d.(@key == "clusterID");
+			clusterIDArray = clusterIDString.split("|");
+			
+			for each (var cID:uint in clusterIDArray)
+			{
+				n.addClusterID(cID);
+			}
 			
 			var nv: NodeComponent = n.view as NodeComponent;
 			nv.color2 = Utils.colorFromString(d.(@key == "color"));
@@ -1339,21 +1371,20 @@ package ivis
 			nv.longLabelText = d.(@key == "text")
 
 			var fontStr: String = d.(@key == "textFont");
-			if(fontStr != null) {
+			if (fontStr != null) {
 				var fs:Array = fontStr.split("|");
 				nv.font = fs[1];
 				nv.fontSize = fs[2];
 			} 
 			this.addNode(n)
 			
-			for each(node in xml.graph.node)
+			for each (node in xml.graph.node)
 				(n as CompoundNode).addNode(this.nodeFromGraphML(node))
 			
-			if(isCompound)
+			if (isCompound)
 				(n as CompoundNode).recalcBounds()			
 
 			return n
-			
 		}
 		
 		public function fromGraphML(xml: XML): void
@@ -1651,12 +1682,12 @@ package ivis
 		
 		public function assignClusterIDs(): void
 		{
-			if(_selecteds.length == 0)
+			if (_selecteds.length == 0)
 				return
 			
 			var cid: int = Node.nextClusterID()
 			
-			for each(var n:* in _selecteds)
+			for each (var n:* in _selecteds)
 			{
 				if(n is NodeComponent)
 				{
@@ -1668,24 +1699,24 @@ package ivis
 		public function assignRandomClusterIDs(): void
 		{
 			var num: uint = this._nodes.length
-			if(num < 1)
+			if (num < 1)
 				return
 
 			var parts: Array = Utils.randomPartition(num)
 			var pl: uint = parts.length
 			var track: Array = Utils.cloneArray(this._nodes)
 
-			for(var i: int = 0; i < pl; ++i)
+			for (var i: int = 0; i < pl; ++i)
 			{
-				var cid: int = Node.nextClusterID()
+				var cid: uint = Node.nextClusterID()
 				
-				for(var j: int = 0; j < parts[i]; ++j)
+				for (var j: int = 0; j < parts[i]; ++j)
 				{
-					var nn: uint = Math.floor(Math.random() * track.length)
+					var nn: uint = Math.floor(Math.random() * track.length);
 					
-					var node: Node = track[nn] as Node
-					node.clusterID = cid
-					track.splice(nn, 1)
+					var node: Node = track[nn] as Node;
+					node.addClusterID(cid);
+					track.splice(nn, 1);
 				}
 			}
 			
@@ -1695,7 +1726,7 @@ package ivis
 		public function resetClusterOfSelected(): void
 		{
 			for each(var n:* in _selecteds)
-				if(n is NodeComponent)
+				if (n is NodeComponent)
 				{
 					var nv: NodeComponent = n as NodeComponent
 					nv.model.clusterID = 0
@@ -1707,12 +1738,14 @@ package ivis
 		{
 			var clusters: Object = new Object
 			var count: uint = 0
-			
-			for each(var n: Node in _nodes)
-				if(!clusters.hasOwnProperty(n.clusterID)) {
-					++count
-					clusters[n.clusterID] = "done"
-				}
+
+			for each (var n: Node in _nodes)
+				for each (var cID: uint in n.clusterIDs)
+					if (!clusters.hasOwnProperty(cID))
+					{
+						++count
+						clusters[cID] = "done"
+					}
 			
 			return count
 		}
@@ -1735,41 +1768,44 @@ package ivis
 
 			for each(n in _nodes)
 			{
-				
 				nv = n.view as NodeComponent
-				
-				if(n.clusterID > 0)
-				{
-					var c: uint = 0
 
-					if(!colors.hasOwnProperty(n.clusterID))
+				for each (var cID: uint in n.clusterIDs)
+				{
+					if (cID > 0)
 					{
-						tc[i % 3] = Math.min(rgb[i % 3] + step, maxRgb)
-						if(i > 2) {
-							var j: int = ((i / 3) + (i % 3)) % 3
-							tc[j] = Math.min(rgb[j] + step, maxRgb)
-						} 
-						var color: int = Utils.rgbToInt(tc)
-						colors[n.clusterID] = color
-						c = color
-						
-						++i
-						if(i == 6) {
-							rgb[0] = Math.min(rgb[0] + step, maxRgb)
-							rgb[1] = Math.min(rgb[1] + step, maxRgb)
-							rgb[2] = Math.min(rgb[2] + step, maxRgb)
-							i = 0
+						var c: uint = 0
+	
+						if (!colors.hasOwnProperty(cID))
+						{
+							tc[i % 3] = Math.min(rgb[i % 3] + step, maxRgb)
+							if(i > 2) {
+								var j: int = ((i / 3) + (i % 3)) % 3
+								tc[j] = Math.min(rgb[j] + step, maxRgb)
+							} 
+							var color: int = Utils.rgbToInt(tc)
+							colors[cID] = color
+							c = color
+							
+							++i
+							if (i == 6) {
+								rgb[0] = Math.min(rgb[0] + step, maxRgb)
+								rgb[1] = Math.min(rgb[1] + step, maxRgb)
+								rgb[2] = Math.min(rgb[2] + step, maxRgb)
+								i = 0
+							}
+							tc = Utils.cloneArray(rgb)
 						}
-						tc = Utils.cloneArray(rgb)
+						else
+							c = colors[cID]
+						
+						nv.color2 = c
 					}
 					else
-						c = colors[n.clusterID]
-					
-					nv.color2 = c
+					{
+						nv.color2 = NodeComponent.DEFAULT_FILL_COLOR2
+					}
 				}
-				else
-					nv.color2 = NodeComponent.DEFAULT_FILL_COLOR2
-					
 			}
 		}
 		

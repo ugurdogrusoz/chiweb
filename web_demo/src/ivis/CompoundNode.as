@@ -1,5 +1,5 @@
 /** 
-* Authors: Ebrahim Rajabzadeh
+* Authors: Ebrahim Rajabzadeh, Ugur Dogrusoz
 *
 * Copyright: i-Vis Research Group, Bilkent University, 2009 - present 
 */
@@ -27,16 +27,20 @@ package ivis
 		
 		override public function get view(): Component
 		{
-			if(_view == null)
+			if (_view == null)
+			{
 				_view = new CompoundNodeComponent(this)
-				
+			}
+			
 			return _view
 		}
 		
 		override public function bounds(includeGrapples: Boolean = false, exc: Node = null):*
 		{
-			if(_nodes.length == 0) {
+			if (_nodes.length == 0)
+			{
 				var nv: CompoundNodeComponent = this._view as CompoundNodeComponent
+				
 				return {
 					top: Number(y + nv.margin), left: Number(x + nv.margin),
 					right: Number(x + DEFAULT_WIDTH),
@@ -47,16 +51,19 @@ package ivis
 			}
 				
 			var ns: Array = this._nodes
-			if(exc)
+			
+			if (exc)
 			{
 				var ix: int = ns.indexOf(exc)
-				if(ix > -1)
+				
+				if (ix > -1)
 				{
 					var nn: Array = Utils.cloneArray(ns)
 					nn.splice(ix, 1)
 					return Utils.boundingRect(nn)
 				}
 			}
+			
 			var b:* = Utils.boundingRect(ns)
 			
 			return b
@@ -66,11 +73,15 @@ package ivis
 		
 		public function addNode(n: Node): void
 		{
-			if(n.parent)
+			if (n.parent)
+			{
 				n.parent.removeNode(n)
+			}
 			
-			if(!Graph.getInstance().surface.contains(n.view))
+			if (!Graph.getInstance().surface.contains(n.view))
+			{
 				Graph.getInstance().surface.addChild(n.view)
+			}	
 				
 			this._nodes.push(n)
 			n.parent = this
@@ -99,7 +110,8 @@ package ivis
 			
 			// bring up the edges
 			var edges: Array = Graph.getInstance()._edges
-			for each(var e: Edge in edges)
+			
+			for each (var e: Edge in edges)
 			{
 				if(nodes.indexOf(e.source) >= 0 || nodes.indexOf(e.target) >= 0)
 				{
@@ -186,19 +198,29 @@ package ivis
 		
 		override public function asXML(): XML
 		{
-			var res: String = '<node id="' + id + '" ' +
-				'clusterId="' + clusterID + '">' +
+			var res: String = '<node id="' + this.id + '">' + 
 				'<bounds height="' + this.height +
-				'" width="' + this.width + 
-				'" />' + 
-				'<children>'
+				'" width="' + this.width +
+				'" x="' + this.x +
+				'" y="' + this.y +
+				'" />' +
+				'<children>';
 			
-			for each(var c: Node in _nodes)
-				res += c.asXML()
+			for each (var n: Node in _nodes)
+			{
+				res += n.asXML();
+			}
 			
-			res += '</children></node>'
+			res += '</children><clusterIDs>';
 			
-			return XML(res)
+			for each (var c: uint in _clusterIDs)
+			{
+				res += '<clusterID>' + c + '</clusterID>';
+			}
+			
+			res += '</clusterIDs></node>';
+			
+			return XML(res);
 		} 
 		
 		override public function toGraphML(): XML
@@ -218,7 +240,20 @@ package ivis
 				'|' + (this.view as NodeComponent).fontSize +
 				'|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>';
 			//res += '<data key='textColor'>0 0 0</data>';
-			res += '<data key="clusterID">' + this.clusterID + '</data>';
+
+			res += '<data key="clusterID">';
+			var i:uint = 0;
+			for each (var c: uint in _clusterIDs)
+			{
+				res += c;
+				
+				i++;
+				if (i != _clusterIDs.length)
+				{
+					res += '|';
+				}
+			}
+			res += '</data>';
 
 			res += '<graph id="">'
 			
@@ -238,7 +273,8 @@ package ivis
 		
 		public function recalcBounds(): void
 		{
-			if(_nodes.length > 0) {
+			if(_nodes.length > 0)
+			{
 				var b:* = this.bounds()
 				this.x = b.leftmost.x - margin
 				this.y = b.topmost.y - margin
@@ -290,18 +326,25 @@ package ivis
 		
 		override public function compoundUnderPoint(x: Number, y: Number, exc: Node = null): CompoundNode
 		{
-			for each(var n: Node in _nodes)
+			for each (var n: Node in _nodes)
 			{
-				if(n !== exc) {
+				if (n !== exc)
+				{
 					var c: CompoundNode =  n.compoundUnderPoint(x, y, exc)
-					if(c)
+				
+					if (c)
+					{
 						return c
+					}
 				}
 			}
 			
 			var b:* = this.bounds(false, exc)
-			if(x <= b.right && x >= b.left && y <= b.bottom && y >= b.top)
+				
+			if (x <= b.right && x >= b.left && y <= b.bottom && y >= b.top)
+			{
 				return this
+			}
 
 			return null 
 		}
@@ -331,6 +374,5 @@ package ivis
 				  
 			return res
 		}
-	
 	}
 }

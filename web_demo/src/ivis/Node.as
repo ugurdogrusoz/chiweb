@@ -1,5 +1,5 @@
 /** 
-* Authors: Turgut Isik, Ebrahim Rajabzadeh
+* Authors: Turgut Isik, Ebrahim Rajabzadeh, Ugur Dogrusoz
 *
 * Copyright: i-Vis Research Group, Bilkent University, 2009 - present 
 */
@@ -31,7 +31,7 @@ package ivis
 		protected var _view: Component = null;
 		protected static const DEFAULT_WIDTH: uint = 40;
 		protected static const DEFAULT_HEIGHT: uint = 40;		
-		protected var _clusterID: uint
+		protected var _clusterIDs: Array = new Array;
 		
 		public var _parent: CompoundNode = null;
 
@@ -52,7 +52,6 @@ package ivis
 			this.height = DEFAULT_HEIGHT
 			this._data = data;
 			this.parent = cn
-			this.clusterID = 0
 		}
 
 		public function get x(): Number {
@@ -146,16 +145,34 @@ package ivis
 			return _id;
 		}
 
-		public function get clusterID(): uint
+		// GraphML and Chisio Layout support multiple clusters but the current demo
+		// doesnot fully do so. Even though multiple cluster IDs can be maintained
+		// in a node, only the first one will be displayed in the inspector and
+		// input of multiple clusters through the inspector is not supported yet.
+		
+		public function get clusterIDs(): Array
 		{
-			return this._clusterID
+			return this._clusterIDs;
 		}
 		
-		public function set clusterID(value: uint): void
+		public function addClusterID(value: uint): void
 		{
-			this._clusterID = value
+			this._clusterIDs.push(value);
 			
 			this.dispatchEvent(new Event("clusterChanged"))
+		}
+
+		// Used by the inspector only to display the first of possibly multiple clusters
+		public function getClusterID(): uint
+		{
+			return this._clusterIDs[0];
+		}
+		
+		// Used by the inspector only to set the input to be only cluster
+		public function setClusterID(value: uint): void
+		{
+			this._clusterIDs = new Array;
+			this.addClusterID(value);
 		}
 		
 		public function bounds(includeGrapples: Boolean = false, exc: Node = null): *
@@ -195,14 +212,21 @@ package ivis
 		
 		public function asXML(): XML
 		{
-			return XML('<node id="' + id + '" ' + 
-					'clusterId="' + clusterID + '">' + 
-					'<bounds height="' + this.height + 
-					'" width="' + this.width + 
-					'" x="' + this.x + 
-					'" y="' + this.y + 
-					'" />' + 
-					'</node>')
+			var res: String = '<node id="' + this.id + '">' + 
+				'<bounds height="' + this.height +
+				'" width="' + this.width +
+				'" x="' + this.x +
+				'" y="' + this.y +
+				'" />' + '<clusterIDs>';
+			
+			for each (var c: uint in _clusterIDs)
+			{
+				res += '<clusterID>' + c + '</clusterID>';
+			}
+			
+			res += '</clusterIDs></node>';
+			
+			return XML(res);
 		} 
 		
 		public function toGraphML(): XML
@@ -224,7 +248,22 @@ package ivis
 				'|' + (this.view as NodeComponent).fontSize +
 				'|0|WINDOWS|1|-11|0|0|0|0|0|0|0|1|0|0|0|0|Arial</data>';
 			//res += '<data key='textColor'>0 0 0</data>';
-			res += '<data key="clusterID">' + this.clusterID + '</data>';
+
+			res += '<data key="clusterID">';
+
+			var i:uint = 0;
+			for each (var cID: uint in _clusterIDs)
+			{
+				res += cID;
+
+				i++;
+				if (i != _clusterIDs.length)
+				{
+					res += '|';
+				}
+			}
+			res += '</data>';
+
 			res += '<data key="shape">' + (this.view as NodeComponent).shape + '</data>';
 			res += '</node>';
 			
@@ -301,7 +340,7 @@ package ivis
 
 		public function equals(o: Object): Boolean
 		{
-			if(o is Node) {
+			if (o is Node) {
 				return this.id == o.id
 			}
 			

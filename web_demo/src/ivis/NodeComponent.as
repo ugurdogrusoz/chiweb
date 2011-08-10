@@ -208,7 +208,7 @@ package ivis
 				
 			refreshLabel();
 			
-			if(this.model.parent)
+			if (this.model.parent)
 				this.model.parent.revalidate()
 		}
 		
@@ -241,7 +241,7 @@ package ivis
 		override public function set highlight(value:Boolean):void {
 			super.highlight = value;
 			
-			if(value)
+			if (value)
 				addGrapples();
 			else
 				removeGrapples();
@@ -254,13 +254,13 @@ package ivis
 		
 		public function removeGrapples(): void
 		{
-			if(this.contains(grpTL))
+			if (this.contains(grpTL))
 				removeChild(grpTL);
-			if(this.contains(grpTR))
+			if (this.contains(grpTR))
 				removeChild(grpTR);
-			if(this.contains(grpBL))
+			if (this.contains(grpBL))
 				removeChild(grpBL);
-			if(this.contains(grpBR))
+			if (this.contains(grpBR))
 				removeChild(grpBR);			
 		}
 		
@@ -338,13 +338,13 @@ package ivis
 			
 			_transfer &&= e.ctrlKey
 
-			if(!_transfer)
+			if (!_transfer)
 			{
 				if(this.model.parent)
 					this.model.parent.revalidate()
 					
 			} 
-			else if(this.selected) {
+			else if (this.selected) {
 				pa.removeFromSelection(this)
 			}
 				
@@ -360,27 +360,27 @@ package ivis
 			pa.removeEventListener("mouseMove", onMouseMove);
 			pa.removeEventListener("mouseUp", onMouseUp);
 
-			if(_transfer && !pa._clickedAndMoved && _moved)
+			if (_transfer && !pa._clickedAndMoved && _moved)
 			{
 				var p: Point = pa.surface.globalToLocal(new Point(e.stageX, e.stageY))
 				
 				// find the new compound parent
 				var nd: Node = this.model as Node
 				var cn: CompoundNode = pa.compoundUnderPoint(p.x, p.y, nd)
-				if(cn !== nd.parent)
+				if (cn !== nd.parent)
 				{
 					var op: CompoundNode = this.model.parent
 					
-					if(op)
+					if (op)
 					{
 						op.removeNode(nd)
 					}
 					
-					if(cn) 
+					if (cn) 
 					{
 						cn.addNode(nd)
 					}
-					else if(op && Utils.pointInBounds(p.x, p.y, _prevBounds))
+					else if (op && Utils.pointInBounds(p.x, p.y, _prevBounds))
 					{
 						op.addNode(nd)
 					}
@@ -395,7 +395,7 @@ package ivis
 		{
 			return [
 				{ key: "Label", value: longLabelText },
-				{ key: "Cluster", value: this.model.clusterID },
+				{ key: "Cluster", value: this.model.clusterIDs },
 				{ key: "X", value: this.model.x },
 				{ key: "Y", value: this.model.y },
 				{ key: "Color 1", value: _color1},

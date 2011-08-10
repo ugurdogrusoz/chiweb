@@ -34,7 +34,7 @@ package ivis
 
 		internal function onPosChange(e: Event): void
 		{
-			if(this._nodeComponent.inspectorShown && _xInput && _yInput) {
+			if (this._nodeComponent.inspectorShown && _xInput && _yInput) {
 				_xInput.text = Utils.formatNumber(_nodeComponent.model.relativeX)
 				_yInput.text = Utils.formatNumber(_nodeComponent.model.relativeY)
 			}
@@ -45,7 +45,8 @@ package ivis
 			
 			var vb: VBox = new VBox;
 			
-			for each(var e:* in _nodeComponent.properties()) {
+			for each (var e:* in _nodeComponent.properties())
+			{
 				var keyText: String = e.key;
 				var keyLabel: Label = new Label;
 				keyLabel.width = 70;
@@ -57,7 +58,7 @@ package ivis
 				
 				var valueText: String = e.value;
 				
-				if(keyText == "Color 1") {
+				if (keyText == "Color 1") {
 					var cp: ColorPicker = new ColorPicker;
 					cp.selectedColor = uint(valueText);
 					_nodeComponent.addEventListener("color1Changed", function(e: Event): void {
@@ -68,7 +69,7 @@ package ivis
 					});
 					hb.addChild(cp);
 				}	
-				else if(keyText == "Color 2") {
+				else if (keyText == "Color 2") {
 					var cp2: ColorPicker = new ColorPicker;
 					cp2.selectedColor = uint(valueText);
 					cp2.addEventListener("change", function(e: ColorPickerEvent): void {
@@ -79,7 +80,7 @@ package ivis
 					})
 					hb.addChild(cp2);
 				}	
-				else if(keyText == "Shape") {
+				else if (keyText == "Shape") {
 					var cb: ComboBox = new ComboBox;
 					cb.width = 100;
 					var shapes: Array = NodeComponent.availableShapes();
@@ -99,7 +100,7 @@ package ivis
 					});
 					hb.addChild(cb);
 				}	
-				else if(keyText == "Font") {
+				else if (keyText == "Font") {
 					var fb: ComboBox = new ComboBox;
 					fb.width = 100;
 					var fonts: Array = NodeComponent.availableFonts();
@@ -119,7 +120,7 @@ package ivis
 					});
 					hb.addChild(fb);
 				}
-				else if(keyText == "Font Size") {
+				else if (keyText == "Font Size") {
 					var ns: NumericStepper = new NumericStepper;
 					ns.width = 100;
 					ns.maximum = 36;
@@ -132,7 +133,7 @@ package ivis
 						_nodeComponent.fontSize = ns.value;
 					});
 				}	
-				else if(keyText == "Label") {
+				else if (keyText == "Label") {
 					var ti: TextInput = new TextInput;
 					ti.width = 100;
 					ti.text = _nodeComponent.longLabelText;
@@ -142,7 +143,7 @@ package ivis
 					});
 					hb.addChild(ti);
 				}
-				else if(keyText == "X") {
+				else if (keyText == "X") {
 					_xInput = new TextInput;
 					_xInput.width = 100;
 					_xInput.restrict = "-.0-9";
@@ -153,7 +154,7 @@ package ivis
 					});
 					hb.addChild(_xInput);
 				}
-				else if(keyText == "Y") {
+				else if (keyText == "Y") {
 					_yInput = new TextInput;
 					_yInput.width = 100;
 					_yInput.restrict = "-.0-9";
@@ -164,17 +165,17 @@ package ivis
 					});
 					hb.addChild(_yInput);
 				}
-				else if(keyText == "Cluster")
+				else if (keyText == "Cluster")
 				{
 					var cin: TextInput = new TextInput
 					cin.restrict = "0-9"
 					cin.width = 100
 					cin.text = valueText
 					cin.addEventListener("change", function(e: Event): void {
-						_nodeComponent.model.clusterID = uint((e.target as TextInput).text)
+						_nodeComponent.model.setClusterID(uint((e.target as TextInput).text))
 					})
 					_nodeComponent.model.addEventListener("clusterChanged", function(e: Event): void {
-						cin.text = _nodeComponent.model.clusterID
+						cin.text = _nodeComponent.model.getClusterID()
 					})
 					hb.addChild(cin)
 				}
@@ -190,10 +191,8 @@ package ivis
 				vb.addChild(hb);
 				
 			}
-			
 					
 			addChild(vb);
 		}
-		
 	}
 }
