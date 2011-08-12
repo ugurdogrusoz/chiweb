@@ -164,8 +164,8 @@
 			private var loader: MultipartURLLoader = new MultipartURLLoader;
 			private var coseUrl: String = "http://139.179.21.69/chilay2x/layout.jsp"
 			private var ciseUrl: String = "http://139.179.21.69/chilay2x/layout.jsp"
-//			private var coseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
-//			private var ciseUrl: String = "http://localhost:8080/chilay1x/layout.jsp"
+//			private var coseUrl: String = "http://localhost:8080/chilay2x/layout.jsp"
+//			private var ciseUrl: String = "http://localhost:8080/chilay2x/layout.jsp"
 			
 			private var editMenu: Object
 //			private var cursorID: int = -1;
