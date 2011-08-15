@@ -1689,9 +1689,9 @@ package ivis
 			
 			for each (var n:* in _selecteds)
 			{
-				if(n is NodeComponent)
+				if (n is NodeComponent)
 				{
-					(n as NodeComponent).model.clusterID = cid
+					(n as NodeComponent).model.setClusterID(cid)
 				}
 			}
 		}
@@ -1715,7 +1715,7 @@ package ivis
 					var nn: uint = Math.floor(Math.random() * track.length);
 					
 					var node: Node = track[nn] as Node;
-					node.addClusterID(cid);
+					node.setClusterID(cid);
 					track.splice(nn, 1);
 				}
 			}
@@ -1725,11 +1725,11 @@ package ivis
 		
 		public function resetClusterOfSelected(): void
 		{
-			for each(var n:* in _selecteds)
+			for each (var n:* in _selecteds)
 				if (n is NodeComponent)
 				{
 					var nv: NodeComponent = n as NodeComponent
-					nv.model.clusterID = 0
+					nv.model.resetClusterIDs()
 					nv.color2 = NodeComponent.DEFAULT_FILL_COLOR2
 				}
 		}
@@ -1766,7 +1766,7 @@ package ivis
 						
 			var tc: Array = Utils.cloneArray(rgb)
 
-			for each(n in _nodes)
+			for each (n in _nodes)
 			{
 				nv = n.view as NodeComponent
 

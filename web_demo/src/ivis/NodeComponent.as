@@ -28,7 +28,7 @@ package ivis
 		
 		protected static const LINE_COLOR:uint = 0xFF45523B;
 		protected static const DEFAULT_FILL_COLOR1:uint = 0xFFFFFF;
-		public static const DEFAULT_FILL_COLOR2:uint = 0xFF0000; //0xA4C290;
+		public static const DEFAULT_FILL_COLOR2:uint = 0xEF8F49; //0xA4C290; 0xFF0000;
 		protected static const HIGHLIGHT_COLOR:uint = 0xFFF3E843;
 		
 		protected var _font: String = 'Calibri';

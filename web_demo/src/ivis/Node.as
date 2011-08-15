@@ -161,7 +161,14 @@ package ivis
 			
 			this.dispatchEvent(new Event("clusterChanged"))
 		}
-
+		
+		public function resetClusterIDs(): void
+		{
+			this._clusterIDs = new Array;
+			
+			this.dispatchEvent(new Event("clusterChanged"))
+		}
+		
 		// Used by the inspector only to display the first of possibly multiple clusters
 		public function getClusterID(): uint
 		{
