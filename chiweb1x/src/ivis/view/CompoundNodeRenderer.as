@@ -10,7 +10,7 @@ package ivis.view
 	import ivis.model.Edge;
 	import ivis.model.Node;
 	import ivis.util.GeneralUtils;
-	import ivis.util.NodeShapes;
+	import ivis.util.NodeUIs;
 	import ivis.util.Nodes;
 
 	/**
@@ -75,7 +75,7 @@ package ivis.view
 					if (lineAlpha > 0 && d.lineWidth > 0)
 					{
 						var pixelHinting:Boolean =
-							d.shape === NodeShapes.ROUND_RECTANGLE;
+							d.shape === NodeUIs.ROUND_RECTANGLE;
 						
 						g.lineStyle(d.lineWidth,
 							d.lineColor,
@@ -136,7 +136,7 @@ package ivis.view
 			{
 				// do not draw shape
 			}
-			else if (shape == NodeShapes.ROUND_RECTANGLE)
+			else if (shape == NodeUIs.ROUND_RECTANGLE)
 			{
 				g.drawRoundRect(bounds.x, bounds.y,
 					bounds.width, bounds.height,

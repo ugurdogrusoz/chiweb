@@ -57,7 +57,7 @@ package ivis.controls
 			return super.detach();
 		}
 		
-		private function onMouseDown(event:MouseEvent) : void
+		protected function onMouseDown(event:MouseEvent) : void
 		{
 			var s:Sprite = event.target as Sprite;
 			
@@ -92,7 +92,7 @@ package ivis.controls
 			this.view.resetMissingChildren();
 		}
 		
-		private function onDrag(event:Event) : void
+		protected function onDrag(event:Event) : void
 		{
 			// drag active item by updating x and y coordinates
 			
@@ -265,7 +265,7 @@ package ivis.controls
 			}
 		}
 		
-		private function onMouseUp(event:MouseEvent) : void
+		protected function onMouseUp(event:MouseEvent) : void
 		{
 			if (_cur != null)
 			{

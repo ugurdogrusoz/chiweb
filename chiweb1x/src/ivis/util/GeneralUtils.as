@@ -10,10 +10,14 @@ package ivis.util
 	 */ 
 	public class GeneralUtils
 	{
+		//-----------------------CONSTRUCTOR------------------------------------
+		
 		public function GeneralUtils()
 		{
 			throw new Error("DisplayUtils is an abstract class.");
 		}
+		
+		//---------------------- PUBLIC FUNCTIONS ------------------------------
 		
 		/**
 		 * Brings the specified display object to the front of the stage.  

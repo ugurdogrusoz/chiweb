@@ -9,10 +9,14 @@ package ivis.util
 	 */
 	public class Labels
 	{
+		//-----------------------CONSTRUCTOR------------------------------------
+		
 		public function Labels()
 		{
 			throw new Error("Labels is an abstract class.");
 		}
+		
+		//---------------------- PUBLIC FUNCTIONS ------------------------------
 		
 		public static function leftBorder(label:TextSprite):Number
 		{

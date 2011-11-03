@@ -53,7 +53,6 @@ package ivis
 			this.addControl(dragControl);
 			this.addControl(keyControl);
 			
-			
 			// TODO labeler for debug purposes
 			_view.vis.nodeLabeler = new NodeLabeler("props.labelText");
 			_view.vis.compoundLabeler = new CompoundNodeLabeler("props.labelText");

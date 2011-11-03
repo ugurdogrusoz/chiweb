@@ -13,9 +13,7 @@ package ivis.view
 	import ivis.model.Edge;
 	import ivis.model.Node;
 	import ivis.util.GeometryUtils;
-	import ivis.util.NodeShapes;
-	
-	import org.osmf.layout.PaddingLayoutFacet;
+	import ivis.util.NodeUIs;
 
 	/**
 	 * Renderer for Edge instances.
@@ -75,7 +73,8 @@ package ivis.view
 					var points:Array = this.clippingPoints(edge.source,
 						edge.target);
 					
-					// TODO set the linestyle (may need to override setLineStyle)
+					// TODO set the linestyle (need to override setLineStyle
+					// in order to use a bit mask)
 					
 					// TODO Using a bit mask to avoid transparent edges when fillcolor=0xffffffff.
 					// See https://sourceforge.net/forum/message.php?msg_id=7393265
@@ -170,119 +169,8 @@ package ivis.view
 			
 			// find the intersection point according to the node shape
 			
-			if (node.shape == Shapes.CIRCLE)
-			{
-				interPoint = this.intersectCircle(node, p1, p2);
-			}			
-			else if (node.shape == NodeShapes.ROUND_RECTANGLE)
-			{
-				interPoint = this.intersectRoundRect(node, p1, p2);
-			}
-			// default case is a RECTANGLE
-			else if (node.shape == NodeShapes.RECTANGLE)
-			{
-				interPoint = this.intersectRect(node, p1, p2);
-			}
-			
-			return interPoint;
-		}
-		
-		/**
-		 * Calculates the intersection point of the given node and the line
-		 * specified by the points p1 and p2. This function assumes the shape
-		 * of the node as NodeShapes.RECTANGLE. If no intersection point is
-		 * found, then the center of the given node is returned as an
-		 * intersection point.
-		 * 
-		 * @param node	rectangular Node
-		 * @param p1	start point of the line
-		 * @param p2	end point of the line
-		 * @return		intersection point 
-		 */
-		protected function intersectRect(node:Node,
-			p1:Point,
-			p2:Point):Point
-		{
-			var interPoint:Point = null;
-			
-			var ip0:Point = new Point();
-			var ip1:Point = new Point();
-			
-			var rect:Rectangle = new Rectangle(node.left, node.top,
-				node.width, node.height);
-			
-			// calculate intersection point of the line with the rectangle
-			if (Geometry.intersectLineRect(p1.x, p1.y, p2.x, p2.y,
-				rect, ip0, ip1) == Geometry.NO_INTERSECTION)
-			{
-				// if no intersection, then take the center of the node
-				// as the intersection point
-				interPoint = new Point(node.x, node.y);
-			}
-			else
-			{
-				interPoint = new Point(ip0.x, ip0.y);
-			}
-			
-			return interPoint;
-		}
-		
-		/**
-		 * Calculates the intersection point of the given node and the line
-		 * specified by the points p1 and p2. This function assumes the shape
-		 * of the node as NodeShapes.ROUND_RECTANGLE. If no intersection point
-		 * is found, then the center of the given node is returned as an
-		 * intersection point.
-		 * 
-		 * @param node	circular Node
-		 * @param p1	start point of the line
-		 * @param p2	end point of the line
-		 * @return		intersection point 
-		 */
-		protected function intersectRoundRect(node:Node,
-			p1:Point,
-			p2:Point):Point
-		{
-			//TODO intersectRoundRect
-			return this.intersectRect(node, p1, p2);
-		}
-		
-		/**
-		 * Calculates the intersection point of the given node and the line
-		 * specified by the points p1 and p2. This function assumes the shape
-		 * of the node as Shapes.CIRCLE. If no intersection point is
-		 * found, then the center of the given node is returned as an
-		 * intersection point.
-		 * 
-		 * @param node	circular Node
-		 * @param p1	start point of the line
-		 * @param p2	end point of the line
-		 * @return		intersection point 
-		 */
-		protected function intersectCircle(node:Node,
-			p1:Point,
-			p2:Point):Point
-		{
-			var interPoint:Point = null;
-			var center:Point = new Point(node.x, node.y);
-			
-			var result:Object = GeometryUtils.lineIntersectCircle(
-				p1, p2, center, node.width / 2);
-			
-			if (result.enter != null)
-			{
-				interPoint = result.enter as Point;
-			}
-			else if (result.exit != null)
-			{
-				interPoint = result.exit as Point;
-			}
-			else
-			{
-				// if no intersection, then take the center of the node
-				// as the intersection point
-				interPoint = new Point(node.x, node.y);
-			}
+			var nodeUI:INodeUI = NodeUIs.getUI(node.shape);
+			interPoint = nodeUI.intersection(node, p1, p2);
 			
 			return interPoint;
 		}

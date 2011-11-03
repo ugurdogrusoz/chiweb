@@ -4,10 +4,14 @@ package ivis.util
 
 	public class GeometryUtils
 	{
+		//-----------------------CONSTRUCTOR------------------------------------
+		
 		public function GeometryUtils()
 		{
 			throw new Error("GeometryUtils is an abstract class.");
 		}
+		
+		//---------------------- PUBLIC FUNCTIONS ------------------------------
 		
 		/**
 		 * Taken from the Utils class of CytoscapeWeb project.

@@ -7,7 +7,7 @@ package ivis.view
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	
-	import ivis.util.NodeShapes;
+	import ivis.util.NodeUIs;
 
 	/**
 	 * Renderer for simple (regular) and bend nodes.
@@ -18,6 +18,9 @@ package ivis.view
 	{
 		private static var _instance:NodeRenderer = new NodeRenderer();
 		
+		/**
+		 * Singleton instance. 
+		 */
 		public static function get instance():NodeRenderer
 		{
 			return _instance;
@@ -35,22 +38,15 @@ package ivis.view
 			
 			var lineAlpha:Number = d.lineAlpha;
 			var fillAlpha:Number = d.fillAlpha;
-			var size:Number = d.size * defaultSize;
-			var width:Number = d.w * defaultSize;
-			var height:Number = d.h * defaultSize;
 			
 			var g:Graphics = d.graphics;
 			g.clear();
 			
+			var nodeUI:INodeUI = NodeUIs.getUI(d.shape);
+			
 			if (lineAlpha > 0 && d.lineWidth > 0)
 			{
-				var pixelHinting:Boolean =
-					(d.shape === NodeShapes.ROUND_RECTANGLE);
-				
-				g.lineStyle(d.lineWidth,
-					d.lineColor,
-					lineAlpha,
-					pixelHinting);
+				nodeUI.setLineStyle(d);
 			}
 			
 			if (fillAlpha > 0)
@@ -59,14 +55,15 @@ package ivis.view
 				// using a bit mask to avoid transparency
 				// when fillcolor is 0xffffffff.
 				g.beginFill(0xffffff & d.fillColor, fillAlpha);
-				this.drawShape(d, d.shape, size, width, height);
+				nodeUI.drawShape(d, defaultSize);
 				g.endFill();
 				
 				// TODO Draw image
-				//drawImage(d, size);
+				// drawImage(d, size);
 			}
 		}
 		
+		// TODO not use anymore..
 		private function drawShape(s:Sprite,
 			shape:String,
 			size:Number,
@@ -75,6 +72,7 @@ package ivis.view
 		{
 			var g:Graphics = s.graphics;
 			
+			/*
 			if (shape == null)
 			{
 				// do not draw anything
@@ -101,6 +99,7 @@ package ivis.view
 			{
 				Shapes.drawCircle(g, size/2);
 			}
+			*/
 			
 			/*
 			switch (shape) {

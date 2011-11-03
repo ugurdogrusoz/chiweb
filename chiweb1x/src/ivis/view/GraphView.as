@@ -21,7 +21,7 @@ package ivis.view
 	import ivis.model.Node;
 	import ivis.util.GeneralUtils;
 	import ivis.util.Groups;
-	import ivis.util.NodeShapes;
+	import ivis.util.NodeUIs;
 	import ivis.util.Nodes;
 	
 	import mx.core.UIComponent;
@@ -105,7 +105,7 @@ package ivis.view
 			// TODO test values for debugging purposes, these values should be
 			// set by another class (with an init function)
 			node.renderer = NodeRenderer.instance;
-			node.shape = NodeShapes.ROUND_RECTANGLE;
+			node.shape = NodeUIs.ROUND_RECTANGLE;
 			node.size = 10;
 			node.w = 20;
 			node.h = 10;
@@ -128,7 +128,7 @@ package ivis.view
 					// (shape, size, color, padding values etc)
 					// TODO test values for debugging purposes, default values
 					// should be set by another class (with an init function)
-					compound.shape = NodeShapes.RECTANGLE;
+					compound.shape = NodeUIs.RECTANGLE;
 					compound.renderer = CompoundNodeRenderer.instance;
 					compound.paddingLeft = 10;
 					compound.paddingRight = 10;
