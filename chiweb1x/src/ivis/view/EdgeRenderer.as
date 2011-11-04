@@ -12,6 +12,7 @@ package ivis.view
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
+	import ivis.util.EdgeUIs;
 	import ivis.util.GeometryUtils;
 	import ivis.util.NodeUIs;
 
@@ -33,11 +34,11 @@ package ivis.view
 		public override function render(d:DataSprite):void
 		{
 			var edge:Edge;
+			var edgeUI:IEdgeUI;
 			
 			if (d is Edge)
 			{
 				edge = d as Edge;
-				
 				
 				if (edge == null ||
 					edge.source == null ||
@@ -80,7 +81,15 @@ package ivis.view
 					// See https://sourceforge.net/forum/message.php?msg_id=7393265
 					// var color:uint =  0xffffff & e.lineColor;
 					
+					// set the default line style
 					this.setLineStyle(edge, edge.graphics);
+					
+					// TODO consider line styles (dashed, dotted, solid, etc)
+					
+					// if a custom line style is defined in edgeUI, it will
+					// overwrite the default line style
+					edgeUI = EdgeUIs.getUI(edge.shape);
+					edgeUI.setLineStyle(edge);
 					
 					// draw the edge
 					if (points != null)
@@ -90,7 +99,9 @@ package ivis.view
 						edge.props.endPoint = points[1];
 						
 						// draw the edge line using the clipping points
-						this.drawLine(edge, points);
+						// TODO what to do with bendpoints when edges are curved?
+						// TODO consider 'Shapes' such as LINE BEZIER CARDINAL BSPLINE?
+						edgeUI.draw(edge, points);
 					}
 					else
 					{
@@ -174,17 +185,5 @@ package ivis.view
 			
 			return interPoint;
 		}
-		
-		protected function drawLine(edge:Edge, points:Array):void
-		{
-			var g:Graphics = edge.graphics;
-			
-			// TODO consider line styles (dashed, dotted, solid, etc)
-			// TODO consider 'Shapes' such as LINE BEZIER CARDINAL BSPLINE?
-			// TODO bendpoints when edges are curved?
-			g.moveTo((points[0] as Point).x, (points[0] as Point).y);
-			g.lineTo((points[1] as Point).x, (points[1] as Point).y);
-		}
-		
 	}
 }

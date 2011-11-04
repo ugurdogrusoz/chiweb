@@ -11,7 +11,9 @@ package ivis
 	import ivis.controls.MultiDragControl;
 	import ivis.controls.SelectControl;
 	import ivis.util.Groups;
+	import ivis.util.NodeUIs;
 	import ivis.view.CompoundNodeLabeler;
+	import ivis.view.GradientRectUI;
 	import ivis.view.GraphView;
 	import ivis.view.NodeLabeler;
 
@@ -57,6 +59,9 @@ package ivis
 			_view.vis.nodeLabeler = new NodeLabeler("props.labelText");
 			_view.vis.compoundLabeler = new CompoundNodeLabeler("props.labelText");
 			
+			// TODO custom shapes for debugging purposes
+			NodeUIs.registerUI("gradientRect",
+				GradientRectUI.instance);
 		}
 		
 		public function addControl(control:Control):void

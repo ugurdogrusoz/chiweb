@@ -9,7 +9,7 @@ package ivis.util
 
 	/**
 	 * Utility class for custom node UIs. In order to use an implementation of
-	 * a INodeUI interface to render custom nodes, its singleton instance
+	 * an INodeUI interface to render custom nodes, its singleton instance
 	 * should be registered by invoking the registerUI function of this utiliy
 	 * class.
 	 * 
@@ -39,7 +39,7 @@ package ivis.util
 		
 		public function NodeUIs()
 		{
-			throw new Error("NodeShapes is an abstract class.");
+			throw new Error("NodeUIs is an abstract class.");
 		}
 		
 		//-----------------------PUBLIC FUNCTIONS-------------------------------

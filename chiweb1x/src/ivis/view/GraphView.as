@@ -19,6 +19,7 @@ package ivis.view
 	import ivis.model.Edge;
 	import ivis.model.Graph;
 	import ivis.model.Node;
+	import ivis.util.EdgeUIs;
 	import ivis.util.GeneralUtils;
 	import ivis.util.Groups;
 	import ivis.util.NodeUIs;
@@ -105,7 +106,8 @@ package ivis.view
 			// TODO test values for debugging purposes, these values should be
 			// set by another class (with an init function)
 			node.renderer = NodeRenderer.instance;
-			node.shape = NodeUIs.ROUND_RECTANGLE;
+			//node.shape = NodeUIs.ROUND_RECTANGLE;
+			node.shape = "gradientRect";
 			node.size = 10;
 			node.w = 20;
 			node.h = 10;
@@ -175,7 +177,10 @@ package ivis.view
 			var edge:Edge = this.graph.addEdge(data);
 			
 			//TODO initialize visual properties of the edge
+			// TODO test values for debugging purposes, default values
+			// should be set by another class (with an init function)
 			//edge.arrowType = ArrowType.TRIANGLE;
+			edge.shape = EdgeUIs.LINE;
 			edge.lineColor = 0xff000000;
 			edge.lineAlpha = 0.8;
 			edge.alpha = 0.8;

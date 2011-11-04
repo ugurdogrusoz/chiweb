@@ -49,21 +49,21 @@ package ivis.view
 				nodeUI.setLineStyle(d);
 			}
 			
+			// draw node if it is not %100 transparent
 			if (fillAlpha > 0)
 			{
-				// draw background
 				// using a bit mask to avoid transparency
 				// when fillcolor is 0xffffffff.
 				g.beginFill(0xffffff & d.fillColor, fillAlpha);
-				nodeUI.drawShape(d, defaultSize);
+				nodeUI.draw(d, defaultSize);
 				g.endFill();
 				
-				// TODO Draw image
+				// TODO Draw image (this should be performed by nodeUI)
 				// drawImage(d, size);
 			}
 		}
 		
-		// TODO not use anymore..
+		// TODO not used anymore..
 		private function drawShape(s:Sprite,
 			shape:String,
 			size:Number,

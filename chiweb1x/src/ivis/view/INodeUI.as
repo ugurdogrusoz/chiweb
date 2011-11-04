@@ -23,12 +23,12 @@ package ivis.view
 		function setLineStyle(ds:DataSprite):void;
 		
 		/**
-		 * Draws the shape of the given data sprite.
+		 * Draws the UI of the given data sprite.
 		 * 
 		 * @param ds			data sprite (the node)
 		 * @param defaultSize	default size value of the NodeRenderer
 		 */
-		function drawShape(ds:DataSprite,
+		function draw(ds:DataSprite,
 			defaultSize:Number):void;
 		
 		

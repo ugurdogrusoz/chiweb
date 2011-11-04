@@ -58,7 +58,7 @@ package ivis.view
 		 * @param ds			data sprite (the node)
 		 * @param defaultSize	default size value of the NodeRenderer
 		 */
-		public function drawShape(ds:DataSprite,
+		public function draw(ds:DataSprite,
 			defaultSize:Number):void
 		{
 			var width:Number = ds.w * defaultSize;
