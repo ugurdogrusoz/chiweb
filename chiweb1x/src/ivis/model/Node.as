@@ -40,7 +40,8 @@ package ivis.model
 		// -------------------------- ACCESSORS --------------------------------
 		
 		/**
-		 * Bounds enclosing children of the compound node.
+		 * Bounds enclosing children of the compound node. Padding values are
+		 * also included into the bounds.
 		 */
 		public function get bounds():Rectangle
 		{

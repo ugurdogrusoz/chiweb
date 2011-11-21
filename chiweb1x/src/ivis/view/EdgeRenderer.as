@@ -12,6 +12,7 @@ package ivis.view
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
+	import ivis.util.CompoundUIs;
 	import ivis.util.EdgeUIs;
 	import ivis.util.GeometryUtils;
 	import ivis.util.NodeUIs;
@@ -180,7 +181,17 @@ package ivis.view
 			
 			// find the intersection point according to the node shape
 			
-			var nodeUI:INodeUI = NodeUIs.getUI(node.shape);
+			var nodeUI:INodeUI;
+			
+			if (node.isInitialized())
+			{
+				nodeUI = CompoundUIs.getUI(node.shape);
+			}
+			else
+			{
+				nodeUI = NodeUIs.getUI(node.shape);
+			}
+			
 			interPoint = nodeUI.intersection(node, p1, p2);
 			
 			return interPoint;

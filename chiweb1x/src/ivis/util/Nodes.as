@@ -3,6 +3,8 @@ package ivis.util
 	import flare.display.TextSprite;
 	import flare.vis.data.EdgeSprite;
 	
+	import flash.geom.Rectangle;
+	
 	import ivis.model.Edge;
 	import ivis.model.Node;
 
@@ -452,6 +454,28 @@ package ivis.util
 					}
 				}
 			}
+		}
+		
+		/**
+		 * Adjusts the bounds of the given compound node by using local 
+		 * coordinates of the given compound node sprite. This function does
+		 * not modify the original bounds of the compound. Instead, creates
+		 * a new Rectangle instance and applies changes on that instance.
+		 * 
+		 * @param node	compound node whose bounds will be adjusted
+		 * @return		adjusted bounds as a Rectangle instance
+		 */
+		public static function adjustBounds(node:Node) : Rectangle
+		{
+			// create a copy of original node bounds
+			var bounds:Rectangle = node.bounds.clone();
+			
+			// convert bounds from global to local
+			bounds.x -= node.x;
+			bounds.y -= node.y;
+			
+			// return adjusted bounds
+			return bounds;
 		}
 	}
 }

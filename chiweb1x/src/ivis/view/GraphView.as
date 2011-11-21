@@ -19,6 +19,7 @@ package ivis.view
 	import ivis.model.Edge;
 	import ivis.model.Graph;
 	import ivis.model.Node;
+	import ivis.util.CompoundUIs;
 	import ivis.util.EdgeUIs;
 	import ivis.util.GeneralUtils;
 	import ivis.util.Groups;
@@ -106,8 +107,8 @@ package ivis.view
 			// TODO test values for debugging purposes, these values should be
 			// set by another class (with an init function)
 			node.renderer = NodeRenderer.instance;
-			//node.shape = NodeUIs.ROUND_RECTANGLE;
-			node.shape = "gradientRect";
+			node.shape = NodeUIs.ROUND_RECTANGLE;
+			//node.shape = "gradientRect";
 			node.size = 10;
 			node.w = 20;
 			node.h = 10;
@@ -130,7 +131,8 @@ package ivis.view
 					// (shape, size, color, padding values etc)
 					// TODO test values for debugging purposes, default values
 					// should be set by another class (with an init function)
-					compound.shape = NodeUIs.RECTANGLE;
+					compound.shape = CompoundUIs.RECTANGLE;
+					//compound.shape = CompoundUIs.ROUND_RECTANGLE;
 					compound.renderer = CompoundNodeRenderer.instance;
 					compound.paddingLeft = 10;
 					compound.paddingRight = 10;

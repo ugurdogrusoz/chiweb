@@ -9,6 +9,7 @@ package ivis.view
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
+	import ivis.util.CompoundUIs;
 	import ivis.util.GeneralUtils;
 	import ivis.util.NodeUIs;
 	import ivis.util.Nodes;
@@ -72,15 +73,11 @@ package ivis.view
 					
 					g.clear();
 					
+					var nodeUI:INodeUI = CompoundUIs.getUI(d.shape);
+					
 					if (lineAlpha > 0 && d.lineWidth > 0)
 					{
-						var pixelHinting:Boolean =
-							d.shape === NodeUIs.ROUND_RECTANGLE;
-						
-						g.lineStyle(d.lineWidth,
-							d.lineColor,
-							lineAlpha,
-							pixelHinting);
+						nodeUI.setLineStyle(node);
 					}
 					
 					if (fillAlpha > 0)
@@ -89,13 +86,7 @@ package ivis.view
 						// Using a bit mask to avoid transparent mdes when fillcolor=0xffffffff.
 						// See https://sourceforge.net/forum/message.php?msg_id=7393265
 						g.beginFill(0xffffff & d.fillColor, fillAlpha);
-						
-						// draw shape
-						
-						this.drawShape(node,
-							node.shape,
-							this.adjustBounds(node));
-						
+						nodeUI.draw(node, this.defaultSize);
 						g.endFill();
 						
 						// TODO draw an image on top?
@@ -126,6 +117,7 @@ package ivis.view
 		 * @param shape		shape name as a string
 		 * @param bounds	rectangular bounds for the sprite s
 		 */
+		// TODO not used anymore..
 		private function drawShape(s:Sprite,
 								   shape:String,
 								   bounds:Rectangle) : void
@@ -196,28 +188,7 @@ package ivis.view
 		}
 		*/
 		
-		/**
-		 * Adjusts the bounds of the given compound node by using local 
-		 * coordinates of the given compound node sprite. This function does
-		 * not modify the original bounds of the compound. Instead, creates
-		 * a new Rectangle instance and applies changes on that instance.
-		 * 
-		 * @param ns	compound node whose bounds will be adjusted
-		 * @return		adjusted bounds as a Rectangle instance
-		 */
-		private function adjustBounds(node:Node) : Rectangle
-		{
-			// create a copy of original node bounds
-			var bounds:Rectangle = node.bounds.clone();
-			
-			// convert bounds from global to local
-			bounds.x -= node.x;
-			bounds.y -= node.y;
-			
-			// return adjusted bounds
-			return bounds;
-		}
-		
+		/*
 		private function adjustSize(node:Node) : Number
 		{
 			var size:Number = 0;
@@ -230,5 +201,6 @@ package ivis.view
 			
 			return size;
 		}
+		*/
 	}
 }
