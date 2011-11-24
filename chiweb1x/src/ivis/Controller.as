@@ -13,6 +13,7 @@ package ivis
 	import ivis.util.Groups;
 	import ivis.util.NodeUIs;
 	import ivis.view.CompoundNodeLabeler;
+	import ivis.view.EdgeLabeler;
 	import ivis.view.GradientRectUI;
 	import ivis.view.GraphView;
 	import ivis.view.NodeLabeler;
@@ -58,6 +59,7 @@ package ivis
 			// TODO labeler for debug purposes
 			_view.vis.nodeLabeler = new NodeLabeler("props.labelText");
 			_view.vis.compoundLabeler = new CompoundNodeLabeler("props.labelText");
+			_view.vis.edgeLabeler = new EdgeLabeler("props.labelText");
 			
 			// TODO custom shapes for debugging purposes
 			NodeUIs.registerUI("gradientRect",

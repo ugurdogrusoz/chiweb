@@ -12,6 +12,7 @@ package ivis.view
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
+	import ivis.util.ArrowUIs;
 	import ivis.util.CompoundUIs;
 	import ivis.util.EdgeUIs;
 	import ivis.util.GeometryUtils;
@@ -69,8 +70,6 @@ package ivis.view
 				{
 					d.graphics.clear();
 					
-					// TODO arrow?
-					
 					// calculate clipping points
 					var points:Array = this.clippingPoints(edge.source,
 						edge.target);
@@ -92,6 +91,10 @@ package ivis.view
 					edgeUI = EdgeUIs.getUI(edge.shape);
 					edgeUI.setLineStyle(edge);
 					
+					// draw source and target arrows,
+					// and recalculate clipping points if necessary
+					points = this.drawArrows(edge, points);
+					
 					// draw the edge
 					if (points != null)
 					{
@@ -102,7 +105,7 @@ package ivis.view
 						// draw the edge line using the clipping points
 						// TODO what to do with bendpoints when edges are curved?
 						// TODO consider 'Shapes' such as LINE BEZIER CARDINAL BSPLINE?
-						edgeUI.draw(edge, points);
+						edgeUI.draw(edge);
 					}
 					else
 					{
@@ -195,6 +198,89 @@ package ivis.view
 			interPoint = nodeUI.intersection(node, p1, p2);
 			
 			return interPoint;
+		}
+		
+		/**
+		 * Draws the arrows for both source and target ends of the given edge.
+		 * Returns new clipping points after drawing the arrows.
+		 * 
+		 * @param edge		edge on which arrows to be drawn
+		 * @param points	clipping points for the given edge
+		 * @return			new clipping points
+		 */
+		protected function drawArrows(edge:Edge,
+			points:Array):Array
+		{
+			var sourceArrowUI:IArrowUI = null;
+			var targetArrowUI:IArrowUI = null;
+			var newPoints:Array = points;
+			
+			var sourceArrowType:String = null;
+			var targetArrowType:String = null;
+			
+			// for a segment edge, get arrow props from the parent
+			if (edge.isSegment)
+			{
+				sourceArrowType = edge.parentE.props.sourceArrowType;
+				targetArrowType = edge.parentE.props.targetArrowType;
+			}
+			// for an actual edge, use directly its prop object
+			else
+			{
+				sourceArrowType = edge.props.sourceArrowType;
+				targetArrowType = edge.props.targetArrowType;
+			}
+			
+			// get the UI corresponding to the source arrow type
+			if (sourceArrowType != null)
+			{
+				sourceArrowUI = ArrowUIs.getUI(sourceArrowType);
+			}
+			
+			// get the UI corresponding to the target arrow type
+			if (targetArrowType != null)
+			{
+				targetArrowUI = ArrowUIs.getUI(targetArrowType);
+			}
+			
+			// do not draw arrows for segment edges between two bendpoints
+			if (edge.isSegment)
+			{
+				if (edge.source === edge.parentE.source)
+				{
+					// draw source arrow (target is a bendpoint)
+					if (sourceArrowUI != null)
+					{
+						newPoints = sourceArrowUI.drawSourceArrow(edge, points);
+					}
+				}
+				else if (edge.target === edge.parentE.target)
+				{
+					// draw target arrow (source is a bendpoint)
+					if (targetArrowUI != null)
+					{
+						newPoints = targetArrowUI.drawTargetArrow(edge, points);
+					}
+				}
+					
+			}
+			// do not draw arrows for hidden actual edges (having segments) 
+			else if (! edge.hasBendPoints())
+			{
+				// draw both source and target arrows
+				
+				if (sourceArrowUI != null)
+				{
+					newPoints = sourceArrowUI.drawSourceArrow(edge, points);
+				}
+				
+				if (targetArrowUI != null)
+				{
+					newPoints = targetArrowUI.drawTargetArrow(edge, points);
+				}
+			}
+			
+			return newPoints;
 		}
 	}
 }

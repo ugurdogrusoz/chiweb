@@ -1,5 +1,6 @@
 package ivis.controls
 {
+	import flare.display.DirtySprite;
 	import flare.vis.data.DataSprite;
 	
 	import flash.display.InteractiveObject;
@@ -8,6 +9,7 @@ package ivis.controls
 	import flash.events.MouseEvent;
 	
 	import ivis.model.Node;
+	import ivis.util.Groups;
 	import ivis.util.Nodes;
 	import ivis.view.GraphView;
 
@@ -259,9 +261,11 @@ package ivis.controls
 					n.bounds.y += amountY;
 				}
 				
-				// TODO Necessary for Flash 10.1:
-				//DirtySprite.renderDirty();
+				// update edge labels
+				this.view.vis.updateEdgeLabels();
 				
+				// necessary for Flash 10.1
+				DirtySprite.renderDirty();
 			}
 		}
 		
@@ -279,6 +283,9 @@ package ivis.controls
 				}
 				
 				event.stopPropagation();
+				
+				// update edge labels
+				this.view.vis.updateEdgeLabels();
 			}
 			
 			// reset the active sprite

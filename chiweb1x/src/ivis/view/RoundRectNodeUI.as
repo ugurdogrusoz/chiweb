@@ -9,6 +9,13 @@ package ivis.view
 	
 	import ivis.model.Node;
 
+	/**
+	 * Implementation of the INodeUI interface for the round rectangle node
+	 * shape. This class is designed to draw nodes as round rectangles and
+	 * to calculate edge clipping points for round rectangular nodes.
+	 * 
+	 * @author Selcuk Onur Sumer
+	 */
 	public class RoundRectNodeUI implements INodeUI
 	{
 		private static var _instance:INodeUI;

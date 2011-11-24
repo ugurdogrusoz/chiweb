@@ -19,6 +19,7 @@ package ivis.view
 	import ivis.model.Edge;
 	import ivis.model.Graph;
 	import ivis.model.Node;
+	import ivis.util.ArrowUIs;
 	import ivis.util.CompoundUIs;
 	import ivis.util.EdgeUIs;
 	import ivis.util.GeneralUtils;
@@ -181,13 +182,15 @@ package ivis.view
 			//TODO initialize visual properties of the edge
 			// TODO test values for debugging purposes, default values
 			// should be set by another class (with an init function)
-			//edge.arrowType = ArrowType.TRIANGLE;
-			edge.shape = EdgeUIs.LINE;
+			edge.shape = EdgeUIs.LINE;			
 			edge.lineColor = 0xff000000;
 			edge.lineAlpha = 0.8;
 			edge.alpha = 0.8;
 			edge.lineWidth = 1;
 			edge.renderer = EdgeRenderer.instance;
+			edge.props.sourceArrowType = ArrowUIs.SIMPLE_ARROW;
+			edge.props.targetArrowType = ArrowUIs.SIMPLE_ARROW;
+			edge.props.labelText = edge.data.id;
 			
 			// bring the new edge to the front
 			GeneralUtils.bringToFront(edge);
@@ -243,6 +246,9 @@ package ivis.view
 				// reset source node
 				this._sourceNode = null;
 			}
+			
+			// update the visualization
+			this.vis.update();
 			
 			return edge;
 		}

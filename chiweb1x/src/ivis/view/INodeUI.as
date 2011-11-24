@@ -9,7 +9,7 @@ package ivis.view
 	/**
 	 * Interface for defining custom UIs for nodes. This interface is designed
 	 * to be used within Node and Edge renderers to provide a mechanism for
-	 * drawing of custom node UIs.
+	 * drawing custom node UIs.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */

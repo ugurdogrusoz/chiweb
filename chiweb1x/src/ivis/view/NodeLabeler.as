@@ -58,12 +58,11 @@ package ivis.view
 				
 				if (list != null)
 				{
-					for each (var node:DataSprite in list)
+					for each (var ds:DataSprite in list)
 					{
-						if ((filterFn == null || filterFn(node)) &&
-							(node is NodeSprite))
+						if ((filterFn == null || filterFn(ds)))
 						{
-							this.process(node);
+							this.process(ds);
 						}
 					}
 					
@@ -85,6 +84,7 @@ package ivis.view
 			label.visible = d.visible;
 			
 			this.updateLabelPosition(label, d);
+			label.render();
 		}
 		
 		protected override function getLabel(d:DataSprite,
@@ -156,8 +156,6 @@ package ivis.view
 			
 			label.x = x + xOff;
 			label.y = y + yOff;
-			
-			label.render();
 		}
 		
 		protected function updateTextFormat(d:DataSprite):void

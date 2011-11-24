@@ -32,12 +32,30 @@ package ivis.view
 		 */
 		public function get edgeLabeler():Labeler
 		{
+			if (this._edgeLabeler == null)
+			{
+				this._edgeLabeler = new EdgeLabeler(); 
+			}
+			
 			return _edgeLabeler;
 		}
 		
-		public function set edgeLabeler(value:Labeler):void
+		public function set edgeLabeler(labeler:Labeler):void
 		{
-			_edgeLabeler = value;
+			// remove the old labeler
+			if (this._edgeLabeler != null)
+			{
+				this.operators.remove(this._edgeLabeler);
+			}
+			
+			// add new labeler
+			if (labeler != null)
+			{
+				this.operators.add(labeler);
+			}
+			
+			// set the labeler
+			this._edgeLabeler = labeler;
 		}
 		
 		/**
@@ -226,6 +244,16 @@ package ivis.view
 					updateAllBounds(compound);
 				}
 			}
+		}
+		
+		public function updateEdgeLabels() : void
+		{
+			this.edgeLabeler.operate();
+		}
+		
+		public function updateNodeLabels() : void
+		{
+			this.nodeLabeler.operate();
 		}
 		
 		//------------------------ PRIVATE FUNCTIONS ---------------------------
