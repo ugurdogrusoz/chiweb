@@ -40,6 +40,7 @@ package ivis.view
 			this._labels.useHandCursor = false;
 		}
 		
+		/** @inheritDoc */
 		public override function operate(t:Transitioner=null):void
 		{
 			if (this.visualization != null)
@@ -75,6 +76,7 @@ package ivis.view
 			}
 		}
 		
+		/** @inheritDoc */
 		protected override function process(d:DataSprite):void
 		{
 			var label:TextSprite = this.getLabel(d, true);

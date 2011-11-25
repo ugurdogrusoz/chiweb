@@ -7,6 +7,8 @@ package ivis.view
 	import flash.text.TextFormat;
 	
 	import ivis.model.Edge;
+	import ivis.model.Node;
+	import ivis.util.Edges;
 	import ivis.util.Groups;
 
 	public class EdgeLabeler extends NodeLabeler
@@ -23,6 +25,7 @@ package ivis.view
 			super(source, group, format, filter);
 		}
 		
+		/** @inheritDoc */
 		protected override function process(d:DataSprite):void
 		{
 			if (d is Edge)
@@ -52,38 +55,102 @@ package ivis.view
 				return;
 			}
 			
-			// TODO calculate the position!
-			//trace("[EdgeLabeler.updateLabelPos] edge: " + d.data.id);
+			var startPoint:Point = d.props.startPoint as Point;
+			var endPoint:Point = d.props.endPoint as Point;
+			var adjacentToSrc:Edge;
+			var adjacentToTgt:Edge;
 			
-			var x:Number = ((d.props.startPoint as Point).x + 
-				(d.props.endPoint as Point).x) / 2;
-			var y:Number = ((d.props.startPoint as Point).y + 
-				(d.props.endPoint as Point).y) / 2;
+			if ((d as Edge).hasBendPoints())
+			{
+				// get the segment adjacent to the source node
+				adjacentToSrc = Edges.segmentAdjacentToSource(d as Edge);
+				
+				// get the segment adjacent to the target node
+				adjacentToTgt = Edges.segmentAdjacentToTarget(d as Edge);
+				
+				// take the segment adjacent to the source node
+				if (label.horizontalAnchor == TextSprite.LEFT)
+				{
+					startPoint = adjacentToSrc.props.startPoint;
+					endPoint = adjacentToSrc.props.endPoint;
+				}
+				// take the segment adjacent to the target node
+				else if (label.horizontalAnchor == TextSprite.RIGHT)
+				{
+					startPoint = adjacentToTgt.props.startPoint;
+					endPoint = adjacentToSrc.props.endPoint;
+				}
+				// default case is center 
+				else
+				{
+					var segment:Edge;
+					var bendNode:Node;
+					var bendPoint:Point;
+					
+					// find the central segment or the central bendpoint
+					if ((d as Edge).getBendNodes().length % 2 == 0)
+					{
+						segment = Edges.centralSegment(d as Edge);
+						startPoint = segment.props.startPoint;
+						endPoint = segment.props.endPoint;
+					}
+					else
+					{
+						bendNode = Edges.centralBendPoint(d as Edge);
+						bendPoint = new Point(bendNode.x,
+							bendNode.y);
+						
+						startPoint = bendPoint;
+						endPoint = bendPoint;
+					}
+				}
+			}
+			
+			var x:Number;
+			var y:Number;
 			
 			// TODO get these values from elsewhere (visual styles)
+			
 			var xOff:Number = 0;
 			var yOff:Number = 0;
 			
-			// the offset should be based on each node's size
-			/*
+			label.horizontalAnchor = TextSprite.CENTER;
+			//label.horizontalAnchor = TextSprite.LEFT;
+			//label.horizontalAnchor = TextSprite.RIGHT;
+			
+			label.verticalAnchor = TextSprite.MIDDLE;
+			//label.verticalAnchor = TextSprite.TOP;
+			//label.verticalAnchor = TextSprite.BOTTOM;
+			
 			if (label.horizontalAnchor == TextSprite.LEFT)
 			{
-				xOff += d.width/2;
+				// TODO place the label next to the source 
+				// (a fixed distance away from the source clipping point)
+				x = (startPoint.x + endPoint.x) / 2;
+				y = (startPoint.y + endPoint.y) / 2;
 			}
 			else if (label.horizontalAnchor == TextSprite.RIGHT)
 			{
-				xOff -= d.width/2;
+				// TODO place the label next to the target
+				// (a fixed distance away from the target clipping point)
+				x = (startPoint.x + endPoint.x) / 2;
+				y = (startPoint.y + endPoint.y) / 2;
+			}
+			else
+			{
+				// place the label to the center of the edge (or the segment)
+				x = (startPoint.x + endPoint.x) / 2;
+				y = (startPoint.y + endPoint.y) / 2;
 			}
 			
 			if (label.verticalAnchor == TextSprite.TOP)
 			{
-				yOff += d.height/2;
+				// TODO where is top?
 			}
 			else if (label.verticalAnchor == TextSprite.BOTTOM)
 			{
-				yOff -= d.height/2;
+				// TODO where is bottom?
 			}
-			*/
 			
 			label.x = x + xOff;
 			label.y = y + yOff;

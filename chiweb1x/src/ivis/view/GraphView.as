@@ -179,7 +179,7 @@ package ivis.view
 		{
 			var edge:Edge = this.graph.addEdge(data);
 			
-			//TODO initialize visual properties of the edge
+			// TODO initialize visual properties of the edge
 			// TODO test values for debugging purposes, default values
 			// should be set by another class (with an init function)
 			edge.shape = EdgeUIs.LINE;			
@@ -194,9 +194,6 @@ package ivis.view
 			
 			// bring the new edge to the front
 			GeneralUtils.bringToFront(edge);
-			
-			// update the visualization
-			this.vis.update();
 			
 			return edge;
 		}

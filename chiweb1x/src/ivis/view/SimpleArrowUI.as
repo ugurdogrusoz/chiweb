@@ -37,6 +37,7 @@ package ivis.view
 		
 		//---------------------- PUBLIC FUNCTIONS ------------------------------
 		
+		/** @inheritDoc */
 		public function drawSourceArrow(edge:Edge,
 			points:Array):Array
 		{
@@ -71,6 +72,7 @@ package ivis.view
 			return points;
 		}
 		
+		/** @inheritDoc */
 		public function drawTargetArrow(edge:Edge,
 			points:Array):Array
 		{

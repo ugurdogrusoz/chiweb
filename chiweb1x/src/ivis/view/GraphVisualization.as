@@ -1,5 +1,7 @@
 package ivis.view
 {
+	import flare.animate.Transitioner;
+	import flare.display.DirtySprite;
 	import flare.vis.Visualization;
 	import flare.vis.axis.Axes;
 	import flare.vis.data.Data;
@@ -246,14 +248,45 @@ package ivis.view
 			}
 		}
 		
-		public function updateEdgeLabels() : void
-		{
-			this.edgeLabeler.operate();
+		/** @inheritDoc */
+		public override function update(t:*=null,
+			...operators) : Transitioner
+		{	
+			// render dirty spirtes,
+			// this is required to display labels correctly
+			DirtySprite.renderDirty();
+			
+			return super.update(t, operators);
 		}
 		
-		public function updateNodeLabels() : void
+		/**
+		 * Updates the label of the specified data group. If no group is
+		 * specified, updates all labels.
+		 * 
+		 * @param group	data group, valid data groups are:
+		 * 				Groups.EDGES, Groups.NODES, and Groups.COMPOUND_NODES.
+		 */
+		public function updateLabels(group:String = "all") : void
 		{
-			this.nodeLabeler.operate();
+			if (group === null ||
+				group === "all")
+			{
+				this.edgeLabeler.operate();
+				this.nodeLabeler.operate();
+				this.compoundLabeler.operate();
+			}
+			else if (group === Groups.EDGES)
+			{
+				this.edgeLabeler.operate();
+			}
+			else if (group === Groups.NODES)
+			{
+				this.nodeLabeler.operate();
+			}
+			else if (group === Groups.COMPOUND_NODES)
+			{
+				this.compoundLabeler.operate();
+			}
 		}
 		
 		//------------------------ PRIVATE FUNCTIONS ---------------------------

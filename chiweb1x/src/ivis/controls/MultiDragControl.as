@@ -196,7 +196,6 @@ package ivis.controls
 					n.props.label.y += amountY;
 				}
 				
-				
 				var parent:Node;
 				
 				// update parent compound node(s) bounds if necessary
@@ -262,7 +261,7 @@ package ivis.controls
 				}
 				
 				// update edge labels
-				this.view.vis.updateEdgeLabels();
+				this.view.vis.updateLabels(Groups.EDGES);
 				
 				// necessary for Flash 10.1
 				DirtySprite.renderDirty();
@@ -285,7 +284,7 @@ package ivis.controls
 				event.stopPropagation();
 				
 				// update edge labels
-				this.view.vis.updateEdgeLabels();
+				this.view.vis.updateLabels(Groups.EDGES);
 			}
 			
 			// reset the active sprite
