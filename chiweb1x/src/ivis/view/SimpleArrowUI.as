@@ -4,6 +4,7 @@ package ivis.view
 	import flash.geom.Point;
 	
 	import ivis.model.Edge;
+	import ivis.util.GeometryUtils;
 
 	/**
 	 * Implementation of the IArrowUI interface for simple edge arrows.
@@ -45,14 +46,15 @@ package ivis.view
 			var angle:Number = 0.3;
 			var distance:Number = 15;
 			
-			var slopeAngle: Number = this.calcSlopeAngle(points);
+			var slopeAngle: Number = GeometryUtils.slopeAngle(points[0],
+				points[1]);
 			
 			if (!isNaN(slopeAngle))
 			{
 				// adjust arrow direction (arrow angle)
 				if ((points[1] as Point).x - (points[0] as Point).x < 0)
 				{
-					angle = Math.PI - angle;	
+					angle = Math.PI - angle;
 				}
 				
 				// calculate end points
@@ -80,12 +82,13 @@ package ivis.view
 			var angle:Number = 0.3;
 			var distance:Number = 15;
 			
-			var slopeAngle: Number = this.calcSlopeAngle(points);
+			var slopeAngle: Number = GeometryUtils.slopeAngle(points[0],
+				points[1]);
 			
 			if (!isNaN(slopeAngle))
 			{
 				// adjust arrow direction (arrow angle)
-				if ((points[1] as Point).x - (points[0] as Point).x > 0)
+				if ((points[1] as Point).x - (points[0] as Point).x >= 0)
 				{
 					angle = Math.PI - angle;	
 				}
@@ -105,25 +108,6 @@ package ivis.view
 			// no need to change the location of the clipping points for a
 			// simple arrow, so just return the original array
 			return points;
-		}
-		
-		/**
-		 * Calculates the slope angle of the line defined by given two clipping
-		 * points.
-		 * 
-		 * @param points	array containing two clipping points 
-		 * @return			angle of the slope of the line
-		 */
-		protected function calcSlopeAngle(points:Array):Number
-		{
-			// calculate the angle between the line (defined by points[0] and 
-			// points[1]) and the x-axis.
-			
-			var slopeAngle:Number = Math.atan(
-				((points[1] as Point).y - (points[0] as Point).y) /
-				((points[1] as Point).x - (points[0] as Point).x));
-			
-			return slopeAngle;
 		}
 		
 		/**

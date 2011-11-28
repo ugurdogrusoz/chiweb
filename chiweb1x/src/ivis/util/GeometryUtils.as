@@ -84,5 +84,21 @@ package ivis.util
 			
 			return result;
 		}
+		
+		/**
+		 * Calculates the slope angle of the line defined by given two points.
+		 * 
+		 * @param points	array containing two clipping points 
+		 * @return			angle of the slope of the line
+		 */
+		public static function slopeAngle(p1:Point, p2:Point):Number
+		{
+			// calculate the angle between the line (defined by p1 and p2) 
+			// and the x-axis.
+			
+			var slopeAngle:Number = Math.atan((p2.y - p1.y) / (p2.x - p1.x));
+			
+			return slopeAngle;
+		}
 	}
 }

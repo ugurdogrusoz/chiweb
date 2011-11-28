@@ -9,10 +9,20 @@ package ivis.view
 	import ivis.model.Edge;
 	import ivis.model.Node;
 	import ivis.util.Edges;
+	import ivis.util.GeometryUtils;
 	import ivis.util.Groups;
 
+	/**
+	 * Labeler for edge sprites.
+	 * 
+	 * @author Selcuk Onur Sumer 
+	 */
 	public class EdgeLabeler extends NodeLabeler
 	{
+		public static const SOURCE:String = "source";
+		public static const TARGET:String = "target";
+		public static const MIDDLE:String = "middle";
+		
 		public function EdgeLabeler(source:* = null,
 									group:String = Groups.EDGES,
 									format:TextFormat = null,
@@ -60,6 +70,8 @@ package ivis.view
 			var adjacentToSrc:Edge;
 			var adjacentToTgt:Edge;
 			
+			// if edge has bendpoints, find the correct segment (or bend point)
+			// to place the label
 			if ((d as Edge).hasBendPoints())
 			{
 				// get the segment adjacent to the source node
@@ -69,16 +81,16 @@ package ivis.view
 				adjacentToTgt = Edges.segmentAdjacentToTarget(d as Edge);
 				
 				// take the segment adjacent to the source node
-				if (label.horizontalAnchor == TextSprite.LEFT)
+				if (d.props.labelPos == EdgeLabeler.SOURCE)
 				{
 					startPoint = adjacentToSrc.props.startPoint;
 					endPoint = adjacentToSrc.props.endPoint;
 				}
 				// take the segment adjacent to the target node
-				else if (label.horizontalAnchor == TextSprite.RIGHT)
+				else if (d.props.labelPos == EdgeLabeler.TARGET)
 				{
 					startPoint = adjacentToTgt.props.startPoint;
-					endPoint = adjacentToSrc.props.endPoint;
+					endPoint = adjacentToTgt.props.endPoint;
 				}
 				// default case is center 
 				else
@@ -106,35 +118,44 @@ package ivis.view
 				}
 			}
 			
+			// label coordinates
 			var x:Number;
 			var y:Number;
 			
-			// TODO get these values from elsewhere (visual styles)
+			// desired distance of the label from the node
+			// (ignored if label position is EdgeLabeler.CENTER)
+			var distance:Number = d.props.labelDistanceFromNode;
 			
-			var xOff:Number = 0;
-			var yOff:Number = 0;
+			// distance between clipping points of the edge
+			var dist:Number;
 			
-			label.horizontalAnchor = TextSprite.CENTER;
-			//label.horizontalAnchor = TextSprite.LEFT;
-			//label.horizontalAnchor = TextSprite.RIGHT;
-			
-			label.verticalAnchor = TextSprite.MIDDLE;
-			//label.verticalAnchor = TextSprite.TOP;
-			//label.verticalAnchor = TextSprite.BOTTOM;
-			
-			if (label.horizontalAnchor == TextSprite.LEFT)
+			if (d.props.labelPos == EdgeLabeler.SOURCE)
 			{
-				// TODO place the label next to the source 
+				// place the label next to the source 
 				// (a fixed distance away from the source clipping point)
-				x = (startPoint.x + endPoint.x) / 2;
-				y = (startPoint.y + endPoint.y) / 2;
+				
+				dist = Point.distance(startPoint, endPoint);
+				
+				x = startPoint.x +
+					(distance / dist) * (endPoint.x - startPoint.x);
+				y = startPoint.y +
+					(distance / dist) * (endPoint.y - startPoint.y);
 			}
-			else if (label.horizontalAnchor == TextSprite.RIGHT)
+			else if (d.props.labelPos == EdgeLabeler.TARGET)
 			{
-				// TODO place the label next to the target
+				// place the label next to the target
 				// (a fixed distance away from the target clipping point)
-				x = (startPoint.x + endPoint.x) / 2;
-				y = (startPoint.y + endPoint.y) / 2;
+				
+				// (alternative calculation with polar angles)
+				//slopeAngle = GeometryUtils.slopeAngle(startPoint, endPoint);
+				//loc = Point.polar(distance, slopeAngle);
+				
+				dist = Point.distance(startPoint, endPoint);
+				
+				x = endPoint.x +
+					(distance / dist) * (startPoint.x - endPoint.x);
+				y = endPoint.y +
+					(distance / dist) * (startPoint.y - endPoint.y);
 			}
 			else
 			{
@@ -143,17 +164,9 @@ package ivis.view
 				y = (startPoint.y + endPoint.y) / 2;
 			}
 			
-			if (label.verticalAnchor == TextSprite.TOP)
-			{
-				// TODO where is top?
-			}
-			else if (label.verticalAnchor == TextSprite.BOTTOM)
-			{
-				// TODO where is bottom?
-			}
-			
-			label.x = x + xOff;
-			label.y = y + yOff;
+			// apply offset values
+			label.x = x + d.props.labelOffsetX;
+			label.y = y + d.props.labelOffsetY;
 		}
 	}
 }

@@ -103,7 +103,7 @@ package ivis.view
 				label.applyFormat(this.textFormat);
 			}
 			
-			// TODO get horizontal & vertical anchors from elsewhere (styles)
+			
 			//if (hAnchor != null) label.horizontalAnchor = hAnchor(d);
 			//if (vAnchor != null) label.verticalAnchor = vAnchor(d);
 			/*
@@ -111,11 +111,15 @@ package ivis.view
 			labelVerticalAnchor: "middle",
 			*/
 			
-			label.horizontalAnchor = TextSprite.CENTER;
+			// get horizontal & vertical anchors
+			
+			label.horizontalAnchor = d.props.labelHorizontalAnchor;
+			//label.horizontalAnchor = TextSprite.CENTER;
 			//label.horizontalAnchor = TextSprite.LEFT;
 			//label.horizontalAnchor = TextSprite.RIGHT;
 			
-			label.verticalAnchor = TextSprite.MIDDLE;
+			label.verticalAnchor = d.props.labelVerticalAnchor;
+			//label.verticalAnchor = TextSprite.MIDDLE;
 			//label.verticalAnchor = TextSprite.TOP;
 			//label.verticalAnchor = TextSprite.BOTTOM;
 			
@@ -133,9 +137,8 @@ package ivis.view
 			var x:Number = d.x;
 			var y:Number = d.y;
 			
-			// TODO get these values from elsewhere (visual styles)
-			var xOff:Number = 0;
-			var yOff:Number = 0;
+			var xOff:Number = d.props.labelOffsetX;
+			var yOff:Number = d.props.labelOffsetY;
 			
 			// the offset should be based on each node's size
 			if (label.horizontalAnchor == TextSprite.LEFT)

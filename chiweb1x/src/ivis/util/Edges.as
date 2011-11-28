@@ -118,6 +118,8 @@ package ivis.util
 					for each (var incident:Edge in
 						Nodes.incidentEdges(bendNode))
 					{
+						// since a bend node has exactly two incident edges,
+						// one is the current segment, other is the next
 						if (incident != segment)
 						{
 							segment = incident;

@@ -118,6 +118,10 @@ package ivis.view
 			node.lineColor = 0xff333333;
 			node.lineWidth = 1;
 			node.props.labelText = node.data.id;
+			node.props.labelOffsetX = 0;
+			node.props.labelOffsetY = 0;
+			node.props.labelHorizontalAnchor = TextSprite.CENTER;
+			node.props.labelVerticalAnchor = TextSprite.MIDDLE;
 			
 			// if event target is a compound node, add node to the compound as
 			// a child and update compound bounds.
@@ -141,6 +145,7 @@ package ivis.view
 					compound.paddingBottom = 10;
 					compound.fillColor = 0xff9ed1dc;
 					compound.props.labelText = compound.data.id;
+					compound.props.labelVerticalAnchor = TextSprite.TOP;
 				}
 				
 				// add the node as a child
@@ -188,9 +193,17 @@ package ivis.view
 			edge.alpha = 0.8;
 			edge.lineWidth = 1;
 			edge.renderer = EdgeRenderer.instance;
+			
 			edge.props.sourceArrowType = ArrowUIs.SIMPLE_ARROW;
 			edge.props.targetArrowType = ArrowUIs.SIMPLE_ARROW;
+			
 			edge.props.labelText = edge.data.id;
+			edge.props.labelPos = EdgeLabeler.MIDDLE;
+			edge.props.labelDistanceFromNode = 50;
+			edge.props.labelOffsetX = 0;
+			edge.props.labelOffsetY = 0;
+			edge.props.labelHorizontalAnchor = TextSprite.CENTER;
+			edge.props.labelVerticalAnchor = TextSprite.MIDDLE;
 			
 			// bring the new edge to the front
 			GeneralUtils.bringToFront(edge);

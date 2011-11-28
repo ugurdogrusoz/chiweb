@@ -22,18 +22,5 @@ package ivis.view
 		{
 			super(source, group, format, filter);
 		}
-		
-		protected override function getLabel(d:DataSprite,
-			 create:Boolean=false,
-			 visible:Boolean=true):TextSprite
-		{
-			var label:TextSprite = super.getLabel(d, create, visible);
-			
-			// TODO take these values from elsewhere
-			label.horizontalAnchor = TextSprite.CENTER;
-			label.verticalAnchor = TextSprite.TOP;
-			
-			return label;
-		}
 	}
 }
