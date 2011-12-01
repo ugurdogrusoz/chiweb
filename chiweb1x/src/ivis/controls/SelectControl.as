@@ -60,6 +60,12 @@ package ivis.controls
 		/** @inheritDoc */
 		public override function attach(obj:InteractiveObject):void
 		{
+			if (obj == null)
+			{
+				detach();
+				return;
+			}
+			
 			super.attach(obj);
 			
 			if (obj != null)

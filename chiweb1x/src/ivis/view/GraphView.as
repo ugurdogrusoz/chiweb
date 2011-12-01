@@ -198,8 +198,9 @@ package ivis.view
 			edge.props.targetArrowType = ArrowUIs.SIMPLE_ARROW;
 			
 			edge.props.labelText = edge.data.id;
-			edge.props.labelPos = EdgeLabeler.MIDDLE;
-			edge.props.labelDistanceFromNode = 50;
+			edge.props.labelPos = EdgeLabeler.TARGET;
+			edge.props.labelDistanceCalculation = EdgeLabeler.PERCENT_DISTANCE;
+			edge.props.labelDistanceFromNode = 30;
 			edge.props.labelOffsetX = 0;
 			edge.props.labelOffsetY = 0;
 			edge.props.labelHorizontalAnchor = TextSprite.CENTER;

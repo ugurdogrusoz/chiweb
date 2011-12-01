@@ -23,6 +23,9 @@ package ivis.view
 		public static const TARGET:String = "target";
 		public static const MIDDLE:String = "middle";
 		
+		public static const PERCENT_DISTANCE:String = "percent";
+		public static const FIXED_DISTANCE:String = "fixed";
+		
 		public function EdgeLabeler(source:* = null,
 									group:String = Groups.EDGES,
 									format:TextFormat = null,
@@ -57,14 +60,19 @@ package ivis.view
 			}
 		}
 		
-		protected override function updateLabelPosition(label:TextSprite,
-			d:DataSprite):void
+		/**
+		 * Finds the correct segment or the bendpoint where the label to be
+		 * placed. If the given edge has no segments, then the clipping points
+		 * of the edge is returned. If the edge has odd number of segments,
+		 * then the clipping points of the central segment is returned. If the
+		 * number of segments is even, then the both points in the array are
+		 * identical to the central bendpoint.
+		 * 
+		 * @param d	the edge
+		 * @return	an array of end points
+		 */
+		protected function endPoints(d:DataSprite):Array
 		{
-			if (label == null)
-			{
-				return;
-			}
-			
 			var startPoint:Point = d.props.startPoint as Point;
 			var endPoint:Point = d.props.endPoint as Point;
 			var adjacentToSrc:Edge;
@@ -86,13 +94,13 @@ package ivis.view
 					startPoint = adjacentToSrc.props.startPoint;
 					endPoint = adjacentToSrc.props.endPoint;
 				}
-				// take the segment adjacent to the target node
+					// take the segment adjacent to the target node
 				else if (d.props.labelPos == EdgeLabeler.TARGET)
 				{
 					startPoint = adjacentToTgt.props.startPoint;
 					endPoint = adjacentToTgt.props.endPoint;
 				}
-				// default case is center 
+					// default case is center 
 				else
 				{
 					var segment:Edge;
@@ -118,44 +126,96 @@ package ivis.view
 				}
 			}
 			
+			return [startPoint, endPoint];
+		}
+		
+		protected override function updateLabelPosition(label:TextSprite,
+			d:DataSprite):void
+		{
+			if (label == null)
+			{
+				return;
+			}
+			
+			var endPoints:Array = this.endPoints(d);
+			var startPoint:Point = endPoints[0] as Point;
+			var endPoint:Point = endPoints[1] as Point;
+			
 			// label coordinates
 			var x:Number;
 			var y:Number;
+			var distance:Number;
 			
-			// desired distance of the label from the node
+			// distance calculation type (percent or fixed)
+			var distType:String = d.props.labelDistanceCalculation;
+			
+			// desired percentage or fixed distance of the label from the node
 			// (ignored if label position is EdgeLabeler.CENTER)
-			var distance:Number = d.props.labelDistanceFromNode;
 			
-			// distance between clipping points of the edge
+			if (distType == EdgeLabeler.FIXED_DISTANCE)
+			{
+				// fixed distance; take the value as it is
+				distance = d.props.labelDistanceFromNode;
+			}
+			else
+			{
+				// percent distance; divide by 100
+				distance = d.props.labelDistanceFromNode / 100;
+			}
+			
 			var dist:Number;
 			
 			if (d.props.labelPos == EdgeLabeler.SOURCE)
 			{
-				// place the label next to the source 
-				// (a fixed distance away from the source clipping point)
-				
-				dist = Point.distance(startPoint, endPoint);
-				
-				x = startPoint.x +
-					(distance / dist) * (endPoint.x - startPoint.x);
-				y = startPoint.y +
-					(distance / dist) * (endPoint.y - startPoint.y);
+				if (distType == EdgeLabeler.FIXED_DISTANCE)
+				{
+					// distance between clipping points of the edge
+					dist = Point.distance(startPoint, endPoint);
+					
+					// place the label next to the source 
+					// (with a fixed distance away from the clipping point)
+					
+					x = startPoint.x +
+						(distance / dist) * (endPoint.x - startPoint.x);
+					y = startPoint.y +
+						(distance / dist) * (endPoint.y - startPoint.y);
+					
+					// (alternative distance calculation with polar angles)
+					//slopeAngle = GeometryUtils.slopeAngle(startPoint, endPoint);
+					//loc = Point.polar(distance, slopeAngle);
+				}
+				else
+				{
+					// place the label next to the source 
+					// (with a desired percent away from the clipping point)
+					
+					x = startPoint.x + distance * (endPoint.x - startPoint.x);
+					y = startPoint.y + distance * (endPoint.y - startPoint.y);
+				}
 			}
 			else if (d.props.labelPos == EdgeLabeler.TARGET)
 			{
-				// place the label next to the target
-				// (a fixed distance away from the target clipping point)
+				if (distType == EdgeLabeler.FIXED_DISTANCE)
+				{
+					// distance between clipping points of the edge
+					dist = Point.distance(startPoint, endPoint);
 				
-				// (alternative calculation with polar angles)
-				//slopeAngle = GeometryUtils.slopeAngle(startPoint, endPoint);
-				//loc = Point.polar(distance, slopeAngle);
-				
-				dist = Point.distance(startPoint, endPoint);
-				
-				x = endPoint.x +
-					(distance / dist) * (startPoint.x - endPoint.x);
-				y = endPoint.y +
-					(distance / dist) * (startPoint.y - endPoint.y);
+					// place the label next to the target 
+					// (with a fixed distance away from the clipping point)
+					
+					x = endPoint.x +
+						(distance / dist) * (startPoint.x - endPoint.x);
+					y = endPoint.y +
+						(distance / dist) * (startPoint.y - endPoint.y);
+				}
+				else
+				{
+					// place the label next to the target
+					// (with a desired percent away from the clipping point)				
+					
+					x = endPoint.x + distance * (startPoint.x - endPoint.x);
+					y = endPoint.y + distance * (startPoint.y - endPoint.y);
+				}
 			}
 			else
 			{

@@ -5,11 +5,11 @@ package ivis
 	import flare.vis.data.DataSprite;
 	import flare.vis.data.NodeSprite;
 	
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	
 	import ivis.controls.ActionState;
-	import ivis.controls.ClickControl;
-	import ivis.controls.KeyControl;
-	import ivis.controls.MultiDragControl;
-	import ivis.controls.SelectControl;
+	import ivis.controls.ControlCenter;
 	import ivis.util.Groups;
 	import ivis.util.NodeUIs;
 	import ivis.view.CompoundNodeLabeler;
@@ -19,11 +19,11 @@ package ivis
 	import ivis.view.NodeLabeler;
 
 	// TODO currently, this class is used as the main class that inits the
-	// application. But, we may provide another mechanism to init the app.
+	// application. But, we should provide another mechanism to init the app.
 	public class Controller
 	{
 		protected var _view:GraphView;
-		protected var _state:ActionState;
+		protected var _controlCenter:ControlCenter;
 		
 		public function get view():GraphView
 		{
@@ -31,49 +31,33 @@ package ivis
 		}
 		
 		public function Controller()
-		{
-			// instantiate state control
-			_state = new ActionState();
-			
+		{	
 			// instantiate view
 			_view = new GraphView();
 			
 			// initialize default controls for the visualization
+			_controlCenter = new ControlCenter(_view);
 			
-			var keyControl:KeyControl = new KeyControl(_view);
-			var clickControl:ClickControl = new ClickControl(_view);
-			var dragControl:MultiDragControl =
-				new MultiDragControl(_view, NodeSprite); 
-			var selectControl:SelectControl = new SelectControl(_view, DataSprite);
-			
-			clickControl.state = _state;
-			keyControl.state = _state;
-			selectControl.state = _state;
-			//dragControl.state = _state;
-			
-			this.addControl(selectControl);
-			this.addControl(clickControl);
-			this.addControl(dragControl);
-			this.addControl(keyControl);
-			
-			// TODO labeler for debug purposes
+			// labeler for debug purposes
 			_view.vis.nodeLabeler = new NodeLabeler("props.labelText");
 			_view.vis.compoundLabeler = new CompoundNodeLabeler("props.labelText");
 			_view.vis.edgeLabeler = new EdgeLabeler("props.labelText");
 			
-			// TODO custom shapes for debugging purposes
-			NodeUIs.registerUI("gradientRect",
-				GradientRectUI.instance);
-		}
-		
-		public function addControl(control:Control):void
-		{
-			_view.vis.controls.add(control);
-		}
-		
-		public function removeControl(control:Control):void
-		{
-			_view.vis.controls.remove(control);
+			// custom shapes for debugging purposes
+			//NodeUIs.registerUI("gradientRect",
+			//	GradientRectUI.instance);
+			
+			// custom listeners for debugging purposes
+			
+			//_controlCenter.disableMultiSelect();
+			//_controlCenter.disableClick();
+			
+			//_view.vis.doubleClickEnabled = true;
+			
+			_controlCenter.addCustomListener("inspector",
+				MouseEvent.MOUSE_OVER,
+				showInspector,
+				NodeSprite);
 		}
 		
 		public function toggle(state:String):Boolean
@@ -82,21 +66,20 @@ package ivis
 			
 			if (state == ActionState.ADD_NODE)
 			{
-				result = _state.toggleAddNode();
+				result = _controlCenter.state.toggleAddNode();
 			}
 			else if (state == ActionState.ADD_EDGE)
 			{
-				result = _state.toggleAddEdge();
+				result = _controlCenter.state.toggleAddEdge();
 			}
 			else if (state == ActionState.ADD_BENDPOINT)
 			{
-				result = _state.toggleAddBendPoint();
+				result = _controlCenter.state.toggleAddBendPoint();
 			}
 			else if (state == ActionState.SELECT)
 			{
-				result = _state.toggleSelect();
+				result = _controlCenter.state.toggleSelect();
 			}
-			
 			
 			return result;
 		}
@@ -106,6 +89,13 @@ package ivis
 		public function printGraph():void
 		{
 			this.view.graph.printGraph();
+		}
+		
+		public function showInspector(event:MouseEvent):void
+		{
+			//var evt:MouseEvent = evt as MouseEvent;
+			
+			trace ("custom listener: " + event.localX + ", " + event.localY);
 		}
 		
 	}

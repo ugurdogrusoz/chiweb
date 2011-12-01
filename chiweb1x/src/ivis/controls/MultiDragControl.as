@@ -43,9 +43,18 @@ package ivis.controls
 		/** @inheritDoc */
 		public override function attach(obj:InteractiveObject):void
 		{
+			if (obj == null)
+			{
+				detach();
+				return;
+			}
+			
 			super.attach(obj);
 			
-			obj.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			if (obj != null)
+			{
+				obj.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			}
 		}
 		
 		/** @inheritDoc */
