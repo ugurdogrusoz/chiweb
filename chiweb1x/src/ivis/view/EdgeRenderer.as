@@ -3,6 +3,7 @@ package ivis.view
 	import flare.util.Geometry;
 	import flare.util.Shapes;
 	import flare.vis.data.DataSprite;
+	import flare.vis.data.EdgeSprite;
 	import flare.vis.data.NodeSprite;
 	import flare.vis.data.render.EdgeRenderer;
 	
@@ -41,6 +42,7 @@ package ivis.view
 			if (d is Edge)
 			{
 				edge = d as Edge;
+				edgeUI = EdgeUIs.getUI(edge.shape);
 				
 				if (edge == null ||
 					edge.source == null ||
@@ -64,6 +66,14 @@ package ivis.view
 				{
 					d.graphics.clear();
 				}
+				// unrecognized edge UI
+				else if (edgeUI == null)
+				{
+					trace (edge.data.id + " has an unrecognized UI");
+					
+					// try to render with parent renderer
+					super.render(d);
+				}
 				// edge is either a segment or an actual edge with no segments,
 				// in both cases it should be rendered
 				else
@@ -74,26 +84,21 @@ package ivis.view
 					var points:Array = this.clippingPoints(edge.source,
 						edge.target);
 					
-					// TODO set the linestyle (need to override setLineStyle
-					// in order to use a bit mask)
-					
-					// TODO Using a bit mask to avoid transparent edges when fillcolor=0xffffffff.
-					// See https://sourceforge.net/forum/message.php?msg_id=7393265
-					// var color:uint =  0xffffff & e.lineColor;
-					
 					// set the default line style
 					this.setLineStyle(edge, edge.graphics);
 					
-					// TODO consider line styles (dashed, dotted, solid, etc)
-					
 					// if a custom line style is defined in edgeUI, it will
 					// overwrite the default line style
-					edgeUI = EdgeUIs.getUI(edge.shape);
 					edgeUI.setLineStyle(edge);
+					
+					// TODO consider line styles (dashed, dotted, solid, etc.)
 					
 					// draw source and target arrows,
 					// and recalculate clipping points if necessary
-					points = this.drawArrows(edge, points);
+					if (points != null)
+					{
+						points = this.drawArrows(edge, points);
+					}
 					
 					// draw the edge
 					if (points != null)
@@ -102,15 +107,14 @@ package ivis.view
 						edge.props.startPoint = points[0];
 						edge.props.endPoint = points[1];
 						
-						// draw the edge line using the clipping points
-						// TODO what to do with bendpoints when edges are curved?
-						// TODO consider 'Shapes' such as LINE BEZIER CARDINAL BSPLINE?
+						// draw the edge line using the clipping points						
 						edgeUI.draw(edge);
+						
+						// TODO what to do with bendpoints when edges are curved?
 					}
 					else
 					{
-						// TODO warning on screen?
-						trace("Cannot calculate clipping points for the edge: "
+						trace("cannot calculate clipping points for the edge: "
 							+ edge.data.id);
 						
 						super.render(d);
@@ -121,6 +125,24 @@ package ivis.view
 			{
 				super.render(d);
 			}
+		}
+		
+		protected override function setLineStyle(e:EdgeSprite,
+			g:Graphics):void
+		{
+			var lineAlpha:Number = e.lineAlpha;
+			
+			if (lineAlpha == 0)
+			{
+				return;
+			}
+			
+			// bit mask to avoid transparent edges when fillcolor=0xffffffff
+			// (https://sourceforge.net/forum/message.php?msg_id=7393265)
+			var color:uint =  0xffffff & e.lineColor;
+			
+			g.lineStyle(e.lineWidth, color, lineAlpha, 
+				pixelHinting, scaleMode, caps, joints, miterLimit);
 		}
 		
 		/**
@@ -195,7 +217,10 @@ package ivis.view
 				nodeUI = NodeUIs.getUI(node.shape);
 			}
 			
-			interPoint = nodeUI.intersection(node, p1, p2);
+			if (nodeUI != null)
+			{
+				interPoint = nodeUI.intersection(node, p1, p2);
+			}
 			
 			return interPoint;
 		}

@@ -63,12 +63,10 @@ package ivis.view
 		 * radius.
 		 * 
 		 * @param ds			data sprite (the node)
-		 * @param defaultSize	default size value of the NodeRenderer
 		 */
-		public function draw(ds:DataSprite,
-								  defaultSize:Number):void
+		public function draw(ds:DataSprite):void
 		{
-			var radius:Number = ds.size * defaultSize;
+			var radius:Number = ds.size;
 			var g:Graphics = ds.graphics;
 			
 			Shapes.drawCircle(g, radius/2);

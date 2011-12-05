@@ -49,8 +49,8 @@ package ivis
 			
 			// custom listeners for debugging purposes
 			
-			//_controlCenter.disableMultiSelect();
-			//_controlCenter.disableClick();
+			//_controlCenter.disableDefaultControl(ControlCenter.DRAG_CONTROL);
+			//_controlCenter.disableDefaultControl(ControlCenter.CLICK_CONTROL);
 			
 			//_view.vis.doubleClickEnabled = true;
 			

@@ -26,7 +26,7 @@ package ivis.view
 			return _instance;
 		}
 		
-		public function NodeRenderer(defaultSize:Number = 6)
+		public function NodeRenderer(defaultSize:Number = 1)
 		{
 			this.defaultSize = defaultSize;
 		}
@@ -44,6 +44,16 @@ package ivis.view
 			
 			var nodeUI:INodeUI = NodeUIs.getUI(d.shape);
 			
+			// undefined ui, cannot render
+			if (nodeUI == null)
+			{
+				trace (d.data.id + " has an unrecognized UI");
+				
+				// try to render with parent renderer
+				super.render(d);
+				return;
+			}
+			
 			if (lineAlpha > 0 && d.lineWidth > 0)
 			{
 				nodeUI.setLineStyle(d);
@@ -57,7 +67,7 @@ package ivis.view
 				// using a bit mask to avoid transparency
 				// when fillcolor is 0xffffffff.
 				g.beginFill(0xffffff & d.fillColor, fillAlpha);
-				nodeUI.draw(d, defaultSize);
+				nodeUI.draw(d);
 				g.endFill();
 				
 				// TODO Draw image (this should be performed by nodeUI)

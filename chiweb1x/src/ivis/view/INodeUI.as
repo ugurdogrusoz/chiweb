@@ -26,10 +26,8 @@ package ivis.view
 		 * Draws the UI of the given data sprite.
 		 * 
 		 * @param ds			data sprite (the node)
-		 * @param defaultSize	default size value of the NodeRenderer
 		 */
-		function draw(ds:DataSprite,
-			defaultSize:Number):void;
+		function draw(ds:DataSprite):void;
 		
 		
 		/**

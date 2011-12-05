@@ -86,7 +86,7 @@ package ivis.view
 						// Using a bit mask to avoid transparent mdes when fillcolor=0xffffffff.
 						// See https://sourceforge.net/forum/message.php?msg_id=7393265
 						g.beginFill(0xffffff & d.fillColor, fillAlpha);
-						nodeUI.draw(node, this.defaultSize);
+						nodeUI.draw(node);
 						g.endFill();
 						
 						// TODO draw an image on top?

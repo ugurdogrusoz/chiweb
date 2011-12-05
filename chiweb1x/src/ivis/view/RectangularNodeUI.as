@@ -62,14 +62,12 @@ package ivis.view
 		 * Draws a rectangular node assuming that ds has a field w for its
 		 * width and h for its height.
 		 * 
-		 * @param ds			data sprite (the node)
-		 * @param defaultSize	default size value of the NodeRenderer
+		 * @param ds	data sprite (the node)
 		 */
-		public function draw(ds:DataSprite,
-			defaultSize:Number):void
+		public function draw(ds:DataSprite):void
 		{
-			var width:Number = ds.w * defaultSize;
-			var height:Number = ds.h * defaultSize;
+			var width:Number = ds.w;
+			var height:Number = ds.h;
 			var g:Graphics = ds.graphics;
 			
 			g.drawRect(-width/2, -height/2, width, height);

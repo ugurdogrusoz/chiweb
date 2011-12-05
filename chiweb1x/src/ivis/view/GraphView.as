@@ -110,9 +110,10 @@ package ivis.view
 			node.renderer = NodeRenderer.instance;
 			node.shape = NodeUIs.ROUND_RECTANGLE;
 			//node.shape = "gradientRect";
-			node.size = 10;
-			node.w = 20;
-			node.h = 10;
+			//node.shape = Shapes.DIAMOND;
+			node.size = 50;
+			node.w = 100;
+			node.h = 50;
 			node.alpha = 0.9;
 			node.fillColor = 0xff8a1b0b;
 			node.lineColor = 0xff333333;
@@ -690,7 +691,7 @@ package ivis.view
 			// taken from elsewhere (with an init function)
 			bendNode.renderer = NodeRenderer.instance;
 			bendNode.shape = Shapes.CIRCLE;
-			bendNode.size = 1;
+			bendNode.size = 4;
 			bendNode.alpha = 1.0;
 			bendNode.fillColor = 0xff000000;
 			//node.lineColor = 0xff000000;

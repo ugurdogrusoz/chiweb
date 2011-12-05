@@ -62,11 +62,9 @@ package ivis.view
 		 * Draws a rectangular node assuming that ds is a compound node and
 		 * its "bounds" field is not null.
 		 * 
-		 * @param ds			data sprite (the compound node)
-		 * @param defaultSize	default size value of the NodeRenderer
+		 * @param ds	data sprite (the compound node)
 		 */
-		public override function draw(ds:DataSprite,
-									  defaultSize:Number):void
+		public override function draw(ds:DataSprite):void
 		{
 			var node:Node = ds as Node;
 			var g:Graphics = ds.graphics;

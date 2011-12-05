@@ -19,6 +19,11 @@ package ivis.controls
 	 */
 	public class ControlCenter
 	{
+		public static const CLICK_CONTROL:String = "clickControl";
+		public static const DRAG_CONTROL:String = "dragControl";
+		public static const SELECT_CONTROL:String = "selectControl";
+		public static const KEY_CONTROL:String = "keyControl";
+		
 		protected var _view:GraphView;
 		protected var _state:ActionState;
 		
@@ -98,63 +103,78 @@ package ivis.controls
 		}
 		
 		/**
-		 * Enables multi select control. 
+		 * Enables the default control with the given name.
+		 * 
+		 * @param name	name of the default control
 		 */
-		public function enableMultiSelect():void
+		public function enableDefaultControl(name:String):void
+		{
+			if (name === ControlCenter.CLICK_CONTROL)
+			{
+				this.enableControl(_clickControl);
+			}
+			else if (name === ControlCenter.SELECT_CONTROL)
+			{
+				this.enableControl(_selectControl);
+			}
+			else if (name === ControlCenter.DRAG_CONTROL)
+			{
+				this.enableControl(_dragControl);
+			}
+			else if (name === ControlCenter.KEY_CONTROL)
+			{
+				this.enableControl(_keyControl);
+			}
+		}
+		
+		/**
+		 * Disables the default control with the given name.
+		 * 
+		 * @param name	name of the default control
+		 */
+		public function disableDefaultControl(name:String):void
+		{
+			if (name === ControlCenter.CLICK_CONTROL)
+			{
+				this.disableControl(_clickControl);
+			}
+			else if (name === ControlCenter.SELECT_CONTROL)
+			{
+				this.disableControl(_selectControl);
+			}
+			else if (name === ControlCenter.DRAG_CONTROL)
+			{
+				this.disableControl(_dragControl);
+			}
+			else if (name === ControlCenter.KEY_CONTROL)
+			{
+				this.disableControl(_keyControl);
+			}
+		}
+		
+		/**
+		 * Enables the given default control.
+		 * 
+		 * @param control	one of the default controls
+		 */
+		protected function enableControl(control:Control):void
 		{
 			// first, remove the control to avoid duplicate controls
-			this.removeControl(_selectControl);
+			this.removeControl(control);
 			
 			// add the control again
-			this.addControl(_selectControl);
+			this.addControl(control);
 		}
 		
 		/**
-		 * Disables multi select control. 
+		 * Disables the given default control.
+		 * 
+		 * @param control	one of the default controls 
 		 */
-		public function disableMultiSelect():void
+		protected function disableControl(control:Control):void
 		{
-			this.removeControl(_selectControl);
-		}
-		
-		/**
-		 * Enables node drag control. 
-		 */
-		public function enableDrag():void
-		{
-			// first, remove the control to avoid duplicate controls
-			this.removeControl(_dragControl);
-			
-			// add the control again
-			this.addControl(_dragControl);
-		}
-		
-		/**
-		 * Disables node drag control. 
-		 */
-		public function disableDrag():void
-		{
-			this.removeControl(_dragControl);
-		}
-		
-		/**
-		 * Enables click control. 
-		 */
-		public function enableClick():void
-		{
-			// first, remove the control to avoid duplicate controls
-			this.removeControl(_clickControl);
-			
-			// add the control again
-			this.addControl(_clickControl);
-		}
-		
-		/**
-		 * Disables click control. 
-		 */
-		public function disableClick():void
-		{
-			this.removeControl(_clickControl);
+			// remove control from the visualization
+			this.removeControl(control);
 		}
 		
 		/**
