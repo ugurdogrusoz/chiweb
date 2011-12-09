@@ -158,7 +158,7 @@ package ivis.controls
 			
 			var children:Array = new Array();
 						
-			if (target.props.selected)
+			if (target.props.$selected)
 			{
 				// find missing children of selected nodes
 				children = children.concat(this.view.getMissingChildren());
@@ -216,7 +216,7 @@ package ivis.controls
 				// which are not being dragged)
 				
 				if (n == target ||
-					n.props.selected)
+					n.props.$selected)
 				{
 					node = n;
 					
@@ -241,8 +241,8 @@ package ivis.controls
 						{
 							// only update if the parent is not also being
 							// dragged
-							if (!node.props.selected
-								|| (n == target && !n.props.selected))
+							if (!node.props.$selected
+								|| (n == target && !n.props.$selected))
 							{
 								// update the bounds of the compound node
 								this.view.vis.updateCompoundBounds(node);

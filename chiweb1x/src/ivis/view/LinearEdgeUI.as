@@ -48,8 +48,8 @@ package ivis.view
 			
 			// TODO consider line styles while drawing?
 			
-			var startPoint:Point = ds.props.startPoint as Point;
-			var endPoint:Point = ds.props.endPoint as Point;
+			var startPoint:Point = ds.props.$startPoint as Point;
+			var endPoint:Point = ds.props.$endPoint as Point;
 			
 			g.moveTo(startPoint.x, startPoint.y);
 			g.lineTo(endPoint.x, endPoint.y);

@@ -2,9 +2,12 @@ package ivis.model
 {
 	import flare.vis.data.Data;
 	import flare.vis.data.DataList;
+	import flare.vis.data.DataSprite;
 	import flare.vis.data.EdgeSprite;
 	import flare.vis.data.NodeSprite;
 	
+	import ivis.event.DataChangeDispatcher;
+	import ivis.event.DataChangeEvent;
 	import ivis.util.Groups;
 	import ivis.util.Nodes;
 
@@ -337,6 +340,104 @@ package ivis.model
 		}
 		
 		/**
+		 * Adds a new data group with the specified name to the graph data.
+		 * It is not possible to add a new group with a name used as a
+		 * default group name defined in Groups class.
+		 * 
+		 * @param group	name of the group to be added
+		 * @return		true if a new group is added, false otherwise 
+		 */
+		public function addGroup(group:String) : Boolean
+		{
+			var result:Boolean = true;
+			
+			// add a new data group, only if it is not one of the defaults
+			if (!Groups.isDefault(group))
+			{
+				graphData.addGroup(group);
+			}
+			else
+			{
+				result = false;
+			}
+			
+			return result;
+		}
+		
+		/**
+		 * Removes the group with the specifed name from the graph data. 
+		 * It is not possible to remove a default group.
+		 * 
+		 * @param group	name of the group to be removed
+		 * @return		true if the group is removed, false otherwise 
+		 */
+		public function removeGroup(group:String) : Boolean
+		{
+			var result:Boolean = true;
+			
+			// add a new data group, only if it is not one of the defaults
+			if (!Groups.isDefault(group))
+			{
+				graphData.removeGroup(group);
+			}
+			else
+			{
+				result = false;
+			}
+			
+			return result;
+		}
+		
+		/**
+		 * Clears the content of the given data group.
+		 * 
+		 * @param group	name of the data group to be cleared
+		 * @return		true if success, false otherwise
+		 */
+		public function clearGroup(group:String) : Boolean
+		{
+			return this.graphData.group(group).clear();
+		}
+		
+		/**
+		 * Adds the given data sprite to the specified group.
+		 * 
+		 * @param group	name of the data group
+		 * @return		the added DataSprite, or null if add fails
+		 */
+		public function addToGroup(group:String,
+			ds:DataSprite) : DataSprite
+		{
+			var sprite:DataSprite = this.graphData.group(group).add(ds);
+			
+			// dispatch a DataChangeEvent with required information
+			DataChangeDispatcher.instance.dispatchEvent(
+				new DataChangeEvent(DataChangeEvent.DS_ADDED_TO_GROUP,
+					{ds: ds, group: group}));
+			
+			return sprite;
+		}
+		
+		/**
+		 * Removes the given data sprite from the specified group.
+		 * 
+		 * @param group	name of the data group
+		 * @return		true if removed, false otherwise
+		 */
+		public function removeFromGroup(group:String,
+			ds:DataSprite) : Boolean
+		{
+			var result:Boolean = this.graphData.group(group).remove(ds);
+			
+			// dispatch a DataChangeEvent with required information
+			DataChangeDispatcher.instance.dispatchEvent(
+				new DataChangeEvent(DataChangeEvent.DS_REMOVED_FROM_GROUP,
+					{ds: ds, group: group}));
+			
+			return result;
+		}
+		
+		/**
 		 * Resets the missing children array in order to enable re-calculation
 		 * of missing child nodes in the getter method of missingChildren.
 		 */ 
@@ -344,7 +445,7 @@ package ivis.model
 		{
 			_missingChildren = null;
 		}
-		
+			
 		//---------------------- PRIVATE FUNCTIONS -----------------------------
 		
 		/**
@@ -357,7 +458,7 @@ package ivis.model
 			// set graph data
 			_graphData = data;
 			
-			// initialize data groups
+			// initialize default data groups
 			
 			this.graphData.addGroup(Groups.COMPOUND_NODES);
 			this.graphData.addGroup(Groups.BEND_NODES);

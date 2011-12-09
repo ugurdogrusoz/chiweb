@@ -58,7 +58,7 @@ package ivis.util
 				{
 					if (type === Nodes.SELECTED)
 					{
-						if (node.props.selected)
+						if (node.props.$selected)
 						{
 							condition = true;
 						}
@@ -69,7 +69,7 @@ package ivis.util
 					}
 					else if (type === Nodes.NON_SELECTED)
 					{
-						if (node.props.selected)
+						if (node.props.$selected)
 						{
 							condition = false;
 						}
@@ -308,7 +308,7 @@ package ivis.util
 						
 						if (type === Nodes.SELECTED)
 						{
-							if (node.props.selected)
+							if (node.props.$selected)
 							{
 								condition = true;
 							}
@@ -319,7 +319,7 @@ package ivis.util
 						}
 						else if (type === Nodes.NON_SELECTED)
 						{
-							if (node.props.selected)
+							if (node.props.$selected)
 							{
 								condition = false;
 							}
@@ -373,7 +373,7 @@ package ivis.util
 				
 				if (type === Nodes.SELECTED)
 				{
-					if (edge.props.selected)
+					if (edge.props.$selected)
 					{
 						condition = true;
 					}
@@ -384,7 +384,7 @@ package ivis.util
 				}
 				else if (type === Nodes.NON_SELECTED)
 				{
-					if (edge.props.selected)
+					if (edge.props.$selected)
 					{
 						condition = false;
 					}

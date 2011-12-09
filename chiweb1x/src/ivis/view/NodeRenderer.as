@@ -62,8 +62,6 @@ package ivis.view
 			// draw node if it is not %100 transparent
 			if (fillAlpha > 0)
 			{
-				// TODO ignore default size and use d.w & d.h directly?
-				
 				// using a bit mask to avoid transparency
 				// when fillcolor is 0xffffffff.
 				g.beginFill(0xffffff & d.fillColor, fillAlpha);
@@ -99,7 +97,7 @@ package ivis.view
 			}
 			else if (shape == Shapes.POLYGON)
 			{
-				// TODO allow drawing arbitrary polygons
+				
 			}
 			else if (shape == NodeShapes.ROUND_RECTANGLE)
 			{

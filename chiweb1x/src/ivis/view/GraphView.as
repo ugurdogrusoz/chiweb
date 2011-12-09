@@ -16,6 +16,8 @@ package ivis.view
 	import ivis.controls.ClickControl;
 	import ivis.controls.MultiDragControl;
 	import ivis.controls.SelectControl;
+	import ivis.event.DataChangeDispatcher;
+	import ivis.event.DataChangeEvent;
 	import ivis.model.Edge;
 	import ivis.model.Graph;
 	import ivis.model.Node;
@@ -36,6 +38,7 @@ package ivis.view
 	{
 		protected var _vis:GraphVisualization;
 		protected var _graph:Graph;
+		protected var _visualSettings:VisualSettings;
 		
 		// source node used for the edge creating process
 		protected var _sourceNode:Node;
@@ -69,11 +72,17 @@ package ivis.view
 		{
 			this.graph = new Graph();
 			
+			_vis = new GraphVisualization(this.graph.graphData);
+			this.addChild(this.vis);
+			
+			_visualSettings = new VisualSettings();
+			
 			_sourceNode = null;
 			
-			_vis = new GraphVisualization(this.graph.graphData);
-
-			this.addChild(this.vis);
+			// TODO add all listeners in another function (or class)?
+			DataChangeDispatcher.instance.addEventListener(
+				DataChangeEvent.DS_ADDED_TO_GROUP,
+				onAddToGroup);
 		}
 		
 		//---------------------- PUBLIC FUNCTIONS ------------------------------
@@ -96,33 +105,18 @@ package ivis.view
 			// add node to the graph
 			var node:Node = this.graph.addNode(data);
 			var compound:Node;
-			var group:DataList = this.graph.graphData.group(
-				Groups.COMPOUND_NODES);
 			
 			// update node position
 			node.x = x;
 			node.y = y;
 			
-			// TODO initialize visual properties (size, shape, etc) of node (and
-			// render the node before updating compound bounds?)
-			// TODO test values for debugging purposes, these values should be
-			// set by another class (with an init function)
+			// initialize visual properties (size, shape, etc) of node
+			// TODO render the node before updating compound bounds?
+			_visualSettings.applyNodeStyle(node);
+			//node.props.labelText = node.data.id;
+			
+			// update node renderer
 			node.renderer = NodeRenderer.instance;
-			node.shape = NodeUIs.ROUND_RECTANGLE;
-			//node.shape = "gradientRect";
-			//node.shape = Shapes.DIAMOND;
-			node.size = 50;
-			node.w = 100;
-			node.h = 50;
-			node.alpha = 0.9;
-			node.fillColor = 0xff8a1b0b;
-			node.lineColor = 0xff333333;
-			node.lineWidth = 1;
-			node.props.labelText = node.data.id;
-			node.props.labelOffsetX = 0;
-			node.props.labelOffsetY = 0;
-			node.props.labelHorizontalAnchor = TextSprite.CENTER;
-			node.props.labelVerticalAnchor = TextSprite.MIDDLE;
 			
 			// if event target is a compound node, add node to the compound as
 			// a child and update compound bounds.
@@ -132,21 +126,17 @@ package ivis.view
 				
 				if (!compound.isInitialized())
 				{
-					group.add(compound);
-					// TODO also initialize visual properties of compound
-					// (shape, size, color, padding values etc)
-					// TODO test values for debugging purposes, default values
-					// should be set by another class (with an init function)
-					compound.shape = CompoundUIs.RECTANGLE;
-					//compound.shape = CompoundUIs.ROUND_RECTANGLE;
+					// initialize visual properties of compound
+					// (this will apply only the default style)
+					_visualSettings.applyCompoundStyle(compound);
+					
+					// add node to the group of compound nodes
+					this.graph.addToGroup(Groups.COMPOUND_NODES, compound);
+					
+					//compound.props.labelText = compound.data.id;
+					
+					// update node renderer
 					compound.renderer = CompoundNodeRenderer.instance;
-					compound.paddingLeft = 10;
-					compound.paddingRight = 10;
-					compound.paddingTop = 10;
-					compound.paddingBottom = 10;
-					compound.fillColor = 0xff9ed1dc;
-					compound.props.labelText = compound.data.id;
-					compound.props.labelVerticalAnchor = TextSprite.TOP;
 				}
 				
 				// add the node as a child
@@ -185,27 +175,13 @@ package ivis.view
 		{
 			var edge:Edge = this.graph.addEdge(data);
 			
-			// TODO initialize visual properties of the edge
-			// TODO test values for debugging purposes, default values
-			// should be set by another class (with an init function)
-			edge.shape = EdgeUIs.LINE;			
-			edge.lineColor = 0xff000000;
-			edge.lineAlpha = 0.8;
-			edge.alpha = 0.8;
-			edge.lineWidth = 1;
+			// initialize visual properties of the edge
+			_visualSettings.applyEdgeStyle(edge);
+			
+			// update edge renderer
 			edge.renderer = EdgeRenderer.instance;
 			
-			edge.props.sourceArrowType = ArrowUIs.SIMPLE_ARROW;
-			edge.props.targetArrowType = ArrowUIs.SIMPLE_ARROW;
-			
-			edge.props.labelText = edge.data.id;
-			edge.props.labelPos = EdgeLabeler.TARGET;
-			edge.props.labelDistanceCalculation = EdgeLabeler.PERCENT_DISTANCE;
-			edge.props.labelDistanceFromNode = 30;
-			edge.props.labelOffsetX = 0;
-			edge.props.labelOffsetY = 0;
-			edge.props.labelHorizontalAnchor = TextSprite.CENTER;
-			edge.props.labelVerticalAnchor = TextSprite.MIDDLE;
+			// edge.props.labelText = edge.data.id;
 			
 			// bring the new edge to the front
 			GeneralUtils.bringToFront(edge);
@@ -253,7 +229,7 @@ package ivis.view
 				edge = addEdge(data);
 				
 				// add the edge to the group of regular edges
-				this.graph.graphData.group(Groups.REGULAR_EDGES).add(edge);
+				this.graph.addToGroup(Groups.REGULAR_EDGES, edge);
 				
 				// reset source node
 				this._sourceNode = null;
@@ -416,7 +392,7 @@ package ivis.view
 			if (eventTarget is DataSprite)
 			{
 				// deselect the node
-				if ((eventTarget as DataSprite).props.selected)
+				if ((eventTarget as DataSprite).props.$selected)
 				{
 					result = this.deselectElement(eventTarget);
 				}
@@ -502,24 +478,27 @@ package ivis.view
 		{
 			trace("all selections are cleared");
 			
+			var idx:int
+			
 			for each (var node:NodeSprite in this.graph.selectedNodes)
 			{
-				node.props.selected = false;
+				node.props.$selected = false;
 				
-				// TODO remove glow filter only..
-				node.filters = null;
+				// remove glow filter
+				this.removeFilter(node, node.props.$glowFilter);
+				
 			}
 			
 			for each (var edge:EdgeSprite in this.graph.selectedEdges)
 			{
-				edge.props.selected = false;
+				edge.props.$selected = false;
 				
-				// TODO remove glow filter only..
-				edge.filters = null;
+				// remove glow filter
+				this.removeFilter(edge, edge.props.$glowFilter);
 			}
 			
-			this.graph.graphData.group(Groups.SELECTED_NODES).clear();
-			this.graph.graphData.group(Groups.SELECTED_EDGES).clear();
+			this.graph.clearGroup(Groups.SELECTED_NODES);
+			this.graph.clearGroup(Groups.SELECTED_EDGES);
 		}
 		
 		/**
@@ -552,7 +531,7 @@ package ivis.view
 		/**
 		 * Highlights the given target Node or Edge by adding a GlowFilter to
 		 * the sprite. If the eventTarget is not an Node or Edge instance,
-		 * it is not highlighted. 
+		 * it is not highlighted.
 		 * 
 		 * @param eventTarget	target object to be highlighted
 		 * @return				highlighted DataSprite if successful, null o.w.
@@ -561,62 +540,36 @@ package ivis.view
 		{
 			var ds:DataSprite = null;
 			
-			var filters:Array;
 			var filter:GlowFilter;
 			var alpha:Number;
 			var blur:Number;
 			var strength:Number;
 			var color:uint;
 			
-			if (eventTarget is Node)
+			if (eventTarget is DataSprite)
 			{
-				var node:Node = eventTarget as Node;
-				// TODO all these values should be taken from elsewhere
-				// (settings, properties, etc.). These are test values for
-				// debug purposes
-				filters = new Array();
-				filter = null;
-				alpha = node.alpha;
-				blur = 8;
-				strength = 6; 
+				ds = eventTarget as DataSprite;
+				
+				alpha = ds.props.selectionGlowAlpha;
+				blur = ds.props.selectionGlowBlur;
+				strength = ds.props.selectionGlowStrength; 
 				
 				if (alpha > 0 &&
 					blur > 0 &&
 					strength > 0)
 				{
-					color = 0x00ffff33;  // "#ffff33"
-					trace("glow filter is added to node " + node.data.id);
+					color = ds.props.selectionGlowColor;
 					filter = new GlowFilter(color, alpha, blur, blur, strength);
+					
+					// add new filter to the sprite's filter list
+					var filters:Array = ds.filters;
+					
+					// just calling ds.filters.push() does not update view!
+					// ds.filter should be reset explicitly
+					ds.props.$glowFilter = filter;
 					filters.push(filter);
-					node.filters = filters;
+					ds.filters = filters;
 				}
-				
-				ds = node;
-			}
-			else if (eventTarget is Edge)
-			{
-				var edge:Edge = eventTarget as Edge;
-				// TODO all these values should be taken from elsewhere
-				// (settings, properties, etc.). These are test values for
-				// debug purposes
-				filters = new Array();
-				filter = null;
-				alpha = edge.alpha;
-				blur = 4;
-				strength = 10; 
-				
-				if (alpha > 0 &&
-					blur > 0 &&
-					strength > 0)
-				{
-					color = 0x00ffff33;  // "#ffff33"
-					trace("glow filter is added to edge " + edge.data.id);
-					filter = new GlowFilter(color, alpha, blur, blur, strength);
-					filters.push(filter);
-					edge.filters = filters;
-				}
-				
-				ds = edge;
 			}
 			
 			return ds;
@@ -659,14 +612,12 @@ package ivis.view
 		protected function addBendNode(edge:Edge):Node
 		{
 			var bendNode:Node = this.graph.addNode();
-			var group:DataList = this.graph.graphData.group(
-				Groups.BEND_NODES);
 			
 			// set the position of the bendpoint as the mid-point of
 			// the start&end points of the target edge
 			
-			if (edge.props.startPoint == null ||
-				edge.props.endPoint == null)
+			if (edge.props.$startPoint == null ||
+				edge.props.$endPoint == null)
 			{
 				// if no start or end point defined for the edge, use source
 				// and target node poistions
@@ -676,26 +627,18 @@ package ivis.view
 			else
 			{
 				// use start&end points of the edge to set new
-				var startPoint:Point = (edge.props.startPoint as Point);
-				var endPoint:Point = (edge.props.endPoint as Point);
+				var startPoint:Point = (edge.props.$startPoint as Point);
+				var endPoint:Point = (edge.props.$endPoint as Point);
 					
 				bendNode.x = (startPoint.x + endPoint.x) / 2;
 				bendNode.y = (startPoint.y + endPoint.y) / 2;
 			}
 			
 			// add node to the data group
-			group.add(bendNode);
+			this.graph.addToGroup(Groups.BEND_NODES, bendNode);
 			
-			// TODO initialize visual properties (size, shape, etc) of node
-			// TODO test values for debugging purposes, these values should be
-			// taken from elsewhere (with an init function)
+			// update bend node renderer
 			bendNode.renderer = NodeRenderer.instance;
-			bendNode.shape = Shapes.CIRCLE;
-			bendNode.size = 4;
-			bendNode.alpha = 1.0;
-			bendNode.fillColor = 0xff000000;
-			//node.lineColor = 0xff000000;
-			//node.lineWidth = 1;
 			
 			return bendNode;
 		}
@@ -955,13 +898,13 @@ package ivis.view
 		 */
 		protected function selectNode(node:Node):void
 		{
-			if (!node.props.selected)
+			if (!node.props.$selected)
 			{
 				// mark node as selected
-				node.props.selected = true;
+				node.props.$selected = true;
 				
 				// add node to the corresponding data group
-				this.graph.graphData.group(Groups.SELECTED_NODES).add(node);
+				this.graph.addToGroup(Groups.SELECTED_NODES, node);
 				
 				// highlight selected node
 				this.highlight(node);
@@ -978,7 +921,7 @@ package ivis.view
 		{
 			var parent:Edge = edge;
 			
-			if (!edge.props.selected)
+			if (!edge.props.$selected)
 			{
 				// edge is a segment, so select other segments of the
 				// parent edge
@@ -986,10 +929,9 @@ package ivis.view
 				{
 					for each (var segment:Edge in edge.parentE.getSegments())
 					{
-						segment.props.selected = true;
+						segment.props.$selected = true;
 						
-						this.graph.graphData.group(
-							Groups.SELECTED_EDGES).add(segment);
+						this.graph.addToGroup(Groups.SELECTED_EDGES, segment);
 						
 						this.highlight(segment);
 					}
@@ -998,8 +940,8 @@ package ivis.view
 				}
 				
 				// select the parent edge
-				parent.props.selected = true;
-				this.graph.graphData.group(Groups.SELECTED_EDGES).add(parent);			
+				parent.props.$selected = true;
+				this.graph.addToGroup(Groups.SELECTED_EDGES, parent);			
 				
 				// highligh edge if it is visible 
 				if (parent == edge)
@@ -1016,16 +958,16 @@ package ivis.view
 		 */ 
 		protected function deselectNode(node:Node):void
 		{
-			if (node.props.selected)
+			if (node.props.$selected)
 			{
 				// mark node as unselected
-				node.props.selected = false;
+				node.props.$selected = false;
 				
 				// remove node from the corresponding data group
-				this.graph.graphData.group(Groups.SELECTED_NODES).remove(node);
+				this.graph.removeFromGroup(Groups.SELECTED_NODES, node);
 				
-				// TODO remove highlight of the node (remove glow filter only)
-				node.filters = null;
+				// remove highlight of the node (remove glow filter)
+				this.removeFilter(node, node.props.$glowFilter);
 			}
 		}
 		
@@ -1037,8 +979,9 @@ package ivis.view
 		protected function deselectEdge(edge:Edge):void
 		{
 			var parent:Edge = edge;
+			var idx:int;
 			
-			if (edge.props.selected)
+			if (edge.props.$selected)
 			{
 				// edge is a segment, so deselect other segments of the
 				// parent edge
@@ -1046,28 +989,70 @@ package ivis.view
 				{
 					for each (var segment:Edge in edge.parentE.getSegments())
 					{
-						segment.props.selected = false;
+						// mark segment as unselected
+						segment.props.$selected = false;
 						
-						this.graph.graphData.group(
-							Groups.SELECTED_EDGES).remove(segment);
+						// remove segment from corresponding data group
+						this.graph.removeFromGroup(Groups.SELECTED_EDGES,
+							segment);
 						
-						// TODO remove highlight of the segment
-						// (remove glow filter only)
-						segment.filters = null;
+						// remove highlight of the segment (remove glow filter)
+						this.removeFilter(segment, segment.props.$glowFilter);
+						
 					}
 					
-					parent = edge;
+					parent = edge.parentE;
 				}
 				
 				// unselect the parent edge
-				parent.props.selected = false;
+				parent.props.$selected = false;
 				
-				this.graph.graphData.group(
-					Groups.SELECTED_EDGES).remove(parent);
+				this.graph.removeFromGroup(Groups.SELECTED_EDGES, parent);
 				
-				// TODO remove highlight of the edge (remove glow filter only)
-				parent.filters = null;
+				// remove highlight of the parent (remove glow filter)
+				this.removeFilter(parent, parent.props.$glowFilter);
 			}
 		}
+		
+		/**
+		 * This function is designed as a listener for the action
+		 * DataChangeEvent.DS_ADDED_TO_GROUP and to be called whenever a
+		 * node or an edge is added to a data group.
+		 * 
+		 * This function updates the style of the node or edge by applying
+		 * the corresponding style defined for the data group. 
+		 * 
+		 * @param event	DataChangeEvent triggered the action
+		 */
+		protected function onAddToGroup(event:DataChangeEvent) : void
+		{
+			var ds:DataSprite = event.info.ds;
+			var group:String = event.info.group;
+			var style:VisualStyle = _visualSettings.getGroupStyle(group);
+			
+			if (style != null)
+			{
+				style.apply(ds);
+			}
+		}
+		
+		// TODO may need to move to Node and Edge classes...
+		protected function removeFilter(ds:DataSprite, filter:*) : void
+		{
+			// remove the given filter from the filter array of sprite
+			var idx:int = ds.filters.indexOf(filter);
+			
+			if (idx != -1)
+			{
+				ds.filters = ds.filters.slice(0, idx).concat(
+					ds.filters.slice(idx+1));
+			}
+			
+			// TODO workaround, above code does not work yet... 
+			ds.filters = null;
+		}
+		
+		// TODO listener for other actions to apply/reset styles
+		// ...
 	}
 }

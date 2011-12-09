@@ -27,5 +27,33 @@ package ivis.util
 		{
 			throw new Error("NodeShapes is an abstract class.");
 		}
+		
+		//------------------------- PUBLIC FUNCTIONS ---------------------------
+		
+		/**
+		 * Check if the given group name is one of the default groups defined
+		 * in this class. Returns true if a group with the given name already
+		 * exists, returns false if it is available. 
+		 * 
+		 * @param group	name of the group to be checked
+		 * @return		true if a group is default, false otherwise
+		 */
+		public static function isDefault(group:String):Boolean
+		{
+			var reserved:Boolean = false;
+			
+			if (group == Groups.NODES ||
+				group == Groups.EDGES ||
+				group == Groups.COMPOUND_NODES ||
+				group == Groups.BEND_NODES ||
+				group == Groups.SELECTED_NODES ||
+				group == Groups.SELECTED_EDGES ||
+				group == Groups.REGULAR_EDGES)
+			{
+				reserved = true;
+			}
+			
+			return reserved;
+		}
 	}
 }

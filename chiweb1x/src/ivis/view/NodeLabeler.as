@@ -29,6 +29,8 @@ package ivis.view
 			//TODO default label text source "props.labelText"?
 			
 			super(source, group, format, filter, policy);
+			
+			this.cacheText = false;
 		}
 		
 		/** @inheritDoc */

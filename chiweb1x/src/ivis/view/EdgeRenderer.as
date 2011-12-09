@@ -104,8 +104,8 @@ package ivis.view
 					if (points != null)
 					{
 						// store start end points of the edge
-						edge.props.startPoint = points[0];
-						edge.props.endPoint = points[1];
+						edge.props.$startPoint = points[0];
+						edge.props.$endPoint = points[1];
 						
 						// draw the edge line using the clipping points						
 						edgeUI.draw(edge);

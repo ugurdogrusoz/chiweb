@@ -45,8 +45,8 @@ package ivis.view
 			{
 				var edge:Edge = d as Edge;
 				
-				if (!edge.isSegment && edge.props.startPoint != null &&
-					edge.props.endPoint != null)
+				if (!edge.isSegment && edge.props.$startPoint != null &&
+					edge.props.$endPoint != null)
 				{
 					var label:TextSprite = this.getLabel(d, true);
 					
@@ -73,8 +73,8 @@ package ivis.view
 		 */
 		protected function endPoints(d:DataSprite):Array
 		{
-			var startPoint:Point = d.props.startPoint as Point;
-			var endPoint:Point = d.props.endPoint as Point;
+			var startPoint:Point = d.props.$startPoint as Point;
+			var endPoint:Point = d.props.$endPoint as Point;
 			var adjacentToSrc:Edge;
 			var adjacentToTgt:Edge;
 			
@@ -91,14 +91,14 @@ package ivis.view
 				// take the segment adjacent to the source node
 				if (d.props.labelPos == EdgeLabeler.SOURCE)
 				{
-					startPoint = adjacentToSrc.props.startPoint;
-					endPoint = adjacentToSrc.props.endPoint;
+					startPoint = adjacentToSrc.props.$startPoint;
+					endPoint = adjacentToSrc.props.$endPoint;
 				}
 					// take the segment adjacent to the target node
 				else if (d.props.labelPos == EdgeLabeler.TARGET)
 				{
-					startPoint = adjacentToTgt.props.startPoint;
-					endPoint = adjacentToTgt.props.endPoint;
+					startPoint = adjacentToTgt.props.$startPoint;
+					endPoint = adjacentToTgt.props.$endPoint;
 				}
 					// default case is center 
 				else
@@ -111,8 +111,8 @@ package ivis.view
 					if ((d as Edge).getBendNodes().length % 2 == 0)
 					{
 						segment = Edges.centralSegment(d as Edge);
-						startPoint = segment.props.startPoint;
-						endPoint = segment.props.endPoint;
+						startPoint = segment.props.$startPoint;
+						endPoint = segment.props.$endPoint;
 					}
 					else
 					{

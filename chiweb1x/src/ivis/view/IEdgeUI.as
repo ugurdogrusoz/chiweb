@@ -20,8 +20,8 @@ package ivis.view
 		
 		/**
 		 * Draws the UI of the given data sprite. The data sprite is assumed
-		 * to be an Edge instance and it contains props.startPoint and 
-		 * props.endPoint as its two clipping points. 
+		 * to be an Edge instance and it contains props.$startPoint and 
+		 * props.$endPoint as its two clipping points. 
 		 * 
 		 * @param ds		data sprite (the edge)
 		 */
