@@ -1,12 +1,13 @@
 package ivis.view
 {
-	import ivis.event.DataChangeDispatcher;
-	import ivis.event.DataChangeEvent;
+	import flash.events.EventDispatcher;
+	
+	import ivis.event.StyleChangeEvent;
 
 	/**
 	 * Visual Style class to represent style properties of a graph element.
 	 */
-	public class VisualStyle
+	public class VisualStyle extends EventDispatcher
 	{
 		/**
 		 * map for attaching style properties
@@ -51,8 +52,9 @@ package ivis.view
 			_style[name] = value;
 			
 			// TODO also add info
-			DataChangeDispatcher.instance.dispatchEvent(
-				new DataChangeEvent(DataChangeEvent.ADDED_STYLE_PROP));
+			this.dispatchEvent(
+				new StyleChangeEvent(StyleChangeEvent.ADDED_STYLE_PROP,
+					{style: this, property: name}));
 		}
 		
 		/**
@@ -66,8 +68,9 @@ package ivis.view
 			delete _style[name];
 			
 			// TODO also add info
-			DataChangeDispatcher.instance.dispatchEvent(
-				new DataChangeEvent(DataChangeEvent.REMOVED_STYLE_PROP));
+			this.dispatchEvent(
+				new StyleChangeEvent(StyleChangeEvent.REMOVED_STYLE_PROP,
+					{style: this, property: name}));
 		}
 		
 		/**

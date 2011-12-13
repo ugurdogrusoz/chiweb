@@ -26,7 +26,7 @@
 	
 		<mx:Button id="addBendPoint" 
 			   label="BP"
-			   width="32"
+			   width="40"
 			   toolTip="Add Bendpoint"
 			   click="controller.toggle(ActionState.ADD_BENDPOINT)"/>		
 	
@@ -47,6 +47,49 @@
 				   width="32"
 				   toolTip="Print Graph (debug)"
 				   click="controller.printGraph()"/>
+		
+		<mx:Button id="createTestGroup"
+				   label="T"
+				   width="32"
+				   toolTip="Add a test data group"
+				   click="controller.createTestGroup()"/>
+		
+		<mx:Button id="removeTestGroup"
+				   label="RT"
+				   width="40"
+				   toolTip="Remove test data group"
+				   click="controller.removeTestGroup()"/>
+		
+		<mx:Button id="clearTestGroup"
+				   label="CT"
+				   width="40"
+				   toolTip="Clear test data group"
+				   click="controller.clearTestGroup()"/>
+		
+		<mx:Button id="createTestStyle" 
+				   label="S"
+				   width="32"
+				   toolTip="Create a new style for test group"
+				   click="controller.createTestStyle()"/>
+		
+		<mx:Button id="removeTestStyle" 
+				   label="RS"
+				   width="40"
+				   toolTip="Remove test style"
+				   click="controller.removeTestStyle()"/>
+		
+		<mx:Button id="addToTestGroup" 
+				   label="AG"
+				   width="40"
+				   toolTip="Add selected nodes to test group"
+				   click="controller.addToTestGroup()"/>
+		
+		<mx:Button id="removeFromTestGroup" 
+				   label="RG"
+				   width="40"
+				   toolTip="Remove selected nodes from test group"
+				   click="controller.removeFromTestGroup()"/>
+		
 	</mx:HBox>
 		
 	

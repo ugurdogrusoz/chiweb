@@ -6,7 +6,8 @@ package ivis.model
 	import flare.vis.data.EdgeSprite;
 	import flare.vis.data.NodeSprite;
 	
-	import ivis.event.DataChangeDispatcher;
+	import flash.events.EventDispatcher;
+	
 	import ivis.event.DataChangeEvent;
 	import ivis.util.Groups;
 	import ivis.util.Nodes;
@@ -25,20 +26,22 @@ package ivis.model
 		
 		private var _graphData:Data;
 		
+		private var _dispatcher:EventDispatcher;
+		
 		/**
 		 * Node map for quick access to nodes by their ids.
 		 */
-		private var _nodeMap:Object;
+		protected var _nodeMap:Object;
 		
 		/**
 		 * Edge map for quick access to edges by their ids.
 		 */
-		private var _edgeMap:Object;
+		protected var _edgeMap:Object;
 		
 		/**
 		 * Object used to generate ids for nodes and edges. 
 		 */
-		private var _idGen:Object;
+		protected var _idGen:Object;
 		
 		//---------------------------- ACCESSORS -------------------------------
 		
@@ -48,6 +51,14 @@ package ivis.model
 		public function get graphData():Data
 		{
 			return _graphData;
+		}
+		
+		/**
+		 * Event dispatcher to notify listeners for a DataChangeEvent
+		 */
+		public function get dispatcher():EventDispatcher
+		{
+			return _dispatcher;
 		}
 		
 		/**
@@ -156,6 +167,7 @@ package ivis.model
 			this._nodeMap = new Object();
 			this._edgeMap = new Object();
 			this._idGen = new Object();
+			this._dispatcher = new EventDispatcher();
 			
 			// initialize the graph data
 			if (data == null)
@@ -354,7 +366,16 @@ package ivis.model
 			// add a new data group, only if it is not one of the defaults
 			if (!Groups.isDefault(group))
 			{
-				graphData.addGroup(group);
+				if (graphData.addGroup(group) == null)
+				{
+					result = false;
+				}
+				else
+				{
+					this.dispatcher.dispatchEvent(
+						new DataChangeEvent(DataChangeEvent.ADDED_GROUP,
+							{group: group}));
+				}
 			}
 			else
 			{
@@ -374,15 +395,29 @@ package ivis.model
 		public function removeGroup(group:String) : Boolean
 		{
 			var result:Boolean = true;
+			var elements:DataList;
 			
-			// add a new data group, only if it is not one of the defaults
+			// remove the data group, only if it is not one of the defaults
 			if (!Groups.isDefault(group))
 			{
-				graphData.removeGroup(group);
+				elements = graphData.removeGroup(group);
+				
+				if (elements == null)
+				{
+					result = false;
+				}
 			}
 			else
 			{
 				result = false;
+			}
+			
+			// dispatch a DataChangeEvent if group is successfully removed			
+			if (result)
+			{
+				this.dispatcher.dispatchEvent(
+					new DataChangeEvent(DataChangeEvent.REMOVED_GROUP,
+						{group: group, elements: elements}));
 			}
 			
 			return result;
@@ -396,7 +431,25 @@ package ivis.model
 		 */
 		public function clearGroup(group:String) : Boolean
 		{
-			return this.graphData.group(group).clear();
+			var result:Boolean = false;
+			var elements:Array;
+			
+			if (this.graphData.group(group) != null)
+			{
+				// TODO get list of elements in the group
+				
+				result = this.graphData.group(group).clear();
+			}
+			
+			// dispatch a DataChangeEvent if group is successfully cleared
+			if (result)
+			{
+				this.dispatcher.dispatchEvent(
+					new DataChangeEvent(DataChangeEvent.CLEARED_GROUP,
+						{group: group, elements: elements}));
+			}
+			
+			return result;
 		}
 		
 		/**
@@ -408,10 +461,19 @@ package ivis.model
 		public function addToGroup(group:String,
 			ds:DataSprite) : DataSprite
 		{
-			var sprite:DataSprite = this.graphData.group(group).add(ds);
+			var sprite:DataSprite = null;
+			
+			// check if a group with the given name exists
+			if (this.graphData.group(group) == null)
+			{
+				// create a new group with the given name
+				this.addGroup(group);
+			}
+			
+			sprite = this.graphData.group(group).add(ds);
 			
 			// dispatch a DataChangeEvent with required information
-			DataChangeDispatcher.instance.dispatchEvent(
+			this.dispatcher.dispatchEvent(
 				new DataChangeEvent(DataChangeEvent.DS_ADDED_TO_GROUP,
 					{ds: ds, group: group}));
 			
@@ -427,12 +489,17 @@ package ivis.model
 		public function removeFromGroup(group:String,
 			ds:DataSprite) : Boolean
 		{
-			var result:Boolean = this.graphData.group(group).remove(ds);
+			var result:Boolean = false;
 			
-			// dispatch a DataChangeEvent with required information
-			DataChangeDispatcher.instance.dispatchEvent(
-				new DataChangeEvent(DataChangeEvent.DS_REMOVED_FROM_GROUP,
-					{ds: ds, group: group}));
+			if (this.graphData.group(group) != null)
+			{	
+				result = this.graphData.group(group).remove(ds);
+			
+				// dispatch a DataChangeEvent with required information
+				this.dispatcher.dispatchEvent(
+					new DataChangeEvent(DataChangeEvent.DS_REMOVED_FROM_GROUP,
+						{ds: ds, group: group}));
+			}
 			
 			return result;
 		}

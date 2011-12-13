@@ -16,10 +16,10 @@ package ivis.view
 	import ivis.controls.ClickControl;
 	import ivis.controls.MultiDragControl;
 	import ivis.controls.SelectControl;
-	import ivis.event.DataChangeDispatcher;
 	import ivis.event.DataChangeEvent;
 	import ivis.model.Edge;
 	import ivis.model.Graph;
+	import ivis.model.IStyleAttachable;
 	import ivis.model.Node;
 	import ivis.util.ArrowUIs;
 	import ivis.util.CompoundUIs;
@@ -28,6 +28,7 @@ package ivis.view
 	import ivis.util.Groups;
 	import ivis.util.NodeUIs;
 	import ivis.util.Nodes;
+	import ivis.util.VisualStyles;
 	
 	import mx.core.UIComponent;
 
@@ -66,23 +67,28 @@ package ivis.view
 			_graph = graph;
 		}
 		
+		/**
+		 * Visual settings for visual elements
+		 */
+		public function get visualSettings():VisualSettings
+		{
+			return _visualSettings;
+		}
+		
 		//------------------------- CONSTRUCTOR --------------------------------
 		
 		public function GraphView()
 		{
 			this.graph = new Graph();
 			
-			_vis = new GraphVisualization(this.graph.graphData);
+			this._vis = new GraphVisualization(this.graph.graphData);
 			this.addChild(this.vis);
 			
 			_visualSettings = new VisualSettings();
 			
 			_sourceNode = null;
 			
-			// TODO add all listeners in another function (or class)?
-			DataChangeDispatcher.instance.addEventListener(
-				DataChangeEvent.DS_ADDED_TO_GROUP,
-				onAddToGroup);
+			this.initListeners();
 		}
 		
 		//---------------------- PUBLIC FUNCTIONS ------------------------------
@@ -112,7 +118,7 @@ package ivis.view
 			
 			// initialize visual properties (size, shape, etc) of node
 			// TODO render the node before updating compound bounds?
-			_visualSettings.applyNodeStyle(node);
+			this._visualSettings.applyNodeStyle(node);
 			//node.props.labelText = node.data.id;
 			
 			// update node renderer
@@ -120,7 +126,8 @@ package ivis.view
 			
 			// if event target is a compound node, add node to the compound as
 			// a child and update compound bounds.
-			if (eventTarget is Node && !(eventTarget as Node).isBendNode)
+			if (eventTarget is Node &&
+				!(eventTarget as Node).isBendNode)
 			{
 				compound = eventTarget as Node;
 				
@@ -128,7 +135,9 @@ package ivis.view
 				{
 					// initialize visual properties of compound
 					// (this will apply only the default style)
-					_visualSettings.applyCompoundStyle(compound);
+					// TODO prevent this to overwrite previous styles!
+					// TODO just change default style and re-apply styles
+					this._visualSettings.applyCompoundStyle(compound);
 					
 					// add node to the group of compound nodes
 					this.graph.addToGroup(Groups.COMPOUND_NODES, compound);
@@ -176,7 +185,7 @@ package ivis.view
 			var edge:Edge = this.graph.addEdge(data);
 			
 			// initialize visual properties of the edge
-			_visualSettings.applyEdgeStyle(edge);
+			this._visualSettings.applyEdgeStyle(edge);
 			
 			// update edge renderer
 			edge.renderer = EdgeRenderer.instance;
@@ -306,8 +315,8 @@ package ivis.view
 			// target edge is an actual edge
 			else
 			{
-				// in order to hide the actual edge, it should be rendered 
-				edge.render();
+				// in order to hide the actual edge, it should be marked dirty
+				edge.dirty();
 			}
 			
 			// bring new segments to the front
@@ -742,9 +751,9 @@ package ivis.view
 			
 			if (!node.parentE.hasBendPoints())
 			{
-				// it is required to render the actual edge if all bendpoints
-				// are removed from the edge
-				node.parentE.render();
+				// it is required to mark the actual edge dirty
+				// if all bendpoints are removed from the edge
+				node.parentE.dirty();
 			}
 			
 			return result;
@@ -1015,6 +1024,72 @@ package ivis.view
 		}
 		
 		/**
+		 * Initializes event listeners.
+		 */
+		protected function initListeners() : void
+		{
+			// register listener for graph data changes
+			this.graph.dispatcher.addEventListener(
+				DataChangeEvent.REMOVED_GROUP,
+				onRemoveGroup);
+			
+			this.graph.dispatcher.addEventListener(
+				DataChangeEvent.DS_ADDED_TO_GROUP,
+				onAddToGroup);
+			
+			this.graph.dispatcher.addEventListener(
+				DataChangeEvent.DS_REMOVED_FROM_GROUP,
+				onRemoveFromGroup);
+			
+			// register listener visual settings data changes
+			
+			this._visualSettings.addEventListener(
+				DataChangeEvent.ADDED_GROUP_STYLE,
+				onAddGroupStyle);
+			
+			this._visualSettings.addEventListener(
+				DataChangeEvent.REMOVED_GROUP_STYLE,
+				onRemoveGroupStyle);
+		}
+		
+		/**
+		 * This function is designed as a listener for the action
+		 * DataChangeEvent.REMOVED_GROUP and to be called whenever a
+		 * data group is removed from the graph.
+		 * 
+		 * This function updates the style of all nodes or edges in the data
+		 * group by re-applying styles of nodes and edges.
+		 * 
+		 * @param event	DataChangeEvent triggered the action
+		 */
+		protected function onRemoveGroup(event:DataChangeEvent) : void
+		{
+			var group:String = event.info.group;
+			var elements:DataList = event.info.elements;
+			var style:VisualStyle = this._visualSettings.getGroupStyle(group);
+			
+			if (style != null)
+			{
+				// visit all data sprites in the group
+				for each (var ds:DataSprite in elements)
+				{
+					if (ds is IStyleAttachable)
+					{
+						var element:IStyleAttachable = ds as IStyleAttachable;
+						
+						// detach group style from the element
+						element.detachStyle(event.info.group);
+						
+						// re-apply visual style of the element
+						VisualStyles.reApplyStyles(element);
+					}
+				}
+				
+				this.vis.update();
+			}
+		}
+		
+		/**
 		 * This function is designed as a listener for the action
 		 * DataChangeEvent.DS_ADDED_TO_GROUP and to be called whenever a
 		 * node or an edge is added to a data group.
@@ -1030,9 +1105,125 @@ package ivis.view
 			var group:String = event.info.group;
 			var style:VisualStyle = _visualSettings.getGroupStyle(group);
 			
-			if (style != null)
+			if (ds is IStyleAttachable)
 			{
-				style.apply(ds);
+				var element:IStyleAttachable = (ds as IStyleAttachable);
+				
+				// attach new group style
+				element.attachStyle(group, style);
+				
+				// apply new style to the element
+				VisualStyles.applyNewStyle(element, style);
+				
+				this.vis.update();
+			}
+			
+		}
+		
+		/**
+		 * This function is designed as a listener for the action
+		 * DataChangeEvent.DS_REMOVED_FROM_GROUP and to be called whenever a
+		 * node or an edge is removed from a data group.
+		 * 
+		 * This function updates the style of the node or edge by applying
+		 * the corresponding style defined for the data group. 
+		 * 
+		 * @param event	DataChangeEvent triggered the action
+		 */
+		protected function onRemoveFromGroup(event:DataChangeEvent) : void
+		{
+			var ds:DataSprite = event.info.ds;
+			var group:String = event.info.group;
+			
+			var style:VisualStyle = 
+				this._visualSettings.getGroupStyle(group);
+			
+			// reset & apply styles
+			if (style != null &&
+				ds is IStyleAttachable)
+			{
+				var element:IStyleAttachable = ds as IStyleAttachable;
+				
+				// detach group style from the element
+				element.detachStyle(group);
+				
+				// re-apply visual style of the element
+				VisualStyles.reApplyStyles(element);
+				
+				this.vis.update();
+			}
+		}
+		
+		/**
+		 * This function is designed as a listener for the action
+		 * DataChangeEvent.ADDED_GROUP_STYLE and to be called whenever a
+		 * new style added for a data group.
+		 * 
+		 * This function updates the style of all nodes or edges in the data
+		 * group by applying the corresponding style defined for the group. 
+		 * 
+		 * @param event	DataChangeEvent triggered the action
+		 */
+		protected function onAddGroupStyle(event:DataChangeEvent) : void
+		{
+			var group:DataList = this.graph.graphData.group(event.info.group);
+			var style:VisualStyle = this._visualSettings.getGroupStyle(
+				event.info.group);
+			
+			if (group != null &&
+				style != null)
+			{
+				// visit all data sprites in the group to apply new style
+				for each (var ds:DataSprite in group)
+				{	
+					if (ds is IStyleAttachable)
+					{
+						// attach style to the sprite
+						(ds as IStyleAttachable).attachStyle(event.info.group,
+							style);
+						
+						// apply new style to the element
+						VisualStyles.applyNewStyle(ds as IStyleAttachable,
+							style);
+					}
+				}
+				
+				this.vis.update();
+			}
+		}
+		
+		/**
+		 * This function is designed as a listener for the action
+		 * DataChangeEvent.REMOVED_GROUP_STYLE and to be called whenever a
+		 * style for a data group is removed.
+		 * 
+		 * This function updates the style of all nodes or edges in the data
+		 * group by re-applying styles of nodes and edges. 
+		 * 
+		 * @param event	DataChangeEvent triggered the action
+		 */
+		protected function onRemoveGroupStyle(event:DataChangeEvent) : void
+		{
+			var group:DataList = this.graph.graphData.group(event.info.group);
+			
+			if (group != null)
+			{
+				// visit all data sprites in the group
+				for each (var ds:DataSprite in group)
+				{
+					if (ds is IStyleAttachable)
+					{
+						var element:IStyleAttachable = ds as IStyleAttachable;
+						
+						// detach group style from the element
+						element.detachStyle(event.info.group);
+						
+						// re-apply visual style of the element
+						VisualStyles.reApplyStyles(element);
+					}
+				}
+				
+				this.vis.update();
 			}
 		}
 		

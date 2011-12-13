@@ -14,9 +14,9 @@ package ivis
 	import ivis.util.NodeUIs;
 	import ivis.view.CompoundNodeLabeler;
 	import ivis.view.EdgeLabeler;
-	import ivis.view.GradientRectUI;
 	import ivis.view.GraphView;
 	import ivis.view.NodeLabeler;
+	import ivis.view.VisualStyle;
 
 	// TODO currently, this class is used as the main class that inits the
 	// application. But, we should provide another mechanism to init the app.
@@ -98,5 +98,84 @@ package ivis
 			trace ("custom listener: " + event.localX + ", " + event.localY);
 		}
 		
+		public function createTestGroup() : void
+		{
+			if (this.view.graph.addGroup("TEST"))
+			{
+				trace("TEST group added to data");
+			}
+		}
+		
+		public function removeTestGroup() : void
+		{
+			if (this.view.graph.removeGroup("TEST"))
+			{
+				trace("TEST group removed from data");
+			}
+		}
+		
+		public function clearTestGroup() : void
+		{
+			if (this.view.graph.clearGroup("TEST"))
+			{
+				trace("TEST group cleared");
+			}
+		}
+		
+		public function createTestStyle() : void
+		{
+			var style:Object = {shape: NodeUIs.ROUND_RECTANGLE,
+				size: 50,
+				w: 120,
+				h: 100,
+				alpha: 0.4,
+				fillColor: 0xff4cbae8,
+				lineColor: 0xffff0606,
+				lineWidth: 5,
+				labelText: "test",
+				labelOffsetX: 0,
+				labelOffsetY: 0,
+				labelHorizontalAnchor: TextSprite.BOTTOM,
+				labelVerticalAnchor: TextSprite.LEFT,
+				selectionGlowColor: 0x00ccff33, // "#ffff33"
+				selectionGlowAlpha: 0.4,
+				selectionGlowBlur: 8,
+				selectionGlowStrength: 6};
+			
+			this.view.visualSettings.addGroupStyle("TEST",
+				new VisualStyle(style));
+			
+			trace("TEST group style added..");
+		}
+		
+		public function removeTestStyle() : void
+		{
+			this.view.visualSettings.removeGroupStyle("TEST");
+			
+			trace("TEST group style removed..");
+		}
+		
+		public function addToTestGroup() : void
+		{
+			for each (var ds:DataSprite in this.view.graph.selectedNodes)
+			{
+				this.view.graph.addToGroup("TEST", ds);
+				
+				trace("node " + ds.data.id + " added to TEST");
+			}
+		}
+		
+		public function removeFromTestGroup() : void
+		{
+			for each (var ds:DataSprite in this.view.graph.selectedNodes)
+			{
+				if (this.view.graph.removeFromGroup("TEST", ds))
+				{
+					trace("node " + ds.data.id + " removed from TEST");
+				}
+			}
+		}
+		
+		// TODO also test specific styles & style property change event
 	}
 }

@@ -4,6 +4,10 @@ package ivis.model
 	
 	import flash.geom.Rectangle;
 	
+	import ivis.event.StyleChangeEvent;
+	import ivis.util.VisualStyles;
+	import ivis.view.VisualStyle;
+	
 	/**
 	 * This class represents simple (regular) nodes, compound nodes and bend
 	 * nodes (bend points).
@@ -19,7 +23,7 @@ package ivis.model
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */ 
-	public class Node extends NodeSprite
+	public class Node extends NodeSprite implements IStyleAttachable
 	{
 		// ==================== [ PRIVATE PROPERTIES ] =========================
 		
@@ -27,11 +31,15 @@ package ivis.model
 		 * Contains child nodes of this compound node as a map of NodeSprite
 		 * objects.
 		 */
-		private var _nodesMap:Object;
+		protected var _nodesMap:Object;
+		
+		protected var _styleMap:Object;
 		
 		private var _parentN:Node;
 		private var _parentE:Edge;
+		
 		private var _bounds:Rectangle;
+		
 		private var _paddingLeft:Number;
 		private var _paddingRight:Number;
 		private var _paddingTop:Number;
@@ -182,7 +190,6 @@ package ivis.model
 			return (_parentE != null);
 		}
 		
-		
 		// ------------------------- CONSTRUCTOR -------------------------------
 		
 		/**
@@ -194,6 +201,8 @@ package ivis.model
 			this._bounds = null;
 			this._parentN = null;
 			this._parentE = null;
+			
+			this._styleMap = new Object();
 		}
 		
 		// ------------------------ PUBLIC FUNCTIONS ---------------------------
@@ -353,7 +362,78 @@ package ivis.model
 			return str;
 		}
 		
+		public function getStyle(name:String) : VisualStyle
+		{
+			return this._styleMap[name]; 
+		}
 		
-		// ---------------------- PRIVATE FUNCTIONS ----------------------------
+		public function get styleNames() : Array
+		{
+			var names:Array = new Array();
+			
+			for (var key:String in this._styleMap)
+			{
+				names.push(key);
+			}
+			
+			return names;
+		}
+		
+		public function attachStyle(name:String,
+									style:VisualStyle) : void
+		{
+			if (style != null &&
+				name != null)
+			{
+				// add style to the map
+				this._styleMap[name] = style;
+				
+				// register listener for StyleChangeEvents
+				
+				style.addEventListener(StyleChangeEvent.ADDED_STYLE_PROP,
+					onStyleChange);
+				
+				style.addEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
+					onStyleChange);
+			}
+			
+		}
+		
+		public function detachStyle(name:String) : void
+		{
+			var style:VisualStyle = this._styleMap[name]; 
+			
+			if (style != null)
+			{
+				// remove registered listeners
+				
+				style.removeEventListener(StyleChangeEvent.ADDED_STYLE_PROP,
+					onStyleChange);
+				
+				style.removeEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
+					onStyleChange);
+				
+				// remove style from the map
+				delete this._styleMap[name];
+			}
+		}
+		
+		// ---------------------- PROTECTED FUNCTIONS --------------------------
+		
+		protected function onStyleChange(event:StyleChangeEvent) : void
+		{
+			var style:VisualStyle = event.info.style;
+			
+			if (event.type == StyleChangeEvent.ADDED_STYLE_PROP)
+			{
+				// re-apply style on property change
+				VisualStyles.applyNewStyle(this, style);
+			}
+			else // if (event.type == StyleChangeEvent.REMOVED_STYLE_PROP)
+			{
+				// re-apply visual styles
+				VisualStyles.reApplyStyles(this);
+			}
+		}
 	}
 }

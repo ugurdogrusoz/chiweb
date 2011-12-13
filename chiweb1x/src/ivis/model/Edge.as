@@ -2,6 +2,8 @@ package ivis.model
 {
 	import flare.vis.data.DataSprite;
 	import flare.vis.data.EdgeSprite;
+	
+	import ivis.view.VisualStyle;
 
 	/**
 	 * A DataSprite that represents an Edge with its model and view. This class
@@ -17,15 +19,17 @@ package ivis.model
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
-	public class Edge extends EdgeSprite
+	public class Edge extends EdgeSprite implements IStyleAttachable
 	{
+		protected var _styleMap:Object;
+		
 		private var _parentE:Edge;
 		private var _bendNodes:Object;
 		private var _segments:Object;
 		private var _bendCount:int;
 		
 		// -------------------------- ACCESSORS --------------------------------
-		
+				
 		/**
 		 * Parent edge of this edge. If this edge is a segment edge its parent
 		 * should be an actual edge between two nodes. A segment edge should
@@ -68,6 +72,7 @@ package ivis.model
 			_bendNodes = new Object();
 			_segments = new Object();
 			_bendCount = 0;
+			_styleMap = new Object();
 		}
 		
 		// -------------------------- PUBLIC FUNCTIONS -------------------------
@@ -226,5 +231,34 @@ package ivis.model
 			return str;
 		}
 
+		// TODO may need to modify methods below, because of segments... 
+		
+		public function attachStyle(name:String,
+			style:VisualStyle) : void
+		{
+			this._styleMap[name] = style;
+		}
+		
+		public function detachStyle(name:String) : void
+		{
+			this._styleMap[name] = null;
+		}
+		
+		public function getStyle(name:String) : VisualStyle
+		{
+			return _styleMap[name]; 
+		}
+		
+		public function get styleNames() : Array
+		{
+			var names:Array = new Array();
+			
+			for (var key:String in this._styleMap)
+			{
+				names.push(key);
+			}
+			
+			return names;
+		}
 	}
 }

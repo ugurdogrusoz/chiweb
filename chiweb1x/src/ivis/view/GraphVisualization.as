@@ -308,7 +308,8 @@ package ivis.view
 			}
 			
 			this.updateCompoundBounds(compound);
-			compound.render();
+			//compound.render();
+			compound.dirty();
 		}
 	}
 }

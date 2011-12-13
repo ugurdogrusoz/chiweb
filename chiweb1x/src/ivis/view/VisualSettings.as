@@ -5,7 +5,6 @@ package ivis.view
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
-	import ivis.event.DataChangeDispatcher;
 	import ivis.event.DataChangeEvent;
 	import ivis.model.Edge;
 	import ivis.model.Node;
@@ -24,15 +23,12 @@ package ivis.view
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
-	public class VisualSettings
+	public class VisualSettings extends EventDispatcher
 	{
 		protected var _defaultGlobalStyle:VisualStyle;
 		protected var _defaultNodeStyle:VisualStyle;
 		protected var _defaultEdgeStyle:VisualStyle;
 		protected var _defaultCompoundStyle:VisualStyle;
-		
-		protected var _perNodeStyle:Object;
-		protected var _perEdgeStyle:Object;
 		
 		protected var _groupStyle:Object;
 		
@@ -59,6 +55,7 @@ package ivis.view
 		{
 			// apply default node style
 			_defaultNodeStyle.apply(node);
+			node.attachStyle("$defaultStyle", _defaultNodeStyle);
 			
 			// apply custom style specific to Groups.NODES
 			var style:VisualStyle = this.getGroupStyle(Groups.NODES);
@@ -78,6 +75,7 @@ package ivis.view
 		{
 			// apply default compound node style
 			_defaultCompoundStyle.apply(node);
+			node.attachStyle("$defaultStyle", _defaultCompoundStyle);
 		}
 		
 		/**
@@ -90,6 +88,7 @@ package ivis.view
 		{
 			// apply default edge style
 			_defaultEdgeStyle.apply(edge);
+			edge.attachStyle("$defaultStyle", _defaultEdgeStyle);
 			
 			// apply custom style specific to Groups.EDGES
 			var style:VisualStyle = this.getGroupStyle(Groups.EDGES);
@@ -111,9 +110,9 @@ package ivis.view
 		{
 			_groupStyle[name] = style;
 			
-			// TODO also add info
-			DataChangeDispatcher.instance.dispatchEvent(
-				new DataChangeEvent(DataChangeEvent.ADDED_GROUP_STYLE));
+			this.dispatchEvent(
+				new DataChangeEvent(DataChangeEvent.ADDED_GROUP_STYLE,
+					{group: name}));
 		}
 		
 		/**
@@ -124,10 +123,10 @@ package ivis.view
 		public function removeGroupStyle(name:String) : void
 		{
 			delete _groupStyle[name];
-		
-			// TODO also add info
-			DataChangeDispatcher.instance.dispatchEvent(
-				new DataChangeEvent(DataChangeEvent.REMOVED_GROUP_STYLE));
+			
+			this.dispatchEvent(
+				new DataChangeEvent(DataChangeEvent.REMOVED_GROUP_STYLE,
+					{group: name}));
 		}
 		
 		/**
@@ -214,6 +213,8 @@ package ivis.view
 				labelDistanceFromNode: 30,
 				sourceArrowType: ArrowUIs.SIMPLE_ARROW, // TODO no arrows as default?
 				targetArrowType: ArrowUIs.SIMPLE_ARROW, // TODO no arrows as default?
+				arrowTipAngle: 0.3,
+				arrowTipDistance: 15,
 				selectionGlowColor: 0x00ffff33, // "#ffff33"
 				selectionGlowAlpha: 0.8,
 				selectionGlowBlur: 4,
@@ -228,7 +229,11 @@ package ivis.view
 				alpha: 1.0,
 				fillColor: 0xff000000,
 				lineColor: 0xff000000,
-				lineWidth: 1};
+				lineWidth: 1,
+				selectionGlowColor: 0x00ffff33, // "#ffff33"
+				selectionGlowAlpha: 0.9,
+				selectionGlowBlur: 8,
+				selectionGlowStrength: 6};
 			
 			_groupStyle[Groups.BEND_NODES] = new VisualStyle(style);
 			
