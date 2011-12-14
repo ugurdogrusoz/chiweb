@@ -4,7 +4,7 @@ package ivis.util
 	
 	import ivis.model.IStyleAttachable;
 	import ivis.model.Node;
-	import ivis.view.VisualStyle;
+	import ivis.model.VisualStyle;
 
 	/**
 	 * Utility class for visual styles.
@@ -45,7 +45,7 @@ package ivis.util
 			
 			// re-apply default style
 			
-			style = element.getStyle("$defaultStyle");
+			style = element.getStyle(VisualStyles.DEFAULT_STYLE);
 			
 			if (style != null)
 			{
@@ -55,20 +55,15 @@ package ivis.util
 			
 			// re-apply group styles
 			
-			for each (var name:String in element.styleNames)
+			for each (style in element.groupStyles)
 			{
-				// skip default & specific styles
-				if (name != "$specificStyle"
-					&& name != "$defaultStyle")
-				{
-					element.getStyle(name).apply(element);
-					dirty = true;
-				}
+				style.apply(element);
+				dirty = true;
 			}
 			
 			// re-apply specific sytle
 			
-			style = element.getStyle("$specificStyle");
+			style = element.getStyle(VisualStyles.SPECIFIC_STYLE);
 			
 			if (style != null)
 			{
@@ -110,7 +105,7 @@ package ivis.util
 				dirty = true;
 				
 				// re-apply specific style
-				style = element.getStyle("$specificStyle");
+				style = element.getStyle(VisualStyles.SPECIFIC_STYLE);
 				
 				if (style != null)
 				{

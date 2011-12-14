@@ -6,7 +6,6 @@ package ivis.model
 	
 	import ivis.event.StyleChangeEvent;
 	import ivis.util.VisualStyles;
-	import ivis.view.VisualStyle;
 	
 	/**
 	 * This class represents simple (regular) nodes, compound nodes and bend
@@ -33,7 +32,7 @@ package ivis.model
 		 */
 		protected var _nodesMap:Object;
 		
-		protected var _styleMap:Object;
+		protected var _styleSet:StyleSet;
 		
 		private var _parentN:Node;
 		private var _parentE:Edge;
@@ -45,7 +44,7 @@ package ivis.model
 		private var _paddingTop:Number;
 		private var _paddingBottom:Number;
 		
-		// -------------------------- ACCESSORS --------------------------------
+		//--------------------------- ACCESSORS --------------------------------
 		
 		/**
 		 * Bounds enclosing children of the compound node. Padding values are
@@ -190,7 +189,7 @@ package ivis.model
 			return (_parentE != null);
 		}
 		
-		// ------------------------- CONSTRUCTOR -------------------------------
+		//-------------------------- CONSTRUCTOR -------------------------------
 		
 		/**
 		 * Creates a Node instance. 
@@ -202,10 +201,10 @@ package ivis.model
 			this._parentN = null;
 			this._parentE = null;
 			
-			this._styleMap = new Object();
+			this._styleSet = new StyleSet();
 		}
 		
-		// ------------------------ PUBLIC FUNCTIONS ---------------------------
+		//------------------------- PUBLIC FUNCTIONS ---------------------------
 		
 		/**
 		 * Initializes the map of children for this compound node.
@@ -362,46 +361,53 @@ package ivis.model
 			return str;
 		}
 		
+		/** @inheritDoc */
 		public function getStyle(name:String) : VisualStyle
 		{
-			return this._styleMap[name]; 
+			return this._styleSet.getStyle(name);
 		}
 		
-		public function get styleNames() : Array
+		/** @inheritDoc */
+		public function get allStyles() : Array
 		{
-			var names:Array = new Array();
-			
-			for (var key:String in this._styleMap)
-			{
-				names.push(key);
-			}
-			
-			return names;
+			return this._styleSet.allStyles;
 		}
 		
+		/** @inheritDoc */
+		public function get groupStyles() : Array
+		{
+			return this._styleSet.groupStyles;
+		}
+		
+		/** @inheritDoc */
 		public function attachStyle(name:String,
-									style:VisualStyle) : void
+			style:VisualStyle) : void
 		{
 			if (style != null &&
 				name != null)
 			{
-				// add style to the map
-				this._styleMap[name] = style;
+				// add style to the style set
+				this._styleSet.add(name, style);
 				
-				// register listener for StyleChangeEvents
-				
+				// register listener for StyleChangeEvents with a high priority
+								
 				style.addEventListener(StyleChangeEvent.ADDED_STYLE_PROP,
-					onStyleChange);
+					onStyleChange,
+					false,
+					StyleChangeEvent.HIGH_PRIORITY);
 				
 				style.addEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
-					onStyleChange);
+					onStyleChange,
+					false,
+					StyleChangeEvent.HIGH_PRIORITY);
 			}
 			
 		}
 		
+		/** @inheritDoc */
 		public function detachStyle(name:String) : void
 		{
-			var style:VisualStyle = this._styleMap[name]; 
+			var style:VisualStyle = this._styleSet.getStyle(name); 
 			
 			if (style != null)
 			{
@@ -413,16 +419,30 @@ package ivis.model
 				style.removeEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
 					onStyleChange);
 				
-				// remove style from the map
-				delete this._styleMap[name];
+				// remove style from the style set
+				this._styleSet.remove(name);
 			}
 		}
 		
-		// ---------------------- PROTECTED FUNCTIONS --------------------------
+		//----------------------- PROTECTED FUNCTIONS --------------------------
 		
+		/**
+		 * This function is designed as a (high priority) listener for
+		 * the actions StyleChangeEvent.ADDED_STYLE_PROP and 
+		 * StyleChangeEvent.REMOVED_STYLE_PROP.
+		 * 
+		 * This function is called whenever a property of a style (attached to 
+		 * this node) is changed, and refreshes visual styles of this node.
+		 *  
+		 * @param event	StyleChangeEvent triggered the action
+		 */
 		protected function onStyleChange(event:StyleChangeEvent) : void
 		{
 			var style:VisualStyle = event.info.style;
+			
+			// TODO bug for re-applying the style, may need to call reApply for both
+			// TODO also fix Edge.onStyleChange method..
+			trace("[Node.onStyleChange] " + event.type);
 			
 			if (event.type == StyleChangeEvent.ADDED_STYLE_PROP)
 			{

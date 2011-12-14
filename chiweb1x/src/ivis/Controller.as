@@ -16,7 +16,7 @@ package ivis
 	import ivis.view.EdgeLabeler;
 	import ivis.view.GraphView;
 	import ivis.view.NodeLabeler;
-	import ivis.view.VisualStyle;
+	import ivis.model.VisualStyle;
 
 	// TODO currently, this class is used as the main class that inits the
 	// application. But, we should provide another mechanism to init the app.
@@ -174,6 +174,26 @@ package ivis
 					trace("node " + ds.data.id + " removed from TEST");
 				}
 			}
+		}
+		
+		public function addTestProperty() : void
+		{
+			this.view.visualSettings.getGroupStyle("TEST").addProperty(
+				"width", 200);
+			
+			trace("TEST property 'width' is set to 200");
+			
+			// TODO size (width, height, etc.) change in child nodes should update compound bounds!
+		}
+		
+		public function removeTestProperty() : void
+		{
+			this.view.visualSettings.getGroupStyle("TEST").removeProperty(
+				"width");
+			
+			trace("TEST property 'width' removed");
+			
+			// TODO remove property won't reset node to previous state! need fix
 		}
 		
 		// TODO also test specific styles & style property change event

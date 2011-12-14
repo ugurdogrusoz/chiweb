@@ -13,24 +13,51 @@ package ivis.view
 	import ivis.util.EdgeUIs;
 	import ivis.util.Groups;
 	import ivis.util.NodeUIs;
+	import ivis.util.VisualStyles;
+	import ivis.model.VisualStyle;
 
 	/**
 	 * Visual settings for the graph. This class is designed to define custom
 	 * visual styles for the graph elements such as nodes, edges, compounds,
 	 * and bendpoints.
 	 * 
-	 * TODO global settings, per node, per edge settings...
+	 * TODO global settings (backgroundColor, toolTipDelay, etc.) ?
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
 	public class VisualSettings extends EventDispatcher
 	{
 		protected var _defaultGlobalStyle:VisualStyle;
-		protected var _defaultNodeStyle:VisualStyle;
-		protected var _defaultEdgeStyle:VisualStyle;
-		protected var _defaultCompoundStyle:VisualStyle;
+		
+		private var _defaultNodeStyle:VisualStyle;
+		private var _defaultEdgeStyle:VisualStyle;
+		private var _defaultCompoundStyle:VisualStyle;
 		
 		protected var _groupStyle:Object;
+		
+		/**
+		 * Default visual styles for nodes.
+		 */
+		public function get defaultNodeStyle():VisualStyle
+		{
+			return _defaultNodeStyle;
+		}
+		
+		/**
+		 * Default visual styles for edges.
+		 */
+		public function get defaultEdgeStyle():VisualStyle
+		{
+			return _defaultEdgeStyle;
+		}
+		
+		/**
+		 * Default visual styles for compound nodes.
+		 */
+		public function get defaultCompoundStyle():VisualStyle
+		{
+			return _defaultCompoundStyle;
+		}
 		
 		//------------------------- CONSTRUCTOR --------------------------------
 		
@@ -46,23 +73,27 @@ package ivis.view
 		//---------------------- PUBLIC FUNCTIONS ------------------------------
 		
 		/**
-		 * Applies visual styles to the given node. First applies the default
-		 * node style, then applies custom style for the NODES group.
+		 * Attaches visual styles required for the initialization to the
+		 * given node. Default node style is always attached to the given
+		 * node and if there is a custom style defined for NODES group it is
+		 * also attached.
 		 * 
-		 * @param node	node to apply visual style
+		 * @param node	node to attach visual styles
 		 */
-		public function applyNodeStyle(node:Node) : void
+		public function initNodeStyle(node:Node) : void
 		{
-			// apply default node style
-			_defaultNodeStyle.apply(node);
-			node.attachStyle("$defaultStyle", _defaultNodeStyle);
+			// attach default node style
+			node.attachStyle(VisualStyles.DEFAULT_STYLE,
+				_defaultNodeStyle);
 			
-			// apply custom style specific to Groups.NODES
+			// attach custom style specific to Groups.NODES
+			
 			var style:VisualStyle = this.getGroupStyle(Groups.NODES);
 			
 			if (style != null)
 			{
-				style.apply(node);
+				//style.apply(node);
+				node.attachStyle(Groups.NODES, style);
 			}
 		}
 		
@@ -71,11 +102,11 @@ package ivis.view
 		 * 
 		 * @param node	compound node to apply visual style
 		 */
-		public function applyCompoundStyle(node:Node) : void
+		public function initCompoundStyle(node:Node) : void
 		{
 			// apply default compound node style
-			_defaultCompoundStyle.apply(node);
-			node.attachStyle("$defaultStyle", _defaultCompoundStyle);
+			node.attachStyle(VisualStyles.DEFAULT_STYLE,
+				_defaultCompoundStyle);
 		}
 		
 		/**
@@ -84,18 +115,19 @@ package ivis.view
 		 * 
 		 * @param edge	edge to apply visual style
 		 */
-		public function applyEdgeStyle(edge:Edge) : void
+		public function initEdgeStyle(edge:Edge) : void
 		{
 			// apply default edge style
-			_defaultEdgeStyle.apply(edge);
-			edge.attachStyle("$defaultStyle", _defaultEdgeStyle);
+			edge.attachStyle(VisualStyles.DEFAULT_STYLE,
+				_defaultEdgeStyle);
 			
 			// apply custom style specific to Groups.EDGES
 			var style:VisualStyle = this.getGroupStyle(Groups.EDGES);
 			
 			if (style != null)
 			{
-				style.apply(edge);
+				//style.apply(edge);
+				edge.attachStyle(Groups.EDGES, style);
 			}
 		}
 		
@@ -112,21 +144,29 @@ package ivis.view
 			
 			this.dispatchEvent(
 				new DataChangeEvent(DataChangeEvent.ADDED_GROUP_STYLE,
-					{group: name}));
+					{group: name, style: style}));
 		}
 		
 		/**
 		 * Removes a custom visual style for the specified group.
 		 * 
 		 * @param name	name of the group
+		 * @return		removed style if succesfull, null if failed
 		 */
-		public function removeGroupStyle(name:String) : void
+		public function removeGroupStyle(name:String) : VisualStyle
 		{
-			delete _groupStyle[name];
+			var style:VisualStyle = _groupStyle[name];
 			
-			this.dispatchEvent(
-				new DataChangeEvent(DataChangeEvent.REMOVED_GROUP_STYLE,
-					{group: name}));
+			if (style != null)
+			{
+				delete _groupStyle[name];
+				
+				this.dispatchEvent(new DataChangeEvent(
+					DataChangeEvent.REMOVED_GROUP_STYLE,
+					{group: name, style:style}));
+			}
+			
+			return style;
 		}
 		
 		/**
@@ -139,6 +179,7 @@ package ivis.view
 		{
 			return _groupStyle[name];
 		}
+		
 		
 		//---------------------- PROTECTED FUNCTIONS ---------------------------
 		
@@ -240,5 +281,7 @@ package ivis.view
 			// TODO other defaults?
 			
 		}
+		
+		
 	}
 }

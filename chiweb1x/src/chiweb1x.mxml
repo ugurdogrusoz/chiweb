@@ -90,6 +90,18 @@
 				   toolTip="Remove selected nodes from test group"
 				   click="controller.removeFromTestGroup()"/>
 		
+		<mx:Button id="addStyleProperty" 
+				   label="AP"
+				   width="40"
+				   toolTip="Add a property to Test style"
+				   click="controller.addTestProperty()"/>
+		
+		<mx:Button id="removeStyleProperty" 
+				   label="RP"
+				   width="40"
+				   toolTip="Remove a property from Test style"
+				   click="controller.removeTestProperty()"/>
+		
 	</mx:HBox>
 		
 	

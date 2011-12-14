@@ -17,10 +17,12 @@ package ivis.view
 	import ivis.controls.MultiDragControl;
 	import ivis.controls.SelectControl;
 	import ivis.event.DataChangeEvent;
+	import ivis.event.StyleChangeEvent;
 	import ivis.model.Edge;
 	import ivis.model.Graph;
 	import ivis.model.IStyleAttachable;
 	import ivis.model.Node;
+	import ivis.model.VisualStyle;
 	import ivis.util.ArrowUIs;
 	import ivis.util.CompoundUIs;
 	import ivis.util.EdgeUIs;
@@ -118,11 +120,14 @@ package ivis.view
 			
 			// initialize visual properties (size, shape, etc) of node
 			// TODO render the node before updating compound bounds?
-			this._visualSettings.applyNodeStyle(node);
+			this._visualSettings.initNodeStyle(node);
 			//node.props.labelText = node.data.id;
+			
+			VisualStyles.reApplyStyles(node);
 			
 			// update node renderer
 			node.renderer = NodeRenderer.instance;
+			
 			
 			// if event target is a compound node, add node to the compound as
 			// a child and update compound bounds.
@@ -134,18 +139,18 @@ package ivis.view
 				if (!compound.isInitialized())
 				{
 					// initialize visual properties of compound
-					// (this will apply only the default style)
-					// TODO prevent this to overwrite previous styles!
-					// TODO just change default style and re-apply styles
-					this._visualSettings.applyCompoundStyle(compound);
+					this._visualSettings.initCompoundStyle(compound);
 					
 					// add node to the group of compound nodes
 					this.graph.addToGroup(Groups.COMPOUND_NODES, compound);
+					
+					VisualStyles.reApplyStyles(compound);
 					
 					//compound.props.labelText = compound.data.id;
 					
 					// update node renderer
 					compound.renderer = CompoundNodeRenderer.instance;
+					
 				}
 				
 				// add the node as a child
@@ -185,7 +190,8 @@ package ivis.view
 			var edge:Edge = this.graph.addEdge(data);
 			
 			// initialize visual properties of the edge
-			this._visualSettings.applyEdgeStyle(edge);
+			this._visualSettings.initEdgeStyle(edge);
+			VisualStyles.reApplyStyles(edge);
 			
 			// update edge renderer
 			edge.renderer = EdgeRenderer.instance;
@@ -554,6 +560,15 @@ package ivis.view
 			var blur:Number;
 			var strength:Number;
 			var color:uint;
+			
+			// TODO other selection properties? 
+			/*
+				selectionLineColor: "#8888ff",
+				selectionLineOpacity: 0.8,
+				selectionLineWidth: 1,
+				selectionFillColor: "#8888ff",
+				selectionFillOpacity: 0.1
+			*/
 			
 			if (eventTarget is DataSprite)
 			{
@@ -1113,6 +1128,7 @@ package ivis.view
 				element.attachStyle(group, style);
 				
 				// apply new style to the element
+				// TODO consider style priorities.. may need to call reApply
 				VisualStyles.applyNewStyle(element, style);
 				
 				this.vis.update();
@@ -1188,6 +1204,18 @@ package ivis.view
 					}
 				}
 				
+				// add event listeners with a low priority
+				
+				style.addEventListener(StyleChangeEvent.ADDED_STYLE_PROP,
+					onStyleChange,
+					false,
+					StyleChangeEvent.LOW_PRIORITY);
+				
+				style.addEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
+					onStyleChange,
+					false,
+					StyleChangeEvent.LOW_PRIORITY);
+				
 				this.vis.update();
 			}
 		}
@@ -1205,6 +1233,7 @@ package ivis.view
 		protected function onRemoveGroupStyle(event:DataChangeEvent) : void
 		{
 			var group:DataList = this.graph.graphData.group(event.info.group);
+			var style:VisualStyle = event.info.style as VisualStyle;
 			
 			if (group != null)
 			{
@@ -1223,8 +1252,30 @@ package ivis.view
 					}
 				}
 				
+				style.removeEventListener(StyleChangeEvent.ADDED_STYLE_PROP,
+					onStyleChange);
+				
+				style.removeEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
+					onStyleChange);
+				
 				this.vis.update();
 			}
+		}
+		
+		/**
+		 * This function is designed as a (low priority) listener for
+		 * the actions StyleChangeEvent.ADDED_STYLE_PROP and 
+		 * StyleChangeEvent.REMOVED_STYLE_PROP.
+		 * 
+		 * This function is called whenever a property of a style is changed,
+		 * and it calls the vis.update() function to apply style changes
+		 * to the visual elements.
+		 * 
+		 * @param event	StyleChangeEvent triggered the action
+		 */
+		protected function onStyleChange(event:StyleChangeEvent) : void
+		{
+			this.vis.update();
 		}
 		
 		// TODO may need to move to Node and Edge classes...
@@ -1243,7 +1294,6 @@ package ivis.view
 			ds.filters = null;
 		}
 		
-		// TODO listener for other actions to apply/reset styles
-		// ...
+		
 	}
 }

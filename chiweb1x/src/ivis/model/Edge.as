@@ -3,7 +3,8 @@ package ivis.model
 	import flare.vis.data.DataSprite;
 	import flare.vis.data.EdgeSprite;
 	
-	import ivis.view.VisualStyle;
+	import ivis.event.StyleChangeEvent;
+	import ivis.util.VisualStyles;
 
 	/**
 	 * A DataSprite that represents an Edge with its model and view. This class
@@ -21,7 +22,7 @@ package ivis.model
 	 */
 	public class Edge extends EdgeSprite implements IStyleAttachable
 	{
-		protected var _styleMap:Object;
+		protected var _styleSet:StyleSet;
 		
 		private var _parentE:Edge;
 		private var _bendNodes:Object;
@@ -72,7 +73,7 @@ package ivis.model
 			_bendNodes = new Object();
 			_segments = new Object();
 			_bendCount = 0;
-			_styleMap = new Object();
+			_styleSet = new StyleSet();
 		}
 		
 		// -------------------------- PUBLIC FUNCTIONS -------------------------
@@ -230,35 +231,98 @@ package ivis.model
 			
 			return str;
 		}
-
-		// TODO may need to modify methods below, because of segments... 
 		
-		public function attachStyle(name:String,
-			style:VisualStyle) : void
-		{
-			this._styleMap[name] = style;
-		}
-		
-		public function detachStyle(name:String) : void
-		{
-			this._styleMap[name] = null;
-		}
-		
+		/** @inheritDoc */
 		public function getStyle(name:String) : VisualStyle
 		{
-			return _styleMap[name]; 
+			return this._styleSet.getStyle(name);
 		}
 		
-		public function get styleNames() : Array
+		/** @inheritDoc */
+		public function get allStyles() : Array
 		{
-			var names:Array = new Array();
-			
-			for (var key:String in this._styleMap)
+			return this._styleSet.allStyles;
+		}
+		
+		/** @inheritDoc */
+		public function get groupStyles() : Array
+		{
+			return this._styleSet.groupStyles;
+		}
+		
+		// TODO may need to modify methods below, because of segments...
+		
+		/** @inheritDoc */
+		public function attachStyle(name:String,
+									style:VisualStyle) : void
+		{
+			if (style != null &&
+				name != null)
 			{
-				names.push(key);
+				// add style to the style set
+				this._styleSet.add(name, style);
+				
+				// register listener for StyleChangeEvents with a high priority
+				
+				style.addEventListener(StyleChangeEvent.ADDED_STYLE_PROP,
+					onStyleChange,
+					false,
+					StyleChangeEvent.HIGH_PRIORITY);
+				
+				style.addEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
+					onStyleChange,
+					false,
+					StyleChangeEvent.HIGH_PRIORITY);
 			}
 			
-			return names;
+		}
+		
+		/** @inheritDoc */
+		public function detachStyle(name:String) : void
+		{
+			var style:VisualStyle = this._styleSet.getStyle(name); 
+			
+			if (style != null)
+			{
+				// remove registered listeners
+				
+				style.removeEventListener(StyleChangeEvent.ADDED_STYLE_PROP,
+					onStyleChange);
+				
+				style.removeEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
+					onStyleChange);
+				
+				// remove style from the style set
+				this._styleSet.remove(name);
+			}
+		}
+		
+		//----------------------- PROTECTED FUNCTIONS --------------------------
+		
+		/**
+		 * This function is designed as a (high priority) listener for
+		 * the actions StyleChangeEvent.ADDED_STYLE_PROP and 
+		 * StyleChangeEvent.REMOVED_STYLE_PROP.
+		 * 
+		 * This function is called whenever a property of a style (attached to 
+		 * this edge) is changed, and refreshes visual styles of this edge.
+		 *  
+		 * @param event	StyleChangeEvent triggered the action
+		 */
+		protected function onStyleChange(event:StyleChangeEvent) : void
+		{
+			var style:VisualStyle = event.info.style;
+			
+			if (event.type == StyleChangeEvent.ADDED_STYLE_PROP)
+			{
+				// re-apply style on property change
+				VisualStyles.applyNewStyle(this, style);
+			}
+			else // if (event.type == StyleChangeEvent.REMOVED_STYLE_PROP)
+			{
+				// re-apply visual styles
+				VisualStyles.reApplyStyles(this);
+			}
 		}
 	}
 }

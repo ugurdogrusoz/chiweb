@@ -1,4 +1,4 @@
-package ivis.view
+package ivis.model
 {
 	import flash.events.EventDispatcher;
 	
@@ -6,11 +6,13 @@ package ivis.view
 
 	/**
 	 * Visual Style class to represent style properties of a graph element.
+	 * 
+	 * @author Selcuk Onur Sumer
 	 */
 	public class VisualStyle extends EventDispatcher
 	{
 		/**
-		 * map for attaching style properties
+		 * Map for attaching style properties.
 		 */
 		protected var _style:Object;
 		
@@ -20,6 +22,7 @@ package ivis.view
 		 * Initializes a VisualStyle with given style object holding style
 		 * properties.
 		 * 
+		 * @param name	name of the style
 		 * @param style	style object holding style properties
 		 */
 		public function VisualStyle(style:Object = null)
@@ -37,7 +40,7 @@ package ivis.view
 		}
 		
 		//---------------------- PUBLIC FUNCTIONS ------------------------------
-		
+
 		/**
 		 * Adds a new property to the style map for the given name and value
 		 * pair. If a property with the given name already exists, it is
@@ -51,7 +54,7 @@ package ivis.view
 			// add property to the map
 			_style[name] = value;
 			
-			// TODO also add info
+			// dispatch a StyleChangeEvent
 			this.dispatchEvent(
 				new StyleChangeEvent(StyleChangeEvent.ADDED_STYLE_PROP,
 					{style: this, property: name}));
@@ -67,7 +70,7 @@ package ivis.view
 			// remove property from the map
 			delete _style[name];
 			
-			// TODO also add info
+			// dispatch a StyleChangeEvent
 			this.dispatchEvent(
 				new StyleChangeEvent(StyleChangeEvent.REMOVED_STYLE_PROP,
 					{style: this, property: name}));
