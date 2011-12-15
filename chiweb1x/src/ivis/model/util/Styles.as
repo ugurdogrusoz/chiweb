@@ -1,17 +1,17 @@
-package ivis.util
+package ivis.model.util
 {
 	import flare.vis.data.EdgeSprite;
 	
 	import ivis.model.IStyleAttachable;
 	import ivis.model.Node;
-	import ivis.model.VisualStyle;
+	import ivis.model.Style;
 
 	/**
 	 * Utility class for visual styles.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
-	public class VisualStyles
+	public class Styles
 	{
 		//------------------------CONSTANTS-------------------------------------
 		
@@ -20,9 +20,9 @@ package ivis.util
 		
 		//-------------------------CONSTRUCTOR----------------------------------
 		
-		public function VisualStyles()
+		public function Styles()
 		{
-			throw new Error("VisualStyles is an abstract class.");
+			throw new Error("Styles is an abstract class.");
 		}
 		
 		//-----------------------PUBLIC FUNCTIONS-------------------------------
@@ -40,12 +40,12 @@ package ivis.util
 		 */
 		public static function reApplyStyles(element:IStyleAttachable) : void
 		{
-			var style:VisualStyle;
+			var style:Style;
 			var dirty:Boolean = false;
 			
 			// re-apply default style
 			
-			style = element.getStyle(VisualStyles.DEFAULT_STYLE);
+			style = element.getStyle(Styles.DEFAULT_STYLE);
 			
 			if (style != null)
 			{
@@ -63,7 +63,7 @@ package ivis.util
 			
 			// re-apply specific sytle
 			
-			style = element.getStyle(VisualStyles.SPECIFIC_STYLE);
+			style = element.getStyle(Styles.SPECIFIC_STYLE);
 			
 			if (style != null)
 			{
@@ -94,7 +94,7 @@ package ivis.util
 		 * @param style		style to be applied 
 		 */
 		public static function applyNewStyle(element:IStyleAttachable,
-			style:VisualStyle) : void
+			style:Style) : void
 		{
 			var dirty:Boolean = false;
 			
@@ -105,7 +105,7 @@ package ivis.util
 				dirty = true;
 				
 				// re-apply specific style
-				style = element.getStyle(VisualStyles.SPECIFIC_STYLE);
+				style = element.getStyle(Styles.SPECIFIC_STYLE);
 				
 				if (style != null)
 				{

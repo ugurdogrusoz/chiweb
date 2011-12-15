@@ -14,7 +14,7 @@ package ivis.view
 	import ivis.model.Edge;
 	import ivis.model.Node;
 	import ivis.util.Groups;
-	import ivis.util.Nodes;
+	import ivis.model.util.Nodes;
 
 	/**
 	 * Visualization instance for the graph data.

@@ -9,10 +9,11 @@ package ivis.view
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
-	import ivis.util.CompoundUIs;
+	import ivis.view.ui.CompoundUIManager;
 	import ivis.util.GeneralUtils;
-	import ivis.util.NodeUIs;
-	import ivis.util.Nodes;
+	import ivis.view.ui.NodeUIManager;
+	import ivis.model.util.Nodes;
+	import ivis.view.ui.INodeUI;
 
 	/**
 	 * This class is specifically designed to render compound nodes.
@@ -73,7 +74,7 @@ package ivis.view
 					
 					g.clear();
 					
-					var nodeUI:INodeUI = CompoundUIs.getUI(d.shape);
+					var nodeUI:INodeUI = CompoundUIManager.getUI(d.shape);
 					
 					if (lineAlpha > 0 && d.lineWidth > 0)
 					{
@@ -128,7 +129,7 @@ package ivis.view
 			{
 				// do not draw shape
 			}
-			else if (shape == NodeUIs.ROUND_RECTANGLE)
+			else if (shape == NodeUIManager.ROUND_RECTANGLE)
 			{
 				g.drawRoundRect(bounds.x, bounds.y,
 					bounds.width, bounds.height,

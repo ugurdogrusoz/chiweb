@@ -13,11 +13,14 @@ package ivis.view
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
-	import ivis.util.ArrowUIs;
-	import ivis.util.CompoundUIs;
-	import ivis.util.EdgeUIs;
+	import ivis.view.ui.ArrowUIManager;
+	import ivis.view.ui.CompoundUIManager;
+	import ivis.view.ui.EdgeUIManager;
 	import ivis.util.GeometryUtils;
-	import ivis.util.NodeUIs;
+	import ivis.view.ui.NodeUIManager;
+	import ivis.view.ui.IArrowUI;
+	import ivis.view.ui.IEdgeUI;
+	import ivis.view.ui.INodeUI;
 
 	/**
 	 * Renderer for Edge instances.
@@ -42,7 +45,7 @@ package ivis.view
 			if (d is Edge)
 			{
 				edge = d as Edge;
-				edgeUI = EdgeUIs.getUI(edge.shape);
+				edgeUI = EdgeUIManager.getUI(edge.shape);
 				
 				if (edge == null ||
 					edge.source == null ||
@@ -210,11 +213,11 @@ package ivis.view
 			
 			if (node.isInitialized())
 			{
-				nodeUI = CompoundUIs.getUI(node.shape);
+				nodeUI = CompoundUIManager.getUI(node.shape);
 			}
 			else
 			{
-				nodeUI = NodeUIs.getUI(node.shape);
+				nodeUI = NodeUIManager.getUI(node.shape);
 			}
 			
 			if (nodeUI != null)
@@ -259,13 +262,13 @@ package ivis.view
 			// get the UI corresponding to the source arrow type
 			if (sourceArrowType != null)
 			{
-				sourceArrowUI = ArrowUIs.getUI(sourceArrowType);
+				sourceArrowUI = ArrowUIManager.getUI(sourceArrowType);
 			}
 			
 			// get the UI corresponding to the target arrow type
 			if (targetArrowType != null)
 			{
-				targetArrowUI = ArrowUIs.getUI(targetArrowType);
+				targetArrowUI = ArrowUIManager.getUI(targetArrowType);
 			}
 			
 			// do not draw arrows for segment edges between two bendpoints

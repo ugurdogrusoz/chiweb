@@ -10,7 +10,7 @@ package ivis.controls
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
-	import ivis.util.Nodes;
+	import ivis.model.util.Nodes;
 	import ivis.view.GraphView;
 	import ivis.view.GraphVisualization;
 	

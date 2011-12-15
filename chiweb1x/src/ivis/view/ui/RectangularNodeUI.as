@@ -1,4 +1,4 @@
-package ivis.view
+package ivis.view.ui
 {
 	import flare.util.Geometry;
 	import flare.vis.data.DataSprite;

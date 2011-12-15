@@ -7,7 +7,8 @@ package ivis.view
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	
-	import ivis.util.NodeUIs;
+	import ivis.view.ui.NodeUIManager;
+	import ivis.view.ui.INodeUI;
 
 	/**
 	 * Renderer for simple (regular) and bend nodes.
@@ -42,7 +43,7 @@ package ivis.view
 			var g:Graphics = d.graphics;
 			g.clear();
 			
-			var nodeUI:INodeUI = NodeUIs.getUI(d.shape);
+			var nodeUI:INodeUI = NodeUIManager.getUI(d.shape);
 			
 			// undefined ui, cannot render
 			if (nodeUI == null)

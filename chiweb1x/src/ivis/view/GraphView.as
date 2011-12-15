@@ -22,15 +22,15 @@ package ivis.view
 	import ivis.model.Graph;
 	import ivis.model.IStyleAttachable;
 	import ivis.model.Node;
-	import ivis.model.VisualStyle;
-	import ivis.util.ArrowUIs;
-	import ivis.util.CompoundUIs;
-	import ivis.util.EdgeUIs;
+	import ivis.model.Style;
+	import ivis.view.ui.ArrowUIManager;
+	import ivis.view.ui.CompoundUIManager;
+	import ivis.view.ui.EdgeUIManager;
 	import ivis.util.GeneralUtils;
 	import ivis.util.Groups;
-	import ivis.util.NodeUIs;
-	import ivis.util.Nodes;
-	import ivis.util.VisualStyles;
+	import ivis.view.ui.NodeUIManager;
+	import ivis.model.util.Nodes;
+	import ivis.model.util.Styles;
 	
 	import mx.core.UIComponent;
 
@@ -41,7 +41,7 @@ package ivis.view
 	{
 		protected var _vis:GraphVisualization;
 		protected var _graph:Graph;
-		protected var _visualSettings:VisualSettings;
+		protected var _styleManager:GraphStyleManager;
 		
 		// source node used for the edge creating process
 		protected var _sourceNode:Node;
@@ -56,6 +56,7 @@ package ivis.view
 			return _vis;
 		}
 
+		// TODO it may be better to make graph inaccessible outside GraphView
 		/**
 		 * Graph model.
 		 */
@@ -69,12 +70,13 @@ package ivis.view
 			_graph = graph;
 		}
 		
+		
 		/**
-		 * Visual settings for visual elements
+		 * Style manager for shared visual styles.
 		 */
-		public function get visualSettings():VisualSettings
+		public function get graphStyleManager():GraphStyleManager
 		{
-			return _visualSettings;
+			return _styleManager;
 		}
 		
 		//------------------------- CONSTRUCTOR --------------------------------
@@ -82,13 +84,11 @@ package ivis.view
 		public function GraphView()
 		{
 			this.graph = new Graph();
-			
 			this._vis = new GraphVisualization(this.graph.graphData);
 			this.addChild(this.vis);
 			
-			_visualSettings = new VisualSettings();
-			
-			_sourceNode = null;
+			this._styleManager = new GraphStyleManager();
+			this._sourceNode = null;
 			
 			this.initListeners();
 		}
@@ -120,10 +120,10 @@ package ivis.view
 			
 			// initialize visual properties (size, shape, etc) of node
 			// TODO render the node before updating compound bounds?
-			this._visualSettings.initNodeStyle(node);
+			this._styleManager.initNodeStyle(node);
 			//node.props.labelText = node.data.id;
 			
-			VisualStyles.reApplyStyles(node);
+			Styles.reApplyStyles(node);
 			
 			// update node renderer
 			node.renderer = NodeRenderer.instance;
@@ -139,12 +139,12 @@ package ivis.view
 				if (!compound.isInitialized())
 				{
 					// initialize visual properties of compound
-					this._visualSettings.initCompoundStyle(compound);
+					this._styleManager.initCompoundStyle(compound);
 					
 					// add node to the group of compound nodes
 					this.graph.addToGroup(Groups.COMPOUND_NODES, compound);
 					
-					VisualStyles.reApplyStyles(compound);
+					Styles.reApplyStyles(compound);
 					
 					//compound.props.labelText = compound.data.id;
 					
@@ -190,8 +190,8 @@ package ivis.view
 			var edge:Edge = this.graph.addEdge(data);
 			
 			// initialize visual properties of the edge
-			this._visualSettings.initEdgeStyle(edge);
-			VisualStyles.reApplyStyles(edge);
+			this._styleManager.initEdgeStyle(edge);
+			Styles.reApplyStyles(edge);
 			
 			// update edge renderer
 			edge.renderer = EdgeRenderer.instance;
@@ -1058,11 +1058,11 @@ package ivis.view
 			
 			// register listener visual settings data changes
 			
-			this._visualSettings.addEventListener(
+			this._styleManager.addEventListener(
 				DataChangeEvent.ADDED_GROUP_STYLE,
 				onAddGroupStyle);
 			
-			this._visualSettings.addEventListener(
+			this._styleManager.addEventListener(
 				DataChangeEvent.REMOVED_GROUP_STYLE,
 				onRemoveGroupStyle);
 		}
@@ -1081,7 +1081,7 @@ package ivis.view
 		{
 			var group:String = event.info.group;
 			var elements:DataList = event.info.elements;
-			var style:VisualStyle = this._visualSettings.getGroupStyle(group);
+			var style:Style = this._styleManager.getGroupStyle(group);
 			
 			if (style != null)
 			{
@@ -1096,7 +1096,7 @@ package ivis.view
 						element.detachStyle(event.info.group);
 						
 						// re-apply visual style of the element
-						VisualStyles.reApplyStyles(element);
+						Styles.reApplyStyles(element);
 					}
 				}
 				
@@ -1118,7 +1118,7 @@ package ivis.view
 		{
 			var ds:DataSprite = event.info.ds;
 			var group:String = event.info.group;
-			var style:VisualStyle = _visualSettings.getGroupStyle(group);
+			var style:Style = _styleManager.getGroupStyle(group);
 			
 			if (ds is IStyleAttachable)
 			{
@@ -1129,7 +1129,7 @@ package ivis.view
 				
 				// apply new style to the element
 				// TODO consider style priorities.. may need to call reApply
-				VisualStyles.applyNewStyle(element, style);
+				Styles.applyNewStyle(element, style);
 				
 				this.vis.update();
 			}
@@ -1151,8 +1151,8 @@ package ivis.view
 			var ds:DataSprite = event.info.ds;
 			var group:String = event.info.group;
 			
-			var style:VisualStyle = 
-				this._visualSettings.getGroupStyle(group);
+			var style:Style = 
+				this._styleManager.getGroupStyle(group);
 			
 			// reset & apply styles
 			if (style != null &&
@@ -1164,7 +1164,7 @@ package ivis.view
 				element.detachStyle(group);
 				
 				// re-apply visual style of the element
-				VisualStyles.reApplyStyles(element);
+				Styles.reApplyStyles(element);
 				
 				this.vis.update();
 			}
@@ -1183,7 +1183,7 @@ package ivis.view
 		protected function onAddGroupStyle(event:DataChangeEvent) : void
 		{
 			var group:DataList = this.graph.graphData.group(event.info.group);
-			var style:VisualStyle = this._visualSettings.getGroupStyle(
+			var style:Style = this._styleManager.getGroupStyle(
 				event.info.group);
 			
 			if (group != null &&
@@ -1199,7 +1199,7 @@ package ivis.view
 							style);
 						
 						// apply new style to the element
-						VisualStyles.applyNewStyle(ds as IStyleAttachable,
+						Styles.applyNewStyle(ds as IStyleAttachable,
 							style);
 					}
 				}
@@ -1233,7 +1233,7 @@ package ivis.view
 		protected function onRemoveGroupStyle(event:DataChangeEvent) : void
 		{
 			var group:DataList = this.graph.graphData.group(event.info.group);
-			var style:VisualStyle = event.info.style as VisualStyle;
+			var style:Style = event.info.style as Style;
 			
 			if (group != null)
 			{
@@ -1248,7 +1248,7 @@ package ivis.view
 						element.detachStyle(event.info.group);
 						
 						// re-apply visual style of the element
-						VisualStyles.reApplyStyles(element);
+						Styles.reApplyStyles(element);
 					}
 				}
 				

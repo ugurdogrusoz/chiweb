@@ -1,4 +1,4 @@
-package ivis.util
+package ivis.model.util
 {
 	import ivis.model.Edge;
 	import ivis.model.Node;

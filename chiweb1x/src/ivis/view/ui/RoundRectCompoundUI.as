@@ -1,4 +1,4 @@
-package ivis.view
+package ivis.view.ui
 {
 	import flare.vis.data.DataSprite;
 	
@@ -6,7 +6,7 @@ package ivis.view
 	import flash.geom.Rectangle;
 	
 	import ivis.model.Node;
-	import ivis.util.Nodes;
+	import ivis.model.util.Nodes;
 
 	/**
 	 * Implementation of the INodeUI interface for the round rectangle compound

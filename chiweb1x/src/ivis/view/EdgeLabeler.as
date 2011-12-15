@@ -8,7 +8,7 @@ package ivis.view
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
-	import ivis.util.Edges;
+	import ivis.model.util.Edges;
 	import ivis.util.GeometryUtils;
 	import ivis.util.Groups;
 

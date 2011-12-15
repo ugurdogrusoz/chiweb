@@ -1,4 +1,4 @@
-package ivis.util
+package ivis.model.util
 {
 	import flare.display.TextSprite;
 	import flare.vis.data.EdgeSprite;
@@ -7,6 +7,8 @@ package ivis.util
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
+	import ivis.util.GeneralUtils;
+	import ivis.util.Labels;
 
 	/**
 	 * Utility class for nodes.

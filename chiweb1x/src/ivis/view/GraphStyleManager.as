@@ -8,37 +8,38 @@ package ivis.view
 	import ivis.event.DataChangeEvent;
 	import ivis.model.Edge;
 	import ivis.model.Node;
-	import ivis.util.ArrowUIs;
-	import ivis.util.CompoundUIs;
-	import ivis.util.EdgeUIs;
+	import ivis.view.ui.ArrowUIManager;
+	import ivis.view.ui.CompoundUIManager;
+	import ivis.view.ui.EdgeUIManager;
 	import ivis.util.Groups;
-	import ivis.util.NodeUIs;
-	import ivis.util.VisualStyles;
-	import ivis.model.VisualStyle;
+	import ivis.view.ui.NodeUIManager;
+	import ivis.model.util.Styles;
+	import ivis.model.Style;
 
 	/**
-	 * Visual settings for the graph. This class is designed to define custom
-	 * visual styles for the graph elements such as nodes, edges, compounds,
+	 * Style manager for the graph. This class is designed to define custom
+	 * group styles for the graph elements such as nodes, edges, compounds,
 	 * and bendpoints.
 	 * 
-	 * TODO global settings (backgroundColor, toolTipDelay, etc.) ?
+	 * TODO global styles (backgroundColor, canvasSize, toolTipDelay, 
+	 * cursorType, etc.) ?
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
-	public class VisualSettings extends EventDispatcher
+	public class GraphStyleManager extends EventDispatcher
 	{
-		protected var _defaultGlobalStyle:VisualStyle;
+		protected var _defaultGlobalStyle:Style;
 		
-		private var _defaultNodeStyle:VisualStyle;
-		private var _defaultEdgeStyle:VisualStyle;
-		private var _defaultCompoundStyle:VisualStyle;
+		private var _defaultNodeStyle:Style;
+		private var _defaultEdgeStyle:Style;
+		private var _defaultCompoundStyle:Style;
 		
-		protected var _groupStyle:Object;
+		protected var _groupStyleMap:Object;
 		
 		/**
 		 * Default visual styles for nodes.
 		 */
-		public function get defaultNodeStyle():VisualStyle
+		public function get defaultNodeStyle():Style
 		{
 			return _defaultNodeStyle;
 		}
@@ -46,7 +47,7 @@ package ivis.view
 		/**
 		 * Default visual styles for edges.
 		 */
-		public function get defaultEdgeStyle():VisualStyle
+		public function get defaultEdgeStyle():Style
 		{
 			return _defaultEdgeStyle;
 		}
@@ -54,17 +55,17 @@ package ivis.view
 		/**
 		 * Default visual styles for compound nodes.
 		 */
-		public function get defaultCompoundStyle():VisualStyle
+		public function get defaultCompoundStyle():Style
 		{
 			return _defaultCompoundStyle;
 		}
 		
 		//------------------------- CONSTRUCTOR --------------------------------
 		
-		public function VisualSettings()
+		public function GraphStyleManager()
 		{
 			// initialize group style map
-			_groupStyle = new Object();
+			_groupStyleMap = new Object();
 			
 			// initialize default styles
 			this.initDefaultStyles();
@@ -83,12 +84,12 @@ package ivis.view
 		public function initNodeStyle(node:Node) : void
 		{
 			// attach default node style
-			node.attachStyle(VisualStyles.DEFAULT_STYLE,
+			node.attachStyle(Styles.DEFAULT_STYLE,
 				_defaultNodeStyle);
 			
 			// attach custom style specific to Groups.NODES
 			
-			var style:VisualStyle = this.getGroupStyle(Groups.NODES);
+			var style:Style = this.getGroupStyle(Groups.NODES);
 			
 			if (style != null)
 			{
@@ -105,7 +106,7 @@ package ivis.view
 		public function initCompoundStyle(node:Node) : void
 		{
 			// apply default compound node style
-			node.attachStyle(VisualStyles.DEFAULT_STYLE,
+			node.attachStyle(Styles.DEFAULT_STYLE,
 				_defaultCompoundStyle);
 		}
 		
@@ -118,11 +119,11 @@ package ivis.view
 		public function initEdgeStyle(edge:Edge) : void
 		{
 			// apply default edge style
-			edge.attachStyle(VisualStyles.DEFAULT_STYLE,
+			edge.attachStyle(Styles.DEFAULT_STYLE,
 				_defaultEdgeStyle);
 			
 			// apply custom style specific to Groups.EDGES
-			var style:VisualStyle = this.getGroupStyle(Groups.EDGES);
+			var style:Style = this.getGroupStyle(Groups.EDGES);
 			
 			if (style != null)
 			{
@@ -138,9 +139,9 @@ package ivis.view
 		 * @param style	custom visual style for the group
 		 */
 		public function addGroupStyle(name:String,
-			style:VisualStyle) : void
+			style:Style) : void
 		{
-			_groupStyle[name] = style;
+			_groupStyleMap[name] = style;
 			
 			this.dispatchEvent(
 				new DataChangeEvent(DataChangeEvent.ADDED_GROUP_STYLE,
@@ -153,13 +154,13 @@ package ivis.view
 		 * @param name	name of the group
 		 * @return		removed style if succesfull, null if failed
 		 */
-		public function removeGroupStyle(name:String) : VisualStyle
+		public function removeGroupStyle(name:String) : Style
 		{
-			var style:VisualStyle = _groupStyle[name];
+			var style:Style = _groupStyleMap[name];
 			
 			if (style != null)
 			{
-				delete _groupStyle[name];
+				delete _groupStyleMap[name];
 				
 				this.dispatchEvent(new DataChangeEvent(
 					DataChangeEvent.REMOVED_GROUP_STYLE,
@@ -175,9 +176,9 @@ package ivis.view
 		 * @param name	name of the group
 		 * @return		visual style for the given group
 		 */
-		public function getGroupStyle(name:String) : VisualStyle
+		public function getGroupStyle(name:String) : Style
 		{
-			return _groupStyle[name];
+			return _groupStyleMap[name];
 		}
 		
 		
@@ -193,7 +194,7 @@ package ivis.view
 			
 			// init default node style
 			
-			style = {shape: NodeUIs.RECTANGLE,
+			style = {shape: NodeUIManager.RECTANGLE,
 				size: 50,
 				w: 100,
 				h: 50,
@@ -211,11 +212,11 @@ package ivis.view
 				selectionGlowBlur: 8,
 				selectionGlowStrength: 6};
 			
-			_defaultNodeStyle = new VisualStyle(style);
+			_defaultNodeStyle = new Style(style);
 			
 			// init default compound node style
 			
-			style = {shape: CompoundUIs.RECTANGLE,
+			style = {shape: CompoundUIManager.RECTANGLE,
 				alpha: 0.9,
 				fillColor: 0xff9ed1dc,
 				lineColor: 0xff333333,
@@ -234,11 +235,11 @@ package ivis.view
 				paddingTop: 10,
 				paddingBottom: 10};
 			
-			_defaultCompoundStyle = new VisualStyle(style);
+			_defaultCompoundStyle = new Style(style);
 			
 			// init default edge style
 			
-			style = {shape: EdgeUIs.LINE,				
+			style = {shape: EdgeUIManager.LINE,				
 				fillColor: 0xff000000,
 				alpha: 0.8,
 				lineColor: 0xff000000,
@@ -252,8 +253,8 @@ package ivis.view
 				labelVerticalAnchor: TextSprite.MIDDLE,
 				labelDistanceCalculation: EdgeLabeler.PERCENT_DISTANCE,
 				labelDistanceFromNode: 30,
-				sourceArrowType: ArrowUIs.SIMPLE_ARROW, // TODO no arrows as default?
-				targetArrowType: ArrowUIs.SIMPLE_ARROW, // TODO no arrows as default?
+				sourceArrowType: ArrowUIManager.SIMPLE_ARROW, // TODO no arrows as default?
+				targetArrowType: ArrowUIManager.SIMPLE_ARROW, // TODO no arrows as default?
 				arrowTipAngle: 0.3,
 				arrowTipDistance: 15,
 				selectionGlowColor: 0x00ffff33, // "#ffff33"
@@ -261,11 +262,11 @@ package ivis.view
 				selectionGlowBlur: 4,
 				selectionGlowStrength: 10};
 			
-			_defaultEdgeStyle = new VisualStyle(style);
+			_defaultEdgeStyle = new Style(style);
 			
 			// init default style of BEND_NODES group
 			
-			style = {shape: NodeUIs.CIRCLE,				
+			style = {shape: NodeUIManager.CIRCLE,				
 				size: 4,
 				alpha: 1.0,
 				fillColor: 0xff000000,
@@ -276,7 +277,7 @@ package ivis.view
 				selectionGlowBlur: 8,
 				selectionGlowStrength: 6};
 			
-			_groupStyle[Groups.BEND_NODES] = new VisualStyle(style);
+			_groupStyleMap[Groups.BEND_NODES] = new Style(style);
 			
 			// TODO other defaults?
 			

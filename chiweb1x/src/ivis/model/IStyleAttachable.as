@@ -26,7 +26,7 @@ package ivis.model
 		 * @param name	name of the style
 		 * @param style	visual style to be attached
 		 */
-		function attachStyle(name:String, style:VisualStyle) : void;
+		function attachStyle(name:String, style:Style) : void;
 		
 		/**
 		 * Detaches the visual style attached to this element for
@@ -43,6 +43,6 @@ package ivis.model
 		 * @param name	name of style to be retrieved
 		 * @return		visual style for the given name
 		 */
-		function getStyle(name:String) : VisualStyle;
+		function getStyle(name:String) : Style;
 	}
 }

@@ -1,22 +1,22 @@
-package ivis.view
+package ivis.view.ui
 {
-	import flare.util.Shapes;
+	import flare.util.Geometry;
 	import flare.vis.data.DataSprite;
 	
 	import flash.display.Graphics;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import ivis.model.Node;
-	import ivis.util.GeometryUtils;
 
 	/**
-	 * Implementation of the INodeUI interface for circular node shapes. This
-	 * class is designed to draw nodes as circles and to calculate edge
-	 * clipping points for circlular nodes.
+	 * Implementation of the INodeUI interface for the round rectangle node
+	 * shape. This class is designed to draw nodes as round rectangles and
+	 * to calculate edge clipping points for round rectangular nodes.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
-	public class CircularNodeUI implements INodeUI
+	public class RoundRectNodeUI implements INodeUI
 	{
 		private static var _instance:INodeUI;
 		
@@ -27,7 +27,7 @@ package ivis.view
 		{
 			if (_instance == null)
 			{
-				_instance = new CircularNodeUI();
+				_instance = new RoundRectNodeUI();
 			}
 			
 			return _instance;
@@ -35,7 +35,7 @@ package ivis.view
 		
 		//------------------------- CONSTRUCTOR --------------------------------
 		
-		public function CircularNodeUI()
+		public function RoundRectNodeUI()
 		{
 			// default constructor
 		}
@@ -49,7 +49,7 @@ package ivis.view
 		 */
 		public function setLineStyle(ds:DataSprite):void
 		{
-			var pixelHinting:Boolean = false;
+			var pixelHinting:Boolean = true;
 			var g:Graphics = ds.graphics;
 			
 			g.lineStyle(ds.lineWidth,
@@ -59,27 +59,30 @@ package ivis.view
 		}
 		
 		/**
-		 * Draws a circular node assuming that ds has a field size for its
-		 * radius.
+		 * Draws a round rectangular node assuming that ds has a field w for its
+		 * width and h for its height.
 		 * 
-		 * @param ds			data sprite (the node)
+		 * @param ds	data sprite (the node)
 		 */
 		public function draw(ds:DataSprite):void
 		{
-			var radius:Number = ds.size;
+			var width:Number = ds.w;
+			var height:Number = ds.h;
 			var g:Graphics = ds.graphics;
 			
-			Shapes.drawCircle(g, radius/2);
+			g.drawRoundRect(-width / 2, -height / 2,
+				width, height,
+				width / 2, height / 2);
 		}
 		
 		/**
 		 * Calculates the intersection point of the given node and the line
 		 * specified by the points p1 and p2. This function assumes the shape
-		 * of the given node as circular. If no intersection point is found,
-		 * then the center of the given node is returned as an intersection 
-		 * point.
+		 * of the given node as round rectangle. If no intersection point is
+		 * found, then the center of the given node is returned as an
+		 * intersection point.
 		 * 
-		 * @param node	circular Node
+		 * @param node	round rectangular Node
 		 * @param p1	start point of the line
 		 * @param p2	end point of the line
 		 * @return		intersection point 
@@ -88,25 +91,27 @@ package ivis.view
 			p1:Point,
 			p2:Point):Point
 		{
+			// TODO consider rounded corners!! this is identical to rectangle
+			
 			var interPoint:Point = null;
-			var center:Point = new Point(node.x, node.y);
 			
-			var result:Object = GeometryUtils.lineIntersectCircle(
-				p1, p2, center, node.width / 2);
+			var ip0:Point = new Point();
+			var ip1:Point = new Point();
 			
-			if (result.enter != null)
-			{
-				interPoint = result.enter as Point;
-			}
-			else if (result.exit != null)
-			{
-				interPoint = result.exit as Point;
-			}
-			else
+			var rect:Rectangle = new Rectangle(node.left, node.top,
+				node.width, node.height);
+			
+			// calculate intersection point of the line with the rectangle
+			if (Geometry.intersectLineRect(p1.x, p1.y, p2.x, p2.y,
+				rect, ip0, ip1) == Geometry.NO_INTERSECTION)
 			{
 				// if no intersection, then take the center of the node
 				// as the intersection point
 				interPoint = new Point(node.x, node.y);
+			}
+			else
+			{
+				interPoint = new Point(ip0.x, ip0.y);
 			}
 			
 			return interPoint;

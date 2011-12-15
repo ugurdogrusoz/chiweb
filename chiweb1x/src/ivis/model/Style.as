@@ -5,11 +5,11 @@ package ivis.model
 	import ivis.event.StyleChangeEvent;
 
 	/**
-	 * Visual Style class to represent style properties of a graph element.
+	 * Represents style properties of a graph element.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
-	public class VisualStyle extends EventDispatcher
+	public class Style extends EventDispatcher
 	{
 		/**
 		 * Map for attaching style properties.
@@ -25,7 +25,7 @@ package ivis.model
 		 * @param name	name of the style
 		 * @param style	style object holding style properties
 		 */
-		public function VisualStyle(style:Object = null)
+		public function Style(style:Object = null)
 		{
 			if (style == null)
 			{

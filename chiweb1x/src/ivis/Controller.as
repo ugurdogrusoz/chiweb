@@ -11,12 +11,12 @@ package ivis
 	import ivis.controls.ActionState;
 	import ivis.controls.ControlCenter;
 	import ivis.util.Groups;
-	import ivis.util.NodeUIs;
+	import ivis.view.ui.NodeUIManager;
 	import ivis.view.CompoundNodeLabeler;
 	import ivis.view.EdgeLabeler;
 	import ivis.view.GraphView;
 	import ivis.view.NodeLabeler;
-	import ivis.model.VisualStyle;
+	import ivis.model.Style;
 
 	// TODO currently, this class is used as the main class that inits the
 	// application. But, we should provide another mechanism to init the app.
@@ -124,7 +124,7 @@ package ivis
 		
 		public function createTestStyle() : void
 		{
-			var style:Object = {shape: NodeUIs.ROUND_RECTANGLE,
+			var style:Object = {shape: NodeUIManager.ROUND_RECTANGLE,
 				size: 50,
 				w: 120,
 				h: 100,
@@ -142,15 +142,15 @@ package ivis
 				selectionGlowBlur: 8,
 				selectionGlowStrength: 6};
 			
-			this.view.visualSettings.addGroupStyle("TEST",
-				new VisualStyle(style));
+			this.view.graphStyleManager.addGroupStyle("TEST",
+				new Style(style));
 			
 			trace("TEST group style added..");
 		}
 		
 		public function removeTestStyle() : void
 		{
-			this.view.visualSettings.removeGroupStyle("TEST");
+			this.view.graphStyleManager.removeGroupStyle("TEST");
 			
 			trace("TEST group style removed..");
 		}
@@ -178,7 +178,7 @@ package ivis
 		
 		public function addTestProperty() : void
 		{
-			this.view.visualSettings.getGroupStyle("TEST").addProperty(
+			this.view.graphStyleManager.getGroupStyle("TEST").addProperty(
 				"width", 200);
 			
 			trace("TEST property 'width' is set to 200");
@@ -188,7 +188,7 @@ package ivis
 		
 		public function removeTestProperty() : void
 		{
-			this.view.visualSettings.getGroupStyle("TEST").removeProperty(
+			this.view.graphStyleManager.getGroupStyle("TEST").removeProperty(
 				"width");
 			
 			trace("TEST property 'width' removed");
@@ -196,6 +196,6 @@ package ivis
 			// TODO remove property won't reset node to previous state! need fix
 		}
 		
-		// TODO also test specific styles & style property change event
+		// TODO also test specific styles
 	}
 }

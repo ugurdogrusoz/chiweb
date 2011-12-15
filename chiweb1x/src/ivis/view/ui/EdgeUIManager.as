@@ -1,21 +1,19 @@
-package ivis.util
+package ivis.view.ui
 {
 	import flare.util.Shapes;
 	
-	import ivis.view.IEdgeUI;
-	import ivis.view.LinearEdgeUI;
 
 	/**
-	 * Utility class for custom edge UIs. In order to use an implementation of
+	 * Manager class for custom edge UIs. In order to use an implementation of
 	 * an IEdgeUI interface to render custom edges, its singleton instance
-	 * should be registered by invoking the registerUI function of this utiliy
+	 * should be registered by invoking the registerUI function of this manager
 	 * class.
 	 * 
 	 * LinearEdgeUI instance is registered by default.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
-	public class EdgeUIs
+	public class EdgeUIManager
 	{
 		//------------------------CONSTANTS-------------------------------------
 		
@@ -30,9 +28,9 @@ package ivis.util
 		
 		//-----------------------CONSTRUCTOR------------------------------------
 		
-		public function EdgeUIs()
+		public function EdgeUIManager()
 		{
-			throw new Error("EdgeUIs is an abstract class.");
+			throw new Error("EdgeUIManager is an abstract class.");
 		}
 		
 		//-----------------------PUBLIC FUNCTIONS-------------------------------

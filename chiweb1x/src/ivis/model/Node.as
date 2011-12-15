@@ -5,7 +5,7 @@ package ivis.model
 	import flash.geom.Rectangle;
 	
 	import ivis.event.StyleChangeEvent;
-	import ivis.util.VisualStyles;
+	import ivis.model.util.Styles;
 	
 	/**
 	 * This class represents simple (regular) nodes, compound nodes and bend
@@ -32,7 +32,10 @@ package ivis.model
 		 */
 		protected var _nodesMap:Object;
 		
-		protected var _styleSet:StyleSet;
+		/**
+		 * Manager for visual styles of this node. 
+		 */
+		protected var _styleManager:StyleManager;
 		
 		private var _parentN:Node;
 		private var _parentE:Edge;
@@ -201,7 +204,7 @@ package ivis.model
 			this._parentN = null;
 			this._parentE = null;
 			
-			this._styleSet = new StyleSet();
+			this._styleManager = new StyleManager();
 		}
 		
 		//------------------------- PUBLIC FUNCTIONS ---------------------------
@@ -362,32 +365,32 @@ package ivis.model
 		}
 		
 		/** @inheritDoc */
-		public function getStyle(name:String) : VisualStyle
+		public function getStyle(name:String) : Style
 		{
-			return this._styleSet.getStyle(name);
+			return this._styleManager.getStyle(name);
 		}
 		
 		/** @inheritDoc */
 		public function get allStyles() : Array
 		{
-			return this._styleSet.allStyles;
+			return this._styleManager.allStyles;
 		}
 		
 		/** @inheritDoc */
 		public function get groupStyles() : Array
 		{
-			return this._styleSet.groupStyles;
+			return this._styleManager.groupStyles;
 		}
 		
 		/** @inheritDoc */
 		public function attachStyle(name:String,
-			style:VisualStyle) : void
+			style:Style) : void
 		{
 			if (style != null &&
 				name != null)
 			{
-				// add style to the style set
-				this._styleSet.add(name, style);
+				// add style to the style manager
+				this._styleManager.add(name, style);
 				
 				// register listener for StyleChangeEvents with a high priority
 								
@@ -407,7 +410,7 @@ package ivis.model
 		/** @inheritDoc */
 		public function detachStyle(name:String) : void
 		{
-			var style:VisualStyle = this._styleSet.getStyle(name); 
+			var style:Style = this._styleManager.getStyle(name); 
 			
 			if (style != null)
 			{
@@ -419,8 +422,8 @@ package ivis.model
 				style.removeEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
 					onStyleChange);
 				
-				// remove style from the style set
-				this._styleSet.remove(name);
+				// remove style from the style manager
+				this._styleManager.remove(name);
 			}
 		}
 		
@@ -438,7 +441,7 @@ package ivis.model
 		 */
 		protected function onStyleChange(event:StyleChangeEvent) : void
 		{
-			var style:VisualStyle = event.info.style;
+			var style:Style = event.info.style;
 			
 			// TODO bug for re-applying the style, may need to call reApply for both
 			// TODO also fix Edge.onStyleChange method..
@@ -447,12 +450,12 @@ package ivis.model
 			if (event.type == StyleChangeEvent.ADDED_STYLE_PROP)
 			{
 				// re-apply style on property change
-				VisualStyles.applyNewStyle(this, style);
+				Styles.applyNewStyle(this, style);
 			}
 			else // if (event.type == StyleChangeEvent.REMOVED_STYLE_PROP)
 			{
 				// re-apply visual styles
-				VisualStyles.reApplyStyles(this);
+				Styles.reApplyStyles(this);
 			}
 		}
 	}

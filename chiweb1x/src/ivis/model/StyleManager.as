@@ -1,31 +1,31 @@
 package ivis.model
 {
-	import ivis.util.VisualStyles;
+	import ivis.model.util.Styles;
 
 	/**
 	 * This class is designed to manage visual styles attached to
-	 * IStyleAttachable instances. This set contain may contain at most one 
-	 * default style, at most one specific style, and arbitrary number of group 
+	 * IStyleAttachable instances. This manager may contain at most one default 
+	 * style, at most one specific style, and arbitrary number of group 
 	 * styles.
 	 * 
-	 * In order to add a default style to this set, the function add() should
-	 * be called with the string VisualStyles.DEFAULT_STYLE as a name. 
+	 * In order to add a default style to this manager, the function add()
+	 * should be called with the string Styles.DEFAULT_STYLE as a name. 
 	 * Similarly, in order to add a specifc style, it should be called with
-	 * the string VisualStyles.SPECIFIC_STYLE as a name.
+	 * the string Styles.SPECIFIC_STYLE as a name.
 	 * 
-	 * @author Selcuk Onur Sumer 
+	 * @author Selcuk Onur Sumer
 	 */
-	public class StyleSet
+	public class StyleManager
 	{
 		/**
 		 * Default visual style.
 		 */
-		protected var _defaultStyle:VisualStyle;
+		protected var _defaultStyle:Style;
 		
 		/**
 		 * Specific visual style.
 		 */
-		protected var _specificStyle:VisualStyle;
+		protected var _specificStyle:Style;
 		
 		/**
 		 * Map containing all group visual styles. This map is used for fast
@@ -75,9 +75,9 @@ package ivis.model
 		
 		
 		/**
-		 * Initializes a new StyleSet with default properties.
+		 * Initializes a new StyleManager with default properties.
 		 */
-		public function StyleSet()
+		public function StyleManager()
 		{
 			this._defaultStyle = null;
 			this._specificStyle = null;
@@ -93,15 +93,15 @@ package ivis.model
 		 * @param style	visual style to be added 
 		 */
 		public function add(name:String,
-			style:VisualStyle):void
+			style:Style):void
 		{
-			var prev:VisualStyle;
+			var prev:Style;
 			
-			if (name == VisualStyles.DEFAULT_STYLE)
+			if (name == Styles.DEFAULT_STYLE)
 			{
 				this._defaultStyle = style;
 			}
-			else if (name == VisualStyles.SPECIFIC_STYLE)
+			else if (name == Styles.SPECIFIC_STYLE)
 			{
 				this._specificStyle = style;
 			}
@@ -130,16 +130,16 @@ package ivis.model
 		 * @param name	name of the visual style
 		 * @return		removed visual style if success, null otherwise 
 		 */
-		public function remove(name:String):VisualStyle
+		public function remove(name:String):Style
 		{
-			var style:VisualStyle;
+			var style:Style;
 			
-			if (name == VisualStyles.DEFAULT_STYLE)
+			if (name == Styles.DEFAULT_STYLE)
 			{
 				style = this._defaultStyle;
 				this._defaultStyle = null;
 			}
-			else if (name == VisualStyles.SPECIFIC_STYLE)
+			else if (name == Styles.SPECIFIC_STYLE)
 			{
 				style = this._specificStyle;
 				this._specificStyle = null;
@@ -153,7 +153,7 @@ package ivis.model
 					// remove from map
 					delete this._groupStyleMap[name];
 					
-					// TODO remove from list
+					// remove from list
 					this.removeFromList(style);
 				}
 			}
@@ -167,15 +167,15 @@ package ivis.model
 		 * @param name	name of the visual style
 		 * @return		visual style for the given name
 		 */
-		public function getStyle(name:String):VisualStyle
+		public function getStyle(name:String):Style
 		{
-			var style:VisualStyle;
+			var style:Style;
 			
-			if (name == VisualStyles.DEFAULT_STYLE)
+			if (name == Styles.DEFAULT_STYLE)
 			{
 				style = this._defaultStyle;
 			}
-			else if (name == VisualStyles.SPECIFIC_STYLE)
+			else if (name == Styles.SPECIFIC_STYLE)
 			{
 				style = this._specificStyle;
 			}
@@ -192,7 +192,7 @@ package ivis.model
 		 * 
 		 * @param style	style to be removed
 		 */
-		protected function removeFromList(style:VisualStyle):void
+		protected function removeFromList(style:Style):void
 		{
 			var index:int;
 			

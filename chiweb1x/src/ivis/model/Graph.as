@@ -10,7 +10,7 @@ package ivis.model
 	
 	import ivis.event.DataChangeEvent;
 	import ivis.util.Groups;
-	import ivis.util.Nodes;
+	import ivis.model.util.Nodes;
 
 	/**
 	 * This class represents the graph model. 
@@ -24,9 +24,9 @@ package ivis.model
 		 */
 		private var _missingChildren:Array;
 		
-		private var _graphData:Data;
+		protected var _graphData:Data;
 		
-		private var _dispatcher:EventDispatcher;
+		protected var _dispatcher:EventDispatcher;
 		
 		/**
 		 * Node map for quick access to nodes by their ids.
@@ -436,7 +436,13 @@ package ivis.model
 			
 			if (this.graphData.group(group) != null)
 			{
-				// TODO get list of elements in the group
+				// copy elements in the group
+				elements = new Array();
+				
+				for each (var ds:DataSprite in this.graphData.group(group))
+				{
+					elements.push(ds);
+				}
 				
 				result = this.graphData.group(group).clear();
 			}

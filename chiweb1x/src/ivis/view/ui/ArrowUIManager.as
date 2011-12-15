@@ -1,19 +1,17 @@
-package ivis.util
+package ivis.view.ui
 {
-	import ivis.view.IArrowUI;
-	import ivis.view.SimpleArrowUI;
 	
 	/**
-	 * Utility class for custom arrow UIs. In order to use an implementation of
+	 * Manager class for custom arrow UIs. In order to use an implementation of
 	 * an IArrowUI interface to render custom arrows, its singleton instance
-	 * should be registered by invoking the registerUI function of this utiliy
+	 * should be registered by invoking the registerUI function of this manager
 	 * class.
 	 * 
 	 * SimpleArrowUI instance is registered by default.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
-	public class ArrowUIs
+	public class ArrowUIManager
 	{
 		//------------------------CONSTANTS-------------------------------------
 		
@@ -28,9 +26,9 @@ package ivis.util
 		
 		//-----------------------CONSTRUCTOR------------------------------------
 		
-		public function ArrowUIs()
+		public function ArrowUIManager()
 		{
-			throw new Error("ArrowUIs is an abstract class.");
+			throw new Error("ArrowUIManager is an abstract class.");
 		}
 		
 		//-----------------------PUBLIC FUNCTIONS-------------------------------
