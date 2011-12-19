@@ -11,7 +11,7 @@ package ivis.controls
 	import flash.events.MouseEvent;
 	
 	import ivis.model.Node;
-	import ivis.view.GraphView;
+	import ivis.view.GraphManager;
 
 	/**
 	 * Multiple selection (rubber-band) control for DataSprite instances.
@@ -20,7 +20,7 @@ package ivis.controls
 	 */
 	public class SelectControl extends SelectionControl
 	{
-		protected var _view:GraphView;
+		protected var _manager:GraphManager;
 		protected var _state:ActionState;
 		
 		/**
@@ -28,14 +28,14 @@ package ivis.controls
 		 */
 		protected var _enclosing:Boolean;
 		
-		public function get view():GraphView
+		public function get manager():GraphManager
 		{
-			return _view;
+			return _manager;
 		}
 		
-		public function set view(value:GraphView):void
+		public function set manager(value:GraphManager):void
 		{
-			_view = value;
+			_manager = value;
 		}
 		
 		public function get state():ActionState
@@ -48,11 +48,11 @@ package ivis.controls
 			_state = value;
 		}
 		
-		public function SelectControl(view:GraphView,
+		public function SelectControl(manager:GraphManager,
 			filter:* = null)
 		{
 			super(filter, select, deselect);
-			this._view = view;
+			this._manager = manager;
 			this._enclosing = false;
 			//this.fireImmediately = false;
 		}
@@ -123,7 +123,7 @@ package ivis.controls
 				if (!this.state.selectKeyDown &&
 					!this._enclosing)
 				{
-					this.view.resetSelected();
+					this.manager.resetSelected();
 				}				
 			
 				this._enclosing = true;
@@ -141,7 +141,7 @@ package ivis.controls
 			
 			for each (var item:Object in evt.items)
 			{
-				this.view.selectElement(item);
+				this.manager.view.selectElement(item);
 			}
 		}
 		
@@ -156,7 +156,7 @@ package ivis.controls
 				{
 					if (!this.state.selectKeyDown)
 					{
-						this.view.resetSelected();
+						this.manager.resetSelected();
 					}
 					
 					this._enclosing = true;
@@ -173,7 +173,7 @@ package ivis.controls
 			{
 				for each (var item:Object in evt.items)
 				{
-					this.view.deselectElement(item);
+					this.manager.view.deselectElement(item);
 				}
 			}
 			

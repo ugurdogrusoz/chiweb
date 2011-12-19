@@ -4,7 +4,7 @@ package ivis.controls
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	
-	import ivis.view.GraphView;
+	import ivis.view.GraphManager;
 
 	/**
 	 * Control class for the key press actions.
@@ -13,10 +13,10 @@ package ivis.controls
 	 */
 	public class KeyControl extends EventControl
 	{
-		public function KeyControl(view:GraphView = null,
+		public function KeyControl(manager:GraphManager = null,
 			filter:*=null)
 		{
-			super(view);
+			super(manager);
 			this.filter = filter;
 		}
 		

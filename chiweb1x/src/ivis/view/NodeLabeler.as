@@ -83,47 +83,41 @@ package ivis.view
 		{
 			var label:TextSprite = this.getLabel(d, true);
 			
-			label.filters = null; // filters(d); TODO get filters
-			label.alpha = d.alpha;
-			label.visible = d.visible;
+			if (label != null)
+			{
+				label.filters = null; // filters(d); TODO get filters
+				label.alpha = d.alpha;
+				label.visible = d.visible;
 			
-			this.updateLabelPosition(label, d);
-			label.render();
+				this.updateLabelPosition(label, d);
+				label.render();
+			}
 		}
 		
 		protected override function getLabel(d:DataSprite,
 			create:Boolean=false,
 			visible:Boolean=true):TextSprite
 		{
-			updateTextFormat(d);
+			this.updateTextFormat(d);
 			
 			var label:TextSprite = super.getLabel(d, create, visible);
+			
+			// do not create label for empty strings
+			if (label.text.length <= 0)
+			{
+				label = null;
+			}
 			
 			if (label && !cacheText)
 			{
 				label.text = this.getLabelText(d);
 				label.applyFormat(this.textFormat);
+				
+				// get horizontal & vertical anchors
+				
+				label.horizontalAnchor = d.props.labelHorizontalAnchor;
+				label.verticalAnchor = d.props.labelVerticalAnchor;
 			}
-			
-			
-			//if (hAnchor != null) label.horizontalAnchor = hAnchor(d);
-			//if (vAnchor != null) label.verticalAnchor = vAnchor(d);
-			/*
-			labelHorizontalAnchor: "center",
-			labelVerticalAnchor: "middle",
-			*/
-			
-			// get horizontal & vertical anchors
-			
-			label.horizontalAnchor = d.props.labelHorizontalAnchor;
-			//label.horizontalAnchor = TextSprite.CENTER;
-			//label.horizontalAnchor = TextSprite.LEFT;
-			//label.horizontalAnchor = TextSprite.RIGHT;
-			
-			label.verticalAnchor = d.props.labelVerticalAnchor;
-			//label.verticalAnchor = TextSprite.MIDDLE;
-			//label.verticalAnchor = TextSprite.TOP;
-			//label.verticalAnchor = TextSprite.BOTTOM;
 			
 			return label;
 		}
@@ -167,20 +161,22 @@ package ivis.view
 		
 		protected function updateTextFormat(d:DataSprite):void
 		{
-			// TODO get these values from elsewhere (visual styles)
-			/*
-			labelFontName: "Arial",
-			labelFontSize: 11,
-			labelFontColor: "#000000",
-			labelFontWeight: "normal",
-			labelFontStyle: "normal",
-			*/
+			this.textFormat.font = d.props.labelFontName;
+			this.textFormat.color = d.props.labelFontColor;
+			this.textFormat.size = d.props.labelFontSize;
 			
-			textFormat.font = "Arial";
-			textFormat.color = 0x0;
-			textFormat.size = 14;
-			textFormat.bold = null; // textFormat.bold = (fontWeight(d) === "bold");
-			textFormat.italic = null; // textFormat.italic = (fontStyle(d) === "italic");
+			this.textFormat.bold = null;
+			this.textFormat.italic = null;
+			
+			if (d.props.labelFontWeight == "bold")
+			{
+				this.textFormat.bold = true;
+			}
+			
+			if (d.props.labelFontStyle == "italic")
+			{
+				this.textFormat.italic = true;
+			}
 		}
 	}
 }

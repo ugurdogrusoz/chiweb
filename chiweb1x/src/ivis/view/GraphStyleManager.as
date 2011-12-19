@@ -207,6 +207,11 @@ package ivis.view
 				labelOffsetY: 0,
 				labelHorizontalAnchor: TextSprite.CENTER,
 				labelVerticalAnchor: TextSprite.MIDDLE,
+				labelFontName: "Arial",
+				labelFontSize: 11,
+				labelFontColor: 0xff000000,
+				labelFontWeight: "normal",
+				labelFontStyle: "normal",
 				selectionGlowColor: 0x00ffff33, // "#ffff33"
 				selectionGlowAlpha: 0.9,
 				selectionGlowBlur: 8,
@@ -226,6 +231,11 @@ package ivis.view
 				labelOffsetY: 0,
 				labelHorizontalAnchor: TextSprite.CENTER,
 				labelVerticalAnchor: TextSprite.TOP,
+				labelFontName: "Arial",
+				labelFontSize: 11,
+				labelFontColor: 0xff000000,
+				labelFontWeight: "normal",
+				labelFontStyle: "normal",
 				selectionGlowColor: 0x00ffff33, // "#ffff33"
 				selectionGlowAlpha: 0.9,
 				selectionGlowBlur: 8,
@@ -277,12 +287,12 @@ package ivis.view
 				selectionGlowBlur: 8,
 				selectionGlowStrength: 6};
 			
+			// TODO _defaultBendStyle instead of adding a group style?
+			
 			_groupStyleMap[Groups.BEND_NODES] = new Style(style);
 			
 			// TODO other defaults?
 			
 		}
-		
-		
 	}
 }

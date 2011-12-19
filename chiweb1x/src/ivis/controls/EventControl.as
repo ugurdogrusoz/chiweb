@@ -2,7 +2,7 @@ package ivis.controls
 {
 	import flare.vis.controls.Control;
 	
-	import ivis.view.GraphView;
+	import ivis.view.GraphManager;
 
 	/**
 	 * Base class for other control classes.
@@ -11,7 +11,7 @@ package ivis.controls
 	 */
 	public class EventControl extends Control
 	{
-		private var _view:GraphView;
+		private var _manager:GraphManager;
 		private var _state:ActionState;
 		
 		public function get state():ActionState
@@ -24,20 +24,20 @@ package ivis.controls
 			_state = value;
 		}
 		
-		public function get view():GraphView
+		public function get manager():GraphManager
 		{
-			return _view;
+			return _manager;
 		}
 		
-		public function set view(value:GraphView):void
+		public function set manager(value:GraphManager):void
 		{
-			_view = value;
+			_manager = value;
 		}
 		
-		public function EventControl(view:GraphView = null)
+		public function EventControl(manager:GraphManager = null)
 		{
 			super();
-			_view = view;
+			_manager = manager;
 		}
 
 	}

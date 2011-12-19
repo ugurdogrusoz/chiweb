@@ -40,7 +40,7 @@
 				   label="D"
 				   width="32"
 				   toolTip="Delete Selected Elements"
-				   click="controller.view.deleteSelected()"/>
+				   click="controller.manager.deleteSelected()"/>
 		
 		<mx:Button id="printGraph" 
 				   label="P"
@@ -124,7 +124,7 @@
 			trace("main function started...");
 			
 			controller = new Controller();
-			graphBox.addChild(controller.view);
+			graphBox.addChild(controller.manager.view);
 			//view.vis.update();
 			
 			/*

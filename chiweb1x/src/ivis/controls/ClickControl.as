@@ -11,7 +11,7 @@ package ivis.controls
 	import ivis.model.Edge;
 	import ivis.model.Node;
 	import ivis.model.util.Nodes;
-	import ivis.view.GraphView;
+	import ivis.view.GraphManager;
 	import ivis.view.GraphVisualization;
 	
 	import mx.core.mx_internal;
@@ -29,10 +29,10 @@ package ivis.controls
 		// y-coordinate of the click event
 		protected var _evtY:Number;
 		
-		public function ClickControl(view:GraphView = null,
-			filter:*=null)
+		public function ClickControl(manager:GraphManager = null,
+			filter:* = null)
 		{
-			super(view);
+			super(manager);
 			this.filter = filter;
 		}
 		
@@ -92,10 +92,10 @@ package ivis.controls
 				if (!this.state.selectKeyDown)
 				//if (!evt.ctrlKey)
 				{
-					this.view.resetSelected();
+					this.manager.resetSelected();
 				}
 				
-				this.view.toggleSelect(target);
+				this.manager.view.toggleSelect(target);
 			}
 			
 			// "add node" flag is on
@@ -105,7 +105,7 @@ package ivis.controls
 				// the new node as a child node to the target
 				if (target is Node)
 				{
-					this.view.addNode(_object.mouseX,
+					this.manager.addNode(_object.mouseX,
 						_object.mouseY,
 						target);
 				}
@@ -113,7 +113,7 @@ package ivis.controls
 				// the root
 				else
 				{
-					this.view.addNode(_object.mouseX,
+					this.manager.addNode(_object.mouseX,
 						_object.mouseY);
 				}
 			}
@@ -125,7 +125,7 @@ package ivis.controls
 				// the target edge
 				if (target is Edge)
 				{
-					this.view.addBendPoint(target);
+					this.manager.addBendPoint(target);
 				}
 			}
 			
@@ -136,7 +136,7 @@ package ivis.controls
 				// target node
 				if (target is Node)
 				{
-					this.view.addEdgeFor(target);
+					this.manager.addEdgeFor(target);
 				}
 			}
 			

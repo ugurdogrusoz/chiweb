@@ -10,38 +10,31 @@ package ivis
 	
 	import ivis.controls.ActionState;
 	import ivis.controls.ControlCenter;
-	import ivis.util.Groups;
-	import ivis.view.ui.NodeUIManager;
-	import ivis.view.CompoundNodeLabeler;
-	import ivis.view.EdgeLabeler;
-	import ivis.view.GraphView;
-	import ivis.view.NodeLabeler;
 	import ivis.model.Style;
+	import ivis.util.Groups;
+	import ivis.view.GraphManager;
+	import ivis.view.ui.NodeUIManager;
 
 	// TODO currently, this class is used as the main class that inits the
 	// application. But, we should provide another mechanism to init the app.
 	public class Controller
 	{
-		protected var _view:GraphView;
+		protected var _manager:GraphManager;
 		protected var _controlCenter:ControlCenter;
 		
-		public function get view():GraphView
+		public function get manager():GraphManager
 		{
-			return _view;
+			return _manager;
 		}
 		
 		public function Controller()
 		{	
-			// instantiate view
-			_view = new GraphView();
+			// instantiate manager
+			_manager = new GraphManager();
 			
 			// initialize default controls for the visualization
-			_controlCenter = new ControlCenter(_view);
+			_controlCenter = new ControlCenter(_manager);
 			
-			// labeler for debug purposes
-			_view.vis.nodeLabeler = new NodeLabeler("props.labelText");
-			_view.vis.compoundLabeler = new CompoundNodeLabeler("props.labelText");
-			_view.vis.edgeLabeler = new EdgeLabeler("props.labelText");
 			
 			// custom shapes for debugging purposes
 			//NodeUIs.registerUI("gradientRect",
@@ -54,10 +47,10 @@ package ivis
 			
 			//_view.vis.doubleClickEnabled = true;
 			
-			_controlCenter.addCustomListener("inspector",
-				MouseEvent.MOUSE_OVER,
-				showInspector,
-				NodeSprite);
+			//_controlCenter.addCustomListener("inspector",
+			//	MouseEvent.MOUSE_OVER,
+			//	showInspector,
+			//	NodeSprite);
 		}
 		
 		public function toggle(state:String):Boolean
@@ -88,7 +81,7 @@ package ivis
 		
 		public function printGraph():void
 		{
-			this.view.graph.printGraph();
+			this.manager.graph.printGraph();
 		}
 		
 		public function showInspector(event:MouseEvent):void
@@ -100,7 +93,7 @@ package ivis
 		
 		public function createTestGroup() : void
 		{
-			if (this.view.graph.addGroup("TEST"))
+			if (this.manager.graph.addGroup("TEST"))
 			{
 				trace("TEST group added to data");
 			}
@@ -108,7 +101,7 @@ package ivis
 		
 		public function removeTestGroup() : void
 		{
-			if (this.view.graph.removeGroup("TEST"))
+			if (this.manager.graph.removeGroup("TEST"))
 			{
 				trace("TEST group removed from data");
 			}
@@ -116,7 +109,7 @@ package ivis
 		
 		public function clearTestGroup() : void
 		{
-			if (this.view.graph.clearGroup("TEST"))
+			if (this.manager.graph.clearGroup("TEST"))
 			{
 				trace("TEST group cleared");
 			}
@@ -142,7 +135,7 @@ package ivis
 				selectionGlowBlur: 8,
 				selectionGlowStrength: 6};
 			
-			this.view.graphStyleManager.addGroupStyle("TEST",
+			this.manager.graphStyleManager.addGroupStyle("TEST",
 				new Style(style));
 			
 			trace("TEST group style added..");
@@ -150,16 +143,16 @@ package ivis
 		
 		public function removeTestStyle() : void
 		{
-			this.view.graphStyleManager.removeGroupStyle("TEST");
+			this.manager.graphStyleManager.removeGroupStyle("TEST");
 			
 			trace("TEST group style removed..");
 		}
 		
 		public function addToTestGroup() : void
 		{
-			for each (var ds:DataSprite in this.view.graph.selectedNodes)
+			for each (var ds:DataSprite in this.manager.graph.selectedNodes)
 			{
-				this.view.graph.addToGroup("TEST", ds);
+				this.manager.graph.addToGroup("TEST", ds);
 				
 				trace("node " + ds.data.id + " added to TEST");
 			}
@@ -167,9 +160,9 @@ package ivis
 		
 		public function removeFromTestGroup() : void
 		{
-			for each (var ds:DataSprite in this.view.graph.selectedNodes)
+			for each (var ds:DataSprite in this.manager.graph.selectedNodes)
 			{
-				if (this.view.graph.removeFromGroup("TEST", ds))
+				if (this.manager.graph.removeFromGroup("TEST", ds))
 				{
 					trace("node " + ds.data.id + " removed from TEST");
 				}
@@ -178,22 +171,20 @@ package ivis
 		
 		public function addTestProperty() : void
 		{
-			this.view.graphStyleManager.getGroupStyle("TEST").addProperty(
-				"width", 200);
+			this.manager.graphStyleManager.getGroupStyle("TEST").addProperty(
+				"w", 200);
 			
-			trace("TEST property 'width' is set to 200");
+			trace("TEST property 'w' is set to 200");
 			
 			// TODO size (width, height, etc.) change in child nodes should update compound bounds!
 		}
 		
 		public function removeTestProperty() : void
 		{
-			this.view.graphStyleManager.getGroupStyle("TEST").removeProperty(
-				"width");
+			this.manager.graphStyleManager.getGroupStyle("TEST").removeProperty(
+				"w");
 			
-			trace("TEST property 'width' removed");
-			
-			// TODO remove property won't reset node to previous state! need fix
+			trace("TEST property 'w' removed");
 		}
 		
 		// TODO also test specific styles

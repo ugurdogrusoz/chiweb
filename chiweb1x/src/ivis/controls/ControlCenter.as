@@ -6,7 +6,7 @@ package ivis.controls
 	
 	import flash.events.Event;
 	
-	import ivis.view.GraphView;
+	import ivis.view.GraphManager;
 
 	/**
 	 * This class is designed to manage Controls that can be attached to and
@@ -24,7 +24,7 @@ package ivis.controls
 		public static const SELECT_CONTROL:String = "selectControl";
 		public static const KEY_CONTROL:String = "keyControl";
 		
-		protected var _view:GraphView;
+		protected var _manager:GraphManager;
 		protected var _state:ActionState;
 		
 		// default controls
@@ -38,6 +38,8 @@ package ivis.controls
 		 */
 		protected var _customControls:Object;
 		
+		//--------------------------- ACCESSORS --------------------------------
+		
 		/**
 		 * Contains the information about the current state of actions.
 		 */
@@ -47,32 +49,32 @@ package ivis.controls
 		}
 		
 		/**
-		 * Initializes the control center for the given GraphView
+		 * Initializes the control center for the given GraphManager
 		 * 
-		 * @param view	a GraphView instance
+		 * @param manager	a GraphManager instance
 		 */
-		public function ControlCenter(view:GraphView)
+		public function ControlCenter(manager:GraphManager)
 		{
-			// set view
-			_view = view;
+			// set manager
+			this._manager = manager;
 			
 			// init action state control
-			_state = new ActionState();
+			this._state = new ActionState();
 			
 			// init custom listener map
-			_customControls = new Object();
+			this._customControls = new Object();
 			
 			// init default controls
 			
-			_keyControl = new KeyControl(_view);
-			_clickControl = new ClickControl(_view);
-			_dragControl = new MultiDragControl(_view, NodeSprite); 
-			_selectControl = new SelectControl(_view, DataSprite);
+			this._keyControl = new KeyControl(_manager);
+			this._clickControl = new ClickControl(_manager);
+			this._dragControl = new MultiDragControl(_manager, NodeSprite); 
+			this._selectControl = new SelectControl(_manager, DataSprite);
 			
-			_clickControl.state = _state;
-			_keyControl.state = _state;
-			_selectControl.state = _state;
-			//dragControl.state = _state;
+			this._clickControl.state = _state;
+			this._keyControl.state = _state;
+			this._selectControl.state = _state;
+			//this._dragControl.state = _state;
 			
 			// add controls to the visualization
 			
@@ -89,7 +91,7 @@ package ivis.controls
 		 */
 		public function addControl(control:Control):void
 		{
-			_view.vis.controls.add(control);
+			this._manager.view.vis.controls.add(control);
 		}
 		
 		/**
@@ -99,7 +101,7 @@ package ivis.controls
 		 */
 		public function removeControl(control:Control):void
 		{
-			_view.vis.controls.remove(control);
+			this._manager.view.vis.controls.remove(control);
 		}
 		
 		/**
@@ -206,7 +208,7 @@ package ivis.controls
 				filter);
 			
 			this.addControl(custom);
-			_customControls[controlName] = custom;
+			this._customControls[controlName] = custom;
 		}
 		
 		/**
@@ -216,12 +218,12 @@ package ivis.controls
 		 */
 		public function removeCustomListener(controlName:String):void
 		{
-			var custom:Control = _customControls[controlName];
+			var custom:Control = this._customControls[controlName];
 			
 			if (custom != null)
 			{
 				this.removeControl(custom);
-				delete _customControls[controlName];
+				delete this._customControls[controlName];
 			}
 		}
 	}

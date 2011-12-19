@@ -9,9 +9,9 @@ package ivis.controls
 	import flash.events.MouseEvent;
 	
 	import ivis.model.Node;
-	import ivis.util.Groups;
 	import ivis.model.util.Nodes;
-	import ivis.view.GraphView;
+	import ivis.util.Groups;
+	import ivis.view.GraphManager;
 
 	/**
 	 * Control class for dragging nodes. It supports multiple node dragging.
@@ -33,10 +33,10 @@ package ivis.controls
 			return _cur;
 		}
 		
-		public function MultiDragControl(view:GraphView,
+		public function MultiDragControl(manager:GraphManager,
 			filter:* = null)
 		{
-			super(view);
+			super(manager);
 			this.filter = filter;
 		}
 		
@@ -100,7 +100,7 @@ package ivis.controls
 				event.stopPropagation();
 			}
 			
-			this.view.resetMissingChildren();
+			this.manager.resetMissingChildren();
 		}
 		
 		protected function onDrag(event:Event) : void
@@ -161,9 +161,9 @@ package ivis.controls
 			if (target.props.$selected)
 			{
 				// find missing children of selected nodes
-				children = children.concat(this.view.getMissingChildren());
+				children = children.concat(this.manager.getMissingChildren());
 				// drag the other selected nodes as well
-				children = children.concat(this.view.getSelectedNodes());
+				children = children.concat(this.manager.getSelectedNodes());
 			}
 			else
 			{
@@ -245,7 +245,7 @@ package ivis.controls
 								|| (n == target && !n.props.$selected))
 							{
 								// update the bounds of the compound node
-								this.view.vis.updateCompoundBounds(node);
+								this.manager.view.updateCompoundBounds(node);
 								
 								// render the compound node with the new bounds
 								node.render();
@@ -270,7 +270,7 @@ package ivis.controls
 				}
 				
 				// update edge labels
-				this.view.vis.updateLabels(Groups.EDGES);
+				this.manager.view.updateLabels(Groups.EDGES);
 				
 				// necessary for Flash 10.1
 				DirtySprite.renderDirty();
@@ -293,7 +293,7 @@ package ivis.controls
 				event.stopPropagation();
 				
 				// update edge labels
-				this.view.vis.updateLabels(Groups.EDGES);
+				this.manager.view.updateLabels(Groups.EDGES);
 			}
 			
 			// reset the active sprite
