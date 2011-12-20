@@ -2,6 +2,7 @@ package ivis.model.util
 {
 	import ivis.model.Edge;
 	import ivis.model.Node;
+	import ivis.util.GeneralUtils;
 
 	/**
 	 * Utility class for nodes.
@@ -18,6 +19,31 @@ package ivis.model.util
 		}
 		
 		//-----------------------PUBLIC FUNCTIONS-------------------------------
+		
+		/**
+		 * Brings all segments and bendpoints of the given edge to front.
+		 * 
+		 * @param edge	edge sprite whose components are brougt to front
+		 */
+		public static function bringEdgeToFront(edge:Edge) : void
+		{
+			// bring edge to front
+			GeneralUtils.bringToFront(edge);
+			
+			// bring every child component to the front
+			
+			for each (var bend:Node in edge.getBendNodes())
+			{
+				// bring bend point to front
+				GeneralUtils.bringToFront(bend);
+			}
+			
+			for each (var segment:Edge in edge.getSegments())
+			{
+				// bring segment edge to front
+				GeneralUtils.bringToFront(segment);
+			}
+		}
 		
 		/**
 		 * Finds and returns a central edge segment of the given actual edge.

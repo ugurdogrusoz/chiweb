@@ -35,8 +35,7 @@ package ivis.controls
 			this._listenerFn = listenerFn;
 			this._eventName = eventName;
 			
-			// TODO MouseEvent.DOUBLE_CLICK required doubleClickEnabled property
-			// of a sprite to be true.
+			// TODO MouseEvent.DOUBLE_CLICK requires doubleClickEnabled property of a sprite to be true.
 		}
 		
 		/** @inheritDoc */

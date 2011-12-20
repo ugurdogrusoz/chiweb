@@ -44,7 +44,20 @@ package ivis.model
 		/**
 		 * Adds a new property to the style map for the given name and value
 		 * pair. If a property with the given name already exists, it is
-		 * overwritten. 
+		 * overwritten.
+		 * 
+		 * IMPORTANT NOTE: Never add style properties 'width' & 'height' for
+		 * Node and Edge instances! Use 'w' or 'h' instead. 'width' and 'height'
+		 * are internally used by Flare. Adding a style property for 'width' or 
+		 * 'height' may cause unexpected rendering of Nodes and Edges.
+		 * 
+		 * TODO we may prevent adding properties for fields that are not related
+		 * to visual properties such as fields defined in DataSprite (or in any 
+		 * direct and indirect inheritors) that are used for other purposes
+		 * than rendering: for example, parentE variable of the Edge class.
+		 * Another solution is to attach all properties to the 'props' object
+		 * only, but this may cause backward incompatibilities for Flare's
+		 * original renderers.
 		 *  
 		 * @param name	name of the property
 		 * @param value	value of the property

@@ -248,11 +248,15 @@ package ivis.view
 					color = ds.props.selectionGlowColor;
 					filter = new GlowFilter(color, alpha, blur, blur, strength);
 					
+					
+					// TODO define a utiliy function addFilter in GeneralUtils
+					
 					// add new filter to the sprite's filter list
 					var filters:Array = ds.filters;
 					
-					// just calling ds.filters.push() does not update view!
-					// ds.filter should be reset explicitly
+					// just calling ds.filters.push() does not work due to
+					// filtering mechanism of flash, so ds.filter
+					// should be reset explicitly
 					ds.props.$glowFilter = filter;
 					filters.push(filter);
 					ds.filters = filters;
@@ -260,22 +264,6 @@ package ivis.view
 			}
 			
 			return ds;
-		}
-		
-		// TODO may need to move to Node and Edge classes...
-		public function removeFilter(ds:DataSprite, filter:*) : void
-		{
-			// remove the given filter from the filter array of sprite
-			var idx:int = ds.filters.indexOf(filter);
-			
-			if (idx != -1)
-			{
-				ds.filters = ds.filters.slice(0, idx).concat(
-					ds.filters.slice(idx+1));
-			}
-			
-			// TODO workaround, above code does not work yet... 
-			ds.filters = null;
 		}
 		
 		//---------------------- PROTECTED FUNCTIONS ---------------------------
@@ -356,7 +344,7 @@ package ivis.view
 				this.graph.removeFromGroup(Groups.SELECTED_NODES, node);
 				
 				// remove highlight of the node (remove glow filter)
-				this.removeFilter(node, node.props.$glowFilter);
+				GeneralUtils.removeFilter(node, node.props.$glowFilter);
 			}
 		}
 		
@@ -386,7 +374,8 @@ package ivis.view
 							segment);
 						
 						// remove highlight of the segment (remove glow filter)
-						this.removeFilter(segment, segment.props.$glowFilter);
+						GeneralUtils.removeFilter(segment,
+							segment.props.$glowFilter);
 						
 					}
 					
@@ -399,7 +388,7 @@ package ivis.view
 				this.graph.removeFromGroup(Groups.SELECTED_EDGES, parent);
 				
 				// remove highlight of the parent (remove glow filter)
-				this.removeFilter(parent, parent.props.$glowFilter);
+				GeneralUtils.removeFilter(parent, parent.props.$glowFilter);
 			}
 		}
 	}

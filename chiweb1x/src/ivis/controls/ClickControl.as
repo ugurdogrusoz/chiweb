@@ -10,6 +10,7 @@ package ivis.controls
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
+	import ivis.model.util.Edges;
 	import ivis.model.util.Nodes;
 	import ivis.view.GraphManager;
 	import ivis.view.GraphVisualization;
@@ -146,8 +147,19 @@ package ivis.controls
 			}
 			else if (target is Edge)
 			{
-				// TODO implement bringEdgeToFront
-				// (required for segments and bendpoints)
+				var edge:Edge = target as Edge;
+				
+				if (edge.isSegment)
+				{
+					// get the parent edge in order to bring all segments and 
+					// bend points to front
+					Edges.bringEdgeToFront(edge.parentE);
+				}
+				else
+				{
+					// just bring the actual edge to front
+					Edges.bringEdgeToFront(edge);
+				}
 			}
 			
 			// TODO debug

@@ -407,7 +407,7 @@ package ivis.view
 				node.props.$selected = false;
 				
 				// remove glow filter
-				this.view.removeFilter(node, node.props.$glowFilter);
+				GeneralUtils.removeFilter(node, node.props.$glowFilter);
 				
 			}
 			
@@ -416,7 +416,7 @@ package ivis.view
 				edge.props.$selected = false;
 				
 				// remove glow filter
-				this.view.removeFilter(edge, edge.props.$glowFilter);
+				GeneralUtils.removeFilter(edge, edge.props.$glowFilter);
 			}
 			
 			this.graph.clearGroup(Groups.SELECTED_NODES);
@@ -860,7 +860,7 @@ package ivis.view
 				element.attachStyle(group, style);
 				
 				// apply new style to the element
-				// TODO consider style priorities.. may need to call reApply
+				// TODO consider style priorities.. may need to call reApply instead
 				Styles.applyNewStyle(element, style);
 				
 				this.view.update();

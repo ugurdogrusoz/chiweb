@@ -175,8 +175,6 @@ package ivis
 				"w", 200);
 			
 			trace("TEST property 'w' is set to 200");
-			
-			// TODO size (width, height, etc.) change in child nodes should update compound bounds!
 		}
 		
 		public function removeTestProperty() : void

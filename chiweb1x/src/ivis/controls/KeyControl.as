@@ -60,8 +60,7 @@ package ivis.controls
 		
 		protected function onDown(evt:KeyboardEvent):void
 		{
-			// TODO take the select key as a constructor parameter, CTRL should
-			// be the default key
+			// TODO take the select key as a constructor parameter, CTRL should be the default key
 			this.state.selectKeyDown = evt.ctrlKey; 
 		}
 		

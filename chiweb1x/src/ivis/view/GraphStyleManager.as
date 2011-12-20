@@ -21,8 +21,8 @@ package ivis.view
 	 * group styles for the graph elements such as nodes, edges, compounds,
 	 * and bendpoints.
 	 * 
-	 * TODO global styles (backgroundColor, canvasSize, toolTipDelay, 
-	 * cursorType, etc.) ?
+	 * TODO global styles: backgroundColor, canvasSize, toolTipDelay, 
+	 * cursorType, multiple selection key (currently hardcoded as CTRL), etc.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */

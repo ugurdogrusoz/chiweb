@@ -443,8 +443,6 @@ package ivis.model
 		{
 			var style:Style = event.info.style;
 			
-			// TODO bug for re-applying the style, may need to call reApply for both
-			// TODO also fix Edge.onStyleChange method..
 			trace("[Node.onStyleChange] " + event.type);
 			
 			if (event.type == StyleChangeEvent.ADDED_STYLE_PROP)
