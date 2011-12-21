@@ -2,6 +2,8 @@ package ivis.view
 {
 	import flare.vis.Visualization;
 	import flare.vis.data.DataSprite;
+	import flare.vis.data.EdgeSprite;
+	import flare.vis.data.NodeSprite;
 	
 	import flash.display.DisplayObject;
 	import flash.filters.GlowFilter;
@@ -21,18 +23,11 @@ package ivis.view
 	 */
 	public class GraphView extends UIComponent
 	{
-		protected var _vis:GraphVisualization;
 		protected var _graph:Graph;
 		
-		//--------------------------- ACCESSORS --------------------------------
+		protected var _vis:GraphVisualization;
 		
-		/**
-		 * Visualization instance for this graph.
-		 */
-		public function get vis():GraphVisualization
-		{
-			return _vis;
-		}
+		//--------------------------- ACCESSORS --------------------------------
 
 		// TODO it may be better to make graph inaccessible outside GraphView
 		/**
@@ -43,24 +38,26 @@ package ivis.view
 			return _graph;
 		}
 		
-		public function set graph(graph:Graph):void
+		/**
+		 * Visualization instance for this graph.
+		 */
+		public function get vis():Visualization
 		{
-			_graph = graph;
+			return _vis;
 		}
-		
 		
 		//------------------------- CONSTRUCTOR --------------------------------
 		
 		public function GraphView(graph:Graph)
 		{
-			this.graph = graph;
+			this._graph = graph;
 			this._vis = new GraphVisualization(this.graph.graphData);
-			this.addChild(this.vis);
+			this.addChild(this._vis);
 			
 			// TODO props.labelText as default?
-			this.vis.nodeLabeler = new NodeLabeler("props.labelText");
-			this.vis.compoundLabeler = new CompoundNodeLabeler("props.labelText");
-			this.vis.edgeLabeler = new EdgeLabeler("props.labelText");
+			this._vis.nodeLabeler = new NodeLabeler("props.labelText");
+			this._vis.compoundLabeler = new CompoundNodeLabeler("props.labelText");
+			this._vis.edgeLabeler = new EdgeLabeler("props.labelText");
 		}
 		
 		//---------------------- PUBLIC FUNCTIONS ------------------------------
@@ -70,7 +67,7 @@ package ivis.view
 		 */
 		public function update():void
 		{
-			this.vis.update();
+			this._vis.update();
 		}
 		
 		/**
@@ -80,7 +77,7 @@ package ivis.view
 		 */
 		public function removeLabel(label:DisplayObject):void
 		{
-			this.vis.labels.removeChild(label);
+			this._vis.labels.removeChild(label);
 		}
 		
 		/**
@@ -90,7 +87,7 @@ package ivis.view
 		 */
 		public function updateLabels(group:String):void
 		{
-			this.vis.updateLabels(group);
+			this._vis.updateLabels(group);
 		}
 		
 		/**
@@ -98,7 +95,7 @@ package ivis.view
 		 */
 		public function updateAllCompoundBounds():void
 		{
-			this.vis.updateAllCompoundBounds();
+			this._vis.updateAllCompoundBounds();
 		}
 		
 		/**
@@ -108,7 +105,7 @@ package ivis.view
 		 */
 		public function updateCompoundBounds(compound:Node):void
 		{
-			this.vis.updateCompoundBounds(compound);
+			this._vis.updateCompoundBounds(compound);
 		}
 		
 		/**
@@ -118,25 +115,22 @@ package ivis.view
 		 * unselects it by resetting flags and removing element from the
 		 * corresponding data group.
 		 * 
-		 * @param eventTarget	target object to be selected/unselected
+		 * @param eventTarget	target sprite to be selected/unselected
 		 * @return				true if successful, false otherwise
 		 */
-		public function toggleSelect(eventTarget:Object):Boolean
+		public function toggleSelect(eventTarget:DataSprite):Boolean
 		{
 			var result:Boolean = false;
 			
-			if (eventTarget is DataSprite)
+			// deselect the sprite
+			if (eventTarget.props.$selected)
 			{
-				// deselect the node
-				if ((eventTarget as DataSprite).props.$selected)
-				{
-					result = this.deselectElement(eventTarget);
-				}
-				// select the node
-				else
-				{
-					result = this.selectElement(eventTarget);
-				}
+				result = this.deselectElement(eventTarget);
+			}
+			// select the sprite
+			else
+			{
+				result = this.selectElement(eventTarget);
 			}
 			
 			return result;
@@ -154,20 +148,14 @@ package ivis.view
 		{
 			var result:Boolean = false;
 			
-			if (eventTarget is DataSprite)
+			if (eventTarget is Node)
 			{
-				trace("[GraphView.selectElement] " + 
-					(eventTarget as DataSprite).data.id + " is selected");
-				
-				if (eventTarget is Node)
-				{
-					this.selectNode(eventTarget as Node);
-				}
-				else if (eventTarget is Edge)
-				{
-					this.selectEdge(eventTarget as Edge);
-				}
-				
+				this.selectNode(eventTarget as Node);
+				result = true;
+			}
+			else if (eventTarget is Edge)
+			{
+				this.selectEdge(eventTarget as Edge);
 				result = true;
 			}
 			
@@ -179,31 +167,49 @@ package ivis.view
 		 * by resetting corresponding flags and removing the element from the
 		 * corresponding data group.
 		 * 
-		 * @param eventTarget	target object to be selected
+		 * @param eventTarget	target sprite to be selected
 		 * @return				true if successful, false otherwise
 		 */
-		public function deselectElement(eventTarget:Object):Boolean
+		public function deselectElement(eventTarget:DataSprite):Boolean
 		{
 			var result:Boolean = false;
 			
-			if (eventTarget is DataSprite)
+			if (eventTarget is Node)
 			{
-				trace("[GraphView.deselectElement] " + 
-					(eventTarget as DataSprite).data.id + " is deselected");
-				
-				if (eventTarget is Node)
-				{
-					this.deselectNode(eventTarget as Node);
-				}
-				else if (eventTarget is Edge)
-				{
-					this.deselectEdge(eventTarget as Edge);
-				}
-				
+				this.deselectNode(eventTarget as Node);
+				result = true;
+			}
+			else if (eventTarget is Edge)
+			{
+				this.deselectEdge(eventTarget as Edge);
 				result = true;
 			}
 			
 			return result;
+		}
+		
+		/**
+		 * Resets all the selected graph elements (nodes and edges) by setting
+		 * corresponding flag to false, and clearing corresponding data groups.
+		 */ 
+		public function resetSelected():void
+		{
+			for each (var node:NodeSprite in this.graph.selectedNodes)
+			{
+				node.props.$selected = false;
+				
+				// remove glow filter
+				GeneralUtils.removeFilter(node, node.props.$glowFilter);
+				
+			}
+			
+			for each (var edge:EdgeSprite in this.graph.selectedEdges)
+			{
+				edge.props.$selected = false;
+				
+				// remove glow filter
+				GeneralUtils.removeFilter(edge, edge.props.$glowFilter);
+			}
 		}
 		
 		/**
@@ -248,18 +254,8 @@ package ivis.view
 					color = ds.props.selectionGlowColor;
 					filter = new GlowFilter(color, alpha, blur, blur, strength);
 					
-					
-					// TODO define a utiliy function addFilter in GeneralUtils
-					
-					// add new filter to the sprite's filter list
-					var filters:Array = ds.filters;
-					
-					// just calling ds.filters.push() does not work due to
-					// filtering mechanism of flash, so ds.filter
-					// should be reset explicitly
 					ds.props.$glowFilter = filter;
-					filters.push(filter);
-					ds.filters = filters;
+					GeneralUtils.addFilter(ds, filter);
 				}
 			}
 			

@@ -1,5 +1,7 @@
 package ivis.util
 {
+	import flare.vis.data.DataSprite;
+	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 
@@ -37,44 +39,63 @@ package ivis.util
 		}
 		
 		/**
-		 * Finds and removes the specified filter from the filter array
-		 * of the given display object.
+		 * Adds the specified filter to the filters array of the given data
+		 * sprite.
 		 * 
-		 * @param displayObj	display object having a filter array
-		 * @param filter		filter to be removed
+		 * @param ds		data sprite having a filter array
+		 * @param filter	filter to be added
 		 */
-		public static function removeFilter(displayObj:DisplayObject, filter:*) : void
+		public static function addFilter(ds:DataSprite,
+										 filter:*) : void
 		{
-			var filters:Array = displayObj.filters;
-			var index:int;
-			
-			// find the index of the filter
-			// TODO filter never found because it seems that flex creates another
-			// instance from the previously added filter, we need to find another
-			// way to remove the filter.
-			// TODO possible solution: keep a separate list of filters,
-			// reapply all filters after removing the specified one.
-			for (index = 0; index < filters.length; index++)
+			// init sprite's filter array if not initialized yet
+			if (ds.props.$filters == null)
 			{
-				if (filters[index] == filter)
-				{
-					// index found, stop iteration
-					break;
-				}
+				ds.props.$filters = new Array();
 			}
 			
-			// check if filter found
-			if (index < filters.length)
+			var filters:Array = ds.props.$filters;
+			
+			// add new filter to the array
+			filters.push(filter);
+			ds.props.$filters = filters;
+			
+			// just calling ds.filters.push() does not work due to filtering
+			// mechanism of flash, so ds.filter should be reset explicitly
+			ds.filters = filters;
+		}
+		
+		/**
+		 * Finds and removes the specified filter from the filters array
+		 * of the given data sprite.
+		 * 
+		 * @param ds		data sprite having a filter array
+		 * @param filter	filter to be removed
+		 */
+		public static function removeFilter(ds:DataSprite,
+			filter:*) : void
+		{
+			if (ds.props.$filters == null)
 			{
-				// remove the given filter at the found index
+				return;
+			}
+			
+			var filters:Array = ds.props.$filters;
+			
+			// find the index of the given filter
+			var index:int = filters.indexOf(filter);
+			
+			// remove filter from the array if it is found
+			if (index != -1)
+			{
+				// remove filter
 				filters = filters.slice(0, index).concat(
 					filters.slice(index + 1));
+				
+				// update filters arrays
+				ds.props.$filters = filters;
+				ds.filters = filters;
 			}
-			
-			//displayObj.filters = filters;
-			
-			// TODO workaround until a way found to remove the given filter
-			displayObj.filters = null;
 		}
 		
 		/**

@@ -1,5 +1,6 @@
 package ivis.view
 {
+	import flare.vis.controls.IControl;
 	import flare.vis.data.DataList;
 	import flare.vis.data.DataSprite;
 	import flare.vis.data.EdgeSprite;
@@ -56,11 +57,6 @@ package ivis.view
 			return _view;
 		}
 		
-		public function set view(view:GraphView):void
-		{
-			_view = view;
-		}
-		
 		// TODO it may be better to make graph inaccessible outside GraphManager
 		/**
 		 * Graph model.
@@ -70,25 +66,20 @@ package ivis.view
 			return _graph;
 		}
 		
-		public function set graph(graph:Graph):void
-		{
-			_graph = graph;
-		}
-		
 		//------------------------- CONSTRUCTOR --------------------------------
 		
 		public function GraphManager(graph:Graph = null)
 		{
 			if (this.graph == null)
 			{
-				this.graph = new Graph();
+				this._graph = new Graph();
 			}
 			else
 			{
-				this.graph = graph;
+				this._graph = graph;
 			}
 			
-			this.view = new GraphView(this.graph);
+			this._view = new GraphView(this.graph);
 			
 			this._styleManager = new GraphStyleManager();
 			this._sourceNode = null;
@@ -393,31 +384,74 @@ package ivis.view
 		}
 		
 		/**
-		 * Resets all the selected graph elements (nodes and edges) by setting
-		 * corresponding flag to false, and clearing corresponding data groups.
+		 * Selects the given graph element.
+		 * 
+		 * @param eventTarget	target object to be selected
+		 * @return				true if successful, false otherwise
+		 */
+		public function selectElement(eventTarget:Object):Boolean
+		{
+			var result:Boolean = false;
+			
+			if (eventTarget is DataSprite)
+			{
+				trace("[GraphView.selectElement] selecting " + 
+					(eventTarget as DataSprite).data.id);
+				
+				this.view.selectElement(eventTarget as DataSprite);
+				result = true;
+			}
+			
+			return result;
+		}
+		
+		/**
+		 * Deselects the given graph element.
+		 * 
+		 * @param eventTarget	target object to be selected
+		 * @return				true if successful, false otherwise
+		 */
+		public function deselectElement(eventTarget:Object):Boolean
+		{
+			var result:Boolean = false;
+			
+			if (eventTarget is DataSprite)
+			{
+				trace("[GraphView.deselectElement] deselecting " + 
+					(eventTarget as DataSprite).data.id);
+				
+				result = this.view.deselectElement(eventTarget as DataSprite);
+			}
+			
+			return result
+		}
+		
+		/**
+		 * Toggle selection of the given graph element.
+		 * 
+		 * @param eventTarget	target object to be selected/unselected
+		 * @return				true if successful, false otherwise
+		 */
+		public function toggleSelect(eventTarget:Object):Boolean
+		{
+			var result:Boolean = false;
+			
+			if (eventTarget is DataSprite)
+			{
+				result = this.view.toggleSelect(eventTarget as DataSprite);
+			}
+			
+			return result;
+		}
+		
+		/**
+		 * Resets all the selected graph elements (nodes and edges).
 		 */ 
 		public function resetSelected():void
 		{
 			trace("all selections are cleared");
 			
-			var idx:int
-			
-			for each (var node:NodeSprite in this.graph.selectedNodes)
-			{
-				node.props.$selected = false;
-				
-				// remove glow filter
-				GeneralUtils.removeFilter(node, node.props.$glowFilter);
-				
-			}
-			
-			for each (var edge:EdgeSprite in this.graph.selectedEdges)
-			{
-				edge.props.$selected = false;
-				
-				// remove glow filter
-				GeneralUtils.removeFilter(edge, edge.props.$glowFilter);
-			}
+			this.view.resetSelected();
 			
 			this.graph.clearGroup(Groups.SELECTED_NODES);
 			this.graph.clearGroup(Groups.SELECTED_EDGES);
@@ -448,6 +482,26 @@ package ivis.view
 				this.view.updateAllCompoundBounds();
 				this.view.update();
 			}
+		}
+		
+		/**
+		 * Adds a custom control to the visualization.
+		 * 
+		 * @param control	custom control to be added
+		 */
+		public function addControl(control:IControl):void
+		{
+			this.view.vis.controls.add(control);
+		}
+		
+		/**
+		 * Removes an existing custom control from the visualization.
+		 * 
+		 * @param control	custom control to be removed
+		 */
+		public function removeControl(control:IControl):IControl
+		{
+			return this.view.vis.controls.remove(control);
 		}
 		
 		/**

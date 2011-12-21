@@ -96,7 +96,7 @@ package ivis.controls
 					this.manager.resetSelected();
 				}
 				
-				this.manager.view.toggleSelect(target);
+				this.manager.toggleSelect(target);
 			}
 			
 			// "add node" flag is on

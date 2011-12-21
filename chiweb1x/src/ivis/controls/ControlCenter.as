@@ -1,6 +1,6 @@
 package ivis.controls
 {
-	import flare.vis.controls.Control;
+	import flare.vis.controls.IControl;
 	import flare.vis.data.DataSprite;
 	import flare.vis.data.NodeSprite;
 	
@@ -89,9 +89,9 @@ package ivis.controls
 		 * 
 		 * @param control	custom control to be added
 		 */
-		public function addControl(control:Control):void
+		public function addControl(control:IControl):void
 		{
-			this._manager.view.vis.controls.add(control);
+			this._manager.addControl(control);
 		}
 		
 		/**
@@ -99,9 +99,9 @@ package ivis.controls
 		 * 
 		 * @param control	custom control to be removed
 		 */
-		public function removeControl(control:Control):void
+		public function removeControl(control:IControl):IControl
 		{
-			this._manager.view.vis.controls.remove(control);
+			return this._manager.removeControl(control);
 		}
 		
 		/**
@@ -159,7 +159,7 @@ package ivis.controls
 		 * 
 		 * @param control	one of the default controls
 		 */
-		protected function enableControl(control:Control):void
+		protected function enableControl(control:IControl):void
 		{
 			// first, remove the control to avoid duplicate controls
 			this.removeControl(control);
@@ -173,7 +173,7 @@ package ivis.controls
 		 * 
 		 * @param control	one of the default controls 
 		 */
-		protected function disableControl(control:Control):void
+		protected function disableControl(control:IControl):void
 		{
 			// remove control from the visualization
 			this.removeControl(control);
@@ -194,7 +194,7 @@ package ivis.controls
 		{
 			// check for the same controlName and remove previous control
 			
-			var custom:Control = _customControls[controlName];
+			var custom:IControl = _customControls[controlName];
 			
 			if (custom != null)
 			{
@@ -218,7 +218,7 @@ package ivis.controls
 		 */
 		public function removeCustomListener(controlName:String):void
 		{
-			var custom:Control = this._customControls[controlName];
+			var custom:IControl = this._customControls[controlName];
 			
 			if (custom != null)
 			{

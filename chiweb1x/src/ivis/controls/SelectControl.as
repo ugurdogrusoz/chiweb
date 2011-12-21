@@ -141,7 +141,7 @@ package ivis.controls
 			
 			for each (var item:Object in evt.items)
 			{
-				this.manager.view.selectElement(item);
+				this.manager.selectElement(item);
 			}
 		}
 		
@@ -173,7 +173,7 @@ package ivis.controls
 			{
 				for each (var item:Object in evt.items)
 				{
-					this.manager.view.deselectElement(item);
+					this.manager.deselectElement(item);
 				}
 			}
 			

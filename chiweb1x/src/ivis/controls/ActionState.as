@@ -4,6 +4,8 @@ package ivis.controls
 	 * This class is designed to indicate the state of the actions and used by 
 	 * the control classes to check certain states of the application.
 	 * 
+	 * TODO enable additional custom state flags
+	 * 
 	 * @author Selcuk Onur Sumer
 	 */
 	public class ActionState
