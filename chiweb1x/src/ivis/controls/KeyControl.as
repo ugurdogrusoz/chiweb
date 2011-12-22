@@ -13,10 +13,11 @@ package ivis.controls
 	 */
 	public class KeyControl extends EventControl
 	{
-		public function KeyControl(manager:GraphManager = null,
+		public function KeyControl(graphManager:GraphManager,
+			stateManager:StateManager,
 			filter:*=null)
 		{
-			super(manager);
+			super(graphManager, stateManager);
 			this.filter = filter;
 		}
 		
@@ -61,13 +62,16 @@ package ivis.controls
 		protected function onDown(evt:KeyboardEvent):void
 		{
 			// TODO take the select key as a constructor parameter, CTRL should be the default key
-			this.state.selectKeyDown = evt.ctrlKey; 
+			this.stateManager.setState(StateManager.SELECT_KEY_DOWN,
+				evt.ctrlKey); 
 		}
 		
 		protected function onUp(evt:KeyboardEvent):void
 		{
 			// TODO take the select key as a parameter
-			this.state.selectKeyDown = evt.ctrlKey;
+			this.stateManager.setState(StateManager.SELECT_KEY_DOWN,
+				evt.ctrlKey);
+			
 		}
 		
 		protected function onAdd(evt:Event=null):void

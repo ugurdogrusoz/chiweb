@@ -30,10 +30,11 @@ package ivis.controls
 		// y-coordinate of the click event
 		protected var _evtY:Number;
 		
-		public function ClickControl(manager:GraphManager = null,
+		public function ClickControl(graphManager:GraphManager,
+			stateManager:StateManager,									 
 			filter:* = null)
 		{
-			super(manager);
+			super(graphManager, stateManager);
 			this.filter = filter;
 		}
 		
@@ -88,25 +89,25 @@ package ivis.controls
 			}
 			
 			// "select" flag is on
-			if (this.state.isSelect)
+			if (this.stateManager.checkState(StateManager.SELECT))
 			{
-				if (!this.state.selectKeyDown)
+				if (!this.stateManager.checkState(StateManager.SELECT_KEY_DOWN))
 				//if (!evt.ctrlKey)
 				{
-					this.manager.resetSelected();
+					this.graphManager.resetSelected();
 				}
 				
-				this.manager.toggleSelect(target);
+				this.graphManager.toggleSelect(target);
 			}
 			
 			// "add node" flag is on
-			if (this.state.isAddNode)
+			if (this.stateManager.checkState(StateManager.ADD_NODE))
 			{
 				// if the event target is another node, then we should add
 				// the new node as a child node to the target
 				if (target is Node)
 				{
-					this.manager.addNode(_object.mouseX,
+					this.graphManager.addNode(_object.mouseX,
 						_object.mouseY,
 						target);
 				}
@@ -114,30 +115,30 @@ package ivis.controls
 				// the root
 				else
 				{
-					this.manager.addNode(_object.mouseX,
+					this.graphManager.addNode(_object.mouseX,
 						_object.mouseY);
 				}
 			}
 			
 			// "add bend point" flag is on
-			if (this.state.isAddBendPoint)
+			if (this.stateManager.checkState(StateManager.ADD_BENDPOINT))
 			{
 				// if the event target is an edge, then add a bend point to
 				// the target edge
 				if (target is Edge)
 				{
-					this.manager.addBendPoint(target);
+					this.graphManager.addBendPoint(target);
 				}
 			}
 			
 			// "add edge" flag is on
-			if (this.state.isAddEdge)
+			if (this.stateManager.checkState(StateManager.ADD_EDGE))
 			{
 				// if the event target is a node, then add an edge for the
 				// target node
 				if (target is Node)
 				{
-					this.manager.addEdgeFor(target);
+					this.graphManager.addEdgeFor(target);
 				}
 			}
 			

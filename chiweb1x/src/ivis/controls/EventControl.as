@@ -3,6 +3,8 @@ package ivis.controls
 	import flare.vis.controls.Control;
 	
 	import ivis.view.GraphManager;
+	
+	import mx.states.State;
 
 	/**
 	 * Base class for other control classes.
@@ -11,33 +13,52 @@ package ivis.controls
 	 */
 	public class EventControl extends Control
 	{
-		private var _manager:GraphManager;
-		private var _state:ActionState;
+		private var _graphManager:GraphManager;
+		private var _stateManager:StateManager;
 		
-		public function get state():ActionState
+		//---------------------------- ACCESSORS -------------------------------
+		
+		/**
+		 * State manager to monitor action states.
+		 */
+		public function get stateManager():StateManager
 		{
-			return _state;
+			return _stateManager;
 		}
 		
-		public function set state(value:ActionState):void
+		public function set stateManager(value:StateManager):void
 		{
-			_state = value;
+			_stateManager = value;
 		}
 		
-		public function get manager():GraphManager
+		/**
+		 * Graph manager to perform graph related operations. 
+		 */
+		public function get graphManager():GraphManager
 		{
-			return _manager;
+			return _graphManager;
 		}
 		
-		public function set manager(value:GraphManager):void
+		public function set graphManager(value:GraphManager):void
 		{
-			_manager = value;
+			_graphManager = value;
 		}
 		
-		public function EventControl(manager:GraphManager = null)
+		//-------------------------- CONSTRUCTOR -------------------------------
+		
+		/**
+		 * Initializes an EventControl instance with the given graph and state
+		 * managers.
+		 * 
+		 * @param graphManager	GraphManager instance
+		 * @param stateManager	StateManager instance
+		 */
+		public function EventControl(graphManager:GraphManager = null,
+			stateManager:StateManager = null)
 		{
 			super();
-			_manager = manager;
+			this._graphManager = graphManager;
+			this._stateManager = stateManager;
 		}
 
 	}

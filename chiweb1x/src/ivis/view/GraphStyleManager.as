@@ -8,13 +8,15 @@ package ivis.view
 	import ivis.event.DataChangeEvent;
 	import ivis.model.Edge;
 	import ivis.model.Node;
+	import ivis.model.Style;
+	import ivis.model.util.Styles;
+	import ivis.util.Groups;
 	import ivis.view.ui.ArrowUIManager;
 	import ivis.view.ui.CompoundUIManager;
 	import ivis.view.ui.EdgeUIManager;
-	import ivis.util.Groups;
 	import ivis.view.ui.NodeUIManager;
-	import ivis.model.util.Styles;
-	import ivis.model.Style;
+	
+	import mx.core.Container;
 
 	/**
 	 * Style manager for the graph. This class is designed to define custom
@@ -28,11 +30,11 @@ package ivis.view
 	 */
 	public class GraphStyleManager extends EventDispatcher
 	{
-		protected var _defaultGlobalStyle:Style;
-		
 		private var _defaultNodeStyle:Style;
 		private var _defaultEdgeStyle:Style;
 		private var _defaultCompoundStyle:Style;
+		
+		protected var _globalStyle:Style;
 		
 		protected var _groupStyleMap:Object;
 		
@@ -81,7 +83,7 @@ package ivis.view
 		 * 
 		 * @param node	node to attach visual styles
 		 */
-		public function initNodeStyle(node:Node) : void
+		public function initNodeStyle(node:Node):void
 		{
 			// attach default node style
 			node.attachStyle(Styles.DEFAULT_STYLE,
@@ -103,7 +105,7 @@ package ivis.view
 		 * 
 		 * @param node	compound node to apply visual style
 		 */
-		public function initCompoundStyle(node:Node) : void
+		public function initCompoundStyle(node:Node):void
 		{
 			// apply default compound node style
 			node.attachStyle(Styles.DEFAULT_STYLE,
@@ -116,7 +118,7 @@ package ivis.view
 		 * 
 		 * @param edge	edge to apply visual style
 		 */
-		public function initEdgeStyle(edge:Edge) : void
+		public function initEdgeStyle(edge:Edge):void
 		{
 			// apply default edge style
 			edge.attachStyle(Styles.DEFAULT_STYLE,
@@ -132,6 +134,12 @@ package ivis.view
 			}
 		}
 		
+		public function initGlobalStyle(container:Container):void
+		{
+			// TODO apply style to the container!
+			//container.setStyle(...);
+		}
+		
 		/**
 		 * Adds a custom visual style for the specified group.
 		 * 
@@ -139,7 +147,7 @@ package ivis.view
 		 * @param style	custom visual style for the group
 		 */
 		public function addGroupStyle(name:String,
-			style:Style) : void
+			style:Style):void
 		{
 			_groupStyleMap[name] = style;
 			
@@ -154,7 +162,7 @@ package ivis.view
 		 * @param name	name of the group
 		 * @return		removed style if succesfull, null if failed
 		 */
-		public function removeGroupStyle(name:String) : Style
+		public function removeGroupStyle(name:String):Style
 		{
 			var style:Style = _groupStyleMap[name];
 			
@@ -176,7 +184,7 @@ package ivis.view
 		 * @param name	name of the group
 		 * @return		visual style for the given group
 		 */
-		public function getGroupStyle(name:String) : Style
+		public function getGroupStyle(name:String):Style
 		{
 			return _groupStyleMap[name];
 		}
@@ -188,7 +196,7 @@ package ivis.view
 		 * Initializes default styles for nodes, edges, compounds, and
 		 * bendpoints.
 		 */
-		protected function initDefaultStyles() : void
+		protected function initDefaultStyles():void
 		{
 			var style:Object;
 			

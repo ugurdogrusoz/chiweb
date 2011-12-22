@@ -19,6 +19,8 @@ package ivis.view
 	import ivis.model.util.Styles;
 	import ivis.util.GeneralUtils;
 	import ivis.util.Groups;
+	
+	import mx.core.Container;
 
 	/**
 	 * This class is designed to handle changes in graph topology, graph
@@ -88,6 +90,28 @@ package ivis.view
 		}
 		
 		//---------------------- PUBLIC FUNCTIONS ------------------------------
+		
+		/**
+		 * Sets the Container of the graph view as the given container object.
+		 * 
+		 * @param container	container of the graph view
+		 * @return			true if view is added to the given container
+		 */ 
+		public function setGraphContainer(container:Container):Boolean
+		{
+			var added:Boolean = false;
+			
+			if (this._view.parent != container)
+			{
+				container.addChild(this._view);
+				added = true;
+				
+				// init global style of the container
+				this._styleManager.initGlobalStyle(container);
+			}
+			
+			return added;
+		}
 		
 		/**
 		 * Creates a new Node instance and adds it to the location specified by
@@ -840,7 +864,7 @@ package ivis.view
 				DataChangeEvent.DS_REMOVED_FROM_GROUP,
 				onRemoveFromGroup);
 			
-			// register listener visual settings data changes
+			// register listener for style manager
 			
 			this._styleManager.addEventListener(
 				DataChangeEvent.ADDED_GROUP_STYLE,

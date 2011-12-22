@@ -33,10 +33,11 @@ package ivis.controls
 			return _cur;
 		}
 		
-		public function MultiDragControl(manager:GraphManager,
+		public function MultiDragControl(graphManager:GraphManager,
+			stateManager:StateManager = null,
 			filter:* = null)
 		{
-			super(manager);
+			super(graphManager, stateManager);
 			this.filter = filter;
 		}
 		
@@ -100,7 +101,7 @@ package ivis.controls
 				event.stopPropagation();
 			}
 			
-			this.manager.resetMissingChildren();
+			this.graphManager.resetMissingChildren();
 		}
 		
 		protected function onDrag(event:Event) : void
@@ -161,9 +162,9 @@ package ivis.controls
 			if (target.props.$selected)
 			{
 				// find missing children of selected nodes
-				children = children.concat(this.manager.getMissingChildren());
+				children = children.concat(this.graphManager.getMissingChildren());
 				// drag the other selected nodes as well
-				children = children.concat(this.manager.getSelectedNodes());
+				children = children.concat(this.graphManager.getSelectedNodes());
 			}
 			else
 			{
@@ -245,7 +246,7 @@ package ivis.controls
 								|| (n == target && !n.props.$selected))
 							{
 								// update the bounds of the compound node
-								this.manager.view.updateCompoundBounds(node);
+								this.graphManager.view.updateCompoundBounds(node);
 								
 								// render the compound node with the new bounds
 								node.render();
@@ -270,7 +271,7 @@ package ivis.controls
 				}
 				
 				// update edge labels
-				this.manager.view.updateLabels(Groups.EDGES);
+				this.graphManager.view.updateLabels(Groups.EDGES);
 				
 				// necessary for Flash 10.1
 				DirtySprite.renderDirty();
@@ -293,7 +294,7 @@ package ivis.controls
 				event.stopPropagation();
 				
 				// update edge labels
-				this.manager.view.updateLabels(Groups.EDGES);
+				this.graphManager.view.updateLabels(Groups.EDGES);
 			}
 			
 			// reset the active sprite

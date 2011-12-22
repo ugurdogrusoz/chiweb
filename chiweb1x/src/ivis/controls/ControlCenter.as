@@ -24,8 +24,8 @@ package ivis.controls
 		public static const SELECT_CONTROL:String = "selectControl";
 		public static const KEY_CONTROL:String = "keyControl";
 		
-		protected var _manager:GraphManager;
-		protected var _state:ActionState;
+		protected var _graphManager:GraphManager;
+		protected var _stateManager:StateManager;
 		
 		// default controls
 		protected var _keyControl:KeyControl;
@@ -43,38 +43,44 @@ package ivis.controls
 		/**
 		 * Contains the information about the current state of actions.
 		 */
-		public function get state():ActionState
+		public function get stateManager():StateManager
 		{
-			return _state;
+			return _stateManager;
 		}
+		
+		//------------------------- CONSTRUCTOR --------------------------------
 		
 		/**
 		 * Initializes the control center for the given GraphManager
 		 * 
-		 * @param manager	a GraphManager instance
+		 * @param graphManager	a GraphManager instance
 		 */
-		public function ControlCenter(manager:GraphManager)
+		public function ControlCenter(graphManager:GraphManager)
 		{
 			// set manager
-			this._manager = manager;
+			this._graphManager = graphManager;
 			
-			// init action state control
-			this._state = new ActionState();
+			// init action state manager
+			this._stateManager = new StateManager();
 			
 			// init custom listener map
 			this._customControls = new Object();
 			
 			// init default controls
 			
-			this._keyControl = new KeyControl(_manager);
-			this._clickControl = new ClickControl(_manager);
-			this._dragControl = new MultiDragControl(_manager, NodeSprite); 
-			this._selectControl = new SelectControl(_manager, DataSprite);
+			this._keyControl = new KeyControl(this._graphManager,
+				this._stateManager);
 			
-			this._clickControl.state = _state;
-			this._keyControl.state = _state;
-			this._selectControl.state = _state;
-			//this._dragControl.state = _state;
+			this._clickControl = new ClickControl(this._graphManager,
+				this._stateManager);
+			
+			this._dragControl = new MultiDragControl(this._graphManager,
+				this._stateManager,
+				NodeSprite); 
+			
+			this._selectControl = new SelectControl(this._graphManager,
+				this._stateManager,
+				DataSprite);
 			
 			// add controls to the visualization
 			
@@ -84,6 +90,8 @@ package ivis.controls
 			this.addControl(_keyControl);
 		}
 		
+		//------------------------ PUBLIC FUNCTIONS ----------------------------
+		
 		/**
 		 * Adds a custom control to the visualization.
 		 * 
@@ -91,7 +99,25 @@ package ivis.controls
 		 */
 		public function addControl(control:IControl):void
 		{
-			this._manager.addControl(control);
+			if (control is EventControl)
+			{
+				var ec:EventControl = control as EventControl;
+				
+				// set graph manager of the event, if it is not set yet
+				if (ec.graphManager == null)
+				{
+					ec.graphManager = this._graphManager;
+				}
+				
+				// set state manager of the event, if it is not set yet
+				if (ec.stateManager == null)
+				{
+					ec.stateManager = this._stateManager;
+				}
+			}
+			
+			// add control to the visualization
+			this._graphManager.addControl(control);
 		}
 		
 		/**
@@ -101,7 +127,7 @@ package ivis.controls
 		 */
 		public function removeControl(control:IControl):IControl
 		{
-			return this._manager.removeControl(control);
+			return this._graphManager.removeControl(control);
 		}
 		
 		/**
@@ -155,31 +181,6 @@ package ivis.controls
 		}
 		
 		/**
-		 * Enables the given default control.
-		 * 
-		 * @param control	one of the default controls
-		 */
-		protected function enableControl(control:IControl):void
-		{
-			// first, remove the control to avoid duplicate controls
-			this.removeControl(control);
-			
-			// add the control again
-			this.addControl(control);
-		}
-		
-		/**
-		 * Disables the given default control.
-		 * 
-		 * @param control	one of the default controls 
-		 */
-		protected function disableControl(control:IControl):void
-		{
-			// remove control from the visualization
-			this.removeControl(control);
-		}
-		
-		/**
 		 * Adds a custom listener function for the specified event.
 		 * 
 		 * @param controlName	desired name for the custom control
@@ -225,6 +226,44 @@ package ivis.controls
 				this.removeControl(custom);
 				delete this._customControls[controlName];
 			}
+		}
+		
+		/**
+		 * Toggles the given state.
+		 * 
+		 * @param name	name of the state
+		 * @return		state condition after toggling
+		 */
+		public function toggleState(name:String):Boolean
+		{
+			return this.stateManager.toggleState(name);
+		}
+		
+		//------------------------ PROTECTED FUNCTIONS -------------------------
+		
+		/**
+		 * Enables the given default control.
+		 * 
+		 * @param control	one of the default controls
+		 */
+		protected function enableControl(control:IControl):void
+		{
+			// first, remove the control to avoid duplicate controls
+			this.removeControl(control);
+			
+			// add the control again
+			this.addControl(control);
+		}
+		
+		/**
+		 * Disables the given default control.
+		 * 
+		 * @param control	one of the default controls 
+		 */
+		protected function disableControl(control:IControl):void
+		{
+			// remove control from the visualization
+			this.removeControl(control);
 		}
 	}
 }

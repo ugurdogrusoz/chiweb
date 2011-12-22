@@ -20,39 +20,41 @@ package ivis.controls
 	 */
 	public class SelectControl extends SelectionControl
 	{
-		protected var _manager:GraphManager;
-		protected var _state:ActionState;
+		protected var _graphManager:GraphManager;
+		protected var _stateManager:StateManager;
 		
 		/**
 		 * Indicates whether the selection rectangle is active 
 		 */
 		protected var _enclosing:Boolean;
 		
-		public function get manager():GraphManager
+		public function get graphManager():GraphManager
 		{
-			return _manager;
+			return _graphManager;
 		}
 		
-		public function set manager(value:GraphManager):void
+		public function set graphManager(value:GraphManager):void
 		{
-			_manager = value;
+			_graphManager = value;
 		}
 		
-		public function get state():ActionState
+		public function get stateManager():StateManager
 		{
-			return _state;
+			return _stateManager;
 		}
 		
-		public function set state(value:ActionState):void
+		public function set stateManager(value:StateManager):void
 		{
-			_state = value;
+			_stateManager = value;
 		}
 		
-		public function SelectControl(manager:GraphManager,
+		public function SelectControl(graphManager:GraphManager,
+			stateManager:StateManager,
 			filter:* = null)
 		{
 			super(filter, select, deselect);
-			this._manager = manager;
+			this._graphManager = graphManager;
+			this._stateManager = stateManager;
 			this._enclosing = false;
 			//this.fireImmediately = false;
 		}
@@ -94,7 +96,7 @@ package ivis.controls
 			trace(evt.target);
 			
 			if (evt.target is DataSprite ||
-				!this.state.isSelect)
+				!this.stateManager.checkState(StateManager.SELECT))
 			{
 				// this is required to prevent selection and also to prevent
 				// deselect event to be dispatched when selection starts on a 
@@ -102,7 +104,7 @@ package ivis.controls
 				evt.stopPropagation();
 			}
 			else if (!this.fireImmediately &&
-				!this.state.selectKeyDown)
+				!this.stateManager.checkState(StateManager.SELECT_KEY_DOWN))
 			{
 				//TODO fireImmediately? this.view.resetSelected();
 			}
@@ -120,10 +122,10 @@ package ivis.controls
 			
 			if (this.fireImmediately)
 			{
-				if (!this.state.selectKeyDown &&
+				if (!this.stateManager.checkState(StateManager.SELECT_KEY_DOWN) &&
 					!this._enclosing)
 				{
-					this.manager.resetSelected();
+					this.graphManager.resetSelected();
 				}				
 			
 				this._enclosing = true;
@@ -141,7 +143,7 @@ package ivis.controls
 			
 			for each (var item:Object in evt.items)
 			{
-				this.manager.selectElement(item);
+				this.graphManager.selectElement(item);
 			}
 		}
 		
@@ -154,9 +156,9 @@ package ivis.controls
 			{
 				if (!this._enclosing)
 				{
-					if (!this.state.selectKeyDown)
+					if (!this.stateManager.checkState(StateManager.SELECT_KEY_DOWN))
 					{
-						this.manager.resetSelected();
+						this.graphManager.resetSelected();
 					}
 					
 					this._enclosing = true;
@@ -173,7 +175,7 @@ package ivis.controls
 			{
 				for each (var item:Object in evt.items)
 				{
-					this.manager.deselectElement(item);
+					this.graphManager.deselectElement(item);
 				}
 			}
 			

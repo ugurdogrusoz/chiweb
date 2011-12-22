@@ -22,19 +22,19 @@
 			label="N"
 			width="32"
 			toolTip="Add Node"
-			click="controller.toggle(ActionState.ADD_NODE)"/>	
+			click="controller.toggle(StateManager.ADD_NODE)"/>	
 	
 		<mx:Button id="addBendPoint" 
 			   label="BP"
 			   width="40"
 			   toolTip="Add Bendpoint"
-			   click="controller.toggle(ActionState.ADD_BENDPOINT)"/>		
+			   click="controller.toggle(StateManager.ADD_BENDPOINT)"/>		
 	
 		<mx:Button id="addEdge" 
 			   label="E"
 			   width="32"
 			   toolTip="Add Edge"
-			   click="controller.toggle(ActionState.ADD_EDGE)"/>
+			   click="controller.toggle(StateManager.ADD_EDGE)"/>
 		
 		<mx:Button id="deleteSelected" 
 				   label="D"
@@ -113,7 +113,7 @@
 		import flare.vis.data.DataSprite;
 		
 		import ivis.Controller;
-		import ivis.controls.ActionState;
+		import ivis.controls.StateManager;
 		import ivis.view.GraphView;
 		
 		[Bindable]
@@ -124,7 +124,9 @@
 			trace("main function started...");
 			
 			controller = new Controller();
-			graphBox.addChild(controller.manager.view);
+			//graphBox.addChild(controller.manager.view);
+			controller.manager.setGraphContainer(graphBox);
+			
 			//view.vis.update();
 			
 			/*

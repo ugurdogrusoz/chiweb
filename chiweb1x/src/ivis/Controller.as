@@ -8,7 +8,7 @@ package ivis
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import ivis.controls.ActionState;
+	import ivis.controls.StateManager;
 	import ivis.controls.ControlCenter;
 	import ivis.model.Style;
 	import ivis.util.Groups;
@@ -57,22 +57,7 @@ package ivis
 		{
 			var result:Boolean = false;
 			
-			if (state == ActionState.ADD_NODE)
-			{
-				result = _controlCenter.state.toggleAddNode();
-			}
-			else if (state == ActionState.ADD_EDGE)
-			{
-				result = _controlCenter.state.toggleAddEdge();
-			}
-			else if (state == ActionState.ADD_BENDPOINT)
-			{
-				result = _controlCenter.state.toggleAddBendPoint();
-			}
-			else if (state == ActionState.SELECT)
-			{
-				result = _controlCenter.state.toggleSelect();
-			}
+			result = _controlCenter.toggleState(state);
 			
 			return result;
 		}
