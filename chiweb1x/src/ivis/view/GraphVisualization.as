@@ -13,8 +13,9 @@ package ivis.view
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
-	import ivis.util.Groups;
+	import ivis.model.util.Edges;
 	import ivis.model.util.Nodes;
+	import ivis.util.Groups;
 
 	/**
 	 * Visualization instance for the graph data.
@@ -158,6 +159,7 @@ package ivis.view
 			
 			var bounds:Rectangle = new Rectangle();
 			
+			// TODO do not add invisible children!
 			var children:Array = Nodes.getChildren(compound);
 			
 			var directChildren:Array = compound.getNodes();
@@ -166,14 +168,25 @@ package ivis.view
 			// bendpoints should be taken into account for the bounds 
 			for each (var node:Node in directChildren)
 			{
+				// skip filtered nodes
+				if (Nodes.isFiltered(node))
+				{
+					continue;
+				}
+				
 				// process each incident edge of the current node
 				for each (var edge:Edge in Nodes.incidentEdges(node))
 				{
+					// skip filtered edges
+					if (Edges.isFiltered(edge))
+					{
+						continue;
+					}
+					
 					// if edge is an actual edge, calculate the lowest common
 					// ancestor for the source and target of the edge
 					if (!edge.isSegment)
 					{
-						
 						var lca:NodeSprite = Nodes.calcLowestCommonAncestor(
 							edge.source as Node, edge.target as Node);
 						

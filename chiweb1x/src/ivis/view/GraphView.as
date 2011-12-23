@@ -7,10 +7,13 @@ package ivis.view
 	
 	import flash.display.DisplayObject;
 	import flash.filters.GlowFilter;
+	import flash.utils.flash_proxy;
 	
 	import ivis.model.Edge;
 	import ivis.model.Graph;
 	import ivis.model.Node;
+	import ivis.model.util.Edges;
+	import ivis.model.util.Nodes;
 	import ivis.util.GeneralUtils;
 	import ivis.util.Groups;
 	
@@ -109,6 +112,22 @@ package ivis.view
 		}
 		
 		/**
+		 * Updates visibility of nodes and edges.
+		 */
+		public function updateVisibility():void
+		{
+			for each (var node:NodeSprite in this.graph.graphData.nodes)
+			{
+				node.visible = !Nodes.isFiltered(node as Node);
+			}
+			
+			for each (var edge:EdgeSprite in this.graph.graphData.edges)
+			{
+				edge.visible = !Edges.isFiltered(edge as Edge);
+			}
+		}
+		
+		/**
 		 * If the given graph element (node or edge) is not selected, selects it
 		 * by setting corresponding flags and adding the element to the
 		 * corresponding data group. If the graph element is already selected,
@@ -144,7 +163,7 @@ package ivis.view
 		 * @param eventTarget	target object to be selected
 		 * @return				true if successful, false otherwise
 		 */
-		public function selectElement(eventTarget:Object):Boolean
+		public function selectElement(eventTarget:DataSprite):Boolean
 		{
 			var result:Boolean = false;
 			
@@ -260,6 +279,76 @@ package ivis.view
 			}
 			
 			return ds;
+		}
+		
+		/**
+		 * Filters the given data sprite by setting corresponding flag to true.
+		 * 
+		 * @param eventTarget	target sprite to be filtered out
+		 * @return				true if successful, false otherwise
+		 */
+		public function filterElement(eventTarget:DataSprite):Boolean
+		{
+			var result:Boolean = true;
+			
+			if (eventTarget is Node)
+			{
+				this.filterNode(eventTarget as Node);
+			}
+			else if (eventTarget is Edge)
+			{
+				this.filterEdge(eventTarget as Edge);
+			}
+			else
+			{
+				eventTarget.props.$filtered = true;
+			}
+			
+			return result;
+		}
+		
+		/**
+		 * Unfilters the given data sprite by setting corresponding flag
+		 * to false.
+		 * 
+		 * @param eventTarget	target sprite to be unfiltered
+		 * @return				true if successful, false otherwise
+		 */
+		public function unfilterElement(eventTarget:DataSprite):Boolean
+		{
+			var result:Boolean = true;
+			
+			if (eventTarget is Node)
+			{
+				this.unfilterNode(eventTarget as Node);
+			}
+			else if (eventTarget is Edge)
+			{
+				this.unfilterEdge(eventTarget as Edge);
+			}
+			else
+			{
+				eventTarget.props.$filtered = false;
+			}
+			
+			return result;
+		}
+		
+		/**
+		 * Resets all the filtered graph elements (nodes and edges) by setting
+		 * corresponding flag to false.
+		 */ 
+		public function resetFilters():void
+		{
+			for each (var node:NodeSprite in this.graph.graphData.nodes)
+			{
+				node.props.$filtered = false;
+			}
+			
+			for each (var edge:EdgeSprite in this.graph.graphData.edges)
+			{
+				edge.props.$filtered = false;
+			}
 		}
 		
 		//---------------------- PROTECTED FUNCTIONS ---------------------------
@@ -386,6 +475,66 @@ package ivis.view
 				// remove highlight of the parent (remove glow filter)
 				GeneralUtils.removeFilter(parent, parent.props.$glowFilter);
 			}
+		}
+		
+		/**
+		 * Filters the specified node.
+		 * 
+		 * @param node	node to be filtered
+		 */
+		protected function filterNode(node:Node):void
+		{
+			if (node.isBendNode)
+			{
+				this.filterEdge(node.parentE);
+			}
+			
+			node.props.$filtered = true;
+		}
+		
+		/**
+		 * Filters the specified edge.
+		 * 
+		 * @param edge	edge to be filtered
+		 */
+		protected function filterEdge(edge:Edge):void
+		{
+			if (edge.isSegment)
+			{
+				this.filterEdge(edge.parentE);
+			}
+			
+			edge.props.$filtered = true;
+		}
+		
+		/**
+		 * Unfilters the specified node.
+		 * 
+		 * @param node	node to be unfiltered
+		 */
+		protected function unfilterNode(node:Node):void
+		{
+			if (node.isBendNode)
+			{
+				this.unfilterEdge(node.parentE);
+			}
+			
+			node.props.$filtered = false;
+		}
+		
+		/**
+		 * Unfilters the specified edge.
+		 * 
+		 * @param edge	edge to be unfiltered
+		 */
+		protected function unfilterEdge(edge:Edge):void
+		{
+			if (edge.isSegment)
+			{
+				this.unfilterEdge(edge.parentE);
+			}
+			
+			edge.props.$filtered = false;
 		}
 	}
 }

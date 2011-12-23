@@ -95,41 +95,39 @@ package ivis.view
 			
 			if (style != null)
 			{
-				//style.apply(node);
 				node.attachStyle(Groups.NODES, style);
 			}
 		}
 		
 		/**
-		 * Applies default visual style to the given compound node.
+		 * Attaches default visual style to the given compound node.
 		 * 
-		 * @param node	compound node to apply visual style
+		 * @param node	compound node to attach visual styles
 		 */
 		public function initCompoundStyle(node:Node):void
 		{
-			// apply default compound node style
+			// attach default compound node style
 			node.attachStyle(Styles.DEFAULT_STYLE,
 				_defaultCompoundStyle);
 		}
 		
 		/**
-		 * Applies visual styles to the given edge. First applies the default
-		 * node style, then applies custom style for the EDGES group.
+		 * Attaches visual styles to the given edge. First attaches the default
+		 * node style, then attaches custom style for the EDGES group.
 		 * 
-		 * @param edge	edge to apply visual style
+		 * @param edge	edge to attach visual styles
 		 */
 		public function initEdgeStyle(edge:Edge):void
 		{
-			// apply default edge style
+			// attach default edge style
 			edge.attachStyle(Styles.DEFAULT_STYLE,
 				_defaultEdgeStyle);
 			
-			// apply custom style specific to Groups.EDGES
+			// attach custom style specific to Groups.EDGES
 			var style:Style = this.getGroupStyle(Groups.EDGES);
 			
 			if (style != null)
 			{
-				//style.apply(edge);
 				edge.attachStyle(Groups.EDGES, style);
 			}
 		}
@@ -137,7 +135,7 @@ package ivis.view
 		public function initGlobalStyle(container:Container):void
 		{
 			// TODO apply style to the container!
-			//container.setStyle(...);
+			container.setStyle("backgroundColor", 0xfff9f9f9);
 		}
 		
 		/**
@@ -200,6 +198,10 @@ package ivis.view
 		{
 			var style:Object;
 			
+			// init default global style
+			// TODO other global visual styles? 
+			style = {backgroundColor : 0x00ffffff};
+			
 			// init default node style
 			
 			style = {shape: NodeUIManager.RECTANGLE,
@@ -225,7 +227,7 @@ package ivis.view
 				selectionGlowBlur: 8,
 				selectionGlowStrength: 6};
 			
-			_defaultNodeStyle = new Style(style);
+			this._defaultNodeStyle = new Style(style);
 			
 			// init default compound node style
 			
@@ -253,7 +255,7 @@ package ivis.view
 				paddingTop: 10,
 				paddingBottom: 10};
 			
-			_defaultCompoundStyle = new Style(style);
+			this._defaultCompoundStyle = new Style(style);
 			
 			// init default edge style
 			
@@ -280,7 +282,7 @@ package ivis.view
 				selectionGlowBlur: 4,
 				selectionGlowStrength: 10};
 			
-			_defaultEdgeStyle = new Style(style);
+			this._defaultEdgeStyle = new Style(style);
 			
 			// init default style of BEND_NODES group
 			

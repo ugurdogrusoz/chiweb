@@ -211,5 +211,35 @@ package ivis.model.util
 			
 			return segment;
 		}
+		
+		/**
+		 * If the given edge is filtered out, returns true. If an edge is not
+		 * filtered out, but either its source or target is filtered out,
+		 * then the edge is also considered as filtered out. If an edge is a
+		 * segment and its parent is filtered out, then the edge is also
+		 * considered as filtered out.
+		 * 
+		 * @param edge	edge sprite to be checked
+		 * @return		true if filtered out, false otherwise
+		 */
+		public static function isFiltered(edge:Edge):Boolean
+		{
+			var filtered:Boolean = edge.props.$filtered;
+				
+			if (edge.isSegment)
+			{
+				filtered = Edges.isFiltered(edge.parentE);
+			}
+			else
+			{
+				// if an edge is not filtered out, but either its target or its
+				// source is filtered out, then the edge is also filtered out
+				filtered = filtered ||
+					Nodes.isFiltered(edge.source as Node) ||
+					Nodes.isFiltered(edge.target as Node);
+			}
+			
+			return filtered;
+		}
 	}
 }

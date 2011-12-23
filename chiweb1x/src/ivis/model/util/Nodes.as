@@ -21,7 +21,7 @@ package ivis.model.util
 		
 		public static const ALL:String = "all";
 		public static const SELECTED:String = "selected";
-		public static const NON_SELECTED:String = "non-selected";
+		public static const NON_SELECTED:String = "nonSelected";
 		
 		public static const LEFT:String = "left";
 		public static const RIGHT:String = "right";
@@ -480,6 +480,92 @@ package ivis.model.util
 			
 			// return adjusted bounds
 			return bounds;
+		}
+		
+		/**
+		 * Populates an array of Node instances with the parents of selected
+		 * type for the given Node. All parents up to root are collected
+		 * by default, type can also be selected and non-selected parents.
+		 * 
+		 * @param node		node whose parents are collected
+		 * @return			array of parents matching the given type 
+		 */
+		public static function getParents(node:Node,
+			type:String = Nodes.ALL):Array
+		{
+			var parents:Array = new Array();
+			var condition:Boolean;
+			var parent:Node;
+			
+			if (node != null)
+			{
+				// get parent
+				parent = node.parentN;
+				
+				while (parent != null)
+				{
+					if (type === Nodes.SELECTED)
+					{
+						condition = parent.props.$selected;
+					}
+					else if (type === Nodes.NON_SELECTED)
+					{
+						condition = !parent.props.$selected;
+					}
+					else
+					{
+						// default case is all parents (always true)
+						condition = true;
+					}
+					
+					// process the node if the condition meets
+					if (condition)
+					{
+						// add current node to the list
+						parents.push(parent);
+					}
+					
+					// advance to next parent
+					parent = parent.parentN
+				}
+			}
+			
+			return parents;
+		}
+		
+		/**
+		 * If the given node is filtered out, returns true. If a node itself 
+		 * is not filtered out, but at least one of its parents is filtered out,
+		 * then the node is also considered as filtered out. If a node is a
+		 * bend node, and its parent edge is filtered out, then the node is also
+		 * considered as filtered out.
+		 * 
+		 * @param node	node to be checked
+		 * @return		true if filtered out, false otherwise
+		 */
+		public static function isFiltered(node:Node):Boolean
+		{
+			var filtered:Boolean = node.props.$filtered;
+			
+			// if a node is not filtered out, but at least one of its parents
+			// is filtered out, then the node should also be filtered out
+			for each (var parent:Node in Nodes.getParents(node))
+			{
+				if (parent.props.$filtered)
+				{
+					filtered = true;
+					break;
+				}
+			}
+			
+			// if node is a bend node, check its parent edge
+			if (node.isBendNode)
+			{
+				filtered = filtered ||
+					Edges.isFiltered(node.parentE);
+			}
+			
+			return filtered;
 		}
 	}
 }

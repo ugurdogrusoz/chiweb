@@ -105,12 +105,15 @@ package ivis.view
 			{
 				container.addChild(this._view);
 				added = true;
-				
-				// init global style of the container
-				this._styleManager.initGlobalStyle(container);
 			}
 			
 			return added;
+		}
+		
+		public function setRootContainer(container:Container):void
+		{
+			// TODO init global style of the container
+			this._styleManager.initGlobalStyle(container);
 		}
 		
 		/**
@@ -365,9 +368,9 @@ package ivis.view
 		 * @return				true if successful, false otherwise
 		 */
 		public function removeElement(eventTarget:Object,
-									  update:Boolean = true):Boolean
+			update:Boolean = true):Boolean
 		{
-			var result:Boolean = false;
+			var removed:Boolean = false;
 			
 			var edge:Edge;
 			var node:Node;
@@ -381,13 +384,13 @@ package ivis.view
 				// neighbor bend nodes.
 				if (node.isBendNode)
 				{
-					result = this.removeBendNode(node);
+					removed = this.removeBendNode(node);
 				}
 					// for a node, remove all children & all incident edges
 					// (with their bendpoints and segments)
 				else
 				{
-					result = this.removeNode(node);
+					removed = this.removeNode(node);
 				}
 			}
 				// for an edge, remove all segments & bendpoints
@@ -395,16 +398,16 @@ package ivis.view
 			{
 				edge = eventTarget as Edge;
 				
-				result = this.removeEdge(edge);
+				removed = this.removeEdge(edge);
 			}
 			
-			if (result && update)
+			if (removed && update)
 			{
 				this.view.updateAllCompoundBounds();
 				this.view.update();
 			}
 			
-			return result;
+			return removed;
 		}
 		
 		/**
@@ -422,8 +425,7 @@ package ivis.view
 				trace("[GraphView.selectElement] selecting " + 
 					(eventTarget as DataSprite).data.id);
 				
-				this.view.selectElement(eventTarget as DataSprite);
-				result = true;
+				result = this.view.selectElement(eventTarget as DataSprite);
 			}
 			
 			return result;
@@ -506,6 +508,77 @@ package ivis.view
 				this.view.updateAllCompoundBounds();
 				this.view.update();
 			}
+		}
+		
+		/**
+		 * Filters the given graph element.
+		 * 
+		 * @param eventTarget	target object to be filtered
+		 * @param update		flag that indicates compound bound update,
+		 * 						default value is true.
+		 * @return				true if successful, false otherwise
+		 */
+		public function filterElement(eventTarget:Object,
+			update:Boolean = true):Boolean
+		{
+			var filtered:Boolean = false;
+			
+			if (eventTarget is DataSprite)
+			{
+				trace("[GraphView.filterElement] filtering " + 
+					(eventTarget as DataSprite).data.id);
+				
+				filtered = this.view.filterElement(eventTarget as DataSprite);
+			}
+			
+			if (filtered && update)
+			{
+				this.view.updateAllCompoundBounds();
+				this.view.update();
+			}
+			
+			return filtered;
+		}
+		
+		/**
+		 * Filters all the selected elements.
+		 */
+		public function filterSelected():void
+		{
+			var filtered:Boolean = false;
+			
+			for each (var node:NodeSprite in this.graph.selectedNodes)
+			{
+				// remove node, but not update bounds
+				filtered = this.filterElement(node, false);
+			}
+			
+			for each (var edge:EdgeSprite in this.graph.selectedEdges)
+			{
+				// filter edge, but not update bounds
+				filtered = this.filterElement(edge, false) || filtered;
+			}
+			
+			// if filter operation is successful, update all compound bounds
+			if (filtered)
+			{
+				this.view.updateVisibility();
+				this.view.updateAllCompoundBounds();
+				this.view.update();
+			}
+		}
+		
+		/**
+		 * Resets all filters for the graph elements (nodes and edges).
+		 */
+		public function resetFilters():void
+		{
+			trace("all filters are removed");
+			
+			this.view.resetFilters();
+			this.view.updateVisibility();
+			this.view.updateAllCompoundBounds();
+			this.view.update();
 		}
 		
 		/**
