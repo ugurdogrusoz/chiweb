@@ -1,13 +1,9 @@
 package ivis.view
-{
-	import flare.display.TextSprite;
-	import flare.vis.data.DataSprite;
-	import flare.vis.operator.label.Labeler;
-	
+{	
 	import flash.text.TextFormat;
 	
 	import ivis.util.Groups;
-
+	
 	/**
 	 * Labeler class for compound nodes.
 	 * 

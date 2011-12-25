@@ -9,9 +9,8 @@ package ivis.view
 	import ivis.model.Edge;
 	import ivis.model.Node;
 	import ivis.model.util.Edges;
-	import ivis.util.GeometryUtils;
 	import ivis.util.Groups;
-
+	
 	/**
 	 * Labeler for edge sprites.
 	 * 
@@ -129,6 +128,7 @@ package ivis.view
 			return [startPoint, endPoint];
 		}
 		
+		/** @inheritDoc */
 		protected override function updateLabelPosition(label:TextSprite,
 			d:DataSprite):void
 		{

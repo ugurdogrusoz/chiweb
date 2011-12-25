@@ -7,11 +7,10 @@ package ivis.controls
 	
 	import flash.display.DisplayObject;
 	import flash.display.InteractiveObject;
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import ivis.model.Node;
-	import ivis.view.GraphManager;
+	import ivis.manager.GraphManager;
 
 	/**
 	 * Multiple selection (rubber-band) control for DataSprite instances.

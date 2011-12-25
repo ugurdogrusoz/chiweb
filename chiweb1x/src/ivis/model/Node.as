@@ -283,8 +283,10 @@ package ivis.model
 		/**
 		 * Returns (one-level) child nodes of this compound node. If the map
 		 * of children is not initialized, then returns an empty array.
+		 * 
+		 * @param invisible	indicates whether invisible nodes will be collected
 		 */
-		public function getNodes() : Array
+		public function getNodes(invisible:Boolean = true) : Array
 		{
 			var nodeList:Array = new Array();
 			
@@ -292,7 +294,10 @@ package ivis.model
 			{
 				for each (var ns:NodeSprite in this._nodesMap)
 				{
-					nodeList.push(ns);
+					if (invisible || ns.visible)
+					{
+						nodeList.push(ns);
+					}
 				}
 			}
 			
@@ -313,7 +318,7 @@ package ivis.model
 			bounds.width += this.paddingLeft + this.paddingRight;
 			
 			// set bounds
-			_bounds = bounds;
+			this._bounds = bounds;
 			
 			// also update x & y coordinates of the compound node by using
 			// the new bounds
@@ -326,9 +331,10 @@ package ivis.model
 		 */
 		public function resetBounds() : void
 		{
-			_bounds = null;
+			this._bounds = null;
 		}
 		
+		/** @inheritDoc */
 		public override function toString():String
 		{
 			var parentNode:String = "N/A";

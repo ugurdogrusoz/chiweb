@@ -1,6 +1,5 @@
 package ivis.view
 {
-	import flare.util.Shapes;
 	import flare.vis.data.DataSprite;
 	import flare.vis.data.render.ShapeRenderer;
 	

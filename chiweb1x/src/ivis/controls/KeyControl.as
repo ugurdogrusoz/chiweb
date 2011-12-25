@@ -4,7 +4,7 @@ package ivis.controls
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	
-	import ivis.view.GraphManager;
+	import ivis.manager.GraphManager;
 
 	/**
 	 * Control class for the key press actions.

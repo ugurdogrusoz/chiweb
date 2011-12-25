@@ -5,13 +5,12 @@ package ivis.view
 	import flare.util.Filter;
 	import flare.vis.data.DataList;
 	import flare.vis.data.DataSprite;
-	import flare.vis.data.NodeSprite;
 	import flare.vis.operator.label.Labeler;
 	
 	import flash.text.TextFormat;
 	
 	import ivis.util.Groups;
-
+	
 	/**
 	 * Labeler for simple (regular) nodes.
 	 * 
@@ -94,6 +93,7 @@ package ivis.view
 			}
 		}
 		
+		/** @inheritDoc */
 		protected override function getLabel(d:DataSprite,
 			create:Boolean=false,
 			visible:Boolean=true):TextSprite

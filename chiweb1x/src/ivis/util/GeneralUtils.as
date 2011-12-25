@@ -46,7 +46,7 @@ package ivis.util
 		 * @param filter	filter to be added
 		 */
 		public static function addFilter(ds:DataSprite,
-										 filter:*) : void
+			filter:*) : void
 		{
 			// init sprite's filter array if not initialized yet
 			if (ds.props.$filters == null)

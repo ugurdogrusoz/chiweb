@@ -1,12 +1,16 @@
-package ivis.controls
+package ivis.manager
 {
 	import flare.vis.controls.IControl;
 	import flare.vis.data.DataSprite;
 	import flare.vis.data.NodeSprite;
 	
-	import flash.events.Event;
-	
-	import ivis.view.GraphManager;
+	import ivis.controls.ClickControl;
+	import ivis.controls.CustomControl;
+	import ivis.controls.EventControl;
+	import ivis.controls.KeyControl;
+	import ivis.controls.MultiDragControl;
+	import ivis.controls.SelectControl;
+	import ivis.controls.StateManager;
 
 	/**
 	 * This class is designed to manage Controls that can be attached to and
@@ -51,7 +55,7 @@ package ivis.controls
 		//------------------------- CONSTRUCTOR --------------------------------
 		
 		/**
-		 * Initializes the control center for the given GraphManager
+		 * Initializes the control center for the given GraphManager.
 		 * 
 		 * @param graphManager	a GraphManager instance
 		 */
@@ -116,17 +120,32 @@ package ivis.controls
 				}
 			}
 			
+			// first, remove the control to avoid duplications
+			this._graphManager.removeControl(control);
+			
 			// add control to the visualization
 			this._graphManager.addControl(control);
 		}
 		
 		/**
-		 * Removes an existing custom control from the visualization.
+		 * Removes an existing custom control from the visualization. It is not
+		 * possible to remove a default control by this method. Use the method
+		 * disableDefaultControl instead to disable a certain default control.
 		 * 
 		 * @param control	custom control to be removed
 		 */
 		public function removeControl(control:IControl):IControl
 		{
+			// do not allow a default control to be removed manually
+			if (control === this._keyControl ||
+				control === this._clickControl ||
+				control === this._dragControl ||
+				control === this._selectControl)
+			{
+				return null;
+			}
+			
+			// remove any other control
 			return this._graphManager.removeControl(control);
 		}
 		
@@ -249,10 +268,10 @@ package ivis.controls
 		protected function enableControl(control:IControl):void
 		{
 			// first, remove the control to avoid duplicate controls
-			this.removeControl(control);
+			this._graphManager.removeControl(control);
 			
 			// add the control again
-			this.addControl(control);
+			this._graphManager.addControl(control);
 		}
 		
 		/**
@@ -263,7 +282,7 @@ package ivis.controls
 		protected function disableControl(control:IControl):void
 		{
 			// remove control from the visualization
-			this.removeControl(control);
+			this._graphManager.removeControl(control);
 		}
 	}
 }

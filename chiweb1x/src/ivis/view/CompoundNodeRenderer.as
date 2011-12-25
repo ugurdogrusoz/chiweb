@@ -1,16 +1,13 @@
 package ivis.view
 {
 	import flare.vis.data.DataSprite;
-	import flare.vis.data.EdgeSprite;
 	
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
 	
-	import ivis.model.Edge;
 	import ivis.model.Node;
 	import ivis.view.ui.CompoundUIManager;
-	import ivis.util.GeneralUtils;
 	import ivis.view.ui.NodeUIManager;
 	import ivis.model.util.Nodes;
 	import ivis.view.ui.INodeUI;

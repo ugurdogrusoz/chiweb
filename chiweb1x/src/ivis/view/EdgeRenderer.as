@@ -1,7 +1,5 @@
 package ivis.view
 {
-	import flare.util.Geometry;
-	import flare.util.Shapes;
 	import flare.vis.data.DataSprite;
 	import flare.vis.data.EdgeSprite;
 	import flare.vis.data.NodeSprite;
@@ -9,14 +7,12 @@ package ivis.view
 	
 	import flash.display.Graphics;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
 	import ivis.view.ui.ArrowUIManager;
 	import ivis.view.ui.CompoundUIManager;
 	import ivis.view.ui.EdgeUIManager;
-	import ivis.util.GeometryUtils;
 	import ivis.view.ui.NodeUIManager;
 	import ivis.view.ui.IArrowUI;
 	import ivis.view.ui.IEdgeUI;

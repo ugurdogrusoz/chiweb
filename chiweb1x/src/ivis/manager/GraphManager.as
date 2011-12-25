@@ -1,12 +1,12 @@
-package ivis.view
+package ivis.manager
 {
 	import flare.vis.controls.IControl;
 	import flare.vis.data.DataList;
 	import flare.vis.data.DataSprite;
 	import flare.vis.data.EdgeSprite;
 	import flare.vis.data.NodeSprite;
-	
-	import flash.geom.Point;
+	import flare.vis.operator.IOperator;
+	import flare.vis.operator.layout.Layout;
 	
 	import ivis.event.DataChangeEvent;
 	import ivis.event.StyleChangeEvent;
@@ -19,8 +19,10 @@ package ivis.view
 	import ivis.model.util.Styles;
 	import ivis.util.GeneralUtils;
 	import ivis.util.Groups;
-	
-	import mx.core.Container;
+	import ivis.view.CompoundNodeRenderer;
+	import ivis.view.EdgeRenderer;
+	import ivis.view.GraphView;
+	import ivis.view.NodeRenderer;
 
 	/**
 	 * This class is designed to handle changes in graph topology, graph
@@ -70,6 +72,12 @@ package ivis.view
 		
 		//------------------------- CONSTRUCTOR --------------------------------
 		
+		/**
+		 * Instantiates a new GraphManager with the given graph. If no graph
+		 * is provided, creates an empty graph.
+		 * 
+		 * @param graph	a Graph model
+		 */
 		public function GraphManager(graph:Graph = null)
 		{
 			if (this.graph == null)
@@ -92,31 +100,6 @@ package ivis.view
 		//---------------------- PUBLIC FUNCTIONS ------------------------------
 		
 		/**
-		 * Sets the Container of the graph view as the given container object.
-		 * 
-		 * @param container	container of the graph view
-		 * @return			true if view is added to the given container
-		 */ 
-		public function setGraphContainer(container:Container):Boolean
-		{
-			var added:Boolean = false;
-			
-			if (this._view.parent != container)
-			{
-				container.addChild(this._view);
-				added = true;
-			}
-			
-			return added;
-		}
-		
-		public function setRootContainer(container:Container):void
-		{
-			// TODO init global style of the container
-			this._styleManager.initGlobalStyle(container);
-		}
-		
-		/**
 		 * Creates a new Node instance and adds it to the location specified by
 		 * x and y coordinates. If the event target is another node, the new 
 		 * node will be added into the target node as a child.
@@ -128,8 +111,8 @@ package ivis.view
 		 * @return				newly created node as a DataSprite
 		 */
 		public function addNode(x:Number, y:Number,
-								eventTarget:Object = null,
-								data:Object = null):DataSprite
+			eventTarget:Object = null,
+			data:Object = null):DataSprite
 		{
 			// add node to the graph
 			var node:Node = this.graph.addNode(data);
@@ -183,8 +166,8 @@ package ivis.view
 					// update the bounds of the compound node
 					this.view.updateCompoundBounds(compound);
 					
-					// render the compound node with new bounds
-					compound.render();
+					// set compound as dirty
+					compound.dirty();
 					
 					// advance to the next parent node
 					compound = compound.parentN;
@@ -280,10 +263,13 @@ package ivis.view
 		 * Creates a bendpoint as a Node instance and adds it to the given
 		 * target edge. If eventTarget is not an edge, no bendpoint is added.
 		 * 
+		 * @param x				x coordinate of the event
+		 * @param y				y coordinate of the event
 		 * @param eventTarget	target object of event
 		 * @return				newly created bendpoint as a DataSprite
 		 */
-		public function addBendPoint(eventTarget:Object):DataSprite
+		public function addBendPoint(x:Number, y:Number,
+			eventTarget:Object):DataSprite
 		{
 			var edge:Edge;
 			
@@ -317,6 +303,10 @@ package ivis.view
 			// create bend node to represent bendpoint
 			var bendNode:Node = this.addBendNode(edge);
 			parent.addBendNode(bendNode);
+			
+			// update position of the bendpoint
+			bendNode.x = x;
+			bendNode.y = y;
 			
 			// create first segment
 			edgeData = new Object();
@@ -475,8 +465,6 @@ package ivis.view
 		 */ 
 		public function resetSelected():void
 		{
-			trace("all selections are cleared");
-			
 			this.view.resetSelected();
 			
 			this.graph.clearGroup(Groups.SELECTED_NODES);
@@ -493,13 +481,20 @@ package ivis.view
 			for each (var node:NodeSprite in this.graph.selectedNodes)
 			{
 				// remove node, but not update bounds
-				deleted = this.removeElement(node, false);
+				if (this.removeElement(node, false))
+				{
+					deleted = true;
+				}
 			}
 			
 			for each (var edge:EdgeSprite in this.graph.selectedEdges)
 			{
 				// remove node, but not update bounds
-				deleted = this.removeElement(edge, false) || deleted;
+				
+				if (this.removeElement(edge, false))
+				{
+					deleted = true;
+				}
 			}
 			
 			// if delete operation is successful, update all compound bounds
@@ -550,19 +545,26 @@ package ivis.view
 			for each (var node:NodeSprite in this.graph.selectedNodes)
 			{
 				// remove node, but not update bounds
-				filtered = this.filterElement(node, false);
+				if (this.filterElement(node, false))
+				{
+					filtered = true;
+				}
 			}
 			
 			for each (var edge:EdgeSprite in this.graph.selectedEdges)
 			{
 				// filter edge, but not update bounds
-				filtered = this.filterElement(edge, false) || filtered;
+				if (this.filterElement(edge, false))
+				{
+					filtered = true;
+				}
 			}
 			
 			// if filter operation is successful, update all compound bounds
 			if (filtered)
 			{
 				this.view.updateVisibility();
+				
 				this.view.updateAllCompoundBounds();
 				this.view.update();
 			}
@@ -572,19 +574,18 @@ package ivis.view
 		 * Resets all filters for the graph elements (nodes and edges).
 		 */
 		public function resetFilters():void
-		{
-			trace("all filters are removed");
-			
+		{			
 			this.view.resetFilters();
+			
 			this.view.updateVisibility();
 			this.view.updateAllCompoundBounds();
 			this.view.update();
 		}
 		
 		/**
-		 * Adds a custom control to the visualization.
+		 * Adds a control to the visualization.
 		 * 
-		 * @param control	custom control to be added
+		 * @param control	control to be added
 		 */
 		public function addControl(control:IControl):void
 		{
@@ -592,13 +593,55 @@ package ivis.view
 		}
 		
 		/**
-		 * Removes an existing custom control from the visualization.
+		 * Removes an existing control from the visualization.
 		 * 
-		 * @param control	custom control to be removed
+		 * @param control	control to be removed
 		 */
 		public function removeControl(control:IControl):IControl
 		{
 			return this.view.vis.controls.remove(control);
+		}
+		
+		/**
+		 * Adds an operator to the visualizaiton.
+		 * 
+		 * @param operator	operator to be added
+		 */
+		public function addOperator(operator:IOperator):void
+		{
+			this.view.vis.operators.add(operator);
+		}
+		
+		/**
+		 * Removes an existing operator from the visualization.
+		 * 
+		 * @param operator	operator to be removed
+		 */
+		public function removeOperator(operator:IOperator):Boolean
+		{
+			return this.view.vis.operators.remove(operator);
+		}
+		
+		/**
+		 * Sets the layout of the graph.
+		 * 
+		 * @param layout	layout operator
+		 */
+		public function setLayout(layout:Layout):void
+		{
+			this.view.vis.layout = layout;
+		}
+		
+		/**
+		 * Performs the current layout on the graph.
+		 */
+		public function performLayout():void
+		{
+			if (this.view.performLayout())
+			{
+				this.view.updateAllCompoundBounds();
+				this.view.update();
+			}
 		}
 		
 		/**
@@ -642,6 +685,7 @@ package ivis.view
 			// set the position of the bendpoint as the mid-point of
 			// the start&end points of the target edge
 			
+			/*
 			if (edge.props.$startPoint == null ||
 				edge.props.$endPoint == null)
 			{
@@ -659,6 +703,7 @@ package ivis.view
 				bendNode.x = (startPoint.x + endPoint.x) / 2;
 				bendNode.y = (startPoint.y + endPoint.y) / 2;
 			}
+			*/
 			
 			// TODO default style for bend nodes?
 			

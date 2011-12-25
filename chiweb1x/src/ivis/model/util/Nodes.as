@@ -22,6 +22,8 @@ package ivis.model.util
 		public static const ALL:String = "all";
 		public static const SELECTED:String = "selected";
 		public static const NON_SELECTED:String = "nonSelected";
+		public static const VISIBLE:String = "visible";
+		public static const INVISIBLE:String = "invisible";
 		
 		public static const LEFT:String = "left";
 		public static const RIGHT:String = "right";
@@ -45,7 +47,8 @@ package ivis.model.util
 		 * 
 		 * @param compound	compound node whose children are collected
 		 * @param type		type of the nodes to be collected, valid types are:
-		 * 					Nodes.ALL, Nodes.SELECTED and Nodes.NON_SELECTED
+		 * 					Nodes.ALL, Nodes.SELECTED, Nodes.NON_SELECTED,
+		 * 					Nodes.VISIBLE, and Nodes.INVISIBLE
 		 * @return			array of child nodes matching the given type
 		 */
 		public static function getChildren(compound:Node,
@@ -60,25 +63,19 @@ package ivis.model.util
 				{
 					if (type === Nodes.SELECTED)
 					{
-						if (node.props.$selected)
-						{
-							condition = true;
-						}
-						else
-						{
-							condition = false;
-						}
+						condition = node.props.$selected;
 					}
 					else if (type === Nodes.NON_SELECTED)
 					{
-						if (node.props.$selected)
-						{
-							condition = false;
-						}
-						else
-						{
-							condition = true;
-						}
+						condition = !(node.props.$selected);
+					}
+					else if (type === Nodes.VISIBLE)
+					{
+						condition = node.visible;
+					}
+					else if (type === Nodes.INVISIBLE)
+					{
+						condition = !(node.visible);
 					}
 					else
 					{
@@ -254,7 +251,8 @@ package ivis.model.util
 		 * 
 		 * @param compound	target node
 		 * @param type		type of the nodes to be collected, valid types are:
-		 * 					Nodes.ALL, Nodes.SELECTED and Nodes.NON_SELECTED
+		 * 					Nodes.ALL, Nodes.SELECTED, Nodes.NON_SELECTED,
+		 * 					Nodes.VISIBLE, and Nodes.INVISIBLE
 		 * @return			array of inner bend nodes matching the given type
 		 */
 		public static function innerBends(compound:Node,
@@ -272,7 +270,6 @@ package ivis.model.util
 			
 			for each (node in children)
 			{
-				
 				for each (var es:EdgeSprite in Nodes.incidentEdges(node))
 				{
 					edges[es.data.id] = es;
@@ -305,32 +302,25 @@ package ivis.model.util
 				
 				if (inner)
 				{
-					for each (var bendNode:Node in edge.getBendNodes())
+					for each (node in edge.getBendNodes())
 					{
-						
 						// check for the node condition
 						
 						if (type === Nodes.SELECTED)
 						{
-							if (node.props.$selected)
-							{
-								condition = true;
-							}
-							else
-							{
-								condition = false;
-							}
+							condition = node.props.$selected;
 						}
 						else if (type === Nodes.NON_SELECTED)
 						{
-							if (node.props.$selected)
-							{
-								condition = false;
-							}
-							else
-							{
-								condition = true;
-							}
+							condition = !(node.props.$selected);
+						}
+						else if (type === Nodes.VISIBLE)
+						{
+							condition = node.visible;
+						}
+						else if (type === Nodes.INVISIBLE)
+						{
+							condition = !(node.visible);
 						}
 						else
 						{
@@ -341,7 +331,7 @@ package ivis.model.util
 						// if condition met, add node to the list
 						if (condition)
 						{
-							bendNodes[bendNode.data.id] = bendNode;
+							bendNodes[node.data.id] = node;
 						}
 					}
 				}
@@ -363,7 +353,8 @@ package ivis.model.util
 		 * 
 		 * @param node		node whose incident edges are collected
 		 * @param type		type of the edges to be collected, valid types are:
-		 * 					Nodes.ALL, Nodes.SELECTED and Nodes.NON_SELECTED
+		 * 					Nodes.ALL, Nodes.SELECTED, Nodes.NON_SELECTED,
+		 * 					Nodes.VISIBLE, and Nodes.INVISIBLE
 		 * @return			array of incident edges matching the given type
 		 */
 		public static function incidentEdges(node:Node,
@@ -377,25 +368,19 @@ package ivis.model.util
 				
 				if (type === Nodes.SELECTED)
 				{
-					if (edge.props.$selected)
-					{
-						condition = true;
-					}
-					else
-					{
-						condition = false;
-					}
+					condition = edge.props.$selected;
 				}
 				else if (type === Nodes.NON_SELECTED)
 				{
-					if (edge.props.$selected)
-					{
-						condition = false;
-					}
-					else
-					{
-						condition = true;
-					}
+					condition = !(edge.props.$selected);
+				}
+				else if (type === Nodes.VISIBLE)
+				{
+					condition = edge.visible;
+				}
+				else if (type === Nodes.INVISIBLE)
+				{
+					condition = !(edge.visible);
 				}
 				else
 				{
@@ -425,7 +410,7 @@ package ivis.model.util
 			
 			// bring every child component to the front
 			
-			for each (var child:Node in node.getNodes())
+			for each (var child:Node in node.getNodes(false))
 			{
 				// bring node to front
 				GeneralUtils.bringToFront(child);
@@ -472,11 +457,16 @@ package ivis.model.util
 		public static function adjustBounds(node:Node) : Rectangle
 		{
 			// create a copy of original node bounds
-			var bounds:Rectangle = node.bounds.clone();
+			var bounds:Rectangle = null;
 			
-			// convert bounds from global to local
-			bounds.x -= node.x;
-			bounds.y -= node.y;
+			if (node.bounds != null)
+			{
+				bounds = node.bounds.clone();
+				
+				// convert bounds from global to local
+				bounds.x -= node.x;
+				bounds.y -= node.y;
+			}
 			
 			// return adjusted bounds
 			return bounds;

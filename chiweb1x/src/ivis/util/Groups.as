@@ -11,6 +11,7 @@ package ivis.util
 	{
 		//-------------------------CONSTANTS------------------------------------
 		
+		public static const ALL:String = "all";
 		public static const NODES:String = Data.NODES;
 		public static const EDGES:String = Data.EDGES;
 		

@@ -1,6 +1,5 @@
 package ivis.model
 {
-	import flare.vis.data.DataSprite;
 	import flare.vis.data.EdgeSprite;
 	
 	import ivis.event.StyleChangeEvent;

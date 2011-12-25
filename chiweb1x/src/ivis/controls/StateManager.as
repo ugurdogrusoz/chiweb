@@ -1,7 +1,5 @@
 package ivis.controls
 {
-	import flash.system.System;
-
 	/**
 	 * This class is designed to manage action states and to be used by 
 	 * the control classes to check certain states of the application.

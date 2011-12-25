@@ -1,8 +1,7 @@
-package ivis.view
+package ivis.manager
 {
 	import flare.display.TextSprite;
 	
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
 	import ivis.event.DataChangeEvent;
@@ -11,6 +10,7 @@ package ivis.view
 	import ivis.model.Style;
 	import ivis.model.util.Styles;
 	import ivis.util.Groups;
+	import ivis.view.EdgeLabeler;
 	import ivis.view.ui.ArrowUIManager;
 	import ivis.view.ui.CompoundUIManager;
 	import ivis.view.ui.EdgeUIManager;
@@ -232,6 +232,9 @@ package ivis.view
 			// init default compound node style
 			
 			style = {shape: CompoundUIManager.RECTANGLE,
+				size: 50,
+				w: 100,
+				h: 50,
 				alpha: 0.9,
 				fillColor: 0xff9ed1dc,
 				lineColor: 0xff333333,

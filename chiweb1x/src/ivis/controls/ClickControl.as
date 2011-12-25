@@ -2,7 +2,6 @@ package ivis.controls
 {
 	import flare.display.TextSprite;
 	import flare.vis.controls.Control;
-	import flare.vis.data.DataSprite;
 	
 	import flash.display.DisplayObject;
 	import flash.display.InteractiveObject;
@@ -12,10 +11,7 @@ package ivis.controls
 	import ivis.model.Node;
 	import ivis.model.util.Edges;
 	import ivis.model.util.Nodes;
-	import ivis.view.GraphManager;
-	import ivis.view.GraphVisualization;
-	
-	import mx.core.mx_internal;
+	import ivis.manager.GraphManager;
 
 	/**
 	 * Control class for the single click action.
@@ -127,7 +123,9 @@ package ivis.controls
 				// the target edge
 				if (target is Edge)
 				{
-					this.graphManager.addBendPoint(target);
+					this.graphManager.addBendPoint(_object.mouseX,
+						_object.mouseY,
+						target);
 				}
 			}
 			

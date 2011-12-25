@@ -1,13 +1,12 @@
 package ivis.view
 {
-	import flare.vis.Visualization;
+	import flare.display.DirtySprite;
 	import flare.vis.data.DataSprite;
 	import flare.vis.data.EdgeSprite;
 	import flare.vis.data.NodeSprite;
 	
 	import flash.display.DisplayObject;
 	import flash.filters.GlowFilter;
-	import flash.utils.flash_proxy;
 	
 	import ivis.model.Edge;
 	import ivis.model.Graph;
@@ -44,7 +43,7 @@ package ivis.view
 		/**
 		 * Visualization instance for this graph.
 		 */
-		public function get vis():Visualization
+		public function get vis():GraphVisualization
 		{
 			return _vis;
 		}
@@ -68,9 +67,11 @@ package ivis.view
 		/**
 		 * Updates the view.
 		 */
-		public function update():void
+		public function update() : void
 		{
-			this._vis.update();
+			//this._vis.update();
+			DirtySprite.renderDirty();			
+			this.updateLabels();
 		}
 		
 		/**
@@ -88,7 +89,7 @@ package ivis.view
 		 * 
 		 * @param group	name of the data group
 		 */
-		public function updateLabels(group:String):void
+		public function updateLabels(group:String = Groups.ALL):void
 		{
 			this._vis.updateLabels(group);
 		}
@@ -349,6 +350,24 @@ package ivis.view
 			{
 				edge.props.$filtered = false;
 			}
+		}
+		
+		/**
+		 * Performs the current layout on the graph.
+		 * 
+		 * @return true if layout performed succesfully, false otherwise
+		 */
+		public function performLayout():Boolean
+		{
+			var result:Boolean = false;
+			
+			if (this.vis.layout != null)
+			{
+				this.vis.layout.operate();
+				result = true;
+			}
+			
+			return result;
 		}
 		
 		//---------------------- PROTECTED FUNCTIONS ---------------------------

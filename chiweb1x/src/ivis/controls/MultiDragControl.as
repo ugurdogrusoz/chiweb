@@ -11,7 +11,7 @@ package ivis.controls
 	import ivis.model.Node;
 	import ivis.model.util.Nodes;
 	import ivis.util.Groups;
-	import ivis.view.GraphManager;
+	import ivis.manager.GraphManager;
 
 	/**
 	 * Control class for dragging nodes. It supports multiple node dragging.

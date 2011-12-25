@@ -2,9 +2,7 @@ package ivis.controls
 {
 	import flare.vis.controls.Control;
 	
-	import ivis.view.GraphManager;
-	
-	import mx.states.State;
+	import ivis.manager.GraphManager;
 
 	/**
 	 * Base class for other control classes.

@@ -1,19 +1,16 @@
 package ivis.view
 {
-	import flare.animate.Transitioner;
-	import flare.display.DirtySprite;
 	import flare.vis.Visualization;
 	import flare.vis.axis.Axes;
 	import flare.vis.data.Data;
-	import flare.vis.data.EdgeSprite;
 	import flare.vis.data.NodeSprite;
 	import flare.vis.operator.label.Labeler;
+	import flare.vis.operator.layout.Layout;
 	
 	import flash.geom.Rectangle;
 	
 	import ivis.model.Edge;
 	import ivis.model.Node;
-	import ivis.model.util.Edges;
 	import ivis.model.util.Nodes;
 	import ivis.util.Groups;
 
@@ -27,6 +24,7 @@ package ivis.view
 		protected var _nodeLabeler:Labeler;
 		protected var _compoundLabeler:Labeler;
 		protected var _edgeLabeler:Labeler;
+		protected var _layout:Layout;
 		
 		//----------------------------- ACCESSORS ------------------------------
 		
@@ -123,6 +121,32 @@ package ivis.view
 			this._nodeLabeler = labeler;
 		}
 		
+		/**
+		 * Layout operator for the graph.
+		 */
+		public function get layout():Layout
+		{
+			return _layout;
+		}
+		
+		public function set layout(layout:Layout):void
+		{
+			// remove the old layout
+			if (this._layout != null)
+			{
+				this.operators.remove(this._layout);
+			}
+			
+			// add new layout
+			if (layout != null)
+			{
+				this.operators.add(layout);
+			}
+			
+			// set the layout
+			this._layout = layout;
+		}
+		
 		//------------------------ CONSTRUCTOR ---------------------------------
 		
 		/**
@@ -159,30 +183,19 @@ package ivis.view
 			
 			var bounds:Rectangle = new Rectangle();
 			
-			// TODO do not add invisible children!
-			var children:Array = Nodes.getChildren(compound);
+			// do not add invisible children
+			var children:Array = Nodes.getChildren(compound, Nodes.VISIBLE);
 			
-			var directChildren:Array = compound.getNodes();
+			var directChildren:Array = compound.getNodes(false);
 			
 			// for each direct child of the compound node, decide which
 			// bendpoints should be taken into account for the bounds 
 			for each (var node:Node in directChildren)
 			{
-				// skip filtered nodes
-				if (Nodes.isFiltered(node))
-				{
-					continue;
-				}
-				
 				// process each incident edge of the current node
-				for each (var edge:Edge in Nodes.incidentEdges(node))
+				for each (var edge:Edge in
+					Nodes.incidentEdges(node, Nodes.VISIBLE))
 				{
-					// skip filtered edges
-					if (Edges.isFiltered(edge))
-					{
-						continue;
-					}
-					
 					// if edge is an actual edge, calculate the lowest common
 					// ancestor for the source and target of the edge
 					if (!edge.isSegment)
@@ -231,7 +244,7 @@ package ivis.view
 		{
 			var bounds:Rectangle;
 			
-			if (compound.getNodes().length > 0)
+			if (compound.getNodes(false).length > 0)
 			{
 				// calculate&update bounds of the compound node 
 				bounds = this.calculateBounds(compound);
@@ -239,37 +252,35 @@ package ivis.view
 			}
 			else
 			{
-				// empty compound, so reset bounds
-				compound.resetBounds();
+				// compound has no visible child,
+				// update bounds with default width and height values
+				compound.bounds.width = compound.w;
+				compound.bounds.height = compound.h;
+				compound.bounds.x = compound.x - compound.w/2;
+				compound.bounds.y = compound.y - compound.h/2;
+				
+				// update compound node labels
+				compoundLabeler.operate();
 			}
 		}
 		
 		/**
-		 * Finds all parentless compounds, and recursively update bounds
-		 * in a bottom-up manner.
+		 * Finds all parentless visible compounds, and recursively updates
+		 * bounds in a bottom-up manner.
 		 */
 		public function updateAllCompoundBounds() : void
 		{
 			for each (var compound:Node in
 				data.group(Groups.COMPOUND_NODES))
 			{
-				if (compound.isInitialized() && compound.parentN == null)
+				if (compound.isInitialized() &&
+					compound.visible &&
+					compound.parentN == null)
 				{
 					// call the recursive function
-					updateAllBounds(compound);
+					this.updateAllBounds(compound);
 				}
 			}
-		}
-		
-		/** @inheritDoc */
-		public override function update(t:*=null,
-			...operators) : Transitioner
-		{	
-			// render dirty spirtes,
-			// this is required to display labels correctly
-			DirtySprite.renderDirty();
-			
-			return super.update(t, operators);
 		}
 		
 		/**
@@ -279,10 +290,10 @@ package ivis.view
 		 * @param group	data group, valid data groups are:
 		 * 				Groups.EDGES, Groups.NODES, and Groups.COMPOUND_NODES.
 		 */
-		public function updateLabels(group:String = "all") : void
+		public function updateLabels(group:String = Groups.ALL) : void
 		{
 			if (group === null ||
-				group === "all")
+				group === Groups.ALL)
 			{
 				this.edgeLabeler.operate();
 				this.nodeLabeler.operate();
@@ -302,7 +313,7 @@ package ivis.view
 			}
 		}
 		
-		//------------------------ PRIVATE FUNCTIONS ---------------------------
+		//------------------------ PROTECTED FUNCTIONS ---------------------------
 		
 		/**
 		 * Updates the bounds of the given compound, and all its children
@@ -312,17 +323,27 @@ package ivis.view
 		 */
 		protected function updateAllBounds(compound:Node) : void
 		{	
-			for each (var node:Node in compound.getNodes())
+			// get all visible children
+			for each (var node:Node in compound.getNodes(false))
 			{
 				if (node.isInitialized())
 				{
-					updateAllBounds(node);
+					this.updateAllBounds(node);
 				}
 			}
 			
+			// recursive call
 			this.updateCompoundBounds(compound);
-			//compound.render();
+			
+			// set compound as dirty
 			compound.dirty();
+			
+			// set all visible incident edges as dirty
+			for each (var edge:Edge in
+				Nodes.incidentEdges(compound, Nodes.VISIBLE))
+			{
+				edge.dirty();
+			}
 		}
 	}
 }
