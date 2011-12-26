@@ -10,6 +10,7 @@ package ivis.view
 	import flash.text.TextFormat;
 	
 	import ivis.util.Groups;
+	import ivis.util.Labels;
 	
 	/**
 	 * Labeler for simple (regular) nodes.
@@ -18,14 +19,12 @@ package ivis.view
 	 */
 	public class NodeLabeler extends Labeler
 	{
-		public function NodeLabeler(source:* = null,
+		public function NodeLabeler(source:* = Labels.DEFAULT_TEXT_SOURCE,
 			group:String = Groups.NODES,
 			format:TextFormat = null,
 			filter:* = null)
 		{
 			var policy:String = Labeler.LAYER;
-			
-			//TODO default label text source "props.labelText"?
 			
 			super(source, group, format, filter, policy);
 			

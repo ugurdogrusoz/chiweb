@@ -10,6 +10,7 @@ package ivis.view
 	import ivis.model.Node;
 	import ivis.model.util.Edges;
 	import ivis.util.Groups;
+	import ivis.util.Labels;
 	
 	/**
 	 * Labeler for edge sprites.
@@ -25,15 +26,11 @@ package ivis.view
 		public static const PERCENT_DISTANCE:String = "percent";
 		public static const FIXED_DISTANCE:String = "fixed";
 		
-		public function EdgeLabeler(source:* = null,
-									group:String = Groups.EDGES,
-									format:TextFormat = null,
-									filter:* = null)
+		public function EdgeLabeler(source:* = Labels.DEFAULT_TEXT_SOURCE,
+			group:String = Groups.EDGES,
+			format:TextFormat = null,
+			filter:* = null)
 		{
-			//var policy:String = Labeler.LAYER;
-			
-			//TODO default label text source "props.labelText"?
-			
 			super(source, group, format, filter);
 		}
 		

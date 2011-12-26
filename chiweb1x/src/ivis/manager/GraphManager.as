@@ -399,6 +399,29 @@ package ivis.manager
 			
 			return removed;
 		}
+		/**
+		 * Deletes all of the elements in the given array.
+		 * 
+		 * @param elements	array of elements to be deleted
+		 */
+		public function removeElements(elements:Array):void
+		{
+			var removed:Boolean = false;
+			
+			for each (var element:Object in elements)
+			{
+				if (this.removeElement(element, false))
+				{
+					removed = true;
+				}
+			}
+			
+			if (removed)
+			{
+				this.view.updateAllCompoundBounds();
+				this.view.update();
+			}
+		}
 		
 		/**
 		 * Selects the given graph element.
@@ -533,6 +556,32 @@ package ivis.manager
 			}
 			
 			return filtered;
+		}
+		
+		/**
+		 * Filters all of the elements in the given array.
+		 * 
+		 * @param elements	array of elements to be filtered
+		 */
+		public function filterElements(elements:Array):void
+		{
+			var filtered:Boolean = false;
+			
+			for each (var element:Object in elements)
+			{
+				if (this.filterElement(element, false))
+				{
+					filtered = true;
+				}
+			}
+			
+			if (filtered)
+			{
+				this.view.updateVisibility();
+				
+				this.view.updateAllCompoundBounds();
+				this.view.update();
+			}
 		}
 		
 		/**

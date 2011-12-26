@@ -17,7 +17,9 @@ package ivis.manager
 	import mx.core.Container;
 
 	/**
-	 * Main class to initializate the application.
+	 * Main class to initialize the application.
+	 * 
+	 * @author Selcuk Onur Sumer
 	 */ 
 	public class ApplicationManager
 	{
@@ -81,7 +83,9 @@ package ivis.manager
 		}
 		
 		/**
-		 * Sets the root container of the application. 
+		 * Sets the root container of the application.
+		 * 
+		 * @param container root container of the application
 		 */
 		public function setRootContainer(container:Container):void
 		{

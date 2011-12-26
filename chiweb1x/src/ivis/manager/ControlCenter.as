@@ -250,12 +250,19 @@ package ivis.manager
 		/**
 		 * Toggles the given state.
 		 * 
-		 * @param name	name of the state
+		 * @param name			name of the state
+		 * @param reset			indicates whether all other states to be reset
+		 * 						to their initial values
+		 * @param toggleSelect  indicates whether SELECT state to be toggled
 		 * @return		state condition after toggling
 		 */
-		public function toggleState(name:String):Boolean
+		public function toggleState(name:String,
+			reset:Boolean = true,
+			toggleSelect:Boolean = true):Boolean
 		{
-			return this.stateManager.toggleState(name);
+			return this.stateManager.toggleState(name,
+				reset,
+				toggleSelect);
 		}
 		
 		//------------------------ PROTECTED FUNCTIONS -------------------------
@@ -281,7 +288,7 @@ package ivis.manager
 		 */
 		protected function disableControl(control:IControl):void
 		{
-			// remove control from the visualization
+			// remove the control from the visualization
 			this._graphManager.removeControl(control);
 		}
 	}

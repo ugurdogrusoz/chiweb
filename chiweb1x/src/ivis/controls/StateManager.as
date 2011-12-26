@@ -55,6 +55,9 @@ package ivis.controls
 		/**
 		 * Sets the state for the given name and value pair.
 		 * 
+		 * Note that, setting SELECT state on while another state is also on
+		 * may cause problems for some controls.
+		 * 
 		 * @param name	name of the state
 		 * @param value	value of the state
 		 */
@@ -64,24 +67,48 @@ package ivis.controls
 		}
 		
 		/**
-		 * Toggles the value of the given state. If value of the state is false,
-		 * it becomes true after toggling. If value is true, it becomes false.
+		 * Toggles the value of the given state. If the value of the state is 
+		 * false, it becomes true after toggling. If the value is true, it
+		 * becomes false.
 		 * 
-		 * @param name	name of the state
+		 * Invoking this function with default parameters results in resetting 
+		 * all other states. For an advanced state toggling, this fucntion 
+		 * can be invoked with different combinations of reset and toggleSelect
+		 * flags. However turning on SELECT state while another state is on
+		 * may prevent a control to perform properly. 
+		 * 
+		 * In order to change a value of a single state only, use setState
+		 * method instead.
+		 * 
+		 * @param name			name of the state
+		 * @param reset			indicates whether all other states to be reset
+		 * 						to their initial values
+		 * @param toggleSelect  indicates whether SELECT state to be toggled
 		 * @return		value of the state after toggling 
 		 */
-		public function toggleState(name:String):Boolean
+		public function toggleState(name:String,
+			reset:Boolean = true,
+			toggleSelect:Boolean = true):Boolean
 		{
 			var state:Boolean = false;
 			
 			if (this._stateMap[name] != null)
 			{
 				state = this._stateMap[name];
-				this.resetStates();
 				
-				// turning any state ON should turn select state OFF,
-				// turning a state OFF should turn select state ON...
-				this._stateMap[StateManager.SELECT] = state;
+				if (reset)
+				{
+					// reset states to initial condition
+					this.resetStates();
+				}
+				
+				
+				if (toggleSelect)
+				{
+					// turning any state ON should turn select state OFF,
+					// turning a state OFF should turn select state ON...
+					this._stateMap[StateManager.SELECT] = state;
+				}
 				
 				this._stateMap[name] = !state;
 				state = !state;

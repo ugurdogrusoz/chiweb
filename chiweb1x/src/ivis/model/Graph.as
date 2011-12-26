@@ -529,7 +529,7 @@ package ivis.model
 		protected function initData(data:Data):void
 		{
 			// set graph data
-			_graphData = data;
+			this._graphData = data;
 			
 			// initialize default data groups
 			
@@ -539,13 +539,22 @@ package ivis.model
 			this.graphData.addGroup(Groups.SELECTED_EDGES);
 			this.graphData.addGroup(Groups.REGULAR_EDGES);
 			
-			// reset and populate node map
+			// reset and populate the node map
 			
-			_nodeMap = new Object();
+			this._nodeMap = new Object();
 			
 			for each(var node:NodeSprite in this.graphData.nodes)
 			{
-				_nodeMap[node.data.id] = node;
+				this._nodeMap[node.data.id] = node;
+			}
+			
+			// reset and populate the edge map
+			
+			this._edgeMap = new Object();
+			
+			for each(var edge:EdgeSprite in this.graphData.edges)
+			{
+				this._edgeMap[edge.data.id] = edge;
 			}
 		}
 		

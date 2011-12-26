@@ -50,16 +50,23 @@ package ivis.view
 		
 		//------------------------- CONSTRUCTOR --------------------------------
 		
+		/**
+		 * Instantiates a new GraphView for the given graph
+		 * 
+		 * @param graph	graph model for the view
+		 */
 		public function GraphView(graph:Graph)
 		{
 			this._graph = graph;
+			
+			// init visualization
 			this._vis = new GraphVisualization(this.graph.graphData);
 			this.addChild(this._vis);
 			
-			// TODO props.labelText as default?
-			this._vis.nodeLabeler = new NodeLabeler("props.labelText");
-			this._vis.compoundLabeler = new CompoundNodeLabeler("props.labelText");
-			this._vis.edgeLabeler = new EdgeLabeler("props.labelText");
+			// init labelers
+			this._vis.nodeLabeler = new NodeLabeler();
+			this._vis.compoundLabeler = new CompoundNodeLabeler();
+			this._vis.edgeLabeler = new EdgeLabeler();
 		}
 		
 		//---------------------- PUBLIC FUNCTIONS ------------------------------

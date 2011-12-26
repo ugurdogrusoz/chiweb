@@ -9,6 +9,8 @@ package ivis.util
 	 */
 	public class Labels
 	{
+		public static const DEFAULT_TEXT_SOURCE:String = "props.labelText";
+		
 		//-----------------------CONSTRUCTOR------------------------------------
 		
 		public function Labels()

@@ -8,6 +8,7 @@ package ivis.model
 	import ivis.model.util.Styles;
 	
 	/**
+	 * A DataSprite that represents a Node with its model and view.
 	 * This class represents simple (regular) nodes, compound nodes and bend
 	 * nodes (bend points).
 	 * 
@@ -15,7 +16,7 @@ package ivis.model
 	 *  
 	 * A compound node has its child nodes, bounds and padding values.
 	 * A compound node can contain any other node (both simple node and 
-	 * compound node)as its child.
+	 * compound node) as its child.
 	 * 
 	 * A bend node is a special kind of node that is used to create bend points
 	 * for edges.
