@@ -5,6 +5,7 @@
 				verticalScrollPolicy="off" horizontalScrollPolicy="off"
 				pageTitle="ChiWeb">
 	
+	
 	<mx:Canvas styleName="rawBox"
 			   width="100%" height="100%"
 			   verticalScrollPolicy="off" horizontalScrollPolicy="off"
@@ -14,11 +15,12 @@
 				verticalScrollPolicy="off" horizontalScrollPolicy="off"
 				verticalAlign="middle" horizontalAlign="center"
 				autoLayout="true"/>
-		
 	</mx:Canvas>
 	
-	<mx:HBox width="100%" horizontalGap="1" paddingBottom="5" paddingTop="5">
 	
+	<mx:HBox id="buttonBox" width="100%"
+			 horizontalGap="1" paddingBottom="5" paddingTop="5">
+		
 		<mx:Button id="addNode" 
 			label="N"
 			width="32"
@@ -36,6 +38,12 @@
 			   width="32"
 			   toolTip="Add Edge"
 			   click="app.controlCenter.toggleState(StateManager.ADD_EDGE)"/>
+		
+		<mx:Button id="enablePan" 
+				   label="EP"
+				   width="40"
+				   toolTip="Enable Pan"
+				   click="app.controlCenter.toggleState(StateManager.PAN)"/>
 		
 		<mx:Button id="deleteSelected" 
 				   label="D"
@@ -120,13 +128,7 @@
 				   width="40"
 				   toolTip="Remove a property from Test style"
 				   click="app.removeTestProperty()"/>
-		
 	</mx:HBox>
-	
-	
-	
-	
-	
 	
 <mx:Script>
 	<![CDATA[
@@ -135,6 +137,7 @@
 		
 		import ivis.controls.StateManager;
 		import ivis.manager.ApplicationManager;
+		import ivis.manager.ControlCenter;
 		
 		[Bindable]
 		public var app:ApplicationManager;
@@ -159,6 +162,7 @@
 			
 			//_controlCenter.disableDefaultControl(ControlCenter.DRAG_CONTROL);
 			//_controlCenter.disableDefaultControl(ControlCenter.CLICK_CONTROL);
+			//app.controlCenter.disableDefaultControl(ControlCenter.SELECT_CONTROL);
 			
 			//_view.vis.doubleClickEnabled = true;
 			

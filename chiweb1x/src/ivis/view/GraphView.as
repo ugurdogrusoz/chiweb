@@ -7,6 +7,7 @@ package ivis.view
 	
 	import flash.display.DisplayObject;
 	import flash.filters.GlowFilter;
+	import flash.geom.Rectangle;
 	
 	import ivis.model.Edge;
 	import ivis.model.Graph;
@@ -82,16 +83,6 @@ package ivis.view
 		}
 		
 		/**
-		 * Removes the given label from the view.
-		 * 
-		 * @param label	label to be removed
-		 */
-		public function removeLabel(label:DisplayObject):void
-		{
-			this._vis.labels.removeChild(label);
-		}
-		
-		/**
 		 * Updates labels for the given data group.
 		 * 
 		 * @param group	name of the data group
@@ -133,6 +124,36 @@ package ivis.view
 			{
 				edge.visible = !Edges.isFiltered(edge as Edge);
 			}
+		}
+		
+		public function updateHitArea():void
+		{
+			// TODO get these (inital) values from elsewhere 
+			var width:Number = 1024;
+			var height:Number = 768;
+			
+			trace ("w&h: " + this.vis.stage.width + "," + this.vis.stage.height);
+			trace ("scales: " + this.vis.scaleX + "," + this.vis.scaleY);
+			
+			var bounds:Rectangle = new Rectangle(-(width / this.vis.scaleX / 2),
+				-(height / this.vis.scaleY / 2),
+				width / this.vis.scaleX,
+				height / this.vis.scaleY);
+			
+			trace ("[GraphView.updateHitArea] bounds: " + bounds.x + "," +
+				  bounds.y + "," + bounds.width + "," + bounds.height);
+			
+			this.vis.updateHitArea(bounds);
+		}
+		
+		/**
+		 * Removes the given label from the view.
+		 * 
+		 * @param label	label to be removed
+		 */
+		public function removeLabel(label:DisplayObject):void
+		{
+			this._vis.labels.removeChild(label);
 		}
 		
 		/**

@@ -14,6 +14,7 @@ package ivis.controls
 		public static const ADD_EDGE:String = "addEdge";
 		public static const SELECT:String = "select";
 		public static const SELECT_KEY_DOWN:String = "selectKeyDown";
+		public static const PAN:String = "pan";
 		
 		/**
 		 * Map of flags to indicate the states of certain actions.
@@ -143,6 +144,7 @@ package ivis.controls
 			this._stateMap[StateManager.ADD_BENDPOINT] = false;
 			this._stateMap[StateManager.ADD_EDGE] = false;
 			this._stateMap[StateManager.SELECT_KEY_DOWN] = false;
+			this._stateMap[StateManager.PAN] = false;
 		
 			// select state is true by default
 			this._stateMap[StateManager.SELECT] = true;

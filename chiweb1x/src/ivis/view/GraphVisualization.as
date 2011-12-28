@@ -7,6 +7,7 @@ package ivis.view
 	import flare.vis.operator.label.Labeler;
 	import flare.vis.operator.layout.Layout;
 	
+	import flash.display.Sprite;
 	import flash.geom.Rectangle;
 	
 	import ivis.model.Edge;
@@ -167,6 +168,44 @@ package ivis.view
 		
 		//------------------------ PUBLIC FUNCTIONS ----------------------------
 
+		/**
+		 * Updates the git area of the visualization with respect to the
+		 * given rectangular bounds.
+		 * 
+		 * @param bounds	rectangular bounds
+		 */
+		public function updateHitArea(bounds:Rectangle):void
+		{
+			// get the hit area sprite
+			var hit:Sprite = this.getChildByName("_hitArea") as Sprite;
+			
+			if (bounds == null)
+			{
+				return;
+			}
+			
+			// if no hit area is created before, create a new one
+			if (hit == null)
+			{
+				hit = new Sprite();
+				hit.name = "_hitArea";
+				this.addChildAt(hit, 0);
+			}
+		
+			// adjust the hit area
+			hit.visible = false;
+			hit.mouseEnabled = false;
+			hit.graphics.clear();
+			hit.graphics.beginFill(0xffffff, 1);
+			hit.graphics.drawRect(bounds.x,
+				bounds.y,
+				bounds.width,
+				bounds.height);
+			
+			// set updated hit area for the visualization
+			this.hitArea = hit;
+		}
+		
 		/**
 		 * Calculates the bounds of the given compound node. The result of this
 		 * calculation is the smaller rectangle surrounding all of the child 

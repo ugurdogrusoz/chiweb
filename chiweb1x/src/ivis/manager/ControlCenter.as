@@ -9,8 +9,10 @@ package ivis.manager
 	import ivis.controls.EventControl;
 	import ivis.controls.KeyControl;
 	import ivis.controls.MultiDragControl;
+	import ivis.controls.PanControl;
 	import ivis.controls.SelectControl;
 	import ivis.controls.StateManager;
+	import ivis.controls.ZoomControl;
 
 	/**
 	 * This class is designed to manage Controls that can be attached to and
@@ -27,6 +29,8 @@ package ivis.manager
 		public static const DRAG_CONTROL:String = "dragControl";
 		public static const SELECT_CONTROL:String = "selectControl";
 		public static const KEY_CONTROL:String = "keyControl";
+		public static const ZOOM_CONTROL:String = "zoomControl";
+		public static const PAN_CONTROL:String = "panControl";
 		
 		protected var _graphManager:GraphManager;
 		protected var _stateManager:StateManager;
@@ -36,6 +40,8 @@ package ivis.manager
 		protected var _clickControl:ClickControl;
 		protected var _dragControl:MultiDragControl;
 		protected var _selectControl:SelectControl;
+		protected var _zoomControl:ZoomControl;
+		protected var _panControl:PanControl;
 		
 		/**
 		 * Map of controls for custom listeners.
@@ -75,6 +81,12 @@ package ivis.manager
 			this._keyControl = new KeyControl(this._graphManager,
 				this._stateManager);
 			
+			this._zoomControl = new ZoomControl(this._graphManager,
+				this._stateManager);
+			
+			this._panControl = new PanControl(this._graphManager,
+				this._stateManager);
+			
 			this._clickControl = new ClickControl(this._graphManager,
 				this._stateManager);
 			
@@ -92,6 +104,8 @@ package ivis.manager
 			this.addControl(_clickControl);
 			this.addControl(_dragControl);
 			this.addControl(_keyControl);
+			this.addControl(_zoomControl);
+			this.addControl(_panControl);
 		}
 		
 		//------------------------ PUBLIC FUNCTIONS ----------------------------
@@ -140,7 +154,9 @@ package ivis.manager
 			if (control === this._keyControl ||
 				control === this._clickControl ||
 				control === this._dragControl ||
-				control === this._selectControl)
+				control === this._selectControl ||
+				control === this._zoomControl ||
+				control === this._panControl)
 			{
 				return null;
 			}
@@ -158,19 +174,27 @@ package ivis.manager
 		{
 			if (name === ControlCenter.CLICK_CONTROL)
 			{
-				this.enableControl(_clickControl);
+				this.enableControl(this._clickControl);
 			}
 			else if (name === ControlCenter.SELECT_CONTROL)
 			{
-				this.enableControl(_selectControl);
+				this.enableControl(this._selectControl);
 			}
 			else if (name === ControlCenter.DRAG_CONTROL)
 			{
-				this.enableControl(_dragControl);
+				this.enableControl(this._dragControl);
 			}
 			else if (name === ControlCenter.KEY_CONTROL)
 			{
-				this.enableControl(_keyControl);
+				this.enableControl(this._keyControl);
+			}
+			else if (name === ControlCenter.ZOOM_CONTROL)
+			{
+				this.enableControl(this._zoomControl);
+			}
+			else if (name === ControlCenter.PAN_CONTROL)
+			{
+				this.enableControl(this._panControl);
 			}
 		}
 		
@@ -183,19 +207,27 @@ package ivis.manager
 		{
 			if (name === ControlCenter.CLICK_CONTROL)
 			{
-				this.disableControl(_clickControl);
+				this.disableControl(this._clickControl);
 			}
 			else if (name === ControlCenter.SELECT_CONTROL)
 			{
-				this.disableControl(_selectControl);
+				this.disableControl(this._selectControl);
 			}
 			else if (name === ControlCenter.DRAG_CONTROL)
 			{
-				this.disableControl(_dragControl);
+				this.disableControl(this._dragControl);
 			}
 			else if (name === ControlCenter.KEY_CONTROL)
 			{
-				this.disableControl(_keyControl);
+				this.disableControl(this._keyControl);
+			}
+			else if (name === ControlCenter.ZOOM_CONTROL)
+			{
+				this.disableControl(this._zoomControl);
+			}
+			else if (name === ControlCenter.ZOOM_CONTROL)
+			{
+				this.disableControl(this._panControl);
 			}
 		}
 		

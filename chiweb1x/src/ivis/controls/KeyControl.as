@@ -15,7 +15,7 @@ package ivis.controls
 	{
 		public function KeyControl(graphManager:GraphManager,
 			stateManager:StateManager,
-			filter:*=null)
+			filter:* = null)
 		{
 			super(graphManager, stateManager);
 			this.filter = filter;
@@ -26,7 +26,7 @@ package ivis.controls
 		{
 			if (obj == null)
 			{
-				detach();
+				this.detach();
 				return;
 			}
 			
@@ -34,13 +34,12 @@ package ivis.controls
 			
 			if (obj != null)
 			{
+				obj.addEventListener(Event.ADDED_TO_STAGE, onAdd);
+				obj.addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+				
 				if (obj.stage != null)
 				{
 					this.onAdd();
-				}
-				else
-				{
-					obj.addEventListener(Event.ADDED_TO_STAGE, onAdd);
 				}
 			}
 		}
@@ -50,10 +49,10 @@ package ivis.controls
 		{
 			if (_object != null)
 			{
-				if (_object.stage != null)
-				{
-					this.onRemove();
-				}
+				_object.removeEventListener(Event.ADDED_TO_STAGE, onAdd);
+				_object.removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+				
+				this.onRemove();
 			}
 			
 			return super.detach();
@@ -74,7 +73,7 @@ package ivis.controls
 			
 		}
 		
-		protected function onAdd(evt:Event=null):void
+		protected function onAdd(evt:Event = null):void
 		{
 			//view.stage.addEventListener(KeyboardEvent.KEY_DOWN, onDown, false, 0, true);
 			//view.stage.addEventListener(KeyboardEvent.KEY_UP, onUp, false, 0, true);
@@ -82,10 +81,13 @@ package ivis.controls
 			_object.stage.addEventListener(KeyboardEvent.KEY_UP, onUp);
 		}
 		
-		protected function onRemove(evt:Event=null):void
+		protected function onRemove(evt:Event = null):void
 		{
-			_object.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onDown);
-			_object.stage.removeEventListener(KeyboardEvent.KEY_UP, onUp);
+			_object.stage.removeEventListener(KeyboardEvent.KEY_DOWN,
+				onDown);
+			
+			_object.stage.removeEventListener(KeyboardEvent.KEY_UP,
+				onUp);
 		}
 	}
 }

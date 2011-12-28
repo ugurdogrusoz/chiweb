@@ -7,11 +7,11 @@ package ivis.controls
 	import flash.display.InteractiveObject;
 	import flash.events.MouseEvent;
 	
+	import ivis.manager.GraphManager;
 	import ivis.model.Edge;
 	import ivis.model.Node;
 	import ivis.model.util.Edges;
 	import ivis.model.util.Nodes;
-	import ivis.manager.GraphManager;
 
 	/**
 	 * Control class for the single click action.
@@ -178,6 +178,12 @@ package ivis.controls
 			else if (target is Edge)
 			{
 				trace("[ClickControl.onClick] edge: " + target);
+			}
+			else
+			{
+				trace("[ClickControl.onClick] target: " + target + 
+					" x:" + evt.stageX + " y:" + evt.stageY);
+				
 			}
 		}
 	}

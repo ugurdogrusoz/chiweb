@@ -114,8 +114,6 @@ package ivis.model.util
 			var node:Node;
 			var value:Number;
 			
-			// TODO it seems label size is not calculated correctly..
-			
 			// collect required values in the array
 			
 			if (type === Nodes.LEFT)
