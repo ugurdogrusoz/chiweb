@@ -26,6 +26,8 @@ package ivis.controls
 		// y-coordinate of the click event
 		protected var _evtY:Number;
 		
+		// -------------------------- CONSTRUCTOR ------------------------------
+		
 		public function ClickControl(graphManager:GraphManager,
 			stateManager:StateManager,									 
 			filter:* = null)
@@ -33,6 +35,8 @@ package ivis.controls
 			super(graphManager, stateManager);
 			this.filter = filter;
 		}
+		
+		//----------------------- PUBLIC FUNCTIONS -----------------------------
 		
 		/** @inheritDoc */
 		public override function attach(obj:InteractiveObject):void
@@ -55,15 +59,23 @@ package ivis.controls
 		/** @inheritDoc */
 		public override function detach():InteractiveObject
 		{
-			if (_object != null)
+			if (this.object != null)
 			{
-				_object.removeEventListener(MouseEvent.CLICK, onClick);
-				_object.removeEventListener(MouseEvent.MOUSE_DOWN, onDown);
+				this.object.removeEventListener(MouseEvent.CLICK, onClick);
+				this.object.removeEventListener(MouseEvent.MOUSE_DOWN, onDown);
 			}
 			
 			return super.detach();
 		}
 		
+		//----------------------- PROTECTED FUNCTIONS --------------------------
+		
+		/**
+		 * Listener function for MOUSE_DOWN event. Stores the event cooridantes
+		 * when the event is dispatched on the interactive object.
+		 * 
+		 * @param evt	MouseEvent that triggered the action
+		 */
 		protected function onDown(evt:MouseEvent):void
 		{
 			var target:DisplayObject = evt.target as DisplayObject;
@@ -72,6 +84,12 @@ package ivis.controls
 			this._evtY = evt.stageY;
 		}
 		
+		/**
+		 * Listener function for MOUSE_DOWN event. Performs the required action
+		 * according to the active state of the StateManager.
+		 * 
+		 * @param evt	MouseEvent that triggered the action
+		 */
 		protected function onClick(evt:MouseEvent):void
 		{
 			var target:DisplayObject = evt.target as DisplayObject;
@@ -103,16 +121,16 @@ package ivis.controls
 				// the new node as a child node to the target
 				if (target is Node)
 				{
-					this.graphManager.addNode(_object.mouseX,
-						_object.mouseY,
+					this.graphManager.addNode(this.object.mouseX,
+						this.object.mouseY,
 						target);
 				}
 				// if the event target is not a node, then simply add node to
 				// the root
 				else
 				{
-					this.graphManager.addNode(_object.mouseX,
-						_object.mouseY);
+					this.graphManager.addNode(this.object.mouseX,
+						this.object.mouseY);
 				}
 			}
 			
@@ -123,8 +141,8 @@ package ivis.controls
 				// the target edge
 				if (target is Edge)
 				{
-					this.graphManager.addBendPoint(_object.mouseX,
-						_object.mouseY,
+					this.graphManager.addBendPoint(this.object.mouseX,
+						this.object.mouseY,
 						target);
 				}
 			}
@@ -183,7 +201,6 @@ package ivis.controls
 			{
 				trace("[ClickControl.onClick] target: " + target + 
 					" x:" + evt.stageX + " y:" + evt.stageY);
-				
 			}
 		}
 	}

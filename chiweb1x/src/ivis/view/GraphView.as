@@ -126,19 +126,50 @@ package ivis.view
 			}
 		}
 		
+		/**
+		 * Updates the hit area of the visualization.
+		 */
 		public function updateHitArea():void
 		{
-			// TODO get these (inital) values from elsewhere 
-			var width:Number = 1024;
-			var height:Number = 768;
+			var bounds:Rectangle;
+			var width:Number;
+			var height:Number;
+			var x:Number;
+			var y:Number;
 			
-			trace ("w&h: " + this.vis.stage.width + "," + this.vis.stage.height);
-			trace ("scales: " + this.vis.scaleX + "," + this.vis.scaleY);
+			trace("[GraphView] parent w&h: " + 
+				this.parent.width + "," + this.parent.height + "\n" +
+				"visualization coordinates: " + this.vis.x + "," + this.vis.y);
 			
-			var bounds:Rectangle = new Rectangle(-(width / this.vis.scaleX / 2),
-				-(height / this.vis.scaleY / 2),
-				width / this.vis.scaleX,
-				height / this.vis.scaleY);
+			// adjust width & height of the hit area with respect to width &
+			// height of the parent container 
+			
+			if (this.vis.scaleX > 1)
+			{
+				width = this.parent.width;
+			}
+			else
+			{
+				width = this.parent.width / this.vis.scaleX;
+			}
+			
+			if (this.vis.scaleY > 1)
+			{
+				height = this.parent.height;
+			}
+			else
+			{
+				height = this.parent.height / this.vis.scaleY;
+			}
+			
+			// adjust x & y coordiantes of the hit area with respect to the
+			// x & y coordiantes of the visualization
+			
+			x = -width / 2 - this.vis.x / this.vis.scaleX;
+			y = -height / 2 - this.vis.y / this.vis.scaleY;
+			
+			// set bounds for the hit area 
+			bounds = new Rectangle(x, y, width, height);
 			
 			trace ("[GraphView.updateHitArea] bounds: " + bounds.x + "," +
 				  bounds.y + "," + bounds.width + "," + bounds.height);
@@ -278,7 +309,7 @@ package ivis.view
 			var strength:Number;
 			var color:uint;
 			
-			// TODO other selection properties? 
+			// TODO other selection properties (should be applied to rectangle:Shape of SelectControl) 
 			/*
 				selectionLineColor: "#8888ff",
 				selectionLineOpacity: 0.8,

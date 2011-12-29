@@ -1,22 +1,23 @@
 package ivis.controls
-{	
+{
 	import flash.display.InteractiveObject;
 	import flash.events.Event;
-	import flash.events.KeyboardEvent;
 	
 	import ivis.manager.GraphManager;
+	
+	import mx.core.Container;
+	import mx.core.UIComponent;
 
 	/**
-	 * Control class for the key press actions.
+	 * Control class to monitor resize of the view container.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
-	public class KeyControl extends EventControl
+	public class ResizeControl extends EventControl
 	{
-		
 		//-------------------------- CONSTRUCTOR -------------------------------
 		
-		public function KeyControl(graphManager:GraphManager,
+		public function ResizeControl(graphManager:GraphManager,
 			stateManager:StateManager,
 			filter:* = null)
 		{
@@ -66,28 +67,17 @@ package ivis.controls
 		//----------------------- PROTECTED FUNCTIONS --------------------------
 		
 		/**
-		 * Listener for KEY_DOWN event.
-		 * 
-		 * @param evt	KeyboardEvent that triggered the action
+		 * Listener for RESIZE event. Updates the hit area of the view upon
+		 * resize.
+		 *
+		 * @param evt	Event that triggered the action 
 		 */
-		protected function onDown(evt:KeyboardEvent):void
+		protected function onResize(evt:Event):void
 		{
-			// TODO take the select key as a constructor parameter, CTRL should be the default key
-			this.stateManager.setState(StateManager.SELECT_KEY_DOWN,
-				evt.ctrlKey); 
-		}
-		
-		/**
-		 * Listener for KEY_UP event.
-		 * 
-		 * @param evt	KeyboardEvent that triggered the action
-		 */
-		protected function onUp(evt:KeyboardEvent):void
-		{
-			// TODO take the select key as a parameter
-			this.stateManager.setState(StateManager.SELECT_KEY_DOWN,
-				evt.ctrlKey);
-			
+			if (this.object.stage != null)
+			{
+				this.graphManager.view.updateHitArea();
+			}
 		}
 		
 		/**
@@ -98,12 +88,14 @@ package ivis.controls
 		 */
 		protected function onAdd(evt:Event = null):void
 		{
-			//view.stage.addEventListener(KeyboardEvent.KEY_DOWN, onDown, false, 0, true);
-			//view.stage.addEventListener(KeyboardEvent.KEY_UP, onUp, false, 0, true);
-			this.object.stage.addEventListener(KeyboardEvent.KEY_DOWN, onDown);
-			this.object.stage.addEventListener(KeyboardEvent.KEY_UP, onUp);
+			if (this.graphManager.view.parent != null)
+			{
+				this.graphManager.view.parent.addEventListener(
+					Event.RESIZE, onResize);
+				
+				this.graphManager.view.updateHitArea();
+			}
 		}
-		
 		
 		/**
 		 * Listener for REMOVED_FROM_STAGE event. Invoked when the interactive
@@ -113,11 +105,11 @@ package ivis.controls
 		 */
 		protected function onRemove(evt:Event = null):void
 		{
-			this.object.stage.removeEventListener(KeyboardEvent.KEY_DOWN,
-				onDown);
-			
-			this.object.stage.removeEventListener(KeyboardEvent.KEY_UP,
-				onUp);
+			if (this.object.parent != null)
+			{
+				this.graphManager.view.parent.removeEventListener(
+					Event.RESIZE, onResize);
+			}
 		}
 	}
 }

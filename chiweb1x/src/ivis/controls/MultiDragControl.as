@@ -20,10 +20,17 @@ package ivis.controls
 	 */
 	public class MultiDragControl extends EventControl
 	{
-		private var _cur:Sprite;
+		protected var _cur:Sprite;
 		
-		// x and y coordinates of the event target
-		private var _mx:Number, _my:Number;
+		/**
+		 * x-coordinate of the event target.
+		 */
+		protected var _mx:Number;
+		
+		/**
+		 * y-coordinate of the event target.
+		 */
+		protected var _my:Number;
 		
 		/**
 		 * The active item currently being dragged.
@@ -33,6 +40,8 @@ package ivis.controls
 			return _cur;
 		}
 		
+		//-------------------------- CONSTRUCTOR -------------------------------
+		
 		public function MultiDragControl(graphManager:GraphManager,
 			stateManager:StateManager = null,
 			filter:* = null)
@@ -40,6 +49,8 @@ package ivis.controls
 			super(graphManager, stateManager);
 			this.filter = filter;
 		}
+		
+		//----------------------- PUBLIC FUNCTIONS -----------------------------
 		
 		/** @inheritDoc */
 		public override function attach(obj:InteractiveObject):void
@@ -61,14 +72,22 @@ package ivis.controls
 		/** @inheritDoc */
 		public override function detach() : InteractiveObject
 		{
-			if (_object != null)
+			if (this.object != null)
 			{
-				_object.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+				this.object.removeEventListener(MouseEvent.MOUSE_DOWN,
+					onMouseDown);
 			}
 			
 			return super.detach();
 		}
 		
+		//----------------------- PROTECTED FUNCTIONS --------------------------
+		
+		/**
+		 * Listener function for MOUSE_DOWN event.
+		 * 
+		 * @param evt	MouseEvent that triggered the action
+		 */
 		protected function onMouseDown(event:MouseEvent) : void
 		{
 			var s:Sprite = event.target as Sprite;
@@ -82,21 +101,22 @@ package ivis.controls
 			if (_filter == null || _filter(s))
 			{
 				// update current target
-				_cur = s;
+				this._cur = s;
 				
 				// update event target coordinates
-				_mx = _object.mouseX;
-				_my = _object.mouseY;
+				this._mx = this.object.mouseX;
+				this._my = this.object.mouseY;
 				
-				if (_cur is DataSprite)
+				if (this._cur is DataSprite)
 				{
-					(_cur as DataSprite).fix();
+					(this._cur as DataSprite).fix();
 				}
 				
 				// add necessary listeners for the drag action
-				
-				_cur.stage.addEventListener(MouseEvent.MOUSE_MOVE, onDrag);
-				_cur.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				this._cur.stage.addEventListener(MouseEvent.MOUSE_MOVE,
+					onDrag);
+				this._cur.stage.addEventListener(MouseEvent.MOUSE_UP,
+					onMouseUp);
 				
 				event.stopPropagation();
 			}
@@ -104,32 +124,24 @@ package ivis.controls
 			this.graphManager.resetMissingChildren();
 		}
 		
+		/**
+		 * Listener function for MOUSE_MOVE event. Updates the coordiantes
+		 * of the elements to drag.
+		 * 
+		 * @param evt	MouseEvent that triggered the action
+		 */
 		protected function onDrag(event:Event) : void
 		{
 			// drag active item by updating x and y coordinates
 			
-			var x:Number = _object.mouseX;
-			var y:Number = _object.mouseY;
+			var x:Number = this.object.mouseX;
+			var y:Number = this.object.mouseY;
 			
-			var amountX:Number = x - _mx;
-			var amountY:Number = y - _my;
+			var amountX:Number = x - this._mx;
+			var amountY:Number = y - this._my;
 			
-			_mx = x;
-			_my = y;
-			
-			/*
-			if (x != _mx)
-			{
-				_cur.x += (x - _mx);
-				_mx = x;
-			}			
-			
-			if (y != _my)
-			{
-				_cur.y += (y - _my);
-				_my = y;
-			}
-			*/
+			this._mx = x;
+			this._my = y;
 			
 			if (amountX == 0 &&
 				amountY == 0)
@@ -140,17 +152,16 @@ package ivis.controls
 			
 			var target:Node;
 			
-			if (_cur is Node)
+			if (this._cur is Node)
 			{
 				// a node is being dragged
-				target = _cur as Node;
+				target = this._cur as Node;
 			}
 			else
 			{
 				// drag the sprite and return
-				
-				_cur.x += amountX;
-				_cur.y += amountY;
+				this._cur.x += amountX;
+				this._cur.y += amountY;
 				
 				return;
 			}
@@ -177,9 +188,6 @@ package ivis.controls
 			}
 			
 			//updateCursor();
-			
-			//var amountX:Number = evt.amountX;
-			//var amountY:Number = evt.amountY;
 			
 			var node:Node;
 			var n:Node;
@@ -278,19 +286,28 @@ package ivis.controls
 			}
 		}
 		
+		
+		/**
+		 * Listener function for MOUSE_UP event.
+		 * 
+		 * @param evt	MouseEvent that triggered the action
+		 */
 		protected function onMouseUp(event:MouseEvent) : void
 		{
-			if (_cur != null)
+			if (this._cur != null)
 			{
 				// remove listeners after mouse up event
-				_cur.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-				_cur.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onDrag);
+				this._cur.stage.removeEventListener(MouseEvent.MOUSE_UP,
+					onMouseUp);
+				this._cur.stage.removeEventListener(MouseEvent.MOUSE_MOVE,
+					onDrag);
 				
-				if (_cur is DataSprite)
+				if (this._cur is DataSprite)
 				{
-					(_cur as DataSprite).unfix();
+					(this._cur as DataSprite).unfix();
 				}
 				
+				// TODO is this necessary?
 				event.stopPropagation();
 				
 				// update edge labels
@@ -298,7 +315,7 @@ package ivis.controls
 			}
 			
 			// reset the active sprite
-			_cur = null;
+			this._cur = null;
 		}
 	}
 }

@@ -10,8 +10,15 @@ package ivis.controls
 	
 	import ivis.manager.GraphManager;
 
+	/**
+	 * Control class for zooming the view.
+	 * 
+	 * @author Selcuk Onur Sumer
+	 */
 	public class ZoomControl extends EventControl
-	{	
+	{
+		//-------------------------- CONSTRUCTOR -------------------------------
+		
 		public function ZoomControl(graphManager:GraphManager,
 			stateManager:StateManager,
 			filter:* = null)
@@ -19,6 +26,8 @@ package ivis.controls
 			super(graphManager, stateManager);
 			this.filter = filter;
 		}
+		
+		//----------------------- PUBLIC FUNCTIONS -----------------------------
 		
 		/** @inheritDoc */
 		public override function attach(obj:InteractiveObject):void
@@ -40,10 +49,12 @@ package ivis.controls
 		/** @inheritDoc */
 		public override function detach():InteractiveObject
 		{
-			if (_object != null)
+			if (this.object != null)
 			{
-				_object.removeEventListener(Event.ADDED_TO_STAGE, onAdd);
-				_object.removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+				this.object.removeEventListener(Event.ADDED_TO_STAGE,
+					onAdd);
+				this.object.removeEventListener(Event.REMOVED_FROM_STAGE,
+					onRemove);
 				
 				this.onRemove();
 			}
@@ -51,6 +62,14 @@ package ivis.controls
 			return super.detach();
 		}
 		
+		//----------------------- PROTECTED FUNCTIONS --------------------------
+		
+		/**
+		 * Listener for ADDED_TO_STAGE event. Invoked when the interactive
+		 * object, to which this control is attached, is added to the stage.
+		 *
+		 * @param evt	Event that triggered the action 
+		 */
 		protected function onAdd(evt:Event = null):void
 		{
 			// TODO add a pan/zoom control panel and add listener on button clicks?
@@ -58,29 +77,34 @@ package ivis.controls
 			_object.stage.addEventListener(MouseEvent.MOUSE_WHEEL,
 				onMouseWheel);
 			
-			if (_object is Visualization)
+			if (this.object is Visualization)
 			{
 				// disable automatic hit area calculation
-				_object.stage.removeEventListener(Event.RENDER,
+				this.object.stage.removeEventListener(Event.RENDER,
 					this.graphManager.view.vis.setHitArea);
 			}
-			
-			this.graphManager.view.updateHitArea();
 		}
 		
+		/**
+		 * Listener for REMOVED_FROM_STAGE event. Invoked when the interactive
+		 * object, to which this control is attached, is removed from the stage.
+		 * 
+		 * @param evt	Event that triggered the action
+		 */
 		protected function onRemove(evt:Event = null):void
 		{
-			_object.stage.removeEventListener(MouseEvent.MOUSE_WHEEL,
+			this.object.stage.removeEventListener(MouseEvent.MOUSE_WHEEL,
 				onMouseWheel);
 			
-			if (_object is Visualization)
+			if (this.object is Visualization)
 			{
 				// restore autmoatic hit area calculator
-				_object.stage.addEventListener(Event.RENDER,
+				this.object.stage.addEventListener(Event.RENDER,
 					this.graphManager.view.vis.setHitArea);
 			}
 		}
 		
+		// TODO currently, zooming is performed when mouse wheel is moved but this should be customizable!
 		protected function onMouseWheel(evt:MouseEvent):void
 		{
 			var delta:Number = evt.delta;

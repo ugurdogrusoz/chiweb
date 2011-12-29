@@ -10,6 +10,7 @@ package ivis.manager
 	import ivis.controls.KeyControl;
 	import ivis.controls.MultiDragControl;
 	import ivis.controls.PanControl;
+	import ivis.controls.ResizeControl;
 	import ivis.controls.SelectControl;
 	import ivis.controls.StateManager;
 	import ivis.controls.ZoomControl;
@@ -31,6 +32,7 @@ package ivis.manager
 		public static const KEY_CONTROL:String = "keyControl";
 		public static const ZOOM_CONTROL:String = "zoomControl";
 		public static const PAN_CONTROL:String = "panControl";
+		public static const RESIZE_CONTROL:String = "resizeControl";
 		
 		protected var _graphManager:GraphManager;
 		protected var _stateManager:StateManager;
@@ -42,6 +44,7 @@ package ivis.manager
 		protected var _selectControl:SelectControl;
 		protected var _zoomControl:ZoomControl;
 		protected var _panControl:PanControl;
+		protected var _resizeControl:ResizeControl;
 		
 		/**
 		 * Map of controls for custom listeners.
@@ -87,6 +90,9 @@ package ivis.manager
 			this._panControl = new PanControl(this._graphManager,
 				this._stateManager);
 			
+			this._resizeControl = new ResizeControl(this._graphManager,
+				this._stateManager);
+			
 			this._clickControl = new ClickControl(this._graphManager,
 				this._stateManager);
 			
@@ -106,6 +112,7 @@ package ivis.manager
 			this.addControl(_keyControl);
 			this.addControl(_zoomControl);
 			this.addControl(_panControl);
+			this.addControl(_resizeControl);
 		}
 		
 		//------------------------ PUBLIC FUNCTIONS ----------------------------
@@ -156,7 +163,8 @@ package ivis.manager
 				control === this._dragControl ||
 				control === this._selectControl ||
 				control === this._zoomControl ||
-				control === this._panControl)
+				control === this._panControl ||
+				control === this._resizeControl)
 			{
 				return null;
 			}
@@ -196,6 +204,10 @@ package ivis.manager
 			{
 				this.enableControl(this._panControl);
 			}
+			else if (name === ControlCenter.RESIZE_CONTROL)
+			{
+				this.enableControl(this._resizeControl);
+			}
 		}
 		
 		/**
@@ -225,9 +237,13 @@ package ivis.manager
 			{
 				this.disableControl(this._zoomControl);
 			}
-			else if (name === ControlCenter.ZOOM_CONTROL)
+			else if (name === ControlCenter.PAN_CONTROL)
 			{
 				this.disableControl(this._panControl);
+			}
+			else if (name === ControlCenter.RESIZE_CONTROL)
+			{
+				this.disableControl(this._resizeControl);
 			}
 		}
 		

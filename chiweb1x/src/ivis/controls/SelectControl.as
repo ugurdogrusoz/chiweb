@@ -18,7 +18,7 @@ package ivis.controls
 	/**
 	 * Multiple selection (rubber-band) control for DataSprite instances.
 	 * 
-	 * @author Selcuk Onur Sumer 
+	 * @author Selcuk Onur Sumer
 	 */
 	public class SelectControl extends EventControl
 	{		
@@ -37,6 +37,8 @@ package ivis.controls
 		 */
 		protected var _enclosingRect:Rectangle;
 		
+		//-------------------------- CONSTRUCTOR -------------------------------
+		
 		public function SelectControl(graphManager:GraphManager,
 			stateManager:StateManager,
 			filter:* = null)
@@ -49,6 +51,8 @@ package ivis.controls
 			this._enclosingRect = new Rectangle();
 			//this.fireImmediately = false;
 		}
+		
+		//----------------------- PUBLIC FUNCTIONS -----------------------------
 		
 		/** @inheritDoc */
 		public override function attach(obj:InteractiveObject):void
@@ -71,35 +75,41 @@ package ivis.controls
 		/** @inheritDoc */
 		public override function detach():InteractiveObject
 		{
-			if (_object != null)
+			if (this.object != null)
 			{
-				_object.removeEventListener(MouseEvent.MOUSE_DOWN, onDown);
+				this.object.removeEventListener(MouseEvent.MOUSE_DOWN, onDown);
 			}
 			
 			return super.detach();
 		}
 		
+		//----------------------- PROTECTED FUNCTIONS --------------------------
+		
+		/**
+		 * Listener function for MOUSE_DOWN event. Adds listeners for MOUSE_UP
+		 * and MOUSE_MOVE events, and updates the enclosing rectangle.
+		 * 
+		 * @param evt	MouseEvent that triggered the action
+		 */
 		protected function onDown(evt:MouseEvent):void
 		{
-			//var target:DisplayObject = evt.target as DisplayObject;
-			
 			trace("[SelectControl.onDown] target: " + evt.target);
 			
-			if (_object != null &&
+			if (this.object != null &&
 				this.stateManager.checkState(StateManager.SELECT) &&
 				!(evt.target is DataSprite))
 			{
-				_object.addEventListener(MouseEvent.MOUSE_UP, onUp);
-				_object.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
+				this.object.addEventListener(MouseEvent.MOUSE_UP, onUp);
+				this.object.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
 				
-				this._enclosingRect.x = _object.mouseX;
-				this._enclosingRect.y = _object.mouseY;
+				this._enclosingRect.x = this.object.mouseX;
+				this._enclosingRect.y = this.object.mouseY;
 				this._enclosingRect.width = 0;
 				this._enclosingRect.height = 1;
 				
 				this._enclosing = true;
 				
-				(_object as DisplayObjectContainer).addChild(
+				(this.object as DisplayObjectContainer).addChild(
 					this._enclosingShape);
 				
 				this.renderEncloser(this._enclosingShape);
@@ -109,6 +119,11 @@ package ivis.controls
 					selectionTest(evt);
 				}
 				*/
+				
+				if (!this.stateManager.checkState(StateManager.SELECT_KEY_DOWN))
+				{
+					this.graphManager.resetSelected();
+				}
 			}
 			
 			/*
@@ -128,6 +143,12 @@ package ivis.controls
 			*/
 		}
 		
+		/**
+		 * Listener function for MOUSE_UP event. Finds the elements enclosed
+		 * by the enclosing rectangle.
+		 * 
+		 * @param evt	MouseEvent that triggered the action
+		 */
 		protected function onUp(evt:MouseEvent):void
 		{
 			// when mouse up, the enclosing rectangle becomes inactive
@@ -136,32 +157,39 @@ package ivis.controls
 			//if (!fireImmediately)
 			//	selectionTest(evt);
 			
-			if (_object != null)
+			if (this.object != null)
 			{
 				// select each element within the enclosing rectangle
-				for each (var item:Object in this.enclosedObjects(_object))
+				for each (var item:Object in 
+					this.enclosedObjects(this.object))
 				{
 					this.graphManager.selectElement(item);
 				}
 				
 				// remove the shape
-				(_object as DisplayObjectContainer).removeChild(
+				(this.object as DisplayObjectContainer).removeChild(
 					this._enclosingShape);
 				
-				_object.removeEventListener(MouseEvent.MOUSE_UP, onUp);
-				_object.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
+				this.object.removeEventListener(MouseEvent.MOUSE_UP, onUp);
+				this.object.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
 			}
 		}
 		
+		/**
+		 * Listener function for MOUSE_MOVE event. Updates the bounds of
+		 * enclosing rectangle.
+		 * 
+		 * @param evt	MouseEvent that triggered the action
+		 */
 		protected function onMove(evt:MouseEvent):void
 		{
 			if (this._enclosing &&
 				this.stateManager.checkState(StateManager.SELECT))
 			{
-				this._enclosingRect.width = _object.mouseX -
+				this._enclosingRect.width = this.object.mouseX -
 					this._enclosingRect.x;
 				
-				this._enclosingRect.height = _object.mouseY - 
+				this._enclosingRect.height = this.object.mouseY - 
 					this._enclosingRect.y;
 			
 				this.renderEncloser(this._enclosingShape);
@@ -174,6 +202,11 @@ package ivis.controls
 			}
 		}
 		
+		/**
+		 * Renders the given shape (enclosing rectangle).
+		 * 
+		 * @param shape	shape (rectangle) to render 
+		 */
 		protected function renderEncloser(shape:Shape):void
 		{
 			// TODO enable customization of these values
@@ -183,7 +216,7 @@ package ivis.controls
 			/** Line alpha of the selection region border. */
 			var lineAlpha:Number = 0.4;
 			/** Line width of the selection region border. */
-			var lineWidth:Number = 2;
+			var lineWidth:Number = 1;
 			/** Fill color of the selection region. */
 			var fillColor:uint = 0x8888FF;
 			/** Fill alpha of the selection region. */
@@ -207,6 +240,13 @@ package ivis.controls
 			shape.graphics.endFill();
 		}
 		
+		/**
+		 * Collects the elements enclosed by the enclosing rectangle and
+		 * returns the collection as an array of DisplayObject instances.
+		 * 
+		 * @param displayObj	root display object
+		 * @return				elements enclosed by the enclosing rectangle
+		 */
 		protected function enclosedObjects(displayObj:DisplayObject):Array
 		{
 			var objects:Array = new Array();
@@ -236,6 +276,7 @@ package ivis.controls
 			return objects;
 		}
 		
+		// TODO not used anymore
 		protected function select(evt:SelectionEvent):void
 		{
 			trace("[SelectControl.select] item count: " + evt.items.length);
@@ -268,6 +309,7 @@ package ivis.controls
 			}
 		}
 		
+		// TODO not used anymore
 		protected function deselect(evt:SelectionEvent):void
 		{
 			trace("[SelectControl.deselect] item count: " + evt.items.length);

@@ -8,16 +8,23 @@ package ivis.controls
 	
 	import ivis.manager.GraphManager;
 
+	/**
+	 * Control class for panning the view.
+	 * 
+	 * @author Selcuk Onur Sumer
+	 */
 	public class PanControl extends EventControl
 	{
 		// flag indicating dragging status
 		protected var _dragging:Boolean;
 		
-		// x-cooridnate of the click event
+		// x-cooridnate of the MOUSE_DOWN event
 		protected var _evtX:Number;
 		
-		// y-coordinate of the click event
+		// y-cooridnate of the MOUSE_DOWN event
 		protected var _evtY:Number;
+		
+		//-------------------------- CONSTRUCTOR -------------------------------
 		
 		public function PanControl(graphManager:GraphManager,
 			stateManager:StateManager,
@@ -26,6 +33,8 @@ package ivis.controls
 			super(graphManager, stateManager);
 			this.filter = filter;
 		}
+		
+		//----------------------- PUBLIC FUNCTIONS -----------------------------
 		
 		/** @inheritDoc */
 		public override function attach(obj:InteractiveObject):void
@@ -58,6 +67,14 @@ package ivis.controls
 			return super.detach();
 		}
 		
+		//----------------------- PROTECTED FUNCTIONS --------------------------
+		
+		/**
+		 * Listener for ADDED_TO_STAGE event. Invoked when the interactive
+		 * object, to which this control is attached, is added to the stage.
+		 *
+		 * @param evt	Event that triggered the action 
+		 */
 		protected function onAdd(evt:Event = null):void
 		{
 			// add event listener to enable pan by drag
@@ -65,13 +82,25 @@ package ivis.controls
 				onMouseDown);
 		}
 		
+		/**
+		 * Listener for REMOVED_FROM_STAGE event. Invoked when the interactive
+		 * object, to which this control is attached, is removed from the stage.
+		 * 
+		 * @param evt	Event that triggered the action
+		 */
 		protected function onRemove(evt:Event = null):void
 		{
 			_object.stage.removeEventListener(MouseEvent.MOUSE_DOWN,
 				onMouseDown);
 		}
 		
-		private function onMouseDown(event:MouseEvent) : void
+		/**
+		 * Listener function for MOUSE_DOWN event. Stores the event cooridantes
+		 * when the event is dispatched on the interactive object.
+		 * 
+		 * @param evt	MouseEvent that triggered the action
+		 */
+		protected function onMouseDown(event:MouseEvent) : void
 		{
 			if (this.stateManager.checkState(StateManager.PAN) &&
 				this._object != null)
@@ -88,7 +117,13 @@ package ivis.controls
 			}
 		}
 		
-		private function onMouseUp(event:MouseEvent) : void
+		/**
+		 * Listener function for MOUSE_UP event. Updates the hit area of the
+		 * view if necessary.
+		 * 
+		 * @param evt	MouseEvent that triggered the action
+		 */
+		protected function onMouseUp(event:MouseEvent) : void
 		{
 			this._dragging = false;
 			
@@ -100,10 +135,18 @@ package ivis.controls
 				
 				this._object.stage.removeEventListener(MouseEvent.MOUSE_MOVE,
 					onMouseMove);
+				
+				this.graphManager.view.updateHitArea();
 			}
 		}
 		
-		private function onMouseMove(event:MouseEvent) : void
+		/**
+		 * Listener function for MOUSE_MOVE event. Pans the interactive object
+		 * to which this control is attached.
+		 * 
+		 * @param evt	MouseEvent that triggered the action
+		 */
+		protected function onMouseMove(event:MouseEvent) : void
 		{
 			var x:Number;
 			var y:Number;
@@ -114,7 +157,7 @@ package ivis.controls
 				x = event.stageX;
 				y = event.stageY;
 				
-				Displays.panBy(_object,
+				Displays.panBy(this._object,
 					x - this._evtX,
 					y - this._evtY);
 				
