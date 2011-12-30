@@ -23,9 +23,6 @@ package ivis.manager
 	 * group styles for the graph elements such as nodes, edges, compounds,
 	 * and bendpoints.
 	 * 
-	 * TODO global styles: backgroundColor, canvasSize, toolTipDelay, 
-	 * cursorType, multiple selection key (currently hardcoded as CTRL), etc.
-	 * 
 	 * @author Selcuk Onur Sumer
 	 */
 	public class GraphStyleManager extends EventDispatcher
@@ -33,8 +30,6 @@ package ivis.manager
 		private var _defaultNodeStyle:Style;
 		private var _defaultEdgeStyle:Style;
 		private var _defaultCompoundStyle:Style;
-		
-		protected var _globalStyle:Style;
 		
 		protected var _groupStyleMap:Object;
 		
@@ -130,12 +125,6 @@ package ivis.manager
 			{
 				edge.attachStyle(Groups.EDGES, style);
 			}
-		}
-		
-		public function initGlobalStyle(container:Container):void
-		{
-			// TODO apply style to the container!
-			container.setStyle("backgroundColor", 0xfff9f9f9);
 		}
 		
 		/**

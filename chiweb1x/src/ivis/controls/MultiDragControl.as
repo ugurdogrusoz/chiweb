@@ -8,10 +8,11 @@ package ivis.controls
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import ivis.event.ControlEvent;
+	import ivis.manager.GraphManager;
 	import ivis.model.Node;
 	import ivis.model.util.Nodes;
 	import ivis.util.Groups;
-	import ivis.manager.GraphManager;
 
 	/**
 	 * Control class for dragging nodes. It supports multiple node dragging.
@@ -118,7 +119,14 @@ package ivis.controls
 				this._cur.stage.addEventListener(MouseEvent.MOUSE_UP,
 					onMouseUp);
 				
-				event.stopPropagation();
+				this.stateManager.setState(StateManager.DRAGGING, true);
+				
+				// dispatch event on the interactive object
+				this.object.dispatchEvent(
+					new ControlEvent(ControlEvent.DRAG_START));
+				
+				// TODO is this necessary anymore?
+				//event.stopPropagation();
 			}
 			
 			this.graphManager.resetMissingChildren();
@@ -169,7 +177,7 @@ package ivis.controls
 			// drag target node and all other necessary nodes as well
 			
 			var children:Array = new Array();
-						
+			
 			if (target.props.$selected)
 			{
 				// find missing children of selected nodes
@@ -307,11 +315,17 @@ package ivis.controls
 					(this._cur as DataSprite).unfix();
 				}
 				
-				// TODO is this necessary?
-				event.stopPropagation();
+				// TODO is this necessary anymore?
+				//event.stopPropagation();
 				
 				// update edge labels
 				this.graphManager.view.updateLabels(Groups.EDGES);
+				
+				this.stateManager.setState(StateManager.DRAGGING, false);
+				
+				// dispatch event on the interactive object
+				this.object.dispatchEvent(
+					new ControlEvent(ControlEvent.DRAG_END));
 			}
 			
 			// reset the active sprite

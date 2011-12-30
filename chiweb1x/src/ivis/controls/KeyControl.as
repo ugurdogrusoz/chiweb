@@ -4,6 +4,7 @@ package ivis.controls
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	
+	import ivis.manager.GlobalConfig;
 	import ivis.manager.GraphManager;
 
 	/**
@@ -72,9 +73,17 @@ package ivis.controls
 		 */
 		protected function onDown(evt:KeyboardEvent):void
 		{
-			// TODO take the select key as a constructor parameter, CTRL should be the default key
-			this.stateManager.setState(StateManager.SELECT_KEY_DOWN,
-				evt.ctrlKey); 
+			var selectKey:String = this.graphManager.globalConfig.getConfig(
+				GlobalConfig.SELECTION_KEY);
+			
+			var keyStatus:Boolean = false; 
+			
+			if (evt.hasOwnProperty(selectKey))
+			{
+				keyStatus = evt[selectKey];
+			}
+			
+			this.stateManager.setState(StateManager.SELECT_KEY_DOWN, keyStatus); 
 		}
 		
 		/**
@@ -84,9 +93,17 @@ package ivis.controls
 		 */
 		protected function onUp(evt:KeyboardEvent):void
 		{
-			// TODO take the select key as a parameter
-			this.stateManager.setState(StateManager.SELECT_KEY_DOWN,
-				evt.ctrlKey);
+			var selectKey:String = this.graphManager.globalConfig.getConfig(
+				GlobalConfig.SELECTION_KEY);
+			
+			var keyStatus:Boolean = false; 
+			
+			if (evt.hasOwnProperty(selectKey))
+			{
+				keyStatus = evt[selectKey];
+			}
+			
+			this.stateManager.setState(StateManager.SELECT_KEY_DOWN, keyStatus);
 			
 		}
 		

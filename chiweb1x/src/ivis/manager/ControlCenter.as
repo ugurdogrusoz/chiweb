@@ -35,16 +35,13 @@ package ivis.manager
 		public static const RESIZE_CONTROL:String = "resizeControl";
 		
 		protected var _graphManager:GraphManager;
+		
 		protected var _stateManager:StateManager;
 		
-		// default controls
-		protected var _keyControl:KeyControl;
-		protected var _clickControl:ClickControl;
-		protected var _dragControl:MultiDragControl;
-		protected var _selectControl:SelectControl;
-		protected var _zoomControl:ZoomControl;
-		protected var _panControl:PanControl;
-		protected var _resizeControl:ResizeControl;
+		/**
+		 * Map of default controls
+		 */
+		protected var _defaultControls:Object;
 		
 		/**
 		 * Map of controls for custom listeners.
@@ -80,39 +77,42 @@ package ivis.manager
 			this._customControls = new Object();
 			
 			// init default controls
+			this._defaultControls = new Object();
 			
-			this._keyControl = new KeyControl(this._graphManager,
-				this._stateManager);
+			this._defaultControls[ControlCenter.KEY_CONTROL] =
+				new KeyControl(this._graphManager, this._stateManager);
 			
-			this._zoomControl = new ZoomControl(this._graphManager,
-				this._stateManager);
+			this._defaultControls[ControlCenter.ZOOM_CONTROL] =
+				new ZoomControl(this._graphManager, this._stateManager);
 			
-			this._panControl = new PanControl(this._graphManager,
-				this._stateManager);
+			this._defaultControls[ControlCenter.PAN_CONTROL] =
+				new PanControl(this._graphManager, this._stateManager);
 			
-			this._resizeControl = new ResizeControl(this._graphManager,
-				this._stateManager);
+			this._defaultControls[ControlCenter.RESIZE_CONTROL] =
+				new ResizeControl(this._graphManager, this._stateManager);
 			
-			this._clickControl = new ClickControl(this._graphManager,
-				this._stateManager);
+			this._defaultControls[ControlCenter.CLICK_CONTROL] =
+				new ClickControl(this._graphManager, this._stateManager);
 			
-			this._dragControl = new MultiDragControl(this._graphManager,
-				this._stateManager,
-				NodeSprite); 
+			this._defaultControls[ControlCenter.DRAG_CONTROL] = 
+				new MultiDragControl(this._graphManager,
+					this._stateManager,
+					NodeSprite); 
 			
-			this._selectControl = new SelectControl(this._graphManager,
-				this._stateManager,
-				DataSprite);
+			this._defaultControls[ControlCenter.SELECT_CONTROL] =
+				new SelectControl(this._graphManager,
+					this._stateManager,
+					DataSprite);
 			
-			// add controls to the visualization
+			// add default controls to the visualization
 			
-			this.addControl(_selectControl);
-			this.addControl(_clickControl);
-			this.addControl(_dragControl);
-			this.addControl(_keyControl);
-			this.addControl(_zoomControl);
-			this.addControl(_panControl);
-			this.addControl(_resizeControl);
+			this.addControl(_defaultControls[ControlCenter.SELECT_CONTROL]);
+			this.addControl(_defaultControls[ControlCenter.CLICK_CONTROL]);
+			this.addControl(_defaultControls[ControlCenter.DRAG_CONTROL]);
+			this.addControl(_defaultControls[ControlCenter.KEY_CONTROL]);
+			this.addControl(_defaultControls[ControlCenter.ZOOM_CONTROL]);
+			this.addControl(_defaultControls[ControlCenter.PAN_CONTROL]);
+			this.addControl(_defaultControls[ControlCenter.RESIZE_CONTROL]);
 		}
 		
 		//------------------------ PUBLIC FUNCTIONS ----------------------------
@@ -156,21 +156,30 @@ package ivis.manager
 		 * @param control	custom control to be removed
 		 */
 		public function removeControl(control:IControl):IControl
-		{
+		{	
 			// do not allow a default control to be removed manually
-			if (control === this._keyControl ||
-				control === this._clickControl ||
-				control === this._dragControl ||
-				control === this._selectControl ||
-				control === this._zoomControl ||
-				control === this._panControl ||
-				control === this._resizeControl)
+			for each (var defaultControl:IControl in this._defaultControls)
 			{
-				return null;
+				if (control == defaultControl)
+				{
+					return null;
+				}
 			}
 			
 			// remove any other control
 			return this._graphManager.removeControl(control);
+		}
+		
+		/**
+		 * Returns the default control for the given name. If no default control
+		 * is found matching the given name, returns null.
+		 * 
+		 * @param name	name of the default control
+		 * @return		EventControl for the given name if found, null otherwise
+		 */
+		public function getDefaultControl(name:String):EventControl
+		{
+			return this._defaultControls[name];
 		}
 		
 		/**
@@ -180,33 +189,9 @@ package ivis.manager
 		 */
 		public function enableDefaultControl(name:String):void
 		{
-			if (name === ControlCenter.CLICK_CONTROL)
+			if (this._defaultControls[name] != null)
 			{
-				this.enableControl(this._clickControl);
-			}
-			else if (name === ControlCenter.SELECT_CONTROL)
-			{
-				this.enableControl(this._selectControl);
-			}
-			else if (name === ControlCenter.DRAG_CONTROL)
-			{
-				this.enableControl(this._dragControl);
-			}
-			else if (name === ControlCenter.KEY_CONTROL)
-			{
-				this.enableControl(this._keyControl);
-			}
-			else if (name === ControlCenter.ZOOM_CONTROL)
-			{
-				this.enableControl(this._zoomControl);
-			}
-			else if (name === ControlCenter.PAN_CONTROL)
-			{
-				this.enableControl(this._panControl);
-			}
-			else if (name === ControlCenter.RESIZE_CONTROL)
-			{
-				this.enableControl(this._resizeControl);
+				this.enableControl(this._defaultControls[name]);
 			}
 		}
 		
@@ -217,33 +202,9 @@ package ivis.manager
 		 */
 		public function disableDefaultControl(name:String):void
 		{
-			if (name === ControlCenter.CLICK_CONTROL)
+			if (this._defaultControls[name] != null)
 			{
-				this.disableControl(this._clickControl);
-			}
-			else if (name === ControlCenter.SELECT_CONTROL)
-			{
-				this.disableControl(this._selectControl);
-			}
-			else if (name === ControlCenter.DRAG_CONTROL)
-			{
-				this.disableControl(this._dragControl);
-			}
-			else if (name === ControlCenter.KEY_CONTROL)
-			{
-				this.disableControl(this._keyControl);
-			}
-			else if (name === ControlCenter.ZOOM_CONTROL)
-			{
-				this.disableControl(this._zoomControl);
-			}
-			else if (name === ControlCenter.PAN_CONTROL)
-			{
-				this.disableControl(this._panControl);
-			}
-			else if (name === ControlCenter.RESIZE_CONTROL)
-			{
-				this.disableControl(this._resizeControl);
+				this.disableControl(this._defaultControls[name]);
 			}
 		}
 		

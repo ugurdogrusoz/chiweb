@@ -1,6 +1,7 @@
 package ivis.view
 {
 	import flare.display.DirtySprite;
+	import flare.util.Displays;
 	import flare.vis.data.DataSprite;
 	import flare.vis.data.EdgeSprite;
 	import flare.vis.data.NodeSprite;
@@ -142,7 +143,7 @@ package ivis.view
 				"visualization coordinates: " + this.vis.x + "," + this.vis.y);
 			
 			// adjust width & height of the hit area with respect to width &
-			// height of the parent container 
+			// height of the parent container
 			
 			if (this.vis.scaleX > 1)
 			{
@@ -309,15 +310,6 @@ package ivis.view
 			var strength:Number;
 			var color:uint;
 			
-			// TODO other selection properties (should be applied to rectangle:Shape of SelectControl) 
-			/*
-				selectionLineColor: "#8888ff",
-				selectionLineOpacity: 0.8,
-				selectionLineWidth: 1,
-				selectionFillColor: "#8888ff",
-				selectionFillOpacity: 0.1
-			*/
-			
 			if (eventTarget is DataSprite)
 			{
 				ds = eventTarget as DataSprite;
@@ -427,6 +419,32 @@ package ivis.view
 			}
 			
 			return result;
+		}
+		
+		/**
+		 * Pans the visualization component by the given amount.
+		 * 
+		 * @param amountX	vertical pan amount
+		 * @param amountY	horizontla pan amount 
+		 */
+		public function panBy(amountX:Number, amountY:Number):void
+		{
+			Displays.panBy(this.vis,
+				amountX, amountY);
+		}
+		
+		/**
+		 * Zooms the visualization with respect to the given scale value.
+		 * 
+		 * @param scale scale value for the zoom
+		 * @param x		the x-coordinate around which to zoom
+		 * @param y		the y-coordinate around which to zoom
+		 */
+		public function zoomBy(scale:Number,
+			x:Number = 0,
+			y:Number = 0):void
+		{
+			Displays.zoomBy(this.vis, scale, x, y);
 		}
 		
 		//---------------------- PROTECTED FUNCTIONS ---------------------------

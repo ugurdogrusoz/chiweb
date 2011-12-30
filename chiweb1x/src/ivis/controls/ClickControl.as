@@ -106,7 +106,6 @@ package ivis.controls
 			if (this.stateManager.checkState(StateManager.SELECT))
 			{
 				if (!this.stateManager.checkState(StateManager.SELECT_KEY_DOWN))
-				//if (!evt.ctrlKey)
 				{
 					this.graphManager.resetSelected();
 				}

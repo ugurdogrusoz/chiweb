@@ -38,6 +38,8 @@ package ivis.manager
 		
 		protected var _styleManager:GraphStyleManager;
 		
+		protected var _globalConfig:GlobalConfig;
+		
 		/**
 		 *  Source node used for the edge creating process.
 		 */
@@ -51,6 +53,14 @@ package ivis.manager
 		public function get graphStyleManager():GraphStyleManager
 		{
 			return _styleManager;
+		}
+		
+		/**
+		 * Configuration for the global settings.
+		 */
+		public function get globalConfig():GlobalConfig
+		{
+			return _globalConfig;
 		}
 		
 		/**
@@ -92,6 +102,7 @@ package ivis.manager
 			this._view = new GraphView(this.graph);
 			
 			this._styleManager = new GraphStyleManager();
+			this._globalConfig = new GlobalConfig();
 			this._sourceNode = null;
 			
 			this.initListeners();
@@ -691,6 +702,39 @@ package ivis.manager
 				this.view.updateAllCompoundBounds();
 				this.view.update();
 			}
+		}
+		
+		/**
+		 * Pans the view by the given amount.
+		 * 
+		 * @param amountX	vertical pan amount
+		 * @param amountY	horizontla pan amount 
+		 */
+		public function panView(amountX:Number, amountY:Number):void
+		{
+			// pan the view by the given amount
+			this.view.panBy(amountX, amountY);
+			
+			// update hit area of the view
+			this.view.updateHitArea();
+		}
+		
+		/**
+		 * Zooms the view with respect to the given scale value.
+		 * 
+		 * @param scale scale value for the zoom
+		 * @param x		the x-coordinate around which to zoom
+		 * @param y		the y-coordinate around which to zoom
+		 */
+		public function zoomView(scale:Number,
+			x:Number = 0,
+			y:Number = 0):void
+		{
+			// pan the view by the given amount
+			this.view.zoomBy(scale, x, y);
+			
+			// update hit area of the view
+			this.view.updateHitArea();
 		}
 		
 		/**

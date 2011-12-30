@@ -8,23 +8,74 @@ package ivis.controls
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	
+	import ivis.manager.GlobalConfig;
 	import ivis.manager.GraphManager;
 
 	/**
-	 * Control class for zooming the view.
+	 * Control class for zooming the view. By default this control listens for
+	 * MOUSE_WHEEL event, and zooms the view upon the mouse wheel is turned.
+	 * It is possible to customize the event, and the event listener function
+	 * by setting corresponding attributes of this control.
+	 * 
+	 * To provide another interface for zooming, define your own controls 
+	 * (a slider for example), and use zoomView method of the GraphManager
+	 * class.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
 	public class ZoomControl extends EventControl
 	{
+		/**
+		 * Name of the zoom event to listen.
+		 */
+		protected var _zoomEvent:String;
+		
+		/**
+		 * Listener function for the zoom event.
+		 */
+		protected var _zoomListener:Function;
+		
+		/**
+		 * Flag to indicate whether the zoom listener to be added directly
+		 * to the interactive object or to be added to its stage.
+		 */
+		protected var _addToStage:Boolean;
+		
 		//-------------------------- CONSTRUCTOR -------------------------------
 		
+		/**
+		 * Instantiates a new ZoomControl.
+		 * 
+		 * @param graphManager	graph manager
+		 * @param stateManager	state manager
+		 * @param filter		filter function
+		 * @param zoomEvent		name of the event to trigger the zoom action
+		 * @param zoomListener	listener function for the zoom event
+		 * @param addToStage	indicates if the provided listener to be added
+		 * 						directly to the interactive object or to be
+		 * 						added to its stage
+		 */
 		public function ZoomControl(graphManager:GraphManager,
 			stateManager:StateManager,
-			filter:* = null)
+			filter:* = null,
+			zoomEvent:String = MouseEvent.MOUSE_WHEEL,
+			zoomListener:Function = null,
+			addToStage:Boolean = true)
 		{
 			super(graphManager, stateManager);
 			this.filter = filter;
+			
+			this._zoomEvent = zoomEvent;
+			this._addToStage = addToStage;
+			
+			if (zoomListener == null)
+			{
+				this._zoomListener = onZoom;
+			}
+			else
+			{
+				this._zoomListener = zoomListener;
+			}
 		}
 		
 		//----------------------- PUBLIC FUNCTIONS -----------------------------
@@ -62,6 +113,54 @@ package ivis.controls
 			return super.detach();
 		}
 		
+		public function setZoomEvent(eventName:String,
+			listener:Function = null,
+			addToStage:Boolean = true):void
+		{
+			// remove previous listeners
+			
+			if (this.object != null)
+			{
+				this.object.removeEventListener(this._zoomEvent,
+					this._zoomListener);
+				
+				if (this.object.stage != null)
+				{
+					this.object.stage.removeEventListener(this._zoomEvent,
+						this._zoomListener);
+				}
+			}
+			
+			// add new listener
+			
+			this._zoomEvent = eventName;
+			
+			if (listener != null)
+			{
+				this._zoomListener = listener;
+			}
+			
+			this._addToStage = addToStage;
+			
+			if (this.object != null)
+			{
+				if (addToStage)
+				{
+					if (this.object.stage != null)
+					{
+						this.onAdd();
+					}
+				}
+				else
+				{
+					_object.addEventListener(this._zoomEvent,
+						this._zoomListener);
+				}
+			}
+			
+			
+		}
+		
 		//----------------------- PROTECTED FUNCTIONS --------------------------
 		
 		/**
@@ -72,10 +171,16 @@ package ivis.controls
 		 */
 		protected function onAdd(evt:Event = null):void
 		{
-			// TODO add a pan/zoom control panel and add listener on button clicks?
-			// TODO customizable event or a zoom slider for zoom action?
-			_object.stage.addEventListener(MouseEvent.MOUSE_WHEEL,
-				onMouseWheel);
+			if (this._addToStage)
+			{
+				_object.stage.addEventListener(this._zoomEvent,
+					this._zoomListener);
+			}
+			else
+			{
+				_object.addEventListener(this._zoomEvent,
+					this._zoomListener);
+			}
 			
 			if (this.object is Visualization)
 			{
@@ -93,8 +198,15 @@ package ivis.controls
 		 */
 		protected function onRemove(evt:Event = null):void
 		{
-			this.object.stage.removeEventListener(MouseEvent.MOUSE_WHEEL,
-				onMouseWheel);
+			// remove zoom listener from both the object and its stage,
+			// just in case
+			
+			this.object.stage.removeEventListener(this._zoomEvent,
+				this._zoomListener);
+			
+			this.object.removeEventListener(this._zoomEvent,
+				this._zoomListener);
+			
 			
 			if (this.object is Visualization)
 			{
@@ -104,31 +216,44 @@ package ivis.controls
 			}
 		}
 		
-		// TODO currently, zooming is performed when mouse wheel is moved but this should be customizable!
-		protected function onMouseWheel(evt:MouseEvent):void
+		/**
+		 * Default listener function for zoom event.
+		 * 
+		 * @param evt	Event that triggered the action
+		 */
+		protected function onZoom(evt:Event):void
 		{
-			var delta:Number = evt.delta;
+			var delta:Number;
 			var scale:Number;
+			
+			if (evt is MouseEvent)
+			{
+				delta = (evt as MouseEvent).delta;
+			}
+			else
+			{
+				return;
+			}
 			
 			// mouse wheel backward
 			if (delta < 0)
 			{
 				// zoom-out
-				scale = 0.8;
-				//scale = 0.5;
+				scale = this.graphManager.globalConfig.getConfig(
+					GlobalConfig.ZOOM_SCALE);
 			}
 			// mouse wheel forward
 			else
 			{
 				// zoom-in
-				scale = 1 / 0.8;
-				//scale = 1 / 0.5;
+				scale = 1 / this.graphManager.globalConfig.getConfig(
+					GlobalConfig.ZOOM_SCALE);
 			}
 			
 			// zoom view
 			Displays.zoomBy(this._object, scale);
 			
-			// TODO update hit area of the visualization also after other operations if necessary
+			// update hit area of the visualization
 			this.graphManager.view.updateHitArea();
 		}
 	}

@@ -12,6 +12,8 @@ package ivis.controls
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	
+	import ivis.event.ControlEvent;
+	import ivis.manager.GlobalConfig;
 	import ivis.manager.GraphManager;
 	import ivis.model.Node;
 
@@ -124,6 +126,11 @@ package ivis.controls
 				{
 					this.graphManager.resetSelected();
 				}
+				
+				this.stateManager.setState(StateManager.SELECTING, true);
+				// dispatch event on the interactive object
+				this.object.dispatchEvent(
+					new ControlEvent(ControlEvent.SELECT_START));
 			}
 			
 			/*
@@ -172,6 +179,12 @@ package ivis.controls
 				
 				this.object.removeEventListener(MouseEvent.MOUSE_UP, onUp);
 				this.object.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
+				
+				this.stateManager.setState(StateManager.SELECTING, false);
+				
+				// dispatch event on the interactive object
+				this.object.dispatchEvent(
+					new ControlEvent(ControlEvent.SELECT_END));
 			}
 		}
 		
@@ -209,18 +222,21 @@ package ivis.controls
 		 */
 		protected function renderEncloser(shape:Shape):void
 		{
-			// TODO enable customization of these values
+			var lineColor:uint = this.graphManager.globalConfig.getConfig(
+				GlobalConfig.ENCLOSING_LINE_COLOR);
 			
-			/** Line color of the selection region border. */
-			var lineColor:uint = 0x8888FF;
-			/** Line alpha of the selection region border. */
-			var lineAlpha:Number = 0.4;
-			/** Line width of the selection region border. */
-			var lineWidth:Number = 1;
-			/** Fill color of the selection region. */
-			var fillColor:uint = 0x8888FF;
-			/** Fill alpha of the selection region. */
-			var fillAlpha:Number = 0.2;
+			var lineAlpha:Number = this.graphManager.globalConfig.getConfig(
+				GlobalConfig.ENCLOSING_LINE_ALPHA);
+			
+			var lineWidth:Number = this.graphManager.globalConfig.getConfig(
+				GlobalConfig.ENCLOSING_LINE_WIDTH);
+			
+			var fillColor:uint = this.graphManager.globalConfig.getConfig(
+				GlobalConfig.ENCLOSING_FILL_COLOR);
+			
+			var fillAlpha:Number = this.graphManager.globalConfig.getConfig(
+				GlobalConfig.ENCLOSING_FILL_ALPHA);			
+			
 			
 			shape.graphics.clear();
 			

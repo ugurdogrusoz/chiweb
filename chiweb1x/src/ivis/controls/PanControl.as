@@ -6,10 +6,14 @@ package ivis.controls
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import ivis.event.ControlEvent;
 	import ivis.manager.GraphManager;
 
 	/**
-	 * Control class for panning the view.
+	 * Control class for panning the view. This class is designed to pan the
+	 * view by clicking on and dragging the canvas. To provide another interface
+	 * for panning, define your own controls (buttons for example), and use
+	 * panView method of the GraphManager class.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
@@ -114,6 +118,12 @@ package ivis.controls
 				this._dragging = true;
 				this._evtX = event.stageX;
 				this._evtY = event.stageY;
+				
+				this.stateManager.setState(StateManager.PANNING, false);
+				
+				// dispatch event on the interactive object
+				this.object.dispatchEvent(
+					new ControlEvent(ControlEvent.PAN_START));
 			}
 		}
 		
@@ -137,6 +147,12 @@ package ivis.controls
 					onMouseMove);
 				
 				this.graphManager.view.updateHitArea();
+				
+				this.stateManager.setState(StateManager.PANNING, false);
+				
+				// dispatch event on the interactive object
+				this.object.dispatchEvent(
+					new ControlEvent(ControlEvent.PAN_END));
 			}
 		}
 		

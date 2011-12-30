@@ -15,6 +15,9 @@ package ivis.controls
 		public static const SELECT:String = "select";
 		public static const SELECT_KEY_DOWN:String = "selectKeyDown";
 		public static const PAN:String = "pan";
+		public static const SELECTING:String = "selecting";
+		public static const PANNING:String = "panning";
+		public static const DRAGGING:String = "dragging";
 		
 		/**
 		 * Map of flags to indicate the states of certain actions.
