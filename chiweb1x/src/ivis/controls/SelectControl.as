@@ -70,7 +70,7 @@ package ivis.controls
 			
 			if (obj != null)
 			{
-				obj.addEventListener(MouseEvent.MOUSE_DOWN, onDown);
+				obj.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			}
 		}
 		
@@ -79,7 +79,8 @@ package ivis.controls
 		{
 			if (this.object != null)
 			{
-				this.object.removeEventListener(MouseEvent.MOUSE_DOWN, onDown);
+				this.object.removeEventListener(MouseEvent.MOUSE_DOWN,
+					onMouseDown);
 			}
 			
 			return super.detach();
@@ -93,7 +94,7 @@ package ivis.controls
 		 * 
 		 * @param evt	MouseEvent that triggered the action
 		 */
-		protected function onDown(evt:MouseEvent):void
+		protected function onMouseDown(evt:MouseEvent):void
 		{
 			trace("[SelectControl.onDown] target: " + evt.target);
 			
@@ -101,7 +102,7 @@ package ivis.controls
 				this.stateManager.checkState(StateManager.SELECT) &&
 				!(evt.target is DataSprite))
 			{
-				this.object.addEventListener(MouseEvent.MOUSE_UP, onUp);
+				this.object.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				this.object.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
 				
 				this._enclosingRect.x = this.object.mouseX;
@@ -128,9 +129,13 @@ package ivis.controls
 				}
 				
 				this.stateManager.setState(StateManager.SELECTING, true);
-				// dispatch event on the interactive object
-				this.object.dispatchEvent(
-					new ControlEvent(ControlEvent.SELECT_START));
+				
+				if (this.object.hasEventListener(ControlEvent.SELECT_START))
+				{
+					// dispatch event on the interactive object
+					this.object.dispatchEvent(
+						new ControlEvent(ControlEvent.SELECT_START));
+				}
 			}
 			
 			/*
@@ -156,7 +161,7 @@ package ivis.controls
 		 * 
 		 * @param evt	MouseEvent that triggered the action
 		 */
-		protected function onUp(evt:MouseEvent):void
+		protected function onMouseUp(evt:MouseEvent):void
 		{
 			// when mouse up, the enclosing rectangle becomes inactive
 			this._enclosing = false;
@@ -177,14 +182,17 @@ package ivis.controls
 				(this.object as DisplayObjectContainer).removeChild(
 					this._enclosingShape);
 				
-				this.object.removeEventListener(MouseEvent.MOUSE_UP, onUp);
+				this.object.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				this.object.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
 				
 				this.stateManager.setState(StateManager.SELECTING, false);
 				
-				// dispatch event on the interactive object
-				this.object.dispatchEvent(
-					new ControlEvent(ControlEvent.SELECT_END));
+				if (this.object.hasEventListener(ControlEvent.SELECT_END))
+				{
+					// dispatch event on the interactive object
+					this.object.dispatchEvent(
+						new ControlEvent(ControlEvent.SELECT_END));
+				}
 			}
 		}
 		

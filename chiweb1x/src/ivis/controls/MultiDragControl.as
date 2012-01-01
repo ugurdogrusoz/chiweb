@@ -121,9 +121,12 @@ package ivis.controls
 				
 				this.stateManager.setState(StateManager.DRAGGING, true);
 				
-				// dispatch event on the interactive object
-				this.object.dispatchEvent(
-					new ControlEvent(ControlEvent.DRAG_START));
+				if (this.object.hasEventListener(ControlEvent.DRAG_START))
+				{
+					// dispatch event on the interactive object
+					this.object.dispatchEvent(
+						new ControlEvent(ControlEvent.DRAG_START));
+				}
 				
 				// TODO is this necessary anymore?
 				//event.stopPropagation();
@@ -323,9 +326,12 @@ package ivis.controls
 				
 				this.stateManager.setState(StateManager.DRAGGING, false);
 				
-				// dispatch event on the interactive object
-				this.object.dispatchEvent(
-					new ControlEvent(ControlEvent.DRAG_END));
+				if (this.object.hasEventListener(ControlEvent.DRAG_END))
+				{
+					// dispatch event on the interactive object
+					this.object.dispatchEvent(
+						new ControlEvent(ControlEvent.DRAG_END));
+				}
 			}
 			
 			// reset the active sprite

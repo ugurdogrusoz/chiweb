@@ -89,11 +89,7 @@ package ivis.manager
 		 */
 		public function setRootContainer(container:Container):void
 		{
-			var bgColor:uint = this.graphManager.globalConfig.getConfig(
-				GlobalConfig.BACKGROUND_COLOR);
-
-			// init style of the root container
-			container.setStyle("backgroundColor", bgColor);
+			this.graphManager.rootContainer = container;
 		}
 		
 		//------------------------------ DEBUG ---------------------------------

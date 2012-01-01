@@ -52,7 +52,7 @@ package ivis.controls
 			if (obj != null)
 			{
 				obj.addEventListener(MouseEvent.CLICK, onClick);
-				obj.addEventListener(MouseEvent.MOUSE_DOWN, onDown);
+				obj.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			}
 		}
 		
@@ -62,7 +62,8 @@ package ivis.controls
 			if (this.object != null)
 			{
 				this.object.removeEventListener(MouseEvent.CLICK, onClick);
-				this.object.removeEventListener(MouseEvent.MOUSE_DOWN, onDown);
+				this.object.removeEventListener(MouseEvent.MOUSE_DOWN,
+					onMouseDown);
 			}
 			
 			return super.detach();
@@ -76,7 +77,7 @@ package ivis.controls
 		 * 
 		 * @param evt	MouseEvent that triggered the action
 		 */
-		protected function onDown(evt:MouseEvent):void
+		protected function onMouseDown(evt:MouseEvent):void
 		{
 			var target:DisplayObject = evt.target as DisplayObject;
 			

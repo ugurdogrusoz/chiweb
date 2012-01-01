@@ -1,5 +1,10 @@
 package ivis.event
 {
+	/**
+	 * This class is designed to manage events for Control classes.
+	 * 
+	 * @author Selcuk Onur Sumer
+	 */
 	public class ControlEvent extends ChiWebEvent
 	{
 		public static const DRAG_START:String = "dragStart";

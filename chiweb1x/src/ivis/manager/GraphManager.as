@@ -23,6 +23,8 @@ package ivis.manager
 	import ivis.view.EdgeRenderer;
 	import ivis.view.GraphView;
 	import ivis.view.NodeRenderer;
+	
+	import mx.core.Container;
 
 	/**
 	 * This class is designed to handle changes in graph topology, graph
@@ -39,6 +41,8 @@ package ivis.manager
 		protected var _styleManager:GraphStyleManager;
 		
 		protected var _globalConfig:GlobalConfig;
+		
+		protected var _rootContainer:Container; 
 		
 		/**
 		 *  Source node used for the edge creating process.
@@ -78,6 +82,17 @@ package ivis.manager
 		public function get graph():Graph
 		{
 			return _graph;
+		}
+		
+		/**
+		 * Root container of the view.
+		 */
+		public function set rootContainer(value:Container):void
+		{
+			_rootContainer = value;
+			
+			// update global config
+			this.onConfigChange();
 		}
 		
 		//------------------------- CONSTRUCTOR --------------------------------
@@ -1062,7 +1077,8 @@ package ivis.manager
 		 */
 		protected function initListeners() : void
 		{
-			// register listener for graph data changes
+			// register listeners for graph data changes
+			
 			this.graph.dispatcher.addEventListener(
 				DataChangeEvent.REMOVED_GROUP,
 				onRemoveGroup);
@@ -1075,7 +1091,7 @@ package ivis.manager
 				DataChangeEvent.DS_REMOVED_FROM_GROUP,
 				onRemoveFromGroup);
 			
-			// register listener for style manager
+			// register listeners for style manager
 			
 			this._styleManager.addEventListener(
 				DataChangeEvent.ADDED_GROUP_STYLE,
@@ -1084,6 +1100,16 @@ package ivis.manager
 			this._styleManager.addEventListener(
 				DataChangeEvent.REMOVED_GROUP_STYLE,
 				onRemoveGroupStyle);
+			
+			// resigter listeners for global config
+			
+			this._globalConfig.addEventListener(
+				StyleChangeEvent.ADDED_GLOBAL_CONFIG,
+				onConfigChange);
+			
+			this._globalConfig.addEventListener(
+				StyleChangeEvent.REMOVED_GLOBAL_CONFIG,
+				onConfigChange);
 		}
 		
 		/**
@@ -1096,7 +1122,7 @@ package ivis.manager
 		 * 
 		 * @param event	DataChangeEvent triggered the action
 		 */
-		protected function onRemoveGroup(event:DataChangeEvent) : void
+		protected function onRemoveGroup(event:DataChangeEvent):void
 		{
 			var group:String = event.info.group;
 			var elements:DataList = event.info.elements;
@@ -1134,7 +1160,7 @@ package ivis.manager
 		 * 
 		 * @param event	DataChangeEvent triggered the action
 		 */
-		protected function onAddToGroup(event:DataChangeEvent) : void
+		protected function onAddToGroup(event:DataChangeEvent):void
 		{
 			var ds:DataSprite = event.info.ds;
 			var group:String = event.info.group;
@@ -1168,7 +1194,7 @@ package ivis.manager
 		 * 
 		 * @param event	DataChangeEvent triggered the action
 		 */
-		protected function onRemoveFromGroup(event:DataChangeEvent) : void
+		protected function onRemoveFromGroup(event:DataChangeEvent):void
 		{
 			var ds:DataSprite = event.info.ds;
 			var group:String = event.info.group;
@@ -1203,7 +1229,7 @@ package ivis.manager
 		 * 
 		 * @param event	DataChangeEvent triggered the action
 		 */
-		protected function onAddGroupStyle(event:DataChangeEvent) : void
+		protected function onAddGroupStyle(event:DataChangeEvent):void
 		{
 			var group:DataList = this.graph.graphData.group(event.info.group);
 			var style:Style = this._styleManager.getGroupStyle(
@@ -1254,7 +1280,7 @@ package ivis.manager
 		 * 
 		 * @param event	DataChangeEvent triggered the action
 		 */
-		protected function onRemoveGroupStyle(event:DataChangeEvent) : void
+		protected function onRemoveGroupStyle(event:DataChangeEvent):void
 		{
 			var group:DataList = this.graph.graphData.group(event.info.group);
 			var style:Style = event.info.style as Style;
@@ -1298,10 +1324,31 @@ package ivis.manager
 		 * 
 		 * @param event	StyleChangeEvent triggered the action
 		 */
-		protected function onStyleChange(event:StyleChangeEvent) : void
+		protected function onStyleChange(event:StyleChangeEvent):void
 		{
 			this.view.update();
 			this.view.updateAllCompoundBounds();
+		}
+		
+		/**
+		 * This function is designed as a listener for the actions
+		 * StyleChangeEvent.ADDED_GLOBAL_CONFIG and 
+		 * StyleChangeEvent.REMOVED_GLOBAL_CONFIG.
+		 * 
+		 * This function is called whenever a new property added to or an
+		 * existing property is removed from the global config.
+		 * 
+		 * @param event	StyleChangeEvent triggered the action
+		 */
+		protected function onConfigChange(event:StyleChangeEvent = null):void
+		{
+			// TODO update global config (currently only background color)
+			
+			var bgColor:uint = this.globalConfig.getConfig(
+				GlobalConfig.BACKGROUND_COLOR);
+			
+			// init style of the root container
+			this._rootContainer.setStyle("backgroundColor", bgColor);
 		}
 	}
 }

@@ -55,8 +55,11 @@ package ivis.controls
 		{
 			if (this.object != null)
 			{
-				this.object.removeEventListener(Event.ADDED_TO_STAGE, onAdd);
-				this.object.removeEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+				this.object.removeEventListener(Event.ADDED_TO_STAGE,
+					onAdd);
+				
+				this.object.removeEventListener(Event.REMOVED_FROM_STAGE,
+					onRemove);
 				
 				this.onRemove();
 			}
@@ -71,18 +74,21 @@ package ivis.controls
 		 * 
 		 * @param evt	KeyboardEvent that triggered the action
 		 */
-		protected function onDown(evt:KeyboardEvent):void
+		protected function onKeyDown(evt:KeyboardEvent):void
 		{
 			var selectKey:String = this.graphManager.globalConfig.getConfig(
 				GlobalConfig.SELECTION_KEY);
 			
 			var keyStatus:Boolean = false; 
 			
+			// if no matching property found for the selectKey string,
+			// keyStatus will remain false
 			if (evt.hasOwnProperty(selectKey))
 			{
 				keyStatus = evt[selectKey];
 			}
 			
+			// update status of the select key
 			this.stateManager.setState(StateManager.SELECT_KEY_DOWN, keyStatus); 
 		}
 		
@@ -91,7 +97,7 @@ package ivis.controls
 		 * 
 		 * @param evt	KeyboardEvent that triggered the action
 		 */
-		protected function onUp(evt:KeyboardEvent):void
+		protected function onKeyUp(evt:KeyboardEvent):void
 		{
 			var selectKey:String = this.graphManager.globalConfig.getConfig(
 				GlobalConfig.SELECTION_KEY);
@@ -117,8 +123,8 @@ package ivis.controls
 		{
 			//view.stage.addEventListener(KeyboardEvent.KEY_DOWN, onDown, false, 0, true);
 			//view.stage.addEventListener(KeyboardEvent.KEY_UP, onUp, false, 0, true);
-			this.object.stage.addEventListener(KeyboardEvent.KEY_DOWN, onDown);
-			this.object.stage.addEventListener(KeyboardEvent.KEY_UP, onUp);
+			this.object.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			this.object.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 		}
 		
 		
@@ -131,10 +137,10 @@ package ivis.controls
 		protected function onRemove(evt:Event = null):void
 		{
 			this.object.stage.removeEventListener(KeyboardEvent.KEY_DOWN,
-				onDown);
+				onKeyDown);
 			
 			this.object.stage.removeEventListener(KeyboardEvent.KEY_UP,
-				onUp);
+				onKeyUp);
 		}
 	}
 }

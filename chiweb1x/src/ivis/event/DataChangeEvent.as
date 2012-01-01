@@ -3,7 +3,7 @@ package ivis.event
 	import flash.events.Event;
 
 	/**
-	 * This class is designed to handle data change events for both 
+	 * This class is designed to manage data change events for both 
 	 * the Graph data and the VisualSettings.
 	 * 
 	 * @author Selcuk Onur Sumer

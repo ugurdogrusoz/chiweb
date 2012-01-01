@@ -1,11 +1,15 @@
 package ivis.manager
 {
+	import flash.events.EventDispatcher;
+	
+	import ivis.event.StyleChangeEvent;
+
 	/**
 	 * Configuration class for the global settings of the application.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
-	public class GlobalConfig
+	public class GlobalConfig extends EventDispatcher
 	{
 		/** Line color of the enclosing selection rectangle. */
 		public static const ENCLOSING_LINE_COLOR:String = "enclosingLineColor";
@@ -29,7 +33,7 @@ package ivis.manager
 		public static const BACKGROUND_COLOR:String = "backgroundColor";
 		
 		/** Increase or decrease in the zoom scale */
-		public static const ZOOM_SCALE:String = "zoomScalePercent";
+		public static const ZOOM_SCALE:String = "zoomScale";
 		
 		// TODO canvasSize, toolTipDelay, cursorType for specific events
 		
@@ -38,23 +42,30 @@ package ivis.manager
 		 */
 		protected var _settings:Object;
 		
-		//
+		//------------------------- CONSTRUCTOR --------------------------------
 		
-		public function GlobalConfig()
+		public function GlobalConfig(settings:Object = null)
 		{
-			// initialize settings object
-			this._settings = new Object();
-			
-			// initialize default settings
-			this.addConfig(GlobalConfig.ENCLOSING_LINE_COLOR, 0x8888FF);
-			this.addConfig(GlobalConfig.ENCLOSING_LINE_ALPHA, 0.4);
-			this.addConfig(GlobalConfig.ENCLOSING_LINE_WIDTH, 1);
-			this.addConfig(GlobalConfig.ENCLOSING_FILL_COLOR, 0x8888FF);
-			this.addConfig(GlobalConfig.ENCLOSING_FILL_ALPHA, 0.2);
-			this.addConfig(GlobalConfig.SELECTION_KEY, "ctrlKey");
-			this.addConfig(GlobalConfig.BACKGROUND_COLOR, 0xfff9f9f9);
-			this.addConfig(GlobalConfig.ZOOM_SCALE, 0.8);
+			if (settings == null)
+			{
+				// initialize default settings map
+				
+				this._settings = {enclosingLineColor: 0x8888FF,
+					enclosingLineAlpha: 0.4,
+					enclosingLineWidth: 1,
+					enclosingFillColor: 0x8888FF,
+					enclosingFillAlpha: 0.2,
+					selectionKey: "ctrlKey",
+					backgroundColor: 0xFFF9F9F9, // TODO different default bg color? 
+					zoomScale: 0.8};
+			}
+			else
+			{
+				this._settings = settings;
+			}
 		}
+		
+		//------------------------ PUBLIC FUNCTIONS ----------------------------
 		
 		/**
 		 * Adds a new configuration to the settings map for the given name and 
@@ -69,7 +80,10 @@ package ivis.manager
 			// add configuration to the map
 			this._settings[name] = value;
 			
-			// TODO dispatch an Event?
+			// dispatch a StyleChangeEvent
+			this.dispatchEvent(
+				new StyleChangeEvent(StyleChangeEvent.ADDED_GLOBAL_CONFIG,
+					{config: name}));
 		}
 		
 		/**
@@ -82,7 +96,10 @@ package ivis.manager
 			// remove configuration from the map
 			delete this._settings[name];
 			
-			// TODO dispatch an Event?
+			// dispatch a StyleChangeEvent
+			this.dispatchEvent(
+				new StyleChangeEvent(StyleChangeEvent.REMOVED_GLOBAL_CONFIG,
+					{config: name}));
 		}
 		
 		/**

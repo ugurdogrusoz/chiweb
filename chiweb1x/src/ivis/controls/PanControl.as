@@ -1,6 +1,7 @@
 package ivis.controls
 {
 	import flare.util.Displays;
+	import flare.vis.data.DataSprite;
 	
 	import flash.display.InteractiveObject;
 	import flash.events.Event;
@@ -104,10 +105,11 @@ package ivis.controls
 		 * 
 		 * @param evt	MouseEvent that triggered the action
 		 */
-		protected function onMouseDown(event:MouseEvent) : void
+		protected function onMouseDown(event:MouseEvent):void
 		{
 			if (this.stateManager.checkState(StateManager.PAN) &&
-				this._object != null)
+				this._object != null &&
+				!(event.target is DataSprite))
 			{
 				this._object.stage.addEventListener(MouseEvent.MOUSE_UP,
 					onMouseUp);
@@ -119,11 +121,14 @@ package ivis.controls
 				this._evtX = event.stageX;
 				this._evtY = event.stageY;
 				
-				this.stateManager.setState(StateManager.PANNING, false);
+				this.stateManager.setState(StateManager.PANNING, true);
 				
-				// dispatch event on the interactive object
-				this.object.dispatchEvent(
-					new ControlEvent(ControlEvent.PAN_START));
+				if (this.object.hasEventListener(ControlEvent.PAN_START))
+				{
+					// dispatch event on the interactive object
+					this.object.dispatchEvent(
+						new ControlEvent(ControlEvent.PAN_START));
+				}
 			}
 		}
 		
@@ -133,7 +138,7 @@ package ivis.controls
 		 * 
 		 * @param evt	MouseEvent that triggered the action
 		 */
-		protected function onMouseUp(event:MouseEvent) : void
+		protected function onMouseUp(event:MouseEvent):void
 		{
 			this._dragging = false;
 			
@@ -150,9 +155,12 @@ package ivis.controls
 				
 				this.stateManager.setState(StateManager.PANNING, false);
 				
-				// dispatch event on the interactive object
-				this.object.dispatchEvent(
-					new ControlEvent(ControlEvent.PAN_END));
+				if (this.object.hasEventListener(ControlEvent.PAN_END))
+				{
+					// dispatch event on the interactive object
+					this.object.dispatchEvent(
+						new ControlEvent(ControlEvent.PAN_END));
+				}
 			}
 		}
 		
@@ -162,7 +170,7 @@ package ivis.controls
 		 * 
 		 * @param evt	MouseEvent that triggered the action
 		 */
-		protected function onMouseMove(event:MouseEvent) : void
+		protected function onMouseMove(event:MouseEvent):void
 		{
 			var x:Number;
 			var y:Number;
