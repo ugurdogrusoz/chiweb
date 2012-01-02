@@ -46,12 +46,15 @@ package ivis.view
 				{
 					var label:TextSprite = this.getLabel(d, true);
 					
-					label.filters = null; // filters(d); TODO get filters
-					label.alpha = d.alpha;
-					label.visible = d.visible;
+					if (label != null)
+					{
+						label.filters = null; // filters(d); TODO get filters
+						label.alpha = d.alpha;
+						label.visible = d.visible;
 					
-					this.updateLabelPosition(label, d);
-					label.render();
+						this.updateLabelPosition(label, d);
+						label.render();
+					}
 				}
 			}
 		}
