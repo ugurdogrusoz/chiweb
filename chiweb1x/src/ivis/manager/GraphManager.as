@@ -280,7 +280,10 @@ package ivis.manager
 			}
 			
 			// update the visualization
-			this.view.update();
+			if (edge != null)
+			{
+				this.view.update();
+			}
 			
 			return edge;
 		}

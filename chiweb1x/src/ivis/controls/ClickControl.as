@@ -2,11 +2,13 @@ package ivis.controls
 {
 	import flare.display.TextSprite;
 	import flare.vis.controls.Control;
+	import flare.vis.data.DataSprite;
 	
 	import flash.display.DisplayObject;
 	import flash.display.InteractiveObject;
 	import flash.events.MouseEvent;
 	
+	import ivis.event.ControlEvent;
 	import ivis.manager.GraphManager;
 	import ivis.model.Edge;
 	import ivis.model.Node;
@@ -94,6 +96,8 @@ package ivis.controls
 		protected function onClick(evt:MouseEvent):void
 		{
 			var target:DisplayObject = evt.target as DisplayObject;
+			var eventType:String;
+			var ds:DataSprite = null;
 			
 			// check if mouse down & mouse up on same location
 			if (this._evtX != evt.stageX ||
@@ -111,7 +115,12 @@ package ivis.controls
 					this.graphManager.resetSelected();
 				}
 				
-				this.graphManager.toggleSelect(target);
+				if (this.graphManager.toggleSelect(target))
+				{
+					ds = target as DataSprite;
+					eventType = ControlEvent.TOGGLED_SELECTION;
+				}
+				
 			}
 			
 			// "add node" flag is on
@@ -121,7 +130,7 @@ package ivis.controls
 				// the new node as a child node to the target
 				if (target is Node)
 				{
-					this.graphManager.addNode(this.object.mouseX,
+					ds = this.graphManager.addNode(this.object.mouseX,
 						this.object.mouseY,
 						target);
 				}
@@ -129,9 +138,11 @@ package ivis.controls
 				// the root
 				else
 				{
-					this.graphManager.addNode(this.object.mouseX,
+					ds = this.graphManager.addNode(this.object.mouseX,
 						this.object.mouseY);
 				}
+				
+				eventType = ControlEvent.ADDED_NODE;
 			}
 			
 			// "add bend point" flag is on
@@ -141,9 +152,11 @@ package ivis.controls
 				// the target edge
 				if (target is Edge)
 				{
-					this.graphManager.addBendPoint(this.object.mouseX,
+					ds = this.graphManager.addBendPoint(this.object.mouseX,
 						this.object.mouseY,
 						target);
+					
+					eventType = ControlEvent.ADDED_BEND;
 				}
 			}
 			
@@ -154,7 +167,8 @@ package ivis.controls
 				// target node
 				if (target is Node)
 				{
-					this.graphManager.addEdgeFor(target);
+					ds = this.graphManager.addEdgeFor(target);
+					eventType = ControlEvent.ADDED_EDGE;
 				}
 			}
 			
@@ -201,6 +215,14 @@ package ivis.controls
 			{
 				trace("[ClickControl.onClick] target: " + target + 
 					" x:" + evt.stageX + " y:" + evt.stageY);
+			}
+			
+			// dispatch a new control event
+			
+			if (ds != null)
+			{
+				this.object.dispatchEvent(new ControlEvent(eventType,
+					{sprite: ds}));
 			}
 		}
 	}

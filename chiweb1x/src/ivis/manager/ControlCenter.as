@@ -263,7 +263,7 @@ package ivis.manager
 		 * @param reset			indicates whether all other states to be reset
 		 * 						to their initial values
 		 * @param toggleSelect  indicates whether SELECT state to be toggled
-		 * @return		state condition after toggling
+		 * @return				state condition after toggling
 		 */
 		public function toggleState(name:String,
 			reset:Boolean = true,

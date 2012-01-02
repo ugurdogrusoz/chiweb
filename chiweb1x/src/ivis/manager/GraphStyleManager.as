@@ -187,10 +187,6 @@ package ivis.manager
 		{
 			var style:Object;
 			
-			// init default global style
-			// TODO other global visual styles? 
-			style = {backgroundColor : 0x00ffffff};
-			
 			// init default node style
 			
 			style = {shape: NodeUIManager.RECTANGLE,
@@ -201,7 +197,7 @@ package ivis.manager
 				fillColor: 0xff8a1b0b,
 				lineColor: 0xff333333,
 				lineWidth: 1,
-				labelText: "node",
+				labelText: "", 
 				labelOffsetX: 0,
 				labelOffsetY: 0,
 				labelHorizontalAnchor: TextSprite.CENTER,
@@ -228,7 +224,7 @@ package ivis.manager
 				fillColor: 0xff9ed1dc,
 				lineColor: 0xff333333,
 				lineWidth: 1,
-				labelText: "compound", // TODO no default label?
+				labelText: "",
 				labelOffsetX: 0,
 				labelOffsetY: 0,
 				labelHorizontalAnchor: TextSprite.CENTER,
@@ -257,16 +253,16 @@ package ivis.manager
 				lineColor: 0xff000000,
 				lineAlpha: 0.8,
 				lineWidth: 1,
-				labelText: "edge", // TODO no default label?
-				labelPos: EdgeLabeler.TARGET, // TODO change to EdgeLabeler.CENTER
+				labelText: "",
+				labelPos: EdgeLabeler.MIDDLE,
 				labelOffsetX: 0,
 				labelOffsetY: 0,
 				labelHorizontalAnchor: TextSprite.CENTER,
 				labelVerticalAnchor: TextSprite.MIDDLE,
 				labelDistanceCalculation: EdgeLabeler.PERCENT_DISTANCE,
 				labelDistanceFromNode: 30,
-				sourceArrowType: ArrowUIManager.SIMPLE_ARROW, // TODO no arrows as default?
-				targetArrowType: ArrowUIManager.SIMPLE_ARROW, // TODO no arrows as default?
+				//sourceArrowType: ArrowUIManager.SIMPLE_ARROW,
+				//targetArrowType: ArrowUIManager.SIMPLE_ARROW,
 				arrowTipAngle: 0.3,
 				arrowTipDistance: 15,
 				selectionGlowColor: 0x00ffff33, // "#ffff33"
