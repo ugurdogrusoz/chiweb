@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+				initialize="main()" xmlns:ivis="ivis.*"
+				width="100%" height="100%"
+				verticalScrollPolicy="off" horizontalScrollPolicy="off"
+				pageTitle="ChiWeb Test">
+
+<!--
+	<mx:VBox width="100%" verticalGap="0" id="vbox1">
+		<mx:HBox width="100%" horizontalGap="1" paddingBottom="5" paddingTop="5">
+			<mx:Button id="addNode" 
+					   label="N"
+					   width="32"
+					   toolTip="Add Node"
+					   click="app.controlCenter.toggleState(StateManager.ADD_NODE)"/>	
+			
+			<mx:Button id="addBendPoint" 
+					   label="BP"
+					   width="40"
+					   toolTip="Add Bendpoint"
+					   click="app.controlCenter.toggleState(StateManager.ADD_BENDPOINT)"/>		
+			
+			<mx:Button id="addEdge" 
+					   label="E"
+					   width="32"
+					   toolTip="Add Edge"
+					   click="app.controlCenter.toggleState(StateManager.ADD_EDGE)"/>
+			
+			<mx:Button id="enablePan" 
+					   label="EP"
+					   width="40"
+					   toolTip="Enable Pan"
+					   click="app.controlCenter.toggleState(StateManager.PAN)"/>
+			
+			<mx:Button id="deleteSelected" 
+					   label="D"
+					   width="32"
+					   toolTip="Delete Selected Elements"
+					   click="app.graphManager.deleteSelected()"/>
+			
+			<mx:Button id="filterSelected" 
+					   label="F"
+					   width="32"
+					   toolTip="Filter Selected Elements"
+					   click="app.graphManager.filterSelected()"/>
+			
+			<mx:Button id="resetFilters" 
+					   label="RF"
+					   width="40"
+					   toolTip="Reset all filters"
+					   click="app.graphManager.resetFilters()"/>
+			
+			<mx:Button id="performLayout" 
+					   label="L"
+					   width="32"
+					   toolTip="Perform Layout"
+					   click="app.graphManager.performLayout()"/>
+			
+			<mx:Button id="printGraph" 
+					   label="P"
+					   width="32"
+					   toolTip="Print Graph (debug)"
+					   click="app.printGraph()"/>
+			
+			<mx:Button id="createTestGroup"
+					   label="T"
+					   width="32"
+					   toolTip="Add a test data group"
+					   click="app.createTestGroup()"/>
+			
+			<mx:Button id="removeTestGroup"
+					   label="RT"
+					   width="40"
+					   toolTip="Remove test data group"
+					   click="app.removeTestGroup()"/>
+			
+			<mx:Button id="clearTestGroup"
+					   label="CT"
+					   width="40"
+					   toolTip="Clear test data group"
+					   click="app.clearTestGroup()"/>
+			
+			<mx:Button id="createTestStyle" 
+					   label="S"
+					   width="32"
+					   toolTip="Create a new style for test group"
+					   click="app.createTestStyle()"/>
+			
+			<mx:Button id="removeTestStyle" 
+					   label="RS"
+					   width="40"
+					   toolTip="Remove test style"
+					   click="app.removeTestStyle()"/>
+			
+			<mx:Button id="addToTestGroup" 
+					   label="AG"
+					   width="40"
+					   toolTip="Add selected nodes to test group"
+					   click="app.addToTestGroup()"/>
+			
+			<mx:Button id="removeFromTestGroup" 
+					   label="RG"
+					   width="40"
+					   toolTip="Remove selected nodes from test group"
+					   click="app.removeFromTestGroup()"/>
+			
+			<mx:Button id="addStyleProperty" 
+					   label="AP"
+					   width="40"
+					   toolTip="Add a property to Test style"
+					   click="app.addTestProperty()"/>
+			
+			<mx:Button id="removeStyleProperty" 
+					   label="RP"
+					   width="40"
+					   toolTip="Remove a property from Test style"
+					   click="app.removeTestProperty()"/>
+		</mx:HBox>
+		<mx:HBox horizontalGap="0" id="hbox1">
+			<mx:Canvas styleName="rawBox"
+					   width="100%" height="100%"
+					   verticalScrollPolicy="off" horizontalScrollPolicy="off"
+					   autoLayout="true">
+				
+				<mx:Box id="graphBox" styleName="rawBox" width="100%" height="100%"
+						verticalScrollPolicy="off" horizontalScrollPolicy="off"
+						verticalAlign="middle" horizontalAlign="center"
+						autoLayout="true"/>
+			</mx:Canvas>
+		</mx:HBox>
+	</mx:VBox>
+!-->
+	<mx:Canvas styleName="rawBox"
+			   width="100%" height="100%"
+			   verticalScrollPolicy="off" horizontalScrollPolicy="off"
+			   autoLayout="true">
+		
+		<mx:Box id="graphBox" styleName="rawBox" width="100%" height="100%"
+				verticalScrollPolicy="off" horizontalScrollPolicy="off"
+				verticalAlign="middle" horizontalAlign="center"
+				autoLayout="true"/>
+	</mx:Canvas>
+	
+	<mx:HBox id="buttonBox" width="100%"
+			 horizontalGap="1" paddingBottom="5" paddingTop="5">
+		
+		<mx:Button id="addNode" 
+			label="N"
+			width="32"
+			toolTip="Add Node"
+			click="app.controlCenter.toggleState(StateManager.ADD_NODE)"/>	
+	
+		<mx:Button id="addBendPoint" 
+			   label="BP"
+			   width="40"
+			   toolTip="Add Bendpoint"
+			   click="app.controlCenter.toggleState(StateManager.ADD_BENDPOINT)"/>		
+	
+		<mx:Button id="addEdge" 
+			   label="E"
+			   width="32"
+			   toolTip="Add Edge"
+			   click="app.controlCenter.toggleState(StateManager.ADD_EDGE)"/>
+		
+		<mx:Button id="enablePan" 
+				   label="EP"
+				   width="40"
+				   toolTip="Enable Pan"
+				   click="app.controlCenter.toggleState(StateManager.PAN)"/>
+		
+		<mx:Button id="deleteSelected" 
+				   label="D"
+				   width="32"
+				   toolTip="Delete Selected Elements"
+				   click="app.graphManager.deleteSelected()"/>
+		
+		<mx:Button id="filterSelected" 
+				   label="F"
+				   width="32"
+				   toolTip="Filter Selected Elements"
+				   click="app.graphManager.filterSelected()"/>
+		
+		<mx:Button id="resetFilters" 
+				   label="RF"
+				   width="40"
+				   toolTip="Reset all filters"
+				   click="app.graphManager.resetFilters()"/>
+		
+		<mx:Button id="performLayout" 
+				   label="L"
+				   width="32"
+				   toolTip="Perform Layout"
+				   click="app.graphManager.performLayout()"/>
+		
+		<mx:Button id="printGraph"
+				   label="P"
+				   width="32"
+				   toolTip="Print Graph (debug)"
+				   click="testMain.printGraph()"/>
+		
+		<mx:Button id="createTestGroup"
+				   label="T"
+				   width="32"
+				   toolTip="Add a test data group"
+				   click="testMain.createTestGroup()"/>
+		
+		<mx:Button id="removeTestGroup"
+				   label="RT"
+				   width="40"
+				   toolTip="Remove test data group"
+				   click="testMain.removeTestGroup()"/>
+		
+		<mx:Button id="clearTestGroup"
+				   label="CT"
+				   width="40"
+				   toolTip="Clear test data group"
+				   click="testMain.clearTestGroup()"/>
+		
+		<mx:Button id="createTestStyle" 
+				   label="S"
+				   width="32"
+				   toolTip="Create a new style for test group"
+				   click="testMain.createTestStyle()"/>
+		
+		<mx:Button id="removeTestStyle" 
+				   label="RS"
+				   width="40"
+				   toolTip="Remove test style"
+				   click="testMain.removeTestStyle()"/>
+		
+		<mx:Button id="addToTestGroup" 
+				   label="AG"
+				   width="40"
+				   toolTip="Add selected nodes to test group"
+				   click="testMain.addToTestGroup()"/>
+		
+		<mx:Button id="removeFromTestGroup" 
+				   label="RG"
+				   width="40"
+				   toolTip="Remove selected nodes from test group"
+				   click="testMain.removeFromTestGroup()"/>
+		
+		<mx:Button id="addStyleProperty" 
+				   label="AP"
+				   width="40"
+				   toolTip="Add a property to Test style"
+				   click="testMain.addTestProperty()"/>
+		
+		<mx:Button id="removeStyleProperty" 
+				   label="RP"
+				   width="40"
+				   toolTip="Remove a property from Test style"
+				   click="testMain.removeTestProperty()"/>
+	</mx:HBox>
+	
+<mx:Script>
+	<![CDATA[
+		import flare.vis.operator.layout.CircleLayout;
+		import flare.vis.operator.layout.ForceDirectedLayout;
+		
+		import ivis.controls.StateManager;
+		import ivis.manager.ApplicationManager;
+		
+		import main.TestMain;
+		
+		public var app:ApplicationManager;
+		
+		public var testMain:TestMain;
+		
+		private function main():void
+		{
+			trace("main function started...");
+			
+			app = new ApplicationManager();
+			//graphBox.addChild(controller.manager.view);
+			app.setGraphContainer(graphBox);
+			app.setRootContainer(this);
+			
+			app.graphManager.setLayout(new ForceDirectedLayout());
+			
+			testMain = new TestMain();
+			testMain.appManager = app;
+			
+			//app.graphManager.setLayout(new CircleLayout());
+			
+			// custom shapes for debugging purposes
+			//NodeUIs.registerUI("gradientRect",
+			//	GradientRectUI.instance);
+			
+			// custom listeners for debugging purposes
+			
+			//_controlCenter.disableDefaultControl(ControlCenter.DRAG_CONTROL);
+			//_controlCenter.disableDefaultControl(ControlCenter.CLICK_CONTROL);
+			//app.controlCenter.disableDefaultControl(ControlCenter.SELECT_CONTROL);
+			
+			//_view.vis.doubleClickEnabled = true;
+			
+			//_controlCenter.addCustomListener("inspector",
+			//	MouseEvent.MOUSE_OVER,
+			//	showInspector,
+			//	NodeSprite);
+			
+			/*
+			var nodeData:Object;
+			var edgeData:Object;
+			var node:DataSprite;
+			var compound:DataSprite;
+			var edge:DataSprite;
+			
+			nodeData = new Object();
+			nodeData.id = "n1";
+			node = view.addNode(nodeData, 0, 0);
+			
+			nodeData = new Object();
+			nodeData.id = "n2";
+			node = view.addNode(nodeData, 50, 50);
+			compound = node;
+			
+			nodeData = new Object();
+			nodeData.id = "n3";
+			node = view.addNode(nodeData, 60, 60, compound);
+			
+			nodeData = new Object();
+			nodeData.id = "n4";
+			node = view.addNode(nodeData, 15, 25, compound);
+			compound = node;
+			
+			nodeData = new Object();
+			nodeData.id = "n5";
+			node = view.addNode(nodeData, 19, 34, compound);
+			
+			nodeData = new Object();
+			nodeData.id = "n6";
+			node = view.addNode(nodeData, 19, 34, compound);
+			
+			edgeData = new Object();
+			edgeData.id = "e1";
+			edgeData.sourceId = "n1";
+			edgeData.targetId = "n2";
+			view.addEdge(edgeData);
+			
+			edgeData = new Object();
+			edgeData.id = "e2";
+			edgeData.sourceId = "n3";
+			edgeData.targetId = "n4";
+			view.addEdge(edgeData);
+			
+			edgeData = new Object();
+			edgeData.id = "e3";
+			edgeData.sourceId = "n5";
+			edgeData.targetId = "n6";
+			view.addEdge(edgeData);
+			
+			edgeData = new Object();
+			edgeData.id = "e4";
+			edgeData.sourceId = "n1";
+			edgeData.targetId = "n3";
+			edge = view.addEdge(edgeData);
+			
+			view.addBendPoint(edge);
+			*/
+		}
+	]]>
+	</mx:Script>
+	
+</mx:Application>
+		

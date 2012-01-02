@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+				initialize="main()" xmlns:ivis="ivis.*"
+				width="1024" height="768"
+				verticalScrollPolicy="off" horizontalScrollPolicy="off"
+				pageTitle="ChiWeb Sample Application">
+
+	<mx:Canvas styleName="rawBox"
+			   width="100%" height="100%"
+			   verticalScrollPolicy="off" horizontalScrollPolicy="off"
+			   autoLayout="true">
+		
+		<mx:Box id="graphBox" styleName="rawBox" width="100%" height="100%"
+				verticalScrollPolicy="off" horizontalScrollPolicy="off"
+				verticalAlign="middle" horizontalAlign="center"
+				autoLayout="true"/>
+	</mx:Canvas>
+	
+	<mx:HBox id="buttonBox" width="100%"
+			 horizontalGap="1" paddingBottom="5" paddingTop="5">
+		
+		<mx:Button id="addDashedTri" 
+			label="TD"
+			width="40"
+			toolTip="Add Dashed Triangle Node"
+			click="app.addDashedTriangle()"/>	
+	
+		<mx:Button id="addGradientCircle" 
+				   label="GC"
+				   width="40"
+				   toolTip="Add Gradient Circle Node"
+				   click="app.addGradientCircle()"/>
+		
+		<mx:Button id="addImageNode" 
+				   label="IM"
+				   width="40"
+				   toolTip="Add Image Node"
+				   click="app.addImageNode()"/>
+		
+		<mx:Button id="addBendPoint" 
+			   label="BP"
+			   width="40"
+			   toolTip="Add Bendpoint"
+			   click="app.addBendPoint()"/>		
+	
+		<mx:Button id="addDefaultEdge" 
+			   label="E"
+			   width="32"
+			   toolTip="Add Default Edge"
+			   click="app.addDefaultEdge()"/>
+		
+		<mx:Button id="addDashedEdge" 
+				   label="DE"
+				   width="40"
+				   toolTip="Add Dashed Edge"
+				   click="app.addDashedEdge()"/>
+		
+		<mx:Button id="enablePan" 
+				   label="EP"
+				   width="40"
+				   toolTip="Enable Pan"
+				   click="app.enablePan()"/>
+		
+		<mx:Button id="deleteSelected" 
+				   label="D"
+				   width="32"
+				   toolTip="Delete Selected Elements"
+				   click="app.deleteSelected()"/>
+		
+		<mx:Button id="hideSelected" 
+				   label="H"
+				   width="32"
+				   toolTip="Hide Selected Elements"
+				   click="app.hideSelected()"/>
+		
+		<mx:Button id="showAll" 
+				   label="SH"
+				   width="40"
+				   toolTip="Show All Elements"
+				   click="app.showAll()"/>
+		
+		<mx:Button id="performRemoteLayout" 
+				   label="RL"
+				   width="40"
+				   toolTip="Perform Remote Layout"
+				   click="app.performRemoteLayout()"/>
+		
+		<mx:Button id="performLocalLayout"
+				   label="LL"
+				   width="40"
+				   toolTip="Perform Local Layout"
+				   click="app.performLocalLayout()"/>
+		
+	</mx:HBox>
+	
+<mx:Script>
+	<![CDATA[
+		import flare.vis.operator.layout.CircleLayout;
+		import flare.vis.operator.layout.ForceDirectedLayout;
+		
+		import ivis.controls.StateManager;
+		
+		import main.SampleMain;
+		
+		public var app:SampleMain;
+		
+		private function main():void
+		{
+			app = new SampleMain();
+			app.appManager.setGraphContainer(graphBox);
+			app.appManager.setRootContainer(this);
+			
+			// TODO:
+			// 1) replace button text with icons
+			// 2) add a slider for zoom operation
+			// 3) add another interface for pan
+		}
+	]]>
+	</mx:Script>
+	
+</mx:Application>
+		
