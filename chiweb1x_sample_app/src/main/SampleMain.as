@@ -1,8 +1,26 @@
 package main
 {
+	import controls.CreationControl;
+	
+	import ivis.controls.EventControl;
 	import ivis.controls.StateManager;
 	import ivis.manager.ApplicationManager;
+	import ivis.model.Style;
+	import ivis.view.ui.EdgeUIManager;
+	import ivis.view.ui.IEdgeUI;
+	import ivis.view.ui.INodeUI;
+	import ivis.view.ui.NodeUIManager;
+	
+	import ui.DashedEdgeUI;
+	import ui.GradientRectUI;
+	
+	import util.Constants;
 
+	/**
+	 * Main initializer for the Sample application (sample.mxml).
+	 * 
+	 * @author Selcuk Onur Sumer
+	 */
 	public class SampleMain
 	{
 		public var appManager:ApplicationManager;
@@ -10,24 +28,37 @@ package main
 		public function SampleMain()
 		{
 			this.appManager = new ApplicationManager();
+			this.initCustomStyles();
+			this.initUIs();
+			this.initControls();
+			this.initStates();
 		}
 		
 		public function addDashedTriangle():void
 		{
-			this.appManager.controlCenter.toggleState(
-				StateManager.ADD_NODE);
+			var state:Boolean = this.appManager.controlCenter.toggleState(
+				Constants.ADD_DASHED_TRI);
+			
+			this.appManager.controlCenter.stateManager.setState(
+				StateManager.ADD_NODE, state);
 		}
 		
-		public function addGradientCircle():void
+		public function addGradientRect():void
 		{
-			this.appManager.controlCenter.toggleState(
-				StateManager.ADD_NODE);
+			var state:Boolean = this.appManager.controlCenter.toggleState(
+				Constants.ADD_GRADIENT);
+			
+			this.appManager.controlCenter.stateManager.setState(
+				StateManager.ADD_NODE, state);
 		}
 		
 		public function addImageNode():void
 		{
-			this.appManager.controlCenter.toggleState(
-				StateManager.ADD_NODE);
+			var state:Boolean = this.appManager.controlCenter.toggleState(
+				Constants.ADD_IMAGE_NODE);
+			
+			this.appManager.controlCenter.stateManager.setState(
+				StateManager.ADD_NODE, state);
 		}
 		
 		public function addBendPoint():void
@@ -44,8 +75,11 @@ package main
 		
 		public function addDashedEdge():void
 		{
-			this.appManager.controlCenter.toggleState(
-				StateManager.ADD_EDGE);
+			var state:Boolean = this.appManager.controlCenter.toggleState(
+				Constants.ADD_DASHED_EDGE);
+			
+			this.appManager.controlCenter.stateManager.setState(
+				StateManager.ADD_EDGE, state);
 		}
 		
 		public function enablePan():void
@@ -88,6 +122,32 @@ package main
 			// 1) define custom styles for nodes, edges, compounds, and bends
 			// 2) define additional data groups for nodes and edges, define custom styles for the new groups
 			
+			
+			// add group styles
+			style = {shape: Constants.GRADIENT_RECT,
+				size: 50,
+				w: 60,
+				h: 60,
+				alpha: 0.9,
+				fillColor: 0xff3e66f0,
+				lineWidth: 2,
+				labelFontWeight: "bold",
+				labelFontStyle: "italic"};
+			
+			this.appManager.graphManager.graphStyleManager.addGroupStyle(
+				Constants.GRADIENT_RECT, new Style(style));
+			
+			style = {shape: Constants.DASHED_EDGE,				
+				fillColor: 0xff000000,
+				alpha: 0.8,
+				//sourceArrowType: ArrowUIManager.SIMPLE_ARROW,
+				//targetArrowType: ArrowUIManager.SIMPLE_ARROW
+				lineColor: 0xff000000,
+				lineAlpha: 0.8,
+				lineWidth: 2};
+			
+			this.appManager.graphManager.graphStyleManager.addGroupStyle(
+				Constants.DASHED_EDGE, new Style(style));
 			/*
 			// init default node style
 			
@@ -189,6 +249,37 @@ package main
 			
 			_groupStyleMap[Groups.BEND_NODES] = new Style(style);
 			*/
+		}
+		
+		protected function initUIs():void
+		{
+			var gradient:INodeUI = new GradientRectUI();
+			var dashedEdge:IEdgeUI = new DashedEdgeUI();
+			
+			NodeUIManager.registerUI(Constants.GRADIENT_RECT, gradient);
+			EdgeUIManager.registerUI(Constants.DASHED_EDGE, dashedEdge);
+		}
+		
+		protected function initControls():void
+		{
+			var nodeControl:EventControl = new CreationControl();
+			
+			this.appManager.controlCenter.addControl(nodeControl);
+		}
+		
+		protected function initStates():void
+		{
+			this.appManager.controlCenter.stateManager.setState(
+				Constants.ADD_GRADIENT, false);
+			
+			this.appManager.controlCenter.stateManager.setState(
+				Constants.ADD_DASHED_TRI, false);
+			
+			this.appManager.controlCenter.stateManager.setState(
+				Constants.ADD_DASHED_EDGE, false);
+			
+			this.appManager.controlCenter.stateManager.setState(
+				Constants.ADD_IMAGE_NODE, false);
 		}
 	}
 }

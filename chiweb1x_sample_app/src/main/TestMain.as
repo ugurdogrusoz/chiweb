@@ -9,6 +9,9 @@ package main
 	import ivis.model.Style;
 	import ivis.view.ui.NodeUIManager;
 
+	/**
+	 * A class designed for debug purposes.
+	 */
 	public class TestMain
 	{
 		public var appManager:ApplicationManager;

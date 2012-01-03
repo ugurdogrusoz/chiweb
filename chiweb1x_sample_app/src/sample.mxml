@@ -25,11 +25,11 @@
 			toolTip="Add Dashed Triangle Node"
 			click="app.addDashedTriangle()"/>	
 	
-		<mx:Button id="addGradientCircle" 
-				   label="GC"
+		<mx:Button id="addGradientRect" 
+				   label="GR"
 				   width="40"
-				   toolTip="Add Gradient Circle Node"
-				   click="app.addGradientCircle()"/>
+				   toolTip="Add Gradient Rectangle Node"
+				   click="app.addGradientRect()"/>
 		
 		<mx:Button id="addImageNode" 
 				   label="IM"

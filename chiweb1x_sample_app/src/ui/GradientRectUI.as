@@ -1,4 +1,4 @@
-package ivis.view.ui
+package ui
 {
 	import flare.vis.data.DataSprite;
 	
@@ -7,9 +7,14 @@ package ivis.view.ui
 	import flash.display.InterpolationMethod;
 	import flash.display.SpreadMethod;
 	import flash.geom.Matrix;
+	
+	import ivis.view.ui.INodeUI;
+	import ivis.view.ui.RectangularNodeUI;
 
 	/**
-	 * Class for custom UI test for debugging purposes.
+	 * Implementation of the INodeUI interface for gradient color rectangle.
+	 * 
+	 * @author Selcuk Onur Sumer
 	 */
 	public class GradientRectUI extends RectangularNodeUI
 	{
@@ -34,15 +39,14 @@ package ivis.view.ui
 			
 		}
 		
-		public override function draw(ds:DataSprite,
-			defaultSize:Number):void
+		public override function draw(ds:DataSprite):void
 		{
 			var g:Graphics = ds.graphics;
 			
 			var m:Matrix = new Matrix();
 			
-			var width:Number = ds.w * defaultSize;
-			var height:Number = ds.h * defaultSize;
+			var width:Number = ds.w;
+			var height:Number = ds.h;
 			
 			//m.createGradientBox(width, height, Math.atan(height/width));
 			m.createGradientBox(width, height, Math.atan(width/height));
@@ -54,10 +58,7 @@ package ivis.view.ui
 				SpreadMethod.REFLECT,
 				InterpolationMethod.RGB, 1);
 			
-			//g.beginFill(0xffffff & ds.fillColor, ds.fillAlpha);
-			
-			super.draw(ds, defaultSize);
-			//g.endFill();
+			super.draw(ds);
 		}
 	}
 }
