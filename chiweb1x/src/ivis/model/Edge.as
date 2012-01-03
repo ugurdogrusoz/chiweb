@@ -126,6 +126,18 @@ package ivis.model
 			
 			this._segments[edge.data.id] = edge;
 			edge.parentE = this;
+			
+			// also attach parent group styles to the segment
+			for each (var style:Style in this.groupStyles)
+			{
+				edge.attachStyle(this._styleManager.getStyleName(style), style);
+			}
+			
+			// TODO also attach specific style?
+			edge.attachStyle(Styles.SPECIFIC_STYLE,
+				this.getStyle(Styles.SPECIFIC_STYLE));
+				
+			Styles.reApplyStyles(edge);
 		}
 		
 		/**
@@ -252,8 +264,6 @@ package ivis.model
 			return this._styleManager.groupStyles;
 		}
 		
-		// TODO may need to modify methods below, because of segments...
-		
 		/** @inheritDoc */
 		public function attachStyle(name:String,
 									style:Style) : void
@@ -275,6 +285,15 @@ package ivis.model
 					onStyleChange,
 					false,
 					StyleChangeEvent.HIGH_PRIORITY);
+				
+				// also attach styles to the child segments
+				if (this.hasBendPoints())
+				{
+					for each (var segment:Edge in this.getSegments())
+					{
+						segment.attachStyle(name, style);
+					}
+				}
 			}
 			
 		}
@@ -296,6 +315,15 @@ package ivis.model
 				
 				// remove style from the style set
 				this._styleManager.remove(name);
+				
+				// also detach styles from the child segments
+				if (this.hasBendPoints())
+				{
+					for each (var segment:Edge in this.getSegments())
+					{
+						segment.detachStyle(name);
+					}
+				}
 			}
 		}
 		
@@ -315,6 +343,9 @@ package ivis.model
 		{
 			var style:Style = event.info.style;
 			
+			Styles.reApplyStyles(this, false);
+			
+			/*
 			if (event.type == StyleChangeEvent.ADDED_STYLE_PROP)
 			{
 				// re-apply style on property change
@@ -325,6 +356,7 @@ package ivis.model
 				// re-apply visual styles
 				Styles.reApplyStyles(this);
 			}
+			*/
 		}
 	}
 }

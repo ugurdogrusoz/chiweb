@@ -73,6 +73,17 @@ package ivis.view
 					
 					var nodeUI:INodeUI = CompoundUIManager.getUI(d.shape);
 					
+					// undefined ui, use default UI to render
+					if (nodeUI == null)
+					{
+						trace ("[CompoundNodeRenderer.render]" + d.data.id +
+							" has an unrecognized UI");
+						
+						// try to render with a default UI
+						nodeUI = CompoundUIManager.getUI(
+							CompoundUIManager.RECTANGLE);
+					}
+					
 					if (lineAlpha > 0 && d.lineWidth > 0)
 					{
 						nodeUI.setLineStyle(node);

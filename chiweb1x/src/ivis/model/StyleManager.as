@@ -188,6 +188,53 @@ package ivis.model
 		}
 		
 		/**
+		 * Returns the registered name for the given style instance.
+		 * If the given style cannot be found in the list of attached styles,
+		 * then null value is returned.
+		 * 
+		 * TODO add function to the UML diagram!
+		 * 
+		 * @param style	a style instance to search
+		 * @return		name of the style, or null if style not found
+		 */
+		public function getStyleName(style:Style):String
+		{
+			var name:String;
+			var found:Boolean = false;
+			
+			if (style == this._defaultStyle)
+			{
+				name = Styles.DEFAULT_STYLE;
+			}
+			else if (style == this._specificStyle)
+			{
+				name = Styles.SPECIFIC_STYLE;
+			}
+			else
+			{
+				// search for the style withing the group styles
+				for (name in this._groupStyleMap)
+				{
+					if (style == this._groupStyleMap[name])
+					{
+						// set flag
+						found = true;
+						
+						// terminate loop when style found
+						break;
+					}
+				}
+			}
+			
+			if (!found)
+			{
+				name = null;
+			}
+			
+			return name;
+		}
+		
+		/**
 		 * Removes the given visual style from the group style.
 		 * 
 		 * @param style	style to be removed

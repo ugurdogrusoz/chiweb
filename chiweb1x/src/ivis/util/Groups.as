@@ -9,7 +9,7 @@ package ivis.util
 	 */
 	public class Groups
 	{
-		//-------------------------CONSTANTS------------------------------------
+		//------------------------ CONSTANTS -----------------------------------
 		
 		public static const ALL:String = "all";
 		public static const NODES:String = Data.NODES;
@@ -22,11 +22,11 @@ package ivis.util
 		public static const REGULAR_EDGES:String = "regularEdges";
 		
 		
-		//-----------------------CONSTRUCTOR------------------------------------
+		//-------------------------- CONSTRUCTOR -------------------------------
 		
 		public function Groups()
 		{
-			throw new Error("NodeShapes is an abstract class.");
+			throw new Error("Groups is an abstract class.");
 		}
 		
 		//------------------------- PUBLIC FUNCTIONS ---------------------------

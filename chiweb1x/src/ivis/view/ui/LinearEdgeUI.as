@@ -46,8 +46,6 @@ package ivis.view.ui
 		{
 			var g:Graphics = ds.graphics;
 			
-			// TODO consider line styles while drawing?
-			
 			var startPoint:Point = ds.props.$startPoint as Point;
 			var endPoint:Point = ds.props.$endPoint as Point;
 			

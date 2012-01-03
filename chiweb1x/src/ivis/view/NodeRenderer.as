@@ -1,13 +1,14 @@
 package ivis.view
 {
+	import flare.util.Shapes;
 	import flare.vis.data.DataSprite;
 	import flare.vis.data.render.ShapeRenderer;
 	
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	
-	import ivis.view.ui.NodeUIManager;
 	import ivis.view.ui.INodeUI;
+	import ivis.view.ui.NodeUIManager;
 
 	/**
 	 * Renderer for simple (regular) and bend nodes.
@@ -44,14 +45,19 @@ package ivis.view
 			
 			var nodeUI:INodeUI = NodeUIManager.getUI(d.shape);
 			
-			// undefined ui, cannot render
+			// undefined ui, use default UI to render
 			if (nodeUI == null)
 			{
-				trace (d.data.id + " has an unrecognized UI");
+				trace ("[NodeRenderer.render]" + d.data.id +
+					" has an unrecognized UI");
 				
-				// try to render with parent renderer
+				// try to render with a default UI
+				
 				super.render(d);
 				return;
+				
+				// TODO try to render with a default UI if shape cannot be rendered with the parent renderer
+				// nodeUI = NodeUIManager.getUI(NodeUIManager.RECTANGLE);
 			}
 			
 			if (lineAlpha > 0 && d.lineWidth > 0)

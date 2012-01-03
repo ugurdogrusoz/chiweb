@@ -1178,8 +1178,7 @@ package ivis.manager
 				element.attachStyle(group, style);
 				
 				// apply new style to the element
-				// TODO consider style priorities.. may need to call reApply instead
-				Styles.applyNewStyle(element, style);
+				Styles.reApplyStyles(element);
 				
 				this.view.update();
 				this.view.updateAllCompoundBounds();
@@ -1251,8 +1250,7 @@ package ivis.manager
 							style);
 						
 						// apply new style to the element
-						Styles.applyNewStyle(ds as IStyleAttachable,
-							style);
+						Styles.reApplyStyles(ds as IStyleAttachable);
 					}
 				}
 				

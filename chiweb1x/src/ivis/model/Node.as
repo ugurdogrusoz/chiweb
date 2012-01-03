@@ -452,6 +452,9 @@ package ivis.model
 			
 			trace("[Node.onStyleChange] " + event.type);
 			
+			Styles.reApplyStyles(this);
+			
+			/*
 			if (event.type == StyleChangeEvent.ADDED_STYLE_PROP)
 			{
 				// re-apply style on property change
@@ -462,6 +465,7 @@ package ivis.model
 				// re-apply visual styles
 				Styles.reApplyStyles(this);
 			}
+			*/
 		}
 	}
 }

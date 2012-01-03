@@ -16,7 +16,7 @@ package ivis.util
 		
 		public function GeneralUtils()
 		{
-			throw new Error("DisplayUtils is an abstract class.");
+			throw new Error("GeneralUtils is an abstract class.");
 		}
 		
 		//---------------------- PUBLIC FUNCTIONS ------------------------------

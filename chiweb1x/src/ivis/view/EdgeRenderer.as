@@ -68,10 +68,14 @@ package ivis.view
 				// unrecognized edge UI
 				else if (edgeUI == null)
 				{
-					trace (edge.data.id + " has an unrecognized UI");
+					trace ("[EdgeRenderer.render]" + edge.data.id +
+						" has an unrecognized UI");
 					
 					// try to render with parent renderer
 					super.render(d);
+					
+					// TODO try to render with a default UI if shape cannot be rendered with the parent renderer
+					// edgeUI = EdgeUIManager.getUI(EdgeUIManager.LINE);
 				}
 				// edge is either a segment or an actual edge with no segments,
 				// in both cases it should be rendered
@@ -210,16 +214,26 @@ package ivis.view
 			if (node.isInitialized())
 			{
 				nodeUI = CompoundUIManager.getUI(node.shape);
+				
+				if (nodeUI == null)
+				{
+					// try to calculate clipping points for a default UI
+					nodeUI = CompoundUIManager.getUI(
+						CompoundUIManager.RECTANGLE);
+				}
 			}
 			else
 			{
 				nodeUI = NodeUIManager.getUI(node.shape);
+				
+				if (nodeUI == null)
+				{
+					// try to calculate clipping points for a default UI
+					nodeUI = NodeUIManager.getUI(NodeUIManager.RECTANGLE);
+				}
 			}
-			
-			if (nodeUI != null)
-			{
-				interPoint = nodeUI.intersection(node, p1, p2);
-			}
+						
+			interPoint = nodeUI.intersection(node, p1, p2);
 			
 			return interPoint;
 		}

@@ -2,6 +2,7 @@ package ivis.model.util
 {
 	import flare.vis.data.EdgeSprite;
 	
+	import ivis.model.Edge;
 	import ivis.model.IStyleAttachable;
 	import ivis.model.Node;
 	import ivis.model.Style;
@@ -31,14 +32,82 @@ package ivis.model.util
 		 * Re-applies all styles attached to the given element. This function
 		 * always applies the default style first, and element-specific style
 		 * last. Group styles are applied after the default style, and before
-		 * the element-specific style.This order gives priority to the 
+		 * the element-specific style. This order gives priority to the 
 		 * element-specific style over group styles, and priority to group
 		 * styles over the default style. This prevents general styles to
 		 * overwrite more specific styles.
 		 * 
-		 * param element	element to re-apply styles 
+		 * @param element	element to re-apply styles 
+		 * @param propagate	indicates whether to propagate to child segments
+		 * 					(this parameter is valid only for edges)
 		 */
-		public static function reApplyStyles(element:IStyleAttachable) : void
+		public static function reApplyStyles(element:IStyleAttachable,
+			propagate:Boolean = false):void
+		{
+			if (element is Node)
+			{
+				Styles._reApplyNodeStyles(element as Node);
+			}
+			else if (element is Edge)
+			{
+				Styles._reApplyEdgeStyles(element as Edge, propagate);
+			}
+			else
+			{
+				Styles._reApplyStyles(element);
+			}
+			
+		}
+		
+		/**
+		 * Re-applies all styles attached to the given node. 
+		 * 
+		 * @param node	node to re-apply styles
+		 */
+		internal static function _reApplyNodeStyles(node:Node):void
+		{
+			var dirty:Boolean = Styles._reApplyStyles(node);
+			
+			if (dirty)
+			{
+				// mark incident edges of the node as dirty
+				for each (var edge:EdgeSprite in Nodes.incidentEdges(node))
+				{
+					edge.dirty();
+				}
+			}
+		}
+		
+		/**
+		 * Re-applies all styles attached to the given edge. 
+		 * 
+		 * @param edge		edge to re-apply styles
+		 * @param propagate	indicates whether to propagate to child segments
+		 */
+		internal static function _reApplyEdgeStyles(edge:Edge,
+			propagate:Boolean = true):void
+		{
+			Styles._reApplyStyles(edge);
+			
+			if (propagate &&
+				edge.hasBendPoints())
+			{
+				// propagate style to the child segments
+				for each (var segment:Edge in edge.getSegments())
+				{
+					Styles._reApplyStyles(segment);
+				}
+			}
+		}
+		
+		/**
+		 * Re-applies all styles attached to the given element.
+		 * 
+		 * @param element	element to re-apply styles
+		 * @return			return true if any style is re-applied, false o.w.	
+		 */
+		internal static function _reApplyStyles(
+			element:IStyleAttachable):Boolean
 		{
 			var style:Style;
 			var dirty:Boolean = false;
@@ -71,18 +140,7 @@ package ivis.model.util
 				dirty = true;
 			}
 			
-			
-			if (element is Node &&
-				dirty)
-			{
-				// mark incident edges of the node as dirty
-				
-				for each (var edge:EdgeSprite in 
-					Nodes.incidentEdges(element as Node))
-				{
-					edge.dirty();
-				}
-			}
+			return dirty;
 		}
 		
 		/**
@@ -93,6 +151,7 @@ package ivis.model.util
 		 * @param element	element to apply style
 		 * @param style		style to be applied 
 		 */
+		/*
 		public static function applyNewStyle(element:IStyleAttachable,
 			style:Style) : void
 		{
@@ -114,7 +173,7 @@ package ivis.model.util
 				}
 			}
 			
-			if (dirty && element is Node)
+			if (element is Node && dirty)
 			{
 				// mark incident edges of the node as dirty
 				
@@ -125,5 +184,6 @@ package ivis.model.util
 				}
 			}
 		}
+		*/
 	}
 }

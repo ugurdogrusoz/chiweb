@@ -219,10 +219,14 @@ package ivis.controls
 			
 			// dispatch a new control event
 			
-			if (ds != null)
+			if (ds != null
+				&& this.object.hasEventListener(eventType))
 			{
+				trace ("[ClickControl.onClick] event: " + eventType);
+				
 				this.object.dispatchEvent(new ControlEvent(eventType,
 					{sprite: ds}));
+				
 			}
 		}
 	}
