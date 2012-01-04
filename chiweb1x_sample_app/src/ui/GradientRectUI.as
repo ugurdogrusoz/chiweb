@@ -12,12 +12,15 @@ package ui
 	import ivis.view.ui.RectangularNodeUI;
 
 	/**
-	 * Implementation of the INodeUI interface for gradient color rectangle.
+	 * Custom UI class for gradient coloring. Extends RectangularNodeUI to draw
+	 * rectangular nodes with gradient coloring.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
 	public class GradientRectUI extends RectangularNodeUI
 	{
+		public static const AUTO_ANGLE:String = "autoAngle";
+		
 		private static var _instance:INodeUI;
 		
 		/**
@@ -33,11 +36,14 @@ package ui
 			return _instance;
 		}
 		
+		//------------------------- CONSTRUCTOR --------------------------------
 		
 		public function GradientRectUI()
 		{
-			
+			// default constructor
 		}
+		
+		//---------------------- PUBLIC FUNCTIONS ------------------------------
 		
 		public override function draw(ds:DataSprite):void
 		{
@@ -49,14 +55,23 @@ package ui
 			var height:Number = ds.h;
 			
 			//m.createGradientBox(width, height, Math.atan(height/width));
-			m.createGradientBox(width, height, Math.atan(width/height));
+			if (ds.props.gradientAngle == GradientRectUI.AUTO_ANGLE)
+			{
+				m.createGradientBox(width, height, Math.atan(width/height));
+			}
+			else
+			{
+				m.createGradientBox(width, height, ds.props.gradientAngle);
+			}
 			
-			g.beginGradientFill(GradientType.LINEAR,
+			// it is also possible to parameterize each value within ds.props
+			// to enable more customization
+			g.beginGradientFill(ds.props.gradientType,
 				[0xffffff & ds.fillColor, 0xeeeeee],
 				[ds.fillAlpha, ds.fillAlpha],
 				[32, 255], m,
-				SpreadMethod.REFLECT,
-				InterpolationMethod.RGB, 1);
+				ds.props.spreadMethod,
+				ds.props.interpolationMethod, 0);
 			
 			super.draw(ds);
 		}

@@ -46,8 +46,8 @@ package ui
 		{
 			//var g:Graphics = ds.graphics;
 			
-			var onLength:Number = 2 * ds.lineWidth;
-			var offLength:Number = 2 * ds.lineWidth;
+			var onLength:Number = ds.props.onLengthCoeff * ds.lineWidth;
+			var offLength:Number = ds.props.offLengthCoeff * ds.lineWidth;
 			
 			this._dashedLine = new DashedLine(ds, onLength, offLength);
 			//this._dashedLine.lineStyle(ds.lineWidth, ds.lineColor, 1);

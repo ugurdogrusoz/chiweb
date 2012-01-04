@@ -2,10 +2,17 @@ package main
 {
 	import controls.CreationControl;
 	
+	import flare.display.TextSprite;
+	
+	import flash.display.GradientType;
+	import flash.display.InterpolationMethod;
+	import flash.display.SpreadMethod;
+	
 	import ivis.controls.EventControl;
 	import ivis.controls.StateManager;
 	import ivis.manager.ApplicationManager;
 	import ivis.model.Style;
+	import ivis.view.ui.ArrowUIManager;
 	import ivis.view.ui.EdgeUIManager;
 	import ivis.view.ui.IEdgeUI;
 	import ivis.view.ui.INodeUI;
@@ -13,6 +20,7 @@ package main
 	
 	import ui.DashedEdgeUI;
 	import ui.GradientRectUI;
+	import ui.ImageNodeUI;
 	
 	import util.Constants;
 
@@ -118,36 +126,55 @@ package main
 		{
 			var style:Object;
 			
-			// TODO list:
-			// 1) define custom styles for nodes, edges, compounds, and bends
-			// 2) define additional data groups for nodes and edges, define custom styles for the new groups
+			// add group style for gradient node
 			
-			
-			// add group styles
 			style = {shape: Constants.GRADIENT_RECT,
-				size: 50,
-				w: 60,
+				w: 80,
 				h: 60,
-				alpha: 0.9,
+				alpha: 0.6,
 				fillColor: 0xff3e66f0,
 				lineWidth: 2,
 				labelFontWeight: "bold",
-				labelFontStyle: "italic"};
+				labelFontStyle: "italic",
+				gradientType: GradientType.LINEAR,
+				gradientAngle: GradientRectUI.AUTO_ANGLE,
+				spreadMethod: SpreadMethod.REFLECT,
+				interpolationMethod: InterpolationMethod.RGB};
 			
 			this.appManager.graphManager.graphStyleManager.addGroupStyle(
 				Constants.GRADIENT_RECT, new Style(style));
+			
+			// add group style for dashed edge
 			
 			style = {shape: Constants.DASHED_EDGE,				
 				fillColor: 0xff000000,
 				alpha: 0.8,
 				//sourceArrowType: ArrowUIManager.SIMPLE_ARROW,
-				//targetArrowType: ArrowUIManager.SIMPLE_ARROW
-				lineColor: 0xff000000,
-				lineAlpha: 0.8,
-				lineWidth: 2};
+				targetArrowType: ArrowUIManager.SIMPLE_ARROW,
+				onLengthCoeff: 1,
+				offLengthCoeff: 2,
+				lineColor: 0xff66cc12,
+				lineAlpha: 0.5,
+				lineWidth: 3};
 			
 			this.appManager.graphManager.graphStyleManager.addGroupStyle(
 				Constants.DASHED_EDGE, new Style(style));
+			
+			// add group style for image node
+			
+			style = {shape: Constants.IMAGE_NODE,
+				w: 150,
+				h: 50,
+				alpha: 0.8,
+				fillColor: 0xfffcfcfc,
+				lineWidth: 1,
+				imageUrl: "http://www.cs.bilkent.edu.tr/~ivis/images/ivis-logo.png",
+				labelFontWeight: "bold",
+				labelVerticalAnchor: TextSprite.BOTTOM};
+			
+			this.appManager.graphManager.graphStyleManager.addGroupStyle(
+				Constants.IMAGE_NODE, new Style(style));
+			
 			/*
 			// init default node style
 			
@@ -253,11 +280,14 @@ package main
 		
 		protected function initUIs():void
 		{
-			var gradient:INodeUI = new GradientRectUI();
-			var dashedEdge:IEdgeUI = new DashedEdgeUI();
+			NodeUIManager.registerUI(Constants.IMAGE_NODE,
+				ImageNodeUI.instance);
+			NodeUIManager.registerUI(Constants.GRADIENT_RECT,
+				GradientRectUI.instance);
+			EdgeUIManager.registerUI(Constants.DASHED_EDGE,
+				DashedEdgeUI.instance);
 			
-			NodeUIManager.registerUI(Constants.GRADIENT_RECT, gradient);
-			EdgeUIManager.registerUI(Constants.DASHED_EDGE, dashedEdge);
+			// TODO also create a custom UI for compound nodes
 		}
 		
 		protected function initControls():void
