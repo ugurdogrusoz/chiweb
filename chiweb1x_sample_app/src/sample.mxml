@@ -19,11 +19,11 @@
 	<mx:HBox id="buttonBox" width="100%"
 			 horizontalGap="1" paddingBottom="5" paddingTop="5">
 		
-		<mx:Button id="addDashedTri" 
-			label="TD"
+		<mx:Button id="addCircularNode" 
+			label="CN"
 			width="40"
-			toolTip="Add Dashed Triangle Node"
-			click="app.addDashedTriangle()"/>	
+			toolTip="Add Circular Node"
+			click="app.addCircularNode()"/>	
 	
 		<mx:Button id="addGradientRect" 
 				   label="GR"
@@ -82,7 +82,7 @@
 		<mx:Button id="performRemoteLayout" 
 				   label="RL"
 				   width="40"
-				   toolTip="Perform Remote Layout"
+				   toolTip="Perform Remote (CoSE) Layout"
 				   click="app.performRemoteLayout()"/>
 		
 		<mx:Button id="performLocalLayout"

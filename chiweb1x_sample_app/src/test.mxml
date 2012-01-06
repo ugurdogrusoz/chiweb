@@ -272,14 +272,15 @@
 			trace("main function started...");
 			
 			app = new ApplicationManager();
+			
 			//graphBox.addChild(controller.manager.view);
 			app.setGraphContainer(graphBox);
 			app.setRootContainer(this);
 			
 			app.graphManager.setLayout(new ForceDirectedLayout());
 			
-			testMain = new TestMain();
-			testMain.appManager = app;
+			testMain = new TestMain(app);
+			
 			
 			//app.graphManager.setLayout(new CircleLayout());
 			

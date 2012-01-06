@@ -1,28 +1,39 @@
 package main
 {
 	import controls.CreationControl;
+	import controls.CursorControl;
 	
 	import flare.display.TextSprite;
+	import flare.vis.data.DataSprite;
+	import flare.vis.data.NodeSprite;
+	import flare.vis.operator.layout.Layout;
 	
 	import flash.display.GradientType;
 	import flash.display.InterpolationMethod;
 	import flash.display.SpreadMethod;
+	import flash.events.MouseEvent;
 	
 	import ivis.controls.EventControl;
 	import ivis.controls.StateManager;
 	import ivis.manager.ApplicationManager;
 	import ivis.model.Style;
+	import ivis.operators.LayoutOperator;
+	import ivis.util.Groups;
 	import ivis.view.ui.ArrowUIManager;
+	import ivis.view.ui.CompoundUIManager;
 	import ivis.view.ui.EdgeUIManager;
 	import ivis.view.ui.IEdgeUI;
 	import ivis.view.ui.INodeUI;
 	import ivis.view.ui.NodeUIManager;
+	
+	import layout.RemoteLayout;
 	
 	import ui.DashedEdgeUI;
 	import ui.GradientRectUI;
 	import ui.ImageNodeUI;
 	
 	import util.Constants;
+	import util.CursorUtils;
 
 	/**
 	 * Main initializer for the Sample application (sample.mxml).
@@ -33,6 +44,8 @@ package main
 	{
 		public var appManager:ApplicationManager;
 		
+		protected var _remoteLayout:LayoutOperator = new RemoteLayout();
+		
 		public function SampleMain()
 		{
 			this.appManager = new ApplicationManager();
@@ -42,15 +55,23 @@ package main
 			this.initStates();
 		}
 		
-		public function addDashedTriangle():void
+		/**
+		 * Activates ADD_CIRCULAR_NODE state. (Node is created upon clicking on
+		 * the canvas or on another node).
+		 */
+		public function addCircularNode():void
 		{
 			var state:Boolean = this.appManager.controlCenter.toggleState(
-				Constants.ADD_DASHED_TRI);
+				Constants.ADD_CIRCULAR_NODE);
 			
 			this.appManager.controlCenter.stateManager.setState(
 				StateManager.ADD_NODE, state);
 		}
 		
+		/**
+		 * Activates ADD_GRADIENT state. (Node is created upon clicking on
+		 * the canvas or on another node).
+		 */
 		public function addGradientRect():void
 		{
 			var state:Boolean = this.appManager.controlCenter.toggleState(
@@ -60,6 +81,10 @@ package main
 				StateManager.ADD_NODE, state);
 		}
 		
+		/**
+		 * Activates ADD_IMAGE_NODE state. (Node is created upon clicking on
+		 * the canvas or on another node).
+		 */
 		public function addImageNode():void
 		{
 			var state:Boolean = this.appManager.controlCenter.toggleState(
@@ -69,18 +94,33 @@ package main
 				StateManager.ADD_NODE, state);
 		}
 		
+		/**
+		 * Activates ADD_BENDPOINT state. (Bend is created upon clicking on
+		 * an edge).
+		 */
 		public function addBendPoint():void
 		{
 			this.appManager.controlCenter.toggleState(
 				StateManager.ADD_BENDPOINT);
 		}
 		
+		/**
+		 * Activates ADD_DEFAULT_EDGE state. (Edge is created upon clicking on
+		 * canvas).
+		 */
 		public function addDefaultEdge():void
 		{
-			this.appManager.controlCenter.toggleState(
-				StateManager.ADD_EDGE);
+			var state:Boolean = this.appManager.controlCenter.toggleState(
+				Constants.ADD_DEFAULT_EDGE);
+			
+			this.appManager.controlCenter.stateManager.setState(
+				StateManager.ADD_EDGE, state);
 		}
 		
+		/**
+		 * Activates ADD_DASHED_EDGE state. (Edge is created upon clicking on
+		 * canvas).
+		 */
 		public function addDashedEdge():void
 		{
 			var state:Boolean = this.appManager.controlCenter.toggleState(
@@ -90,38 +130,70 @@ package main
 				StateManager.ADD_EDGE, state);
 		}
 		
+		/**
+		 * Enables panning of the canvas.
+		 */
 		public function enablePan():void
 		{
-			this.appManager.controlCenter.toggleState(StateManager.PAN);
+			if(this.appManager.controlCenter.toggleState(StateManager.PAN))
+			{
+				CursorUtils.showOpenHand();
+			}
+			else
+			{
+				CursorUtils.hideOpenHand();
+			}
 		}
 		
+		/**
+		 * Deletes all selected nodes.
+		 */
 		public function deleteSelected():void
 		{
 			this.appManager.graphManager.deleteSelected();
 		}
 		
+		/**
+		 * Hides all selected nodes.
+		 */
 		public function hideSelected():void
 		{
 			this.appManager.graphManager.filterSelected();
 		}
 		
+		/**
+		 * Shows all selected nodes.
+		 */
 		public function showAll():void
 		{
 			this.appManager.graphManager.resetFilters();
 		}
 		
+		/**
+		 * Performs a remote layout.
+		 */
 		public function performRemoteLayout():void
 		{
-			// TODO update layout before performing it
+			// update layout before performing it
+			this.appManager.graphManager.setLayout(_remoteLayout);
+			
+			// perform layout
 			this.appManager.graphManager.performLayout();
 		}
 		
 		public function performLocalLayout():void
 		{
-			// TODO update layout before performing it
-			this.appManager.graphManager.performLayout();
+			// update layout before performing it
+			//this.appManager.graphManager.setLayout(_localLayout);
+			
+			// perform layout
+			//this.appManager.graphManager.performLayout();
 		}
 		
+		/**
+		 * Initializes custom styles for nodes, edges, compound nodes, bend
+		 * nodes and for other custom groups.
+		 */
 		protected function initCustomStyles():void
 		{
 			var style:Object;
@@ -163,6 +235,7 @@ package main
 			// add group style for image node
 			
 			style = {shape: Constants.IMAGE_NODE,
+				buttonMode: true,
 				w: 150,
 				h: 50,
 				alpha: 0.8,
@@ -175,109 +248,55 @@ package main
 			this.appManager.graphManager.graphStyleManager.addGroupStyle(
 				Constants.IMAGE_NODE, new Style(style));
 			
-			/*
-			// init default node style
+			// add group style for circular node
 			
-			style = {shape: NodeUIManager.RECTANGLE,
-				size: 50,
-				w: 100,
-				h: 50,
-				alpha: 0.9,
-				fillColor: 0xff8a1b0b,
-				lineColor: 0xff333333,
-				lineWidth: 1,
-				labelText: "", 
-				labelOffsetX: 0,
-				labelOffsetY: 0,
-				labelHorizontalAnchor: TextSprite.CENTER,
-				labelVerticalAnchor: TextSprite.MIDDLE,
-				labelFontName: "Arial",
-				labelFontSize: 11,
-				labelFontColor: 0xff000000,
-				labelFontWeight: "normal",
-				labelFontStyle: "normal",
-				selectionGlowColor: 0x00ffff33, // "#ffff33"
-				selectionGlowAlpha: 0.9,
-				selectionGlowBlur: 8,
-				selectionGlowStrength: 6};
-			
-			this._defaultNodeStyle = new Style(style);
-			
-			// init default compound node style
-			
-			style = {shape: CompoundUIManager.RECTANGLE,
-				size: 50,
-				w: 100,
-				h: 50,
-				alpha: 0.9,
-				fillColor: 0xff9ed1dc,
-				lineColor: 0xff333333,
-				lineWidth: 1,
-				labelText: "",
-				labelOffsetX: 0,
-				labelOffsetY: 0,
-				labelHorizontalAnchor: TextSprite.CENTER,
-				labelVerticalAnchor: TextSprite.TOP,
-				labelFontName: "Arial",
-				labelFontSize: 11,
-				labelFontColor: 0xff000000,
-				labelFontWeight: "normal",
-				labelFontStyle: "normal",
-				selectionGlowColor: 0x00ffff33, // "#ffff33"
-				selectionGlowAlpha: 0.9,
-				selectionGlowBlur: 8,
-				selectionGlowStrength: 6,
-				paddingLeft: 10,
-				paddingRight: 10,
-				paddingTop: 10,
-				paddingBottom: 10};
-			
-			this._defaultCompoundStyle = new Style(style);
-			
-			// init default edge style
-			
-			style = {shape: EdgeUIManager.LINE,				
-				fillColor: 0xff000000,
+			style = {shape: NodeUIManager.CIRCLE,
+				size: 66,				
 				alpha: 0.8,
-				lineColor: 0xff000000,
-				lineAlpha: 0.8,
-				lineWidth: 1,
-				labelText: "",
-				labelPos: EdgeLabeler.MIDDLE,
-				labelOffsetX: 0,
-				labelOffsetY: 0,
-				labelHorizontalAnchor: TextSprite.CENTER,
-				labelVerticalAnchor: TextSprite.MIDDLE,
-				labelDistanceCalculation: EdgeLabeler.PERCENT_DISTANCE,
-				labelDistanceFromNode: 30,
-				//sourceArrowType: ArrowUIManager.SIMPLE_ARROW,
-				//targetArrowType: ArrowUIManager.SIMPLE_ARROW,
-				arrowTipAngle: 0.3,
-				arrowTipDistance: 15,
-				selectionGlowColor: 0x00ffff33, // "#ffff33"
-				selectionGlowAlpha: 0.8,
-				selectionGlowBlur: 4,
-				selectionGlowStrength: 10};
+				fillColor: 0xff229fa8,
+				lineWidth: 1};
 			
-			this._defaultEdgeStyle = new Style(style);
+			this.appManager.graphManager.graphStyleManager.addGroupStyle(
+				Constants.CIRCULAR_NODE, new Style(style));
 			
-			// init default style of BEND_NODES group
+			// add group style for nodes
 			
-			style = {shape: NodeUIManager.CIRCLE,				
-				size: 4,
-				alpha: 1.0,
-				fillColor: 0xff000000,
-				lineColor: 0xff000000,
-				lineWidth: 1,
-				selectionGlowColor: 0x00ffff33, // "#ffff33"
-				selectionGlowAlpha: 0.9,
-				selectionGlowBlur: 8,
-				selectionGlowStrength: 6};
+			style = {buttonMode: true, // enables hand cursor when mouse over
+				doubleClickEnabled: true}; // enables double click to dispacth 
 			
-			_groupStyleMap[Groups.BEND_NODES] = new Style(style);
-			*/
+			this.appManager.graphManager.graphStyleManager.addGroupStyle(
+				Groups.NODES, new Style(style));
+			
+			// add group style for edges
+			
+			style = {buttonMode: true}; // enables hand cursor when mouse over
+			
+			this.appManager.graphManager.graphStyleManager.addGroupStyle(
+				Groups.EDGES, new Style(style));
+			
+			// add group style for bend nodes
+			
+			style = {buttonMode: true}; // enables hand cursor when mouse over
+			
+			this.appManager.graphManager.graphStyleManager.addGroupStyle(
+				Groups.BEND_NODES, new Style(style));
+			
+			// add group style for compound nodes
+			
+			style = {shape: CompoundUIManager.ROUND_RECTANGLE,
+				buttonMode: true, // enables hand cursor when mouse over
+				alpha: 0.7,
+				fillColor: 0xffa21be0,
+				lineWidth: 2,
+				labelFontWeight: "bold"};
+			
+			this.appManager.graphManager.graphStyleManager.addGroupStyle(
+				Groups.COMPOUND_NODES, new Style(style));
 		}
 		
+		/**
+		 * Register custom UIs.
+		 */
 		protected function initUIs():void
 		{
 			NodeUIManager.registerUI(Constants.IMAGE_NODE,
@@ -287,29 +306,59 @@ package main
 			EdgeUIManager.registerUI(Constants.DASHED_EDGE,
 				DashedEdgeUI.instance);
 			
-			// TODO also create a custom UI for compound nodes
+			// TODO also create a custom UI for compound nodes?
 		}
 		
+		/**
+		 * Init custom controls.
+		 */
 		protected function initControls():void
 		{
-			var nodeControl:EventControl = new CreationControl();
+			var creationControl:EventControl = new CreationControl();
+			var cursorControl:EventControl = new CursorControl();
 			
-			this.appManager.controlCenter.addControl(nodeControl);
+			this.appManager.controlCenter.addControl(creationControl);
+			this.appManager.controlCenter.addControl(cursorControl);
+			
+			
+			this.appManager.controlCenter.addCustomListener("showInspector",
+				MouseEvent.DOUBLE_CLICK,
+				showInspector,
+				NodeSprite);
 		}
 		
+		/**
+		 * Initializes custom states to be used in custom controls.
+		 */
 		protected function initStates():void
 		{
 			this.appManager.controlCenter.stateManager.setState(
 				Constants.ADD_GRADIENT, false);
 			
 			this.appManager.controlCenter.stateManager.setState(
-				Constants.ADD_DASHED_TRI, false);
+				Constants.ADD_CIRCULAR_NODE, false);
+			
+			this.appManager.controlCenter.stateManager.setState(
+				Constants.ADD_DEFAULT_EDGE, false);
 			
 			this.appManager.controlCenter.stateManager.setState(
 				Constants.ADD_DASHED_EDGE, false);
 			
 			this.appManager.controlCenter.stateManager.setState(
 				Constants.ADD_IMAGE_NODE, false);
+		}
+		
+		/**
+		 * Custom listener for DOUBLE_CLICK action on nodes. Shows an inspector
+		 * window with node information.
+		 */
+		protected function showInspector(event:MouseEvent):void
+		{
+			//var evt:MouseEvent = evt as MouseEvent;
+			
+			trace ("double click listener: " + event.localX + ", " + event.localY);
+			
+			// TODO open an inspector window for nodes
 		}
 	}
 }

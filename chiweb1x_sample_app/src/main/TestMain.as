@@ -7,6 +7,8 @@ package main
 	
 	import ivis.manager.ApplicationManager;
 	import ivis.model.Style;
+	import ivis.util.Groups;
+	import ivis.view.ui.CompoundUIManager;
 	import ivis.view.ui.NodeUIManager;
 
 	/**
@@ -16,16 +18,33 @@ package main
 	{
 		public var appManager:ApplicationManager;
 		
+		public function TestMain(app:ApplicationManager)
+		{
+			this.appManager = app;
+			
+			var style:Object;
+			
+			style = {labelHorizontalAnchor: TextSprite.LEFT,
+				labelVerticalAnchor: TextSprite.BOTTOM,
+				labelText: "node"};
+			
+			this.appManager.graphManager.graphStyleManager.addGroupStyle(
+				Groups.NODES, new Style(style));
+			
+			style = {shape: CompoundUIManager.ROUND_RECTANGLE,
+				paddingLeft: 16,
+				paddingRight: 16,
+				paddingTop: 16,
+				paddingBottom: 16,
+				labelText: "compound"};
+			
+			this.appManager.graphManager.graphStyleManager.addGroupStyle(
+				Groups.COMPOUND_NODES, new Style(style));
+		}
+		
 		public function printGraph():void
 		{
 			this.appManager.graphManager.graph.printGraph();
-		}
-		
-		public function showInspector(event:MouseEvent):void
-		{
-			//var evt:MouseEvent = evt as MouseEvent;
-			
-			trace ("custom listener: " + event.localX + ", " + event.localY);
 		}
 		
 		public function createTestGroup() : void
