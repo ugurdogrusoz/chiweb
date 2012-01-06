@@ -30,6 +30,7 @@ package ivis.manager
 		private var _defaultNodeStyle:Style;
 		private var _defaultEdgeStyle:Style;
 		private var _defaultCompoundStyle:Style;
+		private var _defaultBendStyle:Style;
 		
 		protected var _groupStyleMap:Object;
 		
@@ -82,7 +83,7 @@ package ivis.manager
 		{
 			// attach default node style
 			node.attachStyle(Styles.DEFAULT_STYLE,
-				_defaultNodeStyle);
+				this._defaultNodeStyle);
 			
 			// attach custom style specific to Groups.NODES
 			
@@ -103,7 +104,7 @@ package ivis.manager
 		{
 			// attach default compound node style
 			node.attachStyle(Styles.DEFAULT_STYLE,
-				_defaultCompoundStyle);
+				this._defaultCompoundStyle);
 		}
 		
 		/**
@@ -116,7 +117,7 @@ package ivis.manager
 		{
 			// attach default edge style
 			edge.attachStyle(Styles.DEFAULT_STYLE,
-				_defaultEdgeStyle);
+				this._defaultEdgeStyle);
 			
 			// attach custom style specific to Groups.EDGES
 			var style:Style = this.getGroupStyle(Groups.EDGES);
@@ -125,6 +126,18 @@ package ivis.manager
 			{
 				edge.attachStyle(Groups.EDGES, style);
 			}
+		}
+		
+		/**
+		 * Attaches default visual style to the given bend node.
+		 * 
+		 * @param node	bend node to attach visual styles
+		 */
+		public function initBendStyle(node:Node):void
+		{
+			// attach default compound node style
+			node.attachStyle(Styles.DEFAULT_STYLE,
+				this._defaultBendStyle);
 		}
 		
 		/**
@@ -285,12 +298,8 @@ package ivis.manager
 				selectionGlowBlur: 8,
 				selectionGlowStrength: 6};
 			
-			// TODO _defaultBendStyle instead of adding a group style?
-			
-			_groupStyleMap[Groups.BEND_NODES] = new Style(style);
-			
-			// TODO other defaults?
-			
+			this._defaultBendStyle = new Style(style);
+			//_groupStyleMap[Groups.BEND_NODES] = new Style(style);
 		}
 	}
 }

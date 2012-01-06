@@ -287,6 +287,32 @@ package ivis.model
 		}
 		
 		/**
+		 * Returns the node having the specified id.
+		 * 
+		 * TODO add to UML diagram
+		 * 
+		 * @param id	id of the node
+		 * @return		node having the specified id, or null if not found
+		 */
+		public function getNode(id:String):Node
+		{
+			return this._nodeMap[id];
+		}
+		
+		/**
+		 * Returns the edge having the specified id.
+		 * 
+		 * TODO add to UML diagram
+		 * 
+		 * @param id	id of the edge
+		 * @return		edge having the specified id, or null if not found
+		 */
+		public function getEdge(id:String):Edge
+		{
+			return this._edgeMap[id];
+		}
+		
+		/**
 		 * Removes the given edge from the graph. If the edge is a segment,
 		 * it is also removed from its parent's list. This function does not
 		 * remove child segments or bendpoints of the edge. It removes exactly

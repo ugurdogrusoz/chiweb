@@ -127,9 +127,6 @@ package ivis.controls
 					this.object.dispatchEvent(
 						new ControlEvent(ControlEvent.DRAG_START));
 				}
-				
-				// TODO is this necessary anymore?
-				//event.stopPropagation();
 			}
 			
 			this.graphManager.resetMissingChildren();
@@ -317,9 +314,6 @@ package ivis.controls
 				{
 					(this._cur as DataSprite).unfix();
 				}
-				
-				// TODO is this necessary anymore?
-				//event.stopPropagation();
 				
 				// update edge labels
 				this.graphManager.view.updateLabels(Groups.EDGES);

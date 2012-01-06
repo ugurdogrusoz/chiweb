@@ -17,6 +17,7 @@ package ivis.manager
 	import ivis.model.Style;
 	import ivis.model.util.Nodes;
 	import ivis.model.util.Styles;
+	import ivis.operators.LayoutOperator;
 	import ivis.util.GeneralUtils;
 	import ivis.util.Groups;
 	import ivis.view.CompoundNodeRenderer;
@@ -35,18 +36,10 @@ package ivis.manager
 	public class GraphManager
 	{
 		protected var _graph:Graph;
-		
 		protected var _view:GraphView;
-		
 		protected var _styleManager:GraphStyleManager;
-		
-		protected var _globalConfig:GlobalConfig;
-		
-		protected var _rootContainer:Container; 
-		
-		/**
-		 *  Source node used for the edge creating process.
-		 */
+		protected var _globalConfig:GlobalConfig;		
+		protected var _rootContainer:Container;
 		protected var _sourceNode:Node;
 		
 		//--------------------------- ACCESSORS --------------------------------
@@ -73,6 +66,14 @@ package ivis.manager
 		public function get view():GraphView
 		{
 			return _view;
+		}
+		
+		/**
+		 *  Source node used for the edge creating process.
+		 */
+		public function get sourceNode():Node
+		{
+			return _sourceNode;
 		}
 		
 		// TODO it may be better to make graph inaccessible outside GraphManager
@@ -201,7 +202,7 @@ package ivis.manager
 			}
 			
 			// update the visualization
-			this.view.update();
+			this.view.update(false);
 			
 			return node;
 		}
@@ -282,7 +283,7 @@ package ivis.manager
 			// update the visualization
 			if (edge != null)
 			{
-				this.view.update();
+				this.view.update(false);
 			}
 			
 			return edge;
@@ -371,7 +372,7 @@ package ivis.manager
 			GeneralUtils.bringToFront(bendNode);
 			
 			// update the visualization
-			this.view.update();
+			this.view.update(false);
 			
 			return bendNode;
 		}
@@ -422,8 +423,8 @@ package ivis.manager
 			
 			if (removed && update)
 			{
-				this.view.updateAllCompoundBounds();
 				this.view.update();
+				//this.view.updateAllCompoundBounds();
 			}
 			
 			return removed;
@@ -447,8 +448,8 @@ package ivis.manager
 			
 			if (removed)
 			{
-				this.view.updateAllCompoundBounds();
 				this.view.update();
+				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -552,8 +553,8 @@ package ivis.manager
 			// if delete operation is successful, update all compound bounds
 			if (deleted)
 			{
-				this.view.updateAllCompoundBounds();
 				this.view.update();
+				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -580,8 +581,8 @@ package ivis.manager
 			
 			if (filtered && update)
 			{
-				this.view.updateAllCompoundBounds();
 				this.view.update();
+				//this.view.updateAllCompoundBounds();
 			}
 			
 			return filtered;
@@ -607,9 +608,8 @@ package ivis.manager
 			if (filtered)
 			{
 				this.view.updateVisibility();
-				
-				this.view.updateAllCompoundBounds();
 				this.view.update();
+				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -642,9 +642,8 @@ package ivis.manager
 			if (filtered)
 			{
 				this.view.updateVisibility();
-				
-				this.view.updateAllCompoundBounds();
 				this.view.update();
+				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -656,8 +655,8 @@ package ivis.manager
 			this.view.resetFilters();
 			
 			this.view.updateVisibility();
-			this.view.updateAllCompoundBounds();
 			this.view.update();
+			//this.view.updateAllCompoundBounds();
 		}
 		
 		/**
@@ -708,6 +707,12 @@ package ivis.manager
 		public function setLayout(layout:Layout):void
 		{
 			this.view.vis.layout = layout;
+			
+			if (layout is LayoutOperator &&
+				(layout as LayoutOperator).graphManager == null)
+			{
+				(layout as LayoutOperator).graphManager = this;
+			}
 		}
 		
 		/**
@@ -717,7 +722,6 @@ package ivis.manager
 		{
 			if (this.view.performLayout())
 			{
-				this.view.updateAllCompoundBounds();
 				this.view.update();
 			}
 		}
@@ -816,10 +820,13 @@ package ivis.manager
 			}
 			*/
 			
-			// TODO default style for bend nodes?
+			// init default style for bend node
+			this.graphStyleManager.initBendStyle(bendNode);
 			
 			// add node to the data group
 			this.graph.addToGroup(Groups.BEND_NODES, bendNode);
+			
+			Styles.reApplyStyles(bendNode);
 			
 			// update bend node renderer
 			bendNode.renderer = NodeRenderer.instance;
@@ -1149,7 +1156,7 @@ package ivis.manager
 				}
 				
 				this.view.update();
-				this.view.updateAllCompoundBounds();
+				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -1167,7 +1174,7 @@ package ivis.manager
 		{
 			var ds:DataSprite = event.info.ds;
 			var group:String = event.info.group;
-			var style:Style = _styleManager.getGroupStyle(group);
+			var style:Style = this._styleManager.getGroupStyle(group);
 			
 			if (ds is IStyleAttachable &&
 				style != null)
@@ -1181,7 +1188,7 @@ package ivis.manager
 				Styles.reApplyStyles(element);
 				
 				this.view.update();
-				this.view.updateAllCompoundBounds();
+				//this.view.updateAllCompoundBounds();
 			}
 			
 		}
@@ -1201,8 +1208,7 @@ package ivis.manager
 			var ds:DataSprite = event.info.ds;
 			var group:String = event.info.group;
 			
-			var style:Style = 
-				this._styleManager.getGroupStyle(group);
+			var style:Style = this._styleManager.getGroupStyle(group);
 			
 			// reset & apply styles
 			if (style != null &&
@@ -1217,7 +1223,7 @@ package ivis.manager
 				Styles.reApplyStyles(element);
 				
 				this.view.update();
-				this.view.updateAllCompoundBounds();
+				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -1237,23 +1243,8 @@ package ivis.manager
 			var style:Style = this._styleManager.getGroupStyle(
 				event.info.group);
 			
-			if (group != null &&
-				style != null)
+			if (style != null)
 			{
-				// visit all data sprites in the group to apply new style
-				for each (var ds:DataSprite in group)
-				{	
-					if (ds is IStyleAttachable)
-					{
-						// attach style to the sprite
-						(ds as IStyleAttachable).attachStyle(event.info.group,
-							style);
-						
-						// apply new style to the element
-						Styles.reApplyStyles(ds as IStyleAttachable);
-					}
-				}
-				
 				// add event listeners with a low priority
 				
 				style.addEventListener(StyleChangeEvent.ADDED_STYLE_PROP,
@@ -1266,9 +1257,28 @@ package ivis.manager
 					false,
 					StyleChangeEvent.LOW_PRIORITY);
 				
-				this.view.update();
-				this.view.updateAllCompoundBounds();
+				if (group != null)
+				{
+					// visit all data sprites in the group to apply new style
+					for each (var ds:DataSprite in group)
+					{	
+						if (ds is IStyleAttachable)
+						{
+							// attach style to the sprite
+							(ds as IStyleAttachable).attachStyle(
+								event.info.group, style);
+							
+							// apply new style to the element
+							Styles.reApplyStyles(ds as IStyleAttachable);
+						}
+					}
+					
+					this.view.update();
+					//this.view.updateAllCompoundBounds();
+				}
 			}
+			
+			
 		}
 		
 		/**
@@ -1285,6 +1295,15 @@ package ivis.manager
 		{
 			var group:DataList = this.graph.graphData.group(event.info.group);
 			var style:Style = event.info.style as Style;
+			
+			if (style != null)
+			{
+				style.removeEventListener(StyleChangeEvent.ADDED_STYLE_PROP,
+					onStyleChange);
+			
+				style.removeEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
+					onStyleChange);
+			}
 			
 			if (group != null)
 			{
@@ -1303,14 +1322,8 @@ package ivis.manager
 					}
 				}
 				
-				style.removeEventListener(StyleChangeEvent.ADDED_STYLE_PROP,
-					onStyleChange);
-				
-				style.removeEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
-					onStyleChange);
-				
 				this.view.update();
-				this.view.updateAllCompoundBounds();
+				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -1327,8 +1340,9 @@ package ivis.manager
 		 */
 		protected function onStyleChange(event:StyleChangeEvent):void
 		{
+			trace("[GraphManager.onStyleChange] updating view..");
 			this.view.update();
-			this.view.updateAllCompoundBounds();
+			//this.view.updateAllCompoundBounds();
 		}
 		
 		/**

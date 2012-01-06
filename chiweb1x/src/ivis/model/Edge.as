@@ -133,7 +133,7 @@ package ivis.model
 				edge.attachStyle(this._styleManager.getStyleName(style), style);
 			}
 			
-			// TODO also attach specific style?
+			// also attach edge-specific style
 			edge.attachStyle(Styles.SPECIFIC_STYLE,
 				this.getStyle(Styles.SPECIFIC_STYLE));
 				

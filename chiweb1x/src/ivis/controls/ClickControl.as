@@ -96,14 +96,15 @@ package ivis.controls
 		protected function onClick(evt:MouseEvent):void
 		{
 			var target:DisplayObject = evt.target as DisplayObject;
-			var eventType:String;
+			var eventType:String = null;
 			var ds:DataSprite = null;
 			
 			// check if mouse down & mouse up on same location
 			if (this._evtX != evt.stageX ||
 				this._evtY != evt.stageY)
 			{
-				// TODO mouse up on a different location
+				// mouse up on a different location, so the action should not
+				// considered as a click...
 				return;
 			}
 			
@@ -168,7 +169,22 @@ package ivis.controls
 				if (target is Node)
 				{
 					ds = this.graphManager.addEdgeFor(target);
-					eventType = ControlEvent.ADDED_EDGE;
+					
+					if (ds == null)
+					{
+						eventType = ControlEvent.ADDING_EDGE;
+						
+						this.stateManager.setState(StateManager.ADDING_EDGE,
+							true);
+					}
+					else
+					{
+						eventType = ControlEvent.ADDED_EDGE;
+						
+						this.stateManager.setState(StateManager.ADDING_EDGE,
+							false);
+					}
+					
 				}
 			}
 			
@@ -219,14 +235,20 @@ package ivis.controls
 			
 			// dispatch a new control event
 			
-			if (ds != null
+			if (eventType != null
 				&& this.object.hasEventListener(eventType))
 			{
 				trace ("[ClickControl.onClick] event: " + eventType);
 				
-				this.object.dispatchEvent(new ControlEvent(eventType,
-					{sprite: ds}));
-				
+				if (ds == null)
+				{
+					this.object.dispatchEvent(new ControlEvent(eventType));
+				}
+				else
+				{
+					this.object.dispatchEvent(new ControlEvent(eventType,
+						{sprite: ds}));
+				}
 			}
 		}
 	}

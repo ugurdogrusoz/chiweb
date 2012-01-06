@@ -97,9 +97,6 @@ package ivis.view
 						g.beginFill(0xffffff & d.fillColor, fillAlpha);
 						nodeUI.draw(node);
 						g.endFill();
-						
-						// TODO draw an image on top?
-						//drawImage(node, this.adjustSize(node));
 					}
 				}
 				

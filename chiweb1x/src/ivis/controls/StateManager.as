@@ -8,7 +8,7 @@ package ivis.controls
 	 */
 	public class StateManager
 	{
-		// name of the default states
+		/** String constants for the default states. */
 		public static const ADD_NODE:String = "addNode";
 		public static const ADD_BENDPOINT:String = "addBendpoint";
 		public static const ADD_EDGE:String = "addEdge";
@@ -18,6 +18,7 @@ package ivis.controls
 		public static const SELECTING:String = "selecting";
 		public static const PANNING:String = "panning";
 		public static const DRAGGING:String = "dragging";
+		public static const ADDING_EDGE:String = "addingEdge";
 		
 		/**
 		 * Map of flags to indicate the states of certain actions.

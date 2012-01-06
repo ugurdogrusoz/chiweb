@@ -76,10 +76,17 @@ package ivis.view
 		/**
 		 * Updates the view.
 		 */
-		public function update() : void
+		public function update(updateBounds:Boolean = true) : void
 		{
 			//this._vis.update();
-			DirtySprite.renderDirty();			
+			DirtySprite.renderDirty();
+			
+			if (updateBounds)
+			{
+				this.updateAllCompoundBounds();
+				DirtySprite.renderDirty();
+			}
+			
 			this.updateLabels();
 		}
 		

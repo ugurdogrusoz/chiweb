@@ -9,7 +9,7 @@ package ivis.controls
 	 * Wrapper control class for custom event listeners. This class is designed
 	 * to introduce a custom listener function for a single event. In order to
 	 * define an advanced control system for multiple events, it is better to
-	 * extend EventControl class or flare's Control class.
+	 * extend EventControl class or Flare's Control class.
 	 * 
 	 * @author Selcuk Onur Sumer  
 	 */
@@ -34,8 +34,6 @@ package ivis.controls
 			this.filter = filter;
 			this._listenerFn = listenerFn;
 			this._eventName = eventName;
-			
-			// TODO MouseEvent.DOUBLE_CLICK requires doubleClickEnabled property of a sprite to be true.
 		}
 		
 		/** @inheritDoc */

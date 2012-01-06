@@ -73,9 +73,6 @@ package ivis.view
 				g.beginFill(0xffffff & d.fillColor, fillAlpha);
 				nodeUI.draw(d);
 				g.endFill();
-				
-				// TODO Draw image (this should be performed by nodeUI)
-				// drawImage(d, size);
 			}
 		}
 		

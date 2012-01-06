@@ -22,6 +22,7 @@ package ivis.event
 		/** ClickControl events. */
 		public static const ADDED_NODE:String = "addedNode";
 		public static const ADDED_EDGE:String = "addedEdge";
+		public static const ADDING_EDGE:String = "addingEdge";
 		public static const ADDED_BEND:String = "addedBend";
 		public static const TOGGLED_SELECTION:String = "toggledSelection";
 		

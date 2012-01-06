@@ -3,6 +3,7 @@ package ivis.view.ui
 	import flare.vis.data.DataSprite;
 	
 	import flash.display.Graphics;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import ivis.model.Node;
@@ -75,12 +76,25 @@ package ivis.view.ui
 			// dragging a node inside a compound)
 			var bounds:Rectangle = Nodes.adjustBounds(node);
 			
+			var roundWidth:Number = Math.min(node.paddingLeft,
+				node.paddingRight) * 2;
+			
+			var roundHeight:Number = Math.min(node.paddingTop,
+				node.paddingBottom) * 2;
+			
 			// draw the shape
+			// TODO enable customization of rounded corners?
 			g.drawRoundRect(bounds.x, bounds.y,
 				bounds.width, bounds.height,
-				bounds.width / 4, bounds.height / 4);
+				roundWidth, roundHeight);
 		}
 		
-		// TODO also override function intersection
+		public override function intersection(node:Node,
+			p1:Point,
+			p2:Point):Point
+		{
+			// TODO calculate clipping points correctly for rounded corners
+			return super.intersection(node, p1, p2);
+		}
 	}
 }

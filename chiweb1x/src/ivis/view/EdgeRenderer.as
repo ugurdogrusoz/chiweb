@@ -94,8 +94,6 @@ package ivis.view
 					// overwrite the default line style
 					edgeUI.setLineStyle(edge);
 					
-					// TODO consider line styles (dashed, dotted, solid, etc.)
-					
 					// draw source and target arrows,
 					// and recalculate clipping points if necessary
 					if (points != null)

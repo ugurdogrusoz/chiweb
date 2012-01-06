@@ -352,7 +352,7 @@ package ivis.view
 			}
 		}
 		
-		//------------------------ PROTECTED FUNCTIONS ---------------------------
+		//------------------------ PROTECTED FUNCTIONS -------------------------
 		
 		/**
 		 * Updates the bounds of the given compound, and all its children
