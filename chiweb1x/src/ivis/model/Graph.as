@@ -289,8 +289,6 @@ package ivis.model
 		/**
 		 * Returns the node having the specified id.
 		 * 
-		 * TODO add to UML diagram
-		 * 
 		 * @param id	id of the node
 		 * @return		node having the specified id, or null if not found
 		 */
@@ -301,8 +299,6 @@ package ivis.model
 		
 		/**
 		 * Returns the edge having the specified id.
-		 * 
-		 * TODO add to UML diagram
 		 * 
 		 * @param id	id of the edge
 		 * @return		edge having the specified id, or null if not found

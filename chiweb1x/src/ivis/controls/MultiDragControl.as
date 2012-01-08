@@ -224,7 +224,7 @@ package ivis.controls
 				
 				var parent:Node;
 				
-				// update parent compound node(s) bounds if necessary
+				// update parent compound node(s) bounds if necessary.
 				// if n is target node, then its parents may need to be updated.
 				// if n is a selected node, then other selected nodes' parents
 				// also need to be updated. (it causes problems to update bounds
@@ -250,6 +250,11 @@ package ivis.controls
 						parent = node.parentN;
 					}
 					
+					// TODO instead of updating all parents instantly, we may perform
+					// a delayed updated by keeping a map of parents to update to avoid redundancy,
+					// however this may cause temporary inconsistency for the compound bounds
+					// until the dragging ends (until a MOUSE_UP event) ...
+					
 					while (parent != null)
 					{	
 						node = parent;
@@ -261,13 +266,18 @@ package ivis.controls
 							if (!node.props.$selected
 								|| (n == target && !n.props.$selected))
 							{
-								// update the bounds of the compound node
-								this.graphManager.view.updateCompoundBounds(node);
+								// add compound to the list of parents to update
+								//parentsToDrag[node] = node;
 								
-								// render the compound node with the new bounds
-								node.render();
+								// update the bounds of the compound node
+								this.graphManager.view.updateCompoundBounds(
+									node);
+								
+								// mark node as dirty, since its bounds changed
+								node.dirty();
 							}
 							
+							// advance to next parent
 							parent = node.parentN;
 						}
 						else
@@ -284,14 +294,14 @@ package ivis.controls
 				{
 					n.bounds.x += amountX;
 					n.bounds.y += amountY;
-				}
-				
-				// update edge labels
-				this.graphManager.view.updateLabels(Groups.EDGES);
-				
-				// necessary for Flash 10.1
-				DirtySprite.renderDirty();
+				}	
 			}
+			
+			// render all nodes marked as dirty to update view
+			DirtySprite.renderDirty();
+			
+			// update edge labels (node labels already updated while dragging)
+			this.graphManager.view.updateLabels(Groups.EDGES);
 		}
 		
 		
@@ -316,7 +326,7 @@ package ivis.controls
 				}
 				
 				// update edge labels
-				this.graphManager.view.updateLabels(Groups.EDGES);
+				this.graphManager.view.update(false);
 				
 				this.stateManager.setState(StateManager.DRAGGING, false);
 				

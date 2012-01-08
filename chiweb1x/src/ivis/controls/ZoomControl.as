@@ -12,8 +12,8 @@ package ivis.controls
 	import ivis.manager.GraphManager;
 
 	/**
-	 * Control class for zooming the view. By default this control listens for
-	 * MOUSE_WHEEL event, and zooms the view upon the mouse wheel is turned.
+	 * Control class for zooming the view. By default this control listens to
+	 * MOUSE_WHEEL events, and zooms the view upon the mouse wheel is turned.
 	 * It is possible to customize the event, and the event listener function
 	 * by setting corresponding attributes of this control.
 	 * 

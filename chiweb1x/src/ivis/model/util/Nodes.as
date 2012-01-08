@@ -161,7 +161,7 @@ package ivis.model.util
 					values.push(node.top);
 				}
 			}
-			if (type === Nodes.BOTTOM)
+			else if (type === Nodes.BOTTOM)
 			{
 				for each (node in nodes)
 				{

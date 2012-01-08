@@ -271,7 +271,7 @@ package ivis.manager
 				data.sourceId = this._sourceNode.data.id;
 				data.targetId = node.data.id;
 				
-				edge = addEdge(data);
+				edge = this.addEdge(data);
 				
 				// add the edge to the group of regular edges
 				this.graph.addToGroup(Groups.REGULAR_EDGES, edge);
@@ -331,12 +331,8 @@ package ivis.manager
 			}
 			
 			// create bend node to represent bendpoint
-			var bendNode:Node = this.addBendNode(edge);
+			var bendNode:Node = this.addBendNode(edge, x, y);
 			parent.addBendNode(bendNode);
-			
-			// update position of the bendpoint
-			bendNode.x = x;
-			bendNode.y = y;
 			
 			// create first segment
 			edgeData = new Object();
@@ -791,9 +787,13 @@ package ivis.manager
 		 * properties of the bend node.
 		 * 
 		 * @param edge		the target edge
+		 * @param x			x coordinate of the bendpoint
+		 * @param y			y coordiante of the bendpoint
 		 * @return			newly created bendpoint as a Node
 		 */
-		protected function addBendNode(edge:Edge):Node
+		protected function addBendNode(edge:Edge,
+			x:Number,
+			y:Number):Node
 		{
 			var bendNode:Node = this.graph.addNode();
 			
@@ -819,6 +819,10 @@ package ivis.manager
 				bendNode.y = (startPoint.y + endPoint.y) / 2;
 			}
 			*/
+			
+			// update position of the bendpoint
+			bendNode.x = x;
+			bendNode.y = y;
 			
 			// init default style for bend node
 			this.graphStyleManager.initBendStyle(bendNode);

@@ -192,8 +192,6 @@ package ivis.model
 		 * If the given style cannot be found in the list of attached styles,
 		 * then null value is returned.
 		 * 
-		 * TODO add function to the UML diagram!
-		 * 
 		 * @param style	a style instance to search
 		 * @return		name of the style, or null if style not found
 		 */

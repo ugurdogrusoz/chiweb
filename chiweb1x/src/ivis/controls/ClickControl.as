@@ -16,7 +16,7 @@ package ivis.controls
 	import ivis.model.util.Nodes;
 
 	/**
-	 * Control class for the single click action.
+	 * Control class for the single click event.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
@@ -88,7 +88,7 @@ package ivis.controls
 		}
 		
 		/**
-		 * Listener function for MOUSE_DOWN event. Performs the required action
+		 * Listener function for CLICK event. Performs the required action
 		 * according to the active state of the StateManager.
 		 * 
 		 * @param evt	MouseEvent that triggered the action

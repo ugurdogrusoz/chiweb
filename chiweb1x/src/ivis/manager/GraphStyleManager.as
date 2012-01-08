@@ -285,7 +285,7 @@ package ivis.manager
 			
 			this._defaultEdgeStyle = new Style(style);
 			
-			// init default style of BEND_NODES group
+			// init default bendpoint style 
 			
 			style = {shape: NodeUIManager.CIRCLE,				
 				size: 4,
@@ -293,6 +293,16 @@ package ivis.manager
 				fillColor: 0xff000000,
 				lineColor: 0xff000000,
 				lineWidth: 1,
+				labelText: "", 
+				labelOffsetX: 0,
+				labelOffsetY: 0,
+				labelHorizontalAnchor: TextSprite.CENTER,
+				labelVerticalAnchor: TextSprite.MIDDLE,
+				labelFontName: "Arial",
+				labelFontSize: 0,
+				labelFontColor: 0xff000000,
+				labelFontWeight: "normal",
+				labelFontStyle: "normal",
 				selectionGlowColor: 0x00ffff33, // "#ffff33"
 				selectionGlowAlpha: 0.9,
 				selectionGlowBlur: 8,
