@@ -109,6 +109,7 @@ package ivis.view
 			
 			if (label && !cacheText)
 			{
+				label.textMode = d.props.labelTextMode;
 				label.text = this.getLabelText(d);
 				label.applyFormat(this.textFormat);
 				
