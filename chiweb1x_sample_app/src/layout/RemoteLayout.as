@@ -23,7 +23,7 @@ package layout
 	 */
 	public class RemoteLayout extends LayoutOperator
 	{
-		/** Default general options. */		
+		/** Default general options. */
 		public static const PROOF_QUALITY:int = 0;
 		public static const DEFAULT_QUALITY:int = 1;
 		public static const DRAFT_QUALITY:int = 2;
@@ -34,15 +34,24 @@ package layout
 		public static const DEFAULT_REPULSION_STRENGTH:Number = 50;
 		public static const DEFAULT_GRAVITY_STRENGTH:Number = 50;
 		public static const DEFAULT_COMPOUND_GRAVITY_STRENGTH:Number = 50;
-		
-		/** Default CoSE URL. */
-		public static const COSE_URL:String =
+		public static const DEFAULT_COSE_URL:String =
 			"http://139.179.21.69/chilay2x/layout.jsp";
 		
+		/** Default CiSE options. */
+		public static const DEFAULT_NODE_SEPARATION:uint = 60;
+		public static const DEFAULT_CISE_EDGE_LENGTH:uint = 40;
+		public static const DEFAULT_INTER_CLUSTER_EDGE_LENGTH_FACTOR:Number = 50;
+		public static const DEFAULT_CISE_URL:String =
+			"http://139.179.21.69/chilay2x/layout.jsp";
+		
+		/** Default Layout Style. */
+		public static const DEFAULT_LAYOUT_STYLE:String = "CoSE";
+		
+		
 		/**
-		 * URL to request CoSE layout.
+		 * Remote layout style.
 		 */
-		protected var _coseUrl:String;		
+		protected var _layoutStyle:String;
 		
 		/**
 		 * General layout options.
@@ -53,6 +62,11 @@ package layout
 		 * CoSE layout options.
 		 */
 		protected var _coseOptions:Object;
+		
+		/**
+		 * CiSE layout options.
+		 */
+		protected var _ciseOptions:Object;
 		
 		/**
 		 * Loader for remote connection.
@@ -72,7 +86,8 @@ package layout
 		public function get options():Object
 		{
 			var opts:Object = {general: _generalOptions,
-				cose: _coseOptions};
+				cose: _coseOptions,
+				cise: _ciseOptions};
 			
 			return opts;
 		}
@@ -81,6 +96,15 @@ package layout
 		{
 			_generalOptions = value.general;
 			_coseOptions = value.cose;
+			_ciseOptions = value.cise;
+		}
+		
+		/**
+		 * Layout style.
+		 */
+		public function set layoutStyle(value:String):void
+		{
+			_layoutStyle = value;
 		}
 		
 		//-------------------------- CONSTRUCTOR -------------------------------
@@ -94,21 +118,15 @@ package layout
 		 */
 		public function RemoteLayout(graphManager:GraphManager = null,
 			options:Object = null,
-			coseUrl:String = null)
+			layoutStyle:String = DEFAULT_LAYOUT_STYLE)
 		{
 			super(graphManager);
 			
 			// init loader
 			this._loader = new MultipartURLLoader();
 			
-			if (coseUrl == null)
-			{
-				this._coseUrl = COSE_URL;
-			}
-			else
-			{
-				this._coseUrl = coseUrl;
-			}
+			// init layout style
+			this._layoutStyle = layoutStyle;
 			
 			// init options
 			if (options == null)
@@ -117,17 +135,25 @@ package layout
 					animateOnLayout: false,
 					incremental: false};
 				
-				this._coseOptions = {springStrength: DEFAULT_SPRING_STRENGTH,
+				this._coseOptions = {url: DEFAULT_COSE_URL,
+					springStrength: DEFAULT_SPRING_STRENGTH,
 					repulsionStrength: DEFAULT_REPULSION_STRENGTH,
 					gravityStrength: DEFAULT_GRAVITY_STRENGTH,
 					compoundGravityStrength: DEFAULT_COMPOUND_GRAVITY_STRENGTH,
 					idealEdgeLength: DEFAULT_EDGE_LENGTH};
+				
+				this._ciseOptions = {url: DEFAULT_CISE_URL,
+					nodeSeparation: DEFAULT_NODE_SEPARATION,
+					desiredEdgeLength: DEFAULT_CISE_EDGE_LENGTH,
+					interClusterEdgeLengthFactor : DEFAULT_INTER_CLUSTER_EDGE_LENGTH_FACTOR};
+					
 			}
 			else
 			{
 				// assuming options object has a correct structure
 				this._generalOptions = options.general;
 				this._coseOptions = options.cose;
+				this._ciseOptions = options.cise;
 			}
 			
 			// add listeners for the loader
@@ -173,31 +199,32 @@ package layout
 			//CursorManager.setBusyCursor();
 			//coseLayoutButton.enabled = false;
 			
-			var co:Object = this._coseOptions;
-			this._loader.addVariable("springStrength", co.springStrength);
-			this._loader.addVariable("repulsionStrength", co.repulsionStrength);
-			this._loader.addVariable("gravityStrength", co.gravityStrength);
-			this._loader.addVariable("compoundGravityStrength", co.compoundGravityStrength);
-			this._loader.addVariable("idealEdgeLength", co.idealEdgeLength);
-			
-			this._loader.addVariable("layoutStyle", "cose");
-			
-			this._waitingToComplete = true;
-			this._loader.load(this._coseUrl);
-			
-			/*
-			else
-			{
-				// CiSE options
-				ciseLayoutButton.enabled = false;
-				var ci:* = g.CiSEOptions
-				loader.addVariable("nodeSeparation", ci.nodeSeparation)
-				loader.addVariable("desiredEdgeLength", ci.desiredEdgeLength)
-				loader.addVariable("interClusterEdgeLengthFactor", ci.interClusterEdgeLengthFactor)
-				loader.addVariable("layoutStyle", "cise")
-				loader.load(ciseUrl);
+			if (this._layoutStyle == "CoSE")
+			{	
+				var co:Object = this._coseOptions;
+				
+				this._loader.addVariable("springStrength", co.springStrength);
+				this._loader.addVariable("repulsionStrength", co.repulsionStrength);
+				this._loader.addVariable("gravityStrength", co.gravityStrength);
+				this._loader.addVariable("compoundGravityStrength", co.compoundGravityStrength);
+				this._loader.addVariable("idealEdgeLength", co.idealEdgeLength);
+				this._loader.addVariable("layoutStyle", "cose");
+				
+				this._waitingToComplete = true;
+				this._loader.load(co.url);
 			}
-			*/
+			else if (this._layoutStyle == "CiSE")
+			{
+				var ci:Object = this._ciseOptions;
+				
+				this._loader.addVariable("nodeSeparation", ci.nodeSeparation);
+				this._loader.addVariable("desiredEdgeLength", ci.desiredEdgeLength);
+				this._loader.addVariable("interClusterEdgeLengthFactor", ci.interClusterEdgeLengthFactor);
+				this._loader.addVariable("layoutStyle", "cise");
+				
+				this._waitingToComplete = true;
+				this._loader.load(ci.url);
+			}
 		}
 		
 		/**

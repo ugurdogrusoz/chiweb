@@ -11,6 +11,7 @@ package main
 	import flash.display.GradientType;
 	import flash.display.InterpolationMethod;
 	import flash.display.SpreadMethod;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import ivis.controls.EventControl;
@@ -44,15 +45,149 @@ package main
 	{
 		public var appManager:ApplicationManager;
 		
-		protected var _remoteLayout:LayoutOperator = new RemoteLayout();
+		protected var _remoteLayout:LayoutOperator;
+		
+		protected var _nodeState:String;
+		protected var _edgeState:String;
+		protected var _selectedLayout:Object;
 		
 		public function SampleMain()
 		{
 			this.appManager = new ApplicationManager();
+			this._remoteLayout = new RemoteLayout();
+			this._nodeState = Constants.ADD_CIRCULAR_NODE;
+			this._edgeState = Constants.ADD_DEFAULT_EDGE;
+			this._selectedLayout = {label: "CoSE (remote)",
+				type: "remote",
+				style: "CoSE"};
+			
 			this.initCustomStyles();
 			this.initUIs();
 			this.initControls();
 			this.initStates();
+		}
+		
+		public function handleMenuCommand(event:Event):void
+		{
+			// TODO handle command..
+		}
+		
+		/**
+		 * Updates the node type according to the selected combo box item.
+		 */
+		public function setNodeType(event:Event):void
+		{
+			if (this.appManager.controlCenter.stateManager.checkState(
+				StateManager.ADD_NODE))
+			{
+				// deactive state for previous selection
+				this.addNode();
+				
+				// update node state
+				this._nodeState = event.currentTarget.selectedItem.state;
+				
+				// active state for current selection
+				this.addNode();
+			}
+			else
+			{
+				// only update node state
+				this._nodeState = event.currentTarget.selectedItem.state;
+			}
+		}
+		
+		/**
+		 * Updates the edge type according to the selected combo box item.
+		 */
+		public function setEdgeType(event:Event):void
+		{
+			if (this.appManager.controlCenter.stateManager.checkState(
+				StateManager.ADD_EDGE))
+			{
+				// deactive state for previous selection
+				this.addEdge();
+				
+				// update node state
+				this._edgeState = event.currentTarget.selectedItem.state;
+				
+				// active state for current selection
+				this.addEdge();
+			}
+			else
+			{
+				// only update node state
+				this._edgeState = event.currentTarget.selectedItem.state;
+			}
+		}
+		
+		/**
+		 * Updates the layout type according to the selected combo box item.
+		 */
+		public function setLayoutType(event:Event):void
+		{
+			this._selectedLayout = event.currentTarget.selectedItem;
+		}
+		
+		/**
+		 * Toggles selection of graph elements.
+		 */
+		public function select():void
+		{
+			this.appManager.controlCenter.toggleState(StateManager.SELECT);
+		}
+		
+		/**
+		 * Activates state of selected node type. (Node is created upon clicking
+		 * on the canvas or on another node).
+		 */
+		public function addNode(event:Event = null):void
+		{
+			var state:Boolean = this.appManager.controlCenter.toggleState(
+				this._nodeState);
+			
+			this.appManager.controlCenter.stateManager.setState(
+				StateManager.ADD_NODE, state);
+			
+			if (event != null)
+			{
+				// TODO change selected prop of button
+				//event.target.selected = state;
+			}
+		}
+		
+		/**
+		 * Activates state of selected edge type. (Edge is created upon clicking
+		 * on the canvas or on another node).
+		 */
+		public function addEdge(event:Event = null):void
+		{	
+			var state:Boolean = this.appManager.controlCenter.toggleState(
+				this._edgeState);
+			
+			this.appManager.controlCenter.stateManager.setState(
+				StateManager.ADD_EDGE, state);
+			
+			if (event != null)
+			{
+				// TODO change selected prop of button!
+				//event.target.selected = state;
+				
+			}
+		}
+		
+		/**
+		 * Performs layout of selected type.
+		 */
+		public function performLayout(event:Event = null):void
+		{	
+			if (this._selectedLayout.type == "remote")
+			{
+				this.performRemoteLayout(this._selectedLayout.style);
+			}
+			else
+			{
+				// TODO other layouts
+			}			
 		}
 		
 		/**
@@ -172,15 +307,19 @@ package main
 		/**
 		 * Performs a remote layout.
 		 */
-		public function performRemoteLayout():void
+		public function performRemoteLayout(type:String):void
 		{
 			// update layout before performing it
+			this._remoteLayout.layoutType = type;
 			this.appManager.graphManager.setLayout(_remoteLayout);
 			
 			// perform layout
 			this.appManager.graphManager.performLayout();
 		}
 		
+		/**
+		 * Performs a local layout.
+		 */
 		public function performLocalLayout():void
 		{
 			// update layout before performing it

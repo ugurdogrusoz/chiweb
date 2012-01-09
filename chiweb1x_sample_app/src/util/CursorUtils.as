@@ -10,10 +10,10 @@ package util
 	 */
 	public class CursorUtils
 	{
-		[Embed(source="/assets/images/opened_hand.png")]
+		[Embed(source="/assets/cursors/opened_hand.png")]
 		internal static var _openHandCursor:Class;
 		
-		[Embed(source="/assets/images/closed_hand.png")]
+		[Embed(source="/assets/cursors/closed_hand.png")]
 		internal static var _closedHandCursor:Class;
 		
 		internal static var _closedHandId:int = -1;
