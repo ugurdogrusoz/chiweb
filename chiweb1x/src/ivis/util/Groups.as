@@ -15,6 +15,7 @@ package ivis.util
 		public static const NODES:String = Data.NODES;
 		public static const EDGES:String = Data.EDGES;
 		
+		/** Names of the default groups. */
 		public static const COMPOUND_NODES:String = "compoundNodes";
 		public static const BEND_NODES:String = "bendNodes";
 		public static const SELECTED_NODES:String = "selectedNodes";

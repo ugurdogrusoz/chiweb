@@ -4,6 +4,11 @@ package ivis.operators
 	
 	import ivis.manager.GraphManager;
 
+	/**
+	 * Base operator class for Layouts.
+	 * 
+	 * @author Selcuk Onur Sumer
+	 */
 	public class LayoutOperator extends Layout
 	{
 		private var _graphManager:GraphManager;

@@ -277,7 +277,7 @@ package ivis.view
 		 * of the given compound node sprite according to the newly calculated
 		 * bounds.
 		 * 
-		 * @param cns	compound node sprite
+		 * @param compound	compound node sprite
 		 */
 		public function updateCompoundBounds(compound:Node) : void
 		{
@@ -367,11 +367,12 @@ package ivis.view
 			{
 				if (node.isInitialized())
 				{
+					// recursive call
 					this.updateAllBounds(node);
 				}
 			}
 			
-			// recursive call
+			// all children is up-to-date, now update bounds of this compound
 			this.updateCompoundBounds(compound);
 			
 			// set compound as dirty
