@@ -141,7 +141,7 @@
 		
 		private function main():void
 		{
-			app = new SampleMain();
+			app = new SampleMain(this);
 			app.appManager.setGraphContainer(graphBox);
 			app.appManager.setRootContainer(this);
 			

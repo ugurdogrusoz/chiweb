@@ -14,6 +14,8 @@ package main
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import gui.RemoteLayoutOptions;
+	
 	import ivis.controls.EventControl;
 	import ivis.controls.StateManager;
 	import ivis.manager.ApplicationManager;
@@ -28,6 +30,11 @@ package main
 	import ivis.view.ui.NodeUIManager;
 	
 	import layout.RemoteLayout;
+	
+	import mx.core.Container;
+	import mx.core.IFlexDisplayObject;
+	import mx.events.MenuEvent;
+	import mx.managers.PopUpManager;
 	
 	import ui.DashedEdgeUI;
 	import ui.GradientRectUI;
@@ -44,6 +51,7 @@ package main
 	public class SampleMain
 	{
 		public var appManager:ApplicationManager;
+		public var rootContainer:Container;
 		
 		protected var _remoteLayout:LayoutOperator;
 		
@@ -51,10 +59,12 @@ package main
 		protected var _edgeState:String;
 		protected var _selectedLayout:Object;
 		
-		public function SampleMain()
+		public function SampleMain(rootContainer:Container)
 		{
 			this.appManager = new ApplicationManager();
+			this.rootContainer = rootContainer;
 			this._remoteLayout = new RemoteLayout();
+			
 			this._nodeState = Constants.ADD_CIRCULAR_NODE;
 			this._edgeState = Constants.ADD_DEFAULT_EDGE;
 			this._selectedLayout = {label: "CoSE (remote)",
@@ -67,9 +77,23 @@ package main
 			this.initStates();
 		}
 		
-		public function handleMenuCommand(event:Event):void
+		public function handleMenuCommand(event:MenuEvent):void
 		{
-			// TODO handle command..
+			// TODO handle commands..
+			
+			var label:String = event.label.toString().toLowerCase();
+			
+			if(label == "remote layout properties")
+			{
+				var props:IFlexDisplayObject = 
+					this.showWindow(RemoteLayoutOptions);
+				
+				// TODO not safe! window may be initialized before this assignment!
+				(props as RemoteLayoutOptions).initLayout(this._remoteLayout
+					as RemoteLayout);
+			}
+			
+			
 		}
 		
 		/**
@@ -498,6 +522,17 @@ package main
 			trace ("double click listener: " + event.localX + ", " + event.localY);
 			
 			// TODO open an inspector window for nodes
+		}
+		
+		protected function showWindow(window:Class):IFlexDisplayObject
+		{
+			var props: IFlexDisplayObject = 
+				PopUpManager.createPopUp(this.rootContainer, window, true);
+			
+			props.x = (this.rootContainer.width - props.width) / 2;
+			props.y = (this.rootContainer.height - props.height) / 2;
+			
+			return props;
 		}
 	}
 }
