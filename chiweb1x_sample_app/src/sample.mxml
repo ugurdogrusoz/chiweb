@@ -5,6 +5,8 @@
 				verticalScrollPolicy="off" horizontalScrollPolicy="off"
 				pageTitle="ChiWeb Sample Application">
 
+	<mx:Style source="sample.css"/>
+	
 	<mx:Canvas styleName="rawBox"
 			   width="100%" height="100%"
 			   verticalScrollPolicy="off" horizontalScrollPolicy="off"
@@ -141,7 +143,8 @@
 		
 		private function main():void
 		{
-			app = new SampleMain(this);
+			app = SampleMain.instance;
+			app.rootContainer = this;
 			app.appManager.setGraphContainer(graphBox);
 			app.appManager.setRootContainer(this);
 			

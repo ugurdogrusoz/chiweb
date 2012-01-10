@@ -13,40 +13,59 @@ package layout
 	import ivis.operators.LayoutOperator;
 	import ivis.util.Groups;
 	
+	import mx.managers.CursorManager;
+	
 	import util.MultipartURLLoader;
 
 	/**
-	 * This class is designed to perform remote CoSE layout which is deployed
-	 * on the server http://139.179.21.69/
+	 * This class is designed to perform remote CoSE & CiSE layouts which are 
+	 * deployed on the server http://139.179.21.69/
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
 	public class RemoteLayout extends LayoutOperator
 	{
-		/** Default general options. */
+		//---------------------------- CONSTANTS -------------------------------
+		
+		/** Default general options. */	
 		public static const PROOF_QUALITY:int = 0;
 		public static const DEFAULT_QUALITY:int = 1;
 		public static const DRAFT_QUALITY:int = 2;
+		public static const DEFAULT_ANIMATION_ON_LAYOUT:Boolean = true;
+		public static const DEFAULT_INCREMENTAL:Boolean = false;
+		public static const DEFAULT_CREATE_BENDS:Boolean = false;
+		public static const DEFAULT_UNIFORM_LEAF_NODE_SIZE:Boolean = false;
 		
 		/** Default CoSE options. */
-		public static const DEFAULT_EDGE_LENGTH:uint = 40;
 		public static const DEFAULT_SPRING_STRENGTH:Number = 50;
 		public static const DEFAULT_REPULSION_STRENGTH:Number = 50;
 		public static const DEFAULT_GRAVITY_STRENGTH:Number = 50;
+		public static const DEFAULT_GRAVITY_RANGE:Number = 50;
 		public static const DEFAULT_COMPOUND_GRAVITY_STRENGTH:Number = 50;
-		public static const DEFAULT_COSE_URL:String =
-			"http://139.179.21.69/chilay2x/layout.jsp";
+		public static const DEFAULT_COMPOUND_GRAVITY_RANGE:Number = 50;
+		public static const DEFAULT_EDGE_LENGTH:uint = 50;
+		public static const DEFAULT_FR_GRID_VARIANT:Boolean = true;
+		public static const DEFAULT_SMART_EDGE_LENGTH_CALC:Boolean = true;
+		public static const DEFAULT_MULTI_LEVEL_SCALING:Boolean = false;
 		
 		/** Default CiSE options. */
-		public static const DEFAULT_NODE_SEPARATION:uint = 60;
-		public static const DEFAULT_CISE_EDGE_LENGTH:uint = 40;
+		public static const DEFAULT_NODE_SEPARATION:uint = 12;
+		public static const DEFAULT_CISE_EDGE_LENGTH:uint = 50;
 		public static const DEFAULT_INTER_CLUSTER_EDGE_LENGTH_FACTOR:Number = 50;
-		public static const DEFAULT_CISE_URL:String =
-			"http://139.179.21.69/chilay2x/layout.jsp";
+		public static const DEFAULT_ALLOW_NODES_INSIDE_CIRCLE:Boolean = false;
+		public static const DEFAULT_MAX_RATIO_OF_NODES_INSIDE_CIRCLE:Number = 20;
+		
 		
 		/** Default Layout Style. */
 		public static const DEFAULT_LAYOUT_STYLE:String = "CoSE";
 		
+		/** Default Layout URLs. */
+		public static const DEFAULT_COSE_URL:String =
+			"http://139.179.21.69/chilay2x/layout.jsp";
+		public static const DEFAULT_CISE_URL:String =
+			"http://139.179.21.69/chilay2x/layout.jsp";
+		
+		//---------------------------- VARIABLES -------------------------------
 		
 		/**
 		 * Remote layout style.
@@ -78,6 +97,9 @@ package layout
 		 */
 		protected var _waitingToComplete:Boolean;
 		
+		protected var _coseUrl:String;
+		protected var _ciseUrl:String;
+		
 		//---------------------------- ACCESSORS -------------------------------
 		
 		/**
@@ -107,6 +129,22 @@ package layout
 			_layoutStyle = value;
 		}
 		
+		/**
+		 * URL for CoSE layout.
+		 */
+		public function set coseUrl(value:String):void
+		{
+			_coseUrl = value;
+		}
+		
+		/**
+		 * URL for CiSE layout.
+		 */
+		public function set ciseUrl(value:String):void
+		{
+			_ciseUrl = value;
+		}
+		
 		//-------------------------- CONSTRUCTOR -------------------------------
 		
 		/**
@@ -118,7 +156,9 @@ package layout
 		 */
 		public function RemoteLayout(graphManager:GraphManager = null,
 			options:Object = null,
-			layoutStyle:String = DEFAULT_LAYOUT_STYLE)
+			layoutStyle:String = DEFAULT_LAYOUT_STYLE,
+			coseUrl:String = DEFAULT_COSE_URL,
+			ciseUrl:String = DEFAULT_CISE_URL)
 		{
 			super(graphManager);
 			
@@ -128,25 +168,41 @@ package layout
 			// init layout style
 			this._layoutStyle = layoutStyle;
 			
+			// init URLs
+			this._coseUrl = coseUrl;
+			this._ciseUrl = ciseUrl;
+			
 			// init options
 			if (options == null)
 			{
-				this._generalOptions = {quality: DEFAULT_QUALITY,
-					animateOnLayout: false,
-					incremental: false};
+				this._generalOptions = {
+					quality: DEFAULT_QUALITY,
+					animateOnLayout: DEFAULT_ANIMATION_ON_LAYOUT,
+					incremental: DEFAULT_INCREMENTAL,
+					createBends: DEFAULT_CREATE_BENDS,
+					uniformLeafNodeSize: DEFAULT_UNIFORM_LEAF_NODE_SIZE
+				};
 				
-				this._coseOptions = {url: DEFAULT_COSE_URL,
+				this._coseOptions = {
 					springStrength: DEFAULT_SPRING_STRENGTH,
 					repulsionStrength: DEFAULT_REPULSION_STRENGTH,
 					gravityStrength: DEFAULT_GRAVITY_STRENGTH,
+					gravityRange: DEFAULT_GRAVITY_RANGE,
 					compoundGravityStrength: DEFAULT_COMPOUND_GRAVITY_STRENGTH,
-					idealEdgeLength: DEFAULT_EDGE_LENGTH};
+					compoundGravityRange: DEFAULT_COMPOUND_GRAVITY_RANGE,
+					idealCoSEEdgeLength: DEFAULT_EDGE_LENGTH,
+					frGridVariant: DEFAULT_FR_GRID_VARIANT,
+					smartEdgeLengthCalc: DEFAULT_SMART_EDGE_LENGTH_CALC,
+					multiLevelScaling: DEFAULT_MULTI_LEVEL_SCALING
+				};
 				
-				this._ciseOptions = {url: DEFAULT_CISE_URL,
+				this._ciseOptions = {
 					nodeSeparation: DEFAULT_NODE_SEPARATION,
-					desiredEdgeLength: DEFAULT_CISE_EDGE_LENGTH,
-					interClusterEdgeLengthFactor : DEFAULT_INTER_CLUSTER_EDGE_LENGTH_FACTOR};
-					
+					idealCiSEEdgeLength: DEFAULT_CISE_EDGE_LENGTH,
+					interClusterEdgeLengthFactor: DEFAULT_INTER_CLUSTER_EDGE_LENGTH_FACTOR,
+					allowNodesInsideCircle: DEFAULT_ALLOW_NODES_INSIDE_CIRCLE,
+					maxRatioOfNodesInsideCircle: DEFAULT_MAX_RATIO_OF_NODES_INSIDE_CIRCLE
+				};	
 			}
 			else
 			{
@@ -191,12 +247,14 @@ package layout
 			
 			// append options
 			var go:Object = this._generalOptions;
+			
 			this._loader.addVariable("layoutQuality", go.quality);
 			this._loader.addVariable("animateOnLayout", go.animateOnLayout);
 			this._loader.addVariable("incremental", go.incremental);
-			//				loader.addVariable("uniformNodeSize", go.uniformNodeSize)
+			this._loader.addVariable("createBendsAsNeeded", go.createBends);
+			this._loader.addVariable("uniformLeafNodeSizes", go.uniformLeafNodeSize);
 			
-			//CursorManager.setBusyCursor();
+			CursorManager.setBusyCursor();
 			//coseLayoutButton.enabled = false;
 			
 			if (this._layoutStyle == "CoSE")
@@ -206,24 +264,30 @@ package layout
 				this._loader.addVariable("springStrength", co.springStrength);
 				this._loader.addVariable("repulsionStrength", co.repulsionStrength);
 				this._loader.addVariable("gravityStrength", co.gravityStrength);
+				this._loader.addVariable("gravityRange", co.gravityRange);
 				this._loader.addVariable("compoundGravityStrength", co.compoundGravityStrength);
-				this._loader.addVariable("idealEdgeLength", co.idealEdgeLength);
+				this._loader.addVariable("compoundGravityRange", co.compoundGravityRange);
+				this._loader.addVariable("idealEdgeLength", co.idealCoSEEdgeLength);
+				this._loader.addVariable("smartRepulsionRangeCalc", co.frGridVariant);
+				this._loader.addVariable("smartEdgeLengthCalc", co.smartEdgeLengthCalc);
+				this._loader.addVariable("multiLevelScaling", co.multiLevelScaling);
 				this._loader.addVariable("layoutStyle", "cose");
 				
 				this._waitingToComplete = true;
-				this._loader.load(co.url);
+				this._loader.load(this._coseUrl);
 			}
 			else if (this._layoutStyle == "CiSE")
 			{
 				var ci:Object = this._ciseOptions;
 				
 				this._loader.addVariable("nodeSeparation", ci.nodeSeparation);
-				this._loader.addVariable("desiredEdgeLength", ci.desiredEdgeLength);
+				this._loader.addVariable("desiredEdgeLength", ci.idealCiSEEdgeLength);
 				this._loader.addVariable("interClusterEdgeLengthFactor", ci.interClusterEdgeLengthFactor);
-				this._loader.addVariable("layoutStyle", "cise");
+				this._loader.addVariable("allowNodesInsideCircle", ci.allowNodesInsideCircle);
+				this._loader.addVariable("maxRatioOfNodesInsideCircle", ci.maxRatioOfNodesInsideCircle/100);
 				
 				this._waitingToComplete = true;
-				this._loader.load(ci.url);
+				this._loader.load(this._ciseUrl);
 			}
 		}
 		
@@ -239,9 +303,11 @@ package layout
 			var nodes:String = "";
 			var edges:String = "";
 			
+			// TODO animateOnLayout?
+			
 			for each(var xmlNode:XML in response..node)
 			{
-				// TODO debug
+				// TODO debug (new node info)
 				nodes += " " + xmlNode.@id + 
 					"(" + xmlNode.bounds.@x + "," + xmlNode.bounds.@y + ")";
 				
@@ -253,23 +319,25 @@ package layout
 			// reset flag
 			this._waitingToComplete = false;
 			
-			
+			// TODO debug (edge info)
 			for each(var xmlEdge:XML in response..edge)
 			{
-				// TODO debug
+				
 				edges += " " + xmlEdge.@id;
 				
 				//var edge:Edge = this.graphManager.graph.getEdge(xmlEdge.@id);
 			}
 			
 			trace("[RemoteLayout.onLayoutComplete] nodes: " + nodes);
-			trace("[RemoteLayout.onLayoutComplete] nodes: " + edges);
+			trace("[RemoteLayout.onLayoutComplete] edges: " + edges);
 			
 			/*
 			coseLayoutButton.enabled = true;
 			ciseLayoutButton.enabled = true;
-			CursorManager.removeBusyCursor();
 			*/
+			
+			CursorManager.removeBusyCursor();
+			
 			
 			// since this is a remote layout, it will complete after graph
 			// manager updates the view, so view should also be updated here

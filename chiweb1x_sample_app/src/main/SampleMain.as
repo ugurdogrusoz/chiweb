@@ -20,7 +20,6 @@ package main
 	import ivis.controls.StateManager;
 	import ivis.manager.ApplicationManager;
 	import ivis.model.Style;
-	import ivis.operators.LayoutOperator;
 	import ivis.util.Groups;
 	import ivis.view.ui.ArrowUIManager;
 	import ivis.view.ui.CompoundUIManager;
@@ -50,20 +49,32 @@ package main
 	 */
 	public class SampleMain
 	{
+		//---------------------------- VARIABLES -------------------------------
+		
 		public var appManager:ApplicationManager;
 		public var rootContainer:Container;
-		
-		protected var _remoteLayout:LayoutOperator;
+		public var remoteLayout:RemoteLayout;
 		
 		protected var _nodeState:String;
 		protected var _edgeState:String;
 		protected var _selectedLayout:Object;
 		
-		public function SampleMain(rootContainer:Container)
+		private static var _instance:SampleMain = new SampleMain();
+		
+		/**
+		 * Singleton instance. 
+		 */
+		public static function get instance():SampleMain
+		{
+			return _instance;
+		} 
+		
+		//-------------------------- CONSTRUCTOR -------------------------------
+		
+		public function SampleMain()
 		{
 			this.appManager = new ApplicationManager();
-			this.rootContainer = rootContainer;
-			this._remoteLayout = new RemoteLayout();
+			this.remoteLayout = new RemoteLayout();
 			
 			this._nodeState = Constants.ADD_CIRCULAR_NODE;
 			this._edgeState = Constants.ADD_DEFAULT_EDGE;
@@ -77,23 +88,22 @@ package main
 			this.initStates();
 		}
 		
+		//------------------------ PUBLIC FUNCTIONS ----------------------------
+		
+		/**
+		 * Handles main menu events.
+		 */
 		public function handleMenuCommand(event:MenuEvent):void
-		{
-			// TODO handle commands..
-			
+		{	
 			var label:String = event.label.toString().toLowerCase();
 			
 			if(label == "remote layout properties")
 			{
 				var props:IFlexDisplayObject = 
 					this.showWindow(RemoteLayoutOptions);
-				
-				// TODO not safe! window may be initialized before this assignment!
-				(props as RemoteLayoutOptions).initLayout(this._remoteLayout
-					as RemoteLayout);
 			}
 			
-			
+			// TODO handle other commands..
 		}
 		
 		/**
@@ -331,11 +341,11 @@ package main
 		/**
 		 * Performs a remote layout.
 		 */
-		public function performRemoteLayout(type:String):void
+		public function performRemoteLayout(style:String):void
 		{
 			// update layout before performing it
-			this._remoteLayout.layoutType = type;
-			this.appManager.graphManager.setLayout(_remoteLayout);
+			this.remoteLayout.layoutStyle = style;
+			this.appManager.graphManager.setLayout(this.remoteLayout);
 			
 			// perform layout
 			this.appManager.graphManager.performLayout();
@@ -352,6 +362,8 @@ package main
 			// perform layout
 			//this.appManager.graphManager.performLayout();
 		}
+		
+		//------------------------ PROTECTED FUNCTIONS -------------------------
 		
 		/**
 		 * Initializes custom styles for nodes, edges, compound nodes, bend
@@ -524,6 +536,11 @@ package main
 			// TODO open an inspector window for nodes
 		}
 		
+		/**
+		 * Shows a modal window on top of the root container.
+		 * 
+		 * @param window	Class of the window to be instantiated
+		 */
 		protected function showWindow(window:Class):IFlexDisplayObject
 		{
 			var props: IFlexDisplayObject = 
