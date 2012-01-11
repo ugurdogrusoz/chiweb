@@ -141,10 +141,17 @@ package controls
 			if (this.object != null &&
 				this.object is DisplayObjectContainer)
 			{
-				// remove listener (for the animation of preview edge)
+				// remove listeners (for the animation of preview edge)
 				
 				this.object.removeEventListener(MouseEvent.MOUSE_MOVE,
 					onMouseMove);
+				
+				if (this.stateManager != null)
+				{
+					this.stateManager.removeEventListener(
+						ControlEvent.RESET_STATES,
+						onResetStates);
+				}
 				
 				// disable preview edge
 				
@@ -187,10 +194,18 @@ package controls
 			if (this.object != null &&
 				this.object is DisplayObjectContainer)
 			{
-				// add listener for the animation of preview edge
-				
+				// add mouse listener for the animation of preview edge
 				this.object.addEventListener(MouseEvent.MOUSE_MOVE,
 					onMouseMove);
+				
+				// add listener for state manager to reset edge animation when
+				// states reset.
+				if (this.stateManager != null)
+				{
+					this.stateManager.addEventListener(
+						ControlEvent.RESET_STATES,
+						onResetStates);
+				}
 				
 				// enable preview edge
 				
@@ -225,6 +240,35 @@ package controls
 			
 			g.moveTo(startX, startY);
 			g.lineTo(endX, endY);
+		}
+		
+		/**
+		 * Listener for RESET_STATES event. This function is to disable preview
+		 * edge if the edge creation process is cancelled after clicking on
+		 * the first (source) node.
+		 */
+		protected function onResetStates(evt:ControlEvent):void
+		{
+			if (this.object != null)
+			{
+				// disable preview edge
+				this._previewEdge.graphics.clear();
+			
+				(this.object as DisplayObjectContainer).removeChild(
+					this._previewEdge);
+				
+				// remove MOUSE_MOVE listener
+				this.object.removeEventListener(MouseEvent.MOUSE_MOVE,
+					onMouseMove);
+			}
+			
+			if (this.stateManager != null)
+			{
+				// remove this listener
+				this.stateManager.removeEventListener(
+					ControlEvent.RESET_STATES,
+					onResetStates);
+			}
 		}
 	}
 }

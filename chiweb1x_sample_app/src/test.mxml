@@ -152,7 +152,7 @@
 	
 		<mx:Button id="addBendPoint" 
 			   label="BP"
-			   width="40"
+			   width="44"
 			   toolTip="Add Bendpoint"
 			   click="app.controlCenter.toggleState(StateManager.ADD_BENDPOINT)"/>		
 	
@@ -162,9 +162,15 @@
 			   toolTip="Add Edge"
 			   click="app.controlCenter.toggleState(StateManager.ADD_EDGE)"/>
 		
+		<mx:Button id="enableCompound" 
+				   label="EC"
+				   width="44"
+				   toolTip="Enable Compound"
+				   click="app.controlCenter.toggleState(StateManager.AUTO_COMPOUND)"/>
+		
 		<mx:Button id="enablePan" 
 				   label="EP"
-				   width="40"
+				   width="44"
 				   toolTip="Enable Pan"
 				   click="app.controlCenter.toggleState(StateManager.PAN)"/>
 		
@@ -182,7 +188,7 @@
 		
 		<mx:Button id="resetFilters" 
 				   label="RF"
-				   width="40"
+				   width="44"
 				   toolTip="Reset all filters"
 				   click="app.graphManager.resetFilters()"/>
 		
@@ -206,13 +212,13 @@
 		
 		<mx:Button id="removeTestGroup"
 				   label="RT"
-				   width="40"
+				   width="44"
 				   toolTip="Remove test data group"
 				   click="testMain.removeTestGroup()"/>
 		
 		<mx:Button id="clearTestGroup"
 				   label="CT"
-				   width="40"
+				   width="44"
 				   toolTip="Clear test data group"
 				   click="testMain.clearTestGroup()"/>
 		
@@ -224,31 +230,31 @@
 		
 		<mx:Button id="removeTestStyle" 
 				   label="RS"
-				   width="40"
+				   width="44"
 				   toolTip="Remove test style"
 				   click="testMain.removeTestStyle()"/>
 		
 		<mx:Button id="addToTestGroup" 
 				   label="AG"
-				   width="40"
+				   width="44"
 				   toolTip="Add selected nodes to test group"
 				   click="testMain.addToTestGroup()"/>
 		
 		<mx:Button id="removeFromTestGroup" 
 				   label="RG"
-				   width="40"
+				   width="44"
 				   toolTip="Remove selected nodes from test group"
 				   click="testMain.removeFromTestGroup()"/>
 		
 		<mx:Button id="addStyleProperty" 
 				   label="AP"
-				   width="40"
+				   width="44"
 				   toolTip="Add a property to Test style"
 				   click="testMain.addTestProperty()"/>
 		
 		<mx:Button id="removeStyleProperty" 
 				   label="RP"
-				   width="40"
+				   width="44"
 				   toolTip="Remove a property from Test style"
 				   click="testMain.removeTestProperty()"/>
 	</mx:HBox>

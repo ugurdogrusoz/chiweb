@@ -5,6 +5,7 @@ package main
 	
 	import flash.events.MouseEvent;
 	
+	import ivis.controls.StateManager;
 	import ivis.manager.ApplicationManager;
 	import ivis.model.Style;
 	import ivis.util.Groups;
@@ -40,6 +41,9 @@ package main
 			
 			this.appManager.graphManager.graphStyleManager.addGroupStyle(
 				Groups.COMPOUND_NODES, new Style(style));
+			
+			this.appManager.controlCenter.setState(StateManager.AUTO_COMPOUND,
+				false);
 		}
 		
 		public function printGraph():void

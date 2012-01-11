@@ -1,5 +1,6 @@
 package main
 {
+	import controls.ButtonControl;
 	import controls.CreationControl;
 	import controls.CursorControl;
 	
@@ -52,7 +53,7 @@ package main
 		//---------------------------- VARIABLES -------------------------------
 		
 		public var appManager:ApplicationManager;
-		public var rootContainer:Container;
+		protected var _rootContainer:Container;
 		public var remoteLayout:RemoteLayout;
 		
 		protected var _nodeState:String;
@@ -69,6 +70,25 @@ package main
 			return _instance;
 		} 
 		
+		
+		/**
+		 * Root container of the application.
+		 */
+		public function get rootContainer():Container
+		{
+			return _rootContainer;
+		}
+		
+		public function set rootContainer(value:Container):void
+		{
+			// set container
+			_rootContainer = value;
+			
+			// also init button control for the root container
+			var buttonControl:EventControl = new ButtonControl(_rootContainer);
+			this.appManager.controlCenter.addControl(buttonControl);
+		}
+		
 		//-------------------------- CONSTRUCTOR -------------------------------
 		
 		public function SampleMain()
@@ -78,7 +98,7 @@ package main
 			
 			this._nodeState = Constants.ADD_CIRCULAR_NODE;
 			this._edgeState = Constants.ADD_DEFAULT_EDGE;
-			this._selectedLayout = {label: "CoSE (remote)",
+			this._selectedLayout = {label: "default",
 				type: "remote",
 				style: "CoSE"};
 			
@@ -111,8 +131,7 @@ package main
 		 */
 		public function setNodeType(event:Event):void
 		{
-			if (this.appManager.controlCenter.stateManager.checkState(
-				StateManager.ADD_NODE))
+			if (this.appManager.controlCenter.checkState(StateManager.ADD_NODE))
 			{
 				// deactive state for previous selection
 				this.addNode();
@@ -135,13 +154,12 @@ package main
 		 */
 		public function setEdgeType(event:Event):void
 		{
-			if (this.appManager.controlCenter.stateManager.checkState(
-				StateManager.ADD_EDGE))
+			if (this.appManager.controlCenter.checkState(StateManager.ADD_EDGE))
 			{
 				// deactive state for previous selection
 				this.addEdge();
 				
-				// update node state
+				// update edge state
 				this._edgeState = event.currentTarget.selectedItem.state;
 				
 				// active state for current selection
@@ -149,7 +167,7 @@ package main
 			}
 			else
 			{
-				// only update node state
+				// only update edge state
 				this._edgeState = event.currentTarget.selectedItem.state;
 			}
 		}
@@ -165,9 +183,16 @@ package main
 		/**
 		 * Toggles selection of graph elements.
 		 */
-		public function select():void
+		public function select(event:Event):void
 		{
-			this.appManager.controlCenter.toggleState(StateManager.SELECT);
+			var state:Boolean = this.appManager.controlCenter.toggleState(
+				StateManager.SELECT);
+			
+			if (event != null)
+			{
+				// change selected prop of the target button
+				event.target.selected = state;
+			}
 		}
 		
 		/**
@@ -179,13 +204,13 @@ package main
 			var state:Boolean = this.appManager.controlCenter.toggleState(
 				this._nodeState);
 			
-			this.appManager.controlCenter.stateManager.setState(
+			this.appManager.controlCenter.setState(
 				StateManager.ADD_NODE, state);
 			
 			if (event != null)
 			{
-				// TODO change selected prop of button
-				//event.target.selected = state;
+				// change selected prop of the target button
+				event.target.selected = state;
 			}
 		}
 		
@@ -198,14 +223,13 @@ package main
 			var state:Boolean = this.appManager.controlCenter.toggleState(
 				this._edgeState);
 			
-			this.appManager.controlCenter.stateManager.setState(
+			this.appManager.controlCenter.setState(
 				StateManager.ADD_EDGE, state);
 			
 			if (event != null)
 			{
-				// TODO change selected prop of button!
-				//event.target.selected = state;
-				
+				// change selected prop of the target button
+				event.target.selected = state;
 			}
 		}
 		
@@ -233,7 +257,7 @@ package main
 			var state:Boolean = this.appManager.controlCenter.toggleState(
 				Constants.ADD_CIRCULAR_NODE);
 			
-			this.appManager.controlCenter.stateManager.setState(
+			this.appManager.controlCenter.setState(
 				StateManager.ADD_NODE, state);
 		}
 		
@@ -246,7 +270,7 @@ package main
 			var state:Boolean = this.appManager.controlCenter.toggleState(
 				Constants.ADD_GRADIENT);
 			
-			this.appManager.controlCenter.stateManager.setState(
+			this.appManager.controlCenter.setState(
 				StateManager.ADD_NODE, state);
 		}
 		
@@ -259,7 +283,7 @@ package main
 			var state:Boolean = this.appManager.controlCenter.toggleState(
 				Constants.ADD_IMAGE_NODE);
 			
-			this.appManager.controlCenter.stateManager.setState(
+			this.appManager.controlCenter.setState(
 				StateManager.ADD_NODE, state);
 		}
 		
@@ -267,10 +291,16 @@ package main
 		 * Activates ADD_BENDPOINT state. (Bend is created upon clicking on
 		 * an edge).
 		 */
-		public function addBendPoint():void
+		public function addBendPoint(event:Event = null):void
 		{
-			this.appManager.controlCenter.toggleState(
+			var state:Boolean = this.appManager.controlCenter.toggleState(
 				StateManager.ADD_BENDPOINT);
+			
+			if (event != null)
+			{
+				// change selected prop of the target button
+				event.target.selected = state;
+			}
 		}
 		
 		/**
@@ -282,7 +312,7 @@ package main
 			var state:Boolean = this.appManager.controlCenter.toggleState(
 				Constants.ADD_DEFAULT_EDGE);
 			
-			this.appManager.controlCenter.stateManager.setState(
+			this.appManager.controlCenter.setState(
 				StateManager.ADD_EDGE, state);
 		}
 		
@@ -295,22 +325,31 @@ package main
 			var state:Boolean = this.appManager.controlCenter.toggleState(
 				Constants.ADD_DASHED_EDGE);
 			
-			this.appManager.controlCenter.stateManager.setState(
+			this.appManager.controlCenter.setState(
 				StateManager.ADD_EDGE, state);
 		}
 		
 		/**
 		 * Enables panning of the canvas.
 		 */
-		public function enablePan():void
+		public function enablePan(event:Event = null):void
 		{
-			if(this.appManager.controlCenter.toggleState(StateManager.PAN))
+			var state:Boolean =
+				this.appManager.controlCenter.toggleState(StateManager.PAN);
+			
+			if(state)
 			{
 				CursorUtils.showOpenHand();
 			}
 			else
 			{
 				CursorUtils.hideOpenHand();
+			}
+			
+			if (event != null)
+			{
+				// change selected prop of the target button
+				event.target.selected = state;
 			}
 		}
 		
@@ -495,7 +534,6 @@ package main
 			this.appManager.controlCenter.addControl(creationControl);
 			this.appManager.controlCenter.addControl(cursorControl);
 			
-			
 			this.appManager.controlCenter.addCustomListener("showInspector",
 				MouseEvent.DOUBLE_CLICK,
 				showInspector,
@@ -507,19 +545,19 @@ package main
 		 */
 		protected function initStates():void
 		{
-			this.appManager.controlCenter.stateManager.setState(
+			this.appManager.controlCenter.setState(
 				Constants.ADD_GRADIENT, false);
 			
-			this.appManager.controlCenter.stateManager.setState(
+			this.appManager.controlCenter.setState(
 				Constants.ADD_CIRCULAR_NODE, false);
 			
-			this.appManager.controlCenter.stateManager.setState(
+			this.appManager.controlCenter.setState(
 				Constants.ADD_DEFAULT_EDGE, false);
 			
-			this.appManager.controlCenter.stateManager.setState(
+			this.appManager.controlCenter.setState(
 				Constants.ADD_DASHED_EDGE, false);
 			
-			this.appManager.controlCenter.stateManager.setState(
+			this.appManager.controlCenter.setState(
 				Constants.ADD_IMAGE_NODE, false);
 		}
 		

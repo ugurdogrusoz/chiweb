@@ -31,7 +31,8 @@
 				   icon="@Embed(source='assets/buttons/select.png')"
 				   width="32"
 				   toolTip="Select"
-				   click="app.select()"/>
+				   selected="true"
+				   click="app.select(event)"/>
 		
 		<mx:Spacer width="5" />
 		
@@ -78,7 +79,7 @@
 			   label="BP"
 			   width="40"
 			   toolTip="Add Bendpoint"
-			   click="app.addBendPoint()"/>
+			   click="app.addBendPoint(event)"/>
 		
 		<mx:Button id="deleteSelected" 
 				   icon="@Embed(source='assets/buttons/delete.png')"
@@ -88,11 +89,33 @@
 		
 		<mx:Spacer width="10" />
 		
+		<mx:Button icon="@Embed(source='assets/buttons/fit-to-100.png')"
+				   width="32"
+				   toolTip="Zoom to 100%"
+				   click=""/>
+		
+		<mx:Button icon="@Embed(source='assets/buttons/zoom-in.png')"
+				   width="32"
+				   toolTip="Zoom In"
+				   click=""/>
+		
+		<mx:Button icon="@Embed(source='assets/buttons/zoom-out.png')"
+				   width="32"
+				   toolTip="Zoom Out"
+				   click=""/>
+		
+		<mx:Button icon="@Embed(source='assets/buttons/fit-in-canvas.png')"
+				   width="32"
+				   toolTip="Fit in Canvas"
+				   click=""/>
+		
+		<mx:Spacer width="10" />
+		
 		<mx:Button id="enablePan" 
 				   label="EP"
 				   width="40"
 				   toolTip="Enable Pan"
-				   click="app.enablePan()"/>
+				   click="app.enablePan(event)"/>
 		
 		<mx:Button id="hideSelected" 
 				   label="H"
@@ -126,6 +149,18 @@
 				   toolTip="Perform Selected Layout"
 				   click="app.performLayout(event)"/>
 		
+		<mx:Spacer width="10" />
+		
+		<mx:Button icon="@Embed(source='assets/buttons/help.png')"
+				   width="32"
+				   toolTip="How to Use"
+				   click=""/>
+		
+		<mx:Button icon="@Embed(source='assets/buttons/about.png')"
+				   width="32"
+				   toolTip="About"
+				   click=""/>
+		
 	</mx:HBox>
 	
 <mx:Script>
@@ -134,15 +169,18 @@
 		import flare.vis.operator.layout.ForceDirectedLayout;
 		
 		import ivis.controls.StateManager;
+		import ivis.event.ControlEvent;
 		
 		import main.SampleMain;
 		
 		import util.Constants;
+		import util.CursorUtils;
 		
 		public var app:SampleMain;
 		
 		private function main():void
 		{
+			// init main controller
 			app = SampleMain.instance;
 			app.rootContainer = this;
 			app.appManager.setGraphContainer(graphBox);
