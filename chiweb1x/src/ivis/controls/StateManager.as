@@ -1,24 +1,29 @@
 package ivis.controls
 {
+	import flash.events.EventDispatcher;
+	
+	import ivis.event.ControlEvent;
+
 	/**
 	 * This class is designed to manage action states and to be used by 
 	 * the control classes to check certain states of the application.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
-	public class StateManager
+	public class StateManager extends EventDispatcher
 	{
 		/** String constants for the default states. */
+		public static const SELECT:String = "select";
 		public static const ADD_NODE:String = "addNode";
 		public static const ADD_BENDPOINT:String = "addBendpoint";
 		public static const ADD_EDGE:String = "addEdge";
-		public static const SELECT:String = "select";
-		public static const SELECT_KEY_DOWN:String = "selectKeyDown";
 		public static const PAN:String = "pan";
 		public static const SELECTING:String = "selecting";
 		public static const PANNING:String = "panning";
 		public static const DRAGGING:String = "dragging";
 		public static const ADDING_EDGE:String = "addingEdge";
+		public static const AUTO_COMPOUND:String = "autoCompound";
+		public static const SELECT_KEY_DOWN:String = "selectKeyDown";
 		
 		/**
 		 * Map of flags to indicate the states of certain actions.
@@ -69,6 +74,13 @@ package ivis.controls
 		public function setState(name:String, value:Boolean):void
 		{
 			this._stateMap[name] = value;
+			
+			if (this.hasEventListener(ControlEvent.CHANGED_STATE))
+			{
+				this.dispatchEvent(new ControlEvent(
+					ControlEvent.CHANGED_STATE,
+					{state: name, value: value}));
+			}
 		}
 		
 		/**
@@ -107,15 +119,14 @@ package ivis.controls
 					this.resetStates();
 				}
 				
-				
 				if (toggleSelect)
 				{
 					// turning any state ON should turn select state OFF,
 					// turning a state OFF should turn select state ON...
-					this._stateMap[StateManager.SELECT] = state;
+					this.setState(StateManager.SELECT, state);
 				}
 				
-				this._stateMap[name] = !state;
+				this.setState(name, !state);
 				state = !state;
 			}
 			
@@ -130,13 +141,31 @@ package ivis.controls
 		 */
 		protected function resetStates():void
 		{
+			// keep AUTO_COMPOUND & SELECT_KEY_DOWN as they are
+			var autoCompound:Boolean =
+				this._stateMap[StateManager.AUTO_COMPOUND];
+			
+			var selectKey:Boolean =
+				this._stateMap[StateManager.SELECT_KEY_DOWN];
+			
+			// reset all states (including custom states)
 			for (var name:String in this._stateMap)
 			{
 				this._stateMap[name] = false;
 			}
 			
-			// select state is true by default
+			// SELECT state is true by default
 			this._stateMap[StateManager.SELECT] = true;
+			
+			// restore AUTO_COMPOUND & SELECT_KEY_DOWN states
+			this._stateMap[StateManager.AUTO_COMPOUND] = autoCompound;
+			this._stateMap[StateManager.SELECT_KEY_DOWN] = selectKey;
+			
+			if (this.hasEventListener(ControlEvent.RESET_STATES))
+			{
+				this.dispatchEvent(new ControlEvent(
+					ControlEvent.RESET_STATES));
+			}
 		}
 		
 		/**
@@ -149,9 +178,16 @@ package ivis.controls
 			this._stateMap[StateManager.ADD_EDGE] = false;
 			this._stateMap[StateManager.SELECT_KEY_DOWN] = false;
 			this._stateMap[StateManager.PAN] = false;
+			this._stateMap[StateManager.SELECTING] = false;
+			this._stateMap[StateManager.PANNING] = false;
+			this._stateMap[StateManager.DRAGGING] = false;
+			this._stateMap[StateManager.ADDING_EDGE] = false;
 		
-			// select state is true by default
+			// SELECT state is true by default
 			this._stateMap[StateManager.SELECT] = true;
+			
+			// AUTO_COMPOUND state is true by default
+			this._stateMap[StateManager.AUTO_COMPOUND] = true;
 		}
 	}
 }

@@ -9,6 +9,7 @@ package ivis.controls
 	import flash.events.MouseEvent;
 	
 	import ivis.event.ControlEvent;
+	import ivis.event.DataChangeEvent;
 	import ivis.manager.GraphManager;
 	import ivis.model.Edge;
 	import ivis.model.Node;
@@ -108,7 +109,7 @@ package ivis.controls
 				return;
 			}
 			
-			// "select" flag is on
+			// SELECT flag is on
 			if (this.stateManager.checkState(StateManager.SELECT))
 			{
 				if (!this.stateManager.checkState(StateManager.SELECT_KEY_DOWN))
@@ -124,19 +125,20 @@ package ivis.controls
 				
 			}
 			
-			// "add node" flag is on
+			// ADD_NODE flag is on
 			if (this.stateManager.checkState(StateManager.ADD_NODE))
 			{
-				// if the event target is another node, then we should add
-				// the new node as a child node to the target
-				if (target is Node)
+				// if AUTO_COMPOUND flag is set, then clicking on another node
+				// will add the new node as a child node to the target node
+				if (this.stateManager.checkState(StateManager.AUTO_COMPOUND)
+					&& target is Node)
 				{
 					ds = this.graphManager.addNode(this.object.mouseX,
 						this.object.mouseY,
 						target);
 				}
-				// if the event target is not a node, then simply add node to
-				// the root
+				// if AUTO_COMPOUND flag is false, or the event target is not
+				// a node, then simply add node to the root
 				else
 				{
 					ds = this.graphManager.addNode(this.object.mouseX,
@@ -146,7 +148,7 @@ package ivis.controls
 				eventType = ControlEvent.ADDED_NODE;
 			}
 			
-			// "add bend point" flag is on
+			// ADD_BENDPOINT flag is on
 			if (this.stateManager.checkState(StateManager.ADD_BENDPOINT))
 			{
 				// if the event target is an edge, then add a bend point to
@@ -161,7 +163,7 @@ package ivis.controls
 				}
 			}
 			
-			// "add edge" flag is on
+			// ADD_EDGE flag is on
 			if (this.stateManager.checkState(StateManager.ADD_EDGE))
 			{
 				// if the event target is a node, then add an edge for the
@@ -176,6 +178,11 @@ package ivis.controls
 						
 						this.stateManager.setState(StateManager.ADDING_EDGE,
 							true);
+						
+						// add listener to handle cancel between two clicks
+						this.stateManager.addEventListener(
+							ControlEvent.RESET_STATES,
+							onResetStates);
 					}
 					else
 					{
@@ -183,6 +190,11 @@ package ivis.controls
 						
 						this.stateManager.setState(StateManager.ADDING_EDGE,
 							false);
+						
+						// remove state listener
+						this.stateManager.removeEventListener(
+							ControlEvent.RESET_STATES,
+							onResetStates);
 					}
 					
 				}
@@ -190,6 +202,7 @@ package ivis.controls
 			
 			if (target is Node)
 			{
+				// bring target node to the front
 				Nodes.bringNodeToFront(target as Node);
 			}
 			else if (target is Edge)
@@ -209,7 +222,7 @@ package ivis.controls
 				}
 			}
 			
-			// TODO debug
+			// TODO debug click information
 			if (target is Node)
 			{
 				trace("[ClickControl.onClick] node: " + target);
@@ -238,8 +251,6 @@ package ivis.controls
 			if (eventType != null
 				&& this.object.hasEventListener(eventType))
 			{
-				trace ("[ClickControl.onClick] event: " + eventType);
-				
 				if (ds == null)
 				{
 					this.object.dispatchEvent(new ControlEvent(eventType));
@@ -250,6 +261,18 @@ package ivis.controls
 						{sprite: ds}));
 				}
 			}
+		}
+		
+		/**
+		 * Function to listen event of type RESET_STATES. This function is to
+		 * reset sourceNode of edge adding process, if the process is cancelled
+		 * after clicking the source node. 
+		 */
+		protected function onResetStates(event:DataChangeEvent):void
+		{
+			// this is required if edge adding process is cancelled
+			// after clicking the first (source) node.
+			this.graphManager.resetSourceNode();
 		}
 	}
 }

@@ -7,6 +7,10 @@ package ivis.event
 	 */
 	public class ControlEvent extends ChiWebEvent
 	{
+		/** StateManager events. */
+		public static const RESET_STATES:String = "resetStates";
+		public static const CHANGED_STATE:String = "changedState";
+		
 		/** MultiDragControl events. */
 		public static const DRAG_START:String = "dragStart";
 		public static const DRAG_END:String = "dragEnd";

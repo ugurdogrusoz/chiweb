@@ -290,6 +290,15 @@ package ivis.manager
 		}
 		
 		/**
+		 * Cancels the edge adding process by reseting the source node of the
+		 * edge.
+		 */
+		public function resetSourceNode():void
+		{
+			this._sourceNode = null;
+		}
+		
+		/**
 		 * Creates a bendpoint as a Node instance and adds it to the given
 		 * target edge. If eventTarget is not an edge, no bendpoint is added.
 		 * 

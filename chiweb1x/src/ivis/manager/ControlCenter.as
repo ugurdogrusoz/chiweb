@@ -269,9 +269,32 @@ package ivis.manager
 			reset:Boolean = true,
 			toggleSelect:Boolean = true):Boolean
 		{
-			return this.stateManager.toggleState(name,
+			return this._stateManager.toggleState(name,
 				reset,
 				toggleSelect);
+		}
+		
+		/**
+		 * Sets the state for the given name and value pair.
+		 * 
+		 * @param name	name of the state
+		 * @param value	value of the state
+		 */
+		public function setState(name:String, value:Boolean):void
+		{
+			this._stateManager.setState(name, value);
+		}
+		
+		/**
+		 * Checks the state for the given name. If no state value is found for
+		 * the given name, returns false. If value is found, return the value.
+		 * 
+		 * @param name	name of the state
+		 * @return		value of the state (true or false) 
+		 */
+		public function checkState(name:String):Boolean
+		{
+			return this._stateManager.checkState(name);
 		}
 		
 		//------------------------ PROTECTED FUNCTIONS -------------------------
