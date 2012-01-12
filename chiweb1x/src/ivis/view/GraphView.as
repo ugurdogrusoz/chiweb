@@ -448,10 +448,65 @@ package ivis.view
 		 * @param y		the y-coordinate around which to zoom
 		 */
 		public function zoomBy(scale:Number,
-			x:Number = 0,
-			y:Number = 0):void
+			x:Number = NaN,
+			y:Number = NaN):void
 		{
 			Displays.zoomBy(this.vis, scale, x, y);
+		}
+		
+		/**
+		 * Centers the view to the center of the rectangular bounds of 
+		 * all visible sprites.
+		 */
+		public function centerView():void
+		{
+			var bounds:Rectangle = this.vis.contentBounds();
+			
+			trace("[GraphView.centerView] content bounds: (" + bounds.x + "," +
+				bounds.y + ") " + bounds.width + ".." + bounds.height);
+			
+			var centerX:Number = bounds.x + bounds.width / 2;
+			var centerY:Number = bounds.y + bounds.height / 2;
+			var amountX:Number = -this.vis.x - centerX * this.vis.scaleX; 
+			var amountY:Number = -this.vis.y - centerY * this.vis.scaleY;
+				
+			this.panBy(amountX, amountY);
+		}
+		
+		
+		/**
+		 * Zooms the graph view to fit all visible sprites into 
+		 * the visible area.
+		 */
+		public function zoomToFit():void
+		{
+			var bounds:Rectangle = this.vis.contentBounds();
+
+			// TODO if graph is not centered, bounds should be adjusted
+			
+			var scaleX:Number = this.parent.width / bounds.width;
+			var scaleY:Number = this.parent.height / bounds.height;
+			
+			this.vis.x this.vis.y
+			
+			// TODO this works only if the view is centered!
+			this.zoomBy(Math.min(scaleX, scaleY) / this.vis.scaleX);
+		}
+		
+		/**
+		 * Zooms the view to its actual scale.
+		 */
+		public function zoomToActual():void
+		{
+			//this.vis.scaleX = 1.0;
+			//this.vis.scaleY = 1.0;
+			
+			// TODO is it safe? isn't there a chance for precision loss?
+			// both this.vis.scaleX and this.vis.scaleY should be 1.0 when the
+			// zoom level is actual.
+			this.zoomBy(1.0 / this.vis.scaleX);
+			
+			trace ("[GraphView.zoomToActual] scale: " + this.vis.scaleX);
 		}
 		
 		//---------------------- PROTECTED FUNCTIONS ---------------------------

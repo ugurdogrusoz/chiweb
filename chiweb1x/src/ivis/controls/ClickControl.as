@@ -9,7 +9,6 @@ package ivis.controls
 	import flash.events.MouseEvent;
 	
 	import ivis.event.ControlEvent;
-	import ivis.event.DataChangeEvent;
 	import ivis.manager.GraphManager;
 	import ivis.model.Edge;
 	import ivis.model.Node;
@@ -268,7 +267,7 @@ package ivis.controls
 		 * reset sourceNode of edge adding process, if the process is cancelled
 		 * after clicking the source node. 
 		 */
-		protected function onResetStates(event:DataChangeEvent):void
+		protected function onResetStates(event:ControlEvent):void
 		{
 			// this is required if edge adding process is cancelled
 			// after clicking the first (source) node.

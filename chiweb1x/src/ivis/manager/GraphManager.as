@@ -754,13 +754,87 @@ package ivis.manager
 		 * @param y		the y-coordinate around which to zoom
 		 */
 		public function zoomView(scale:Number,
-			x:Number = 0,
-			y:Number = 0):void
+			x:Number = NaN,
+			y:Number = NaN):void
 		{
-			// pan the view by the given amount
+			// zoom the view by the given amount
 			this.view.zoomBy(scale, x, y);
 			
 			// update hit area of the view
+			this.view.updateHitArea();
+		}
+		
+		/**
+		 * Zooms in the view by using ZOOM_SCALE parameter of global config.
+		 * Use zoomView method to zoom in with an arbitrary scale.
+		 * 
+		 * @param x	the x-coordinate around which to zoom in
+		 * @param y	the y-coordinate around which to zoom in
+		 */
+		public function zoomIn(x:Number = NaN, y:Number = NaN):void
+		{
+			// get scale from global config
+			var scale:Number = this.globalConfig.getConfig(
+				GlobalConfig.ZOOM_SCALE);
+			
+			if (scale < 1)
+			{
+				// scale should be greater than one to zoom in
+				scale = 1 / scale;
+			}
+			
+			// zoom in
+			this.zoomView(scale, x, y);
+		}
+		
+		/**
+		 * Zooms out the view by using ZOOM_SCALE parameter of global config.
+		 * Use zoomView method to zoom out with an arbitrary scale.
+		 * 
+		 * @param x	the x-coordinate around which to zoom out
+		 * @param y	the y-coordinate around which to zoom out
+		 */
+		public function zoomOut(x:Number = NaN, y:Number = NaN):void
+		{
+			// get scale from global config
+			var scale:Number = this.globalConfig.getConfig(
+				GlobalConfig.ZOOM_SCALE);
+			
+			if (scale > 1)
+			{
+				// scale should be less than one to zoom out
+				scale = 1 / scale;
+			}
+			
+			// zoom out
+			this.zoomView(scale, x, y);
+		}
+		
+		/**
+		 * Zooms the view to its actual size.
+		 */
+		public function zoomToActual():void
+		{
+			this.view.zoomToActual();
+			this.view.updateHitArea();
+		}
+		
+		/**
+		 * Centers the view and zooms to fit the visible area.
+		 */
+		public function fitInVisibleArea():void
+		{
+			this.view.centerView();
+			this.view.zoomToFit();
+			this.view.updateHitArea();
+		}
+		
+		/**
+		 * Centers the graph view to the center of the visible graph elements. 
+		 */
+		public function centerView():void
+		{
+			this.view.centerView();
 			this.view.updateHitArea();
 		}
 		

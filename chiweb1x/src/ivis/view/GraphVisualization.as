@@ -8,6 +8,7 @@ package ivis.view
 	import flare.vis.operator.layout.Layout;
 	
 	import flash.display.Sprite;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import ivis.model.Edge;
@@ -301,6 +302,54 @@ package ivis.view
 				// update compound node labels
 				compoundLabeler.operate();
 			}
+		}
+		
+		/**
+		 * Calculates the rectangular bounds surrounding all visible graph
+		 * content (nodes, edge, bendpoints, etc.) If the graph is empty,
+		 * calculated bound coordinates will be (0,0) with a zero 
+		 * width & height.
+		 * 
+		 * @return	a rectangular bound for all graph content
+		 */
+		public function contentBounds():Rectangle
+		{
+			// operate node labelers
+			this.nodeLabeler.operate();
+			this.compoundLabeler.operate();
+			
+			var bounds:Rectangle = new Rectangle();
+			var nodes:Array = new Array();
+			
+			// include only visible parentless nodes
+			for each (var node:NodeSprite in this.data.nodes)
+			{
+				if (node.visible &&
+					node.parentNode == null)
+				{
+					nodes.push(node);
+				}
+			}
+			
+			if (nodes.length > 0)
+			{
+				// calculate borders
+				var leftBorder:Number = Nodes.borderValue(nodes, Nodes.LEFT);
+				var rightBorder:Number = Nodes.borderValue(nodes, Nodes.RIGHT);
+				var topBorder:Number = Nodes.borderValue(nodes, Nodes.TOP);
+				var bottomBorder:Number = Nodes.borderValue(nodes, Nodes.BOTTOM);
+				
+				// calculate width & height
+				var width:Number = rightBorder - leftBorder;
+				var height:Number = bottomBorder - topBorder;
+				
+				bounds.x = leftBorder;
+				bounds.y = topBorder;
+				bounds.width = width;
+				bounds.height = height;
+			}
+			
+			return bounds;
 		}
 		
 		/**
