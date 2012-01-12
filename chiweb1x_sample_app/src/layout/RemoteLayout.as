@@ -341,8 +341,8 @@ package layout
 			
 			// since this is a remote layout, it will complete after graph
 			// manager updates the view, so view should also be updated here
-			
 			this.graphManager.view.update();
+			this.graphManager.centerView();
 		}
 		
 		/**
@@ -351,6 +351,10 @@ package layout
 		protected function onLayoutError(event: Event): void
 		{
 			this._waitingToComplete = false;
+			CursorManager.removeBusyCursor();
+			
+			throw new Error("Failed to perform remote " + this._layoutStyle);
+			
 			trace("error: " + event);
 			/*
 			coseLayoutButton.enabled = true;

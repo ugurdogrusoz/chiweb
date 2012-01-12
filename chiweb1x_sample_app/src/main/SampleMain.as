@@ -20,6 +20,7 @@ package main
 	import ivis.controls.EventControl;
 	import ivis.controls.StateManager;
 	import ivis.manager.ApplicationManager;
+	import ivis.manager.GlobalConfig;
 	import ivis.model.Style;
 	import ivis.util.Groups;
 	import ivis.view.ui.ArrowUIManager;
@@ -351,6 +352,38 @@ package main
 				// change selected prop of the target button
 				event.target.selected = state;
 			}
+		}
+		
+		/**
+		 * Zooms in by a default scale.
+		 */
+		public function zoomIn():void
+		{
+			this.appManager.graphManager.zoomIn();
+		}
+		
+		/**
+		 * Zooms out by a default scale.
+		 */
+		public function zoomOut():void
+		{
+			this.appManager.graphManager.zoomOut();
+		}
+		
+		/**
+		 * Centers and fits the view in canvas.
+		 */
+		public function fitInCanvas():void
+		{
+			this.appManager.graphManager.fitInVisibleArea();
+		}
+		
+		/**
+		 * Zooms the graph to its actual size.
+		 */
+		public function actualSize():void
+		{
+			this.appManager.graphManager.zoomToActual();
 		}
 		
 		/**

@@ -51,7 +51,7 @@
 		<mx:Button id="addNode" 
 				   icon="@Embed(source='assets/buttons/create-node.png')"
 				   width="32"
-				   toolTip="Add Node (of selected type)"
+				   toolTip="Create Node (of selected type)"
 				   click="app.addNode(event)"/>
 		
 		<mx:Spacer width="5" />
@@ -70,7 +70,7 @@
 		<mx:Button id="addEdge"
 				   icon="@Embed(source='assets/buttons/create-edge.png')"
 				   width="32"
-				   toolTip="Add Edge (of selected type)"
+				   toolTip="Create Edge (of selected type)"
 				   click="app.addEdge(event)"/>
 		
 		<mx:Spacer width="5" />
@@ -78,7 +78,7 @@
 		<mx:Button id="addBendPoint" 
 			   label="BP"
 			   width="40"
-			   toolTip="Add Bendpoint"
+			   toolTip="Create Bendpoint"
 			   click="app.addBendPoint(event)"/>
 		
 		<mx:Button id="deleteSelected" 
@@ -92,22 +92,22 @@
 		<mx:Button icon="@Embed(source='assets/buttons/fit-to-100.png')"
 				   width="32"
 				   toolTip="Zoom to 100%"
-				   click=""/>
+				   click="app.actualSize()"/>
 		
 		<mx:Button icon="@Embed(source='assets/buttons/zoom-in.png')"
 				   width="32"
 				   toolTip="Zoom In"
-				   click=""/>
+				   click="app.zoomIn()"/>
 		
 		<mx:Button icon="@Embed(source='assets/buttons/zoom-out.png')"
 				   width="32"
 				   toolTip="Zoom Out"
-				   click=""/>
+				   click="app.zoomOut()"/>
 		
 		<mx:Button icon="@Embed(source='assets/buttons/fit-in-canvas.png')"
 				   width="32"
 				   toolTip="Fit in Canvas"
-				   click=""/>
+				   click="app.fitInCanvas()"/>
 		
 		<mx:Spacer width="10" />
 		
