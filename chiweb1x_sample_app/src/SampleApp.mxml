@@ -89,22 +89,26 @@
 		
 		<mx:Spacer width="10" />
 		
-		<mx:Button icon="@Embed(source='assets/buttons/fit-to-100.png')"
+		<mx:Button id="zoomToActual"
+				   icon="@Embed(source='assets/buttons/fit-to-100.png')"
 				   width="32"
 				   toolTip="Zoom to 100%"
 				   click="app.actualSize()"/>
 		
-		<mx:Button icon="@Embed(source='assets/buttons/zoom-in.png')"
+		<mx:Button id="zoomIn"
+				   icon="@Embed(source='assets/buttons/zoom-in.png')"
 				   width="32"
 				   toolTip="Zoom In"
 				   click="app.zoomIn()"/>
 		
-		<mx:Button icon="@Embed(source='assets/buttons/zoom-out.png')"
+		<mx:Button id="zoomOut"
+				   icon="@Embed(source='assets/buttons/zoom-out.png')"
 				   width="32"
 				   toolTip="Zoom Out"
 				   click="app.zoomOut()"/>
 		
-		<mx:Button icon="@Embed(source='assets/buttons/fit-in-canvas.png')"
+		<mx:Button id="fitInCanvas"
+				   icon="@Embed(source='assets/buttons/fit-in-canvas.png')"
 				   width="32"
 				   toolTip="Fit in Canvas"
 				   click="app.fitInCanvas()"/>
@@ -160,6 +164,20 @@
 				   width="32"
 				   toolTip="About"
 				   click=""/>
+		
+		<mx:Spacer width="5" />
+		
+		<mx:Button id="printGraph"
+				   label="G"
+				   width="32"
+				   toolTip="Print Graph (debug)"
+				   click="app.printGraph()"/>
+		
+		<mx:Button id="printView"
+				   label="V"
+				   width="32"
+				   toolTip="Print View (debug)"
+				   click="app.printView()"/>
 		
 	</mx:HBox>
 	
@@ -219,9 +237,19 @@
 						{ label: "Actual Size" },
 						{ label: "Zoom In" },
 						{ label: "Zoom Out" },
-						{ label: "Fit in Canvas" },
+						{ label: "Fit in Canvas" }
 					]
-				}, 
+				},
+				{ label: "Styles", children:
+					[
+						{ label: "Compound Node Style" },
+						{ label: "Circular Node Style" },
+						{ label: "Gradient Node Style" },
+						{ label: "Image Node Style" },
+						{ label: "Simple Edge Style" },
+						{ label: "Dashed Edge Style" }
+					]
+				},
 				/*
 				{ label: "Cluster", children:
 					[

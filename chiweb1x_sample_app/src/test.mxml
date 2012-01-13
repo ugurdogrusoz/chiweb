@@ -198,11 +198,29 @@
 				   toolTip="Perform Layout"
 				   click="app.graphManager.performLayout()"/>
 		
-		<mx:Button id="printGraph"
-				   label="P"
-				   width="32"
-				   toolTip="Print Graph (debug)"
-				   click="testMain.printGraph()"/>
+		<mx:Button id="zoomToActual"
+				   label="ZA"
+				   width="44"
+				   toolTip="Zoom to 100%"
+				   click="app.graphManager.zoomToActual()"/>
+		
+		<mx:Button id="zoomIn"
+				   label="Z+"
+				   width="44"
+				   toolTip="Zoom In"
+				   click="app.graphManager.zoomIn()"/>
+		
+		<mx:Button id="zoomOut"
+				   label="Z-"
+				   width="44"
+				   toolTip="Zoom Out"
+				   click="app.graphManager.zoomOut()"/>
+		
+		<mx:Button id="fitInCanvas"
+				   label="ZF"
+				   width="44"
+				   toolTip="Fit in Canvas"
+				   click="app.graphManager.fitInVisibleArea()"/>
 		
 		<mx:Button id="createTestGroup"
 				   label="T"
@@ -257,6 +275,20 @@
 				   width="44"
 				   toolTip="Remove a property from Test style"
 				   click="testMain.removeTestProperty()"/>
+		
+		<mx:Spacer width="5"/>
+		
+		<mx:Button id="printGraph"
+				   label="PG"
+				   width="44"
+				   toolTip="Print Graph (debug)"
+				   click="testMain.printGraph()"/>
+		
+		<mx:Button id="printView"
+				   label="PV"
+				   width="44"
+				   toolTip="Print View (debug)"
+				   click="testMain.printView()"/>
 	</mx:HBox>
 	
 <mx:Script>

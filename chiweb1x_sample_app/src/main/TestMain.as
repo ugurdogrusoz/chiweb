@@ -41,14 +41,16 @@ package main
 			
 			this.appManager.graphManager.graphStyleManager.addGroupStyle(
 				Groups.COMPOUND_NODES, new Style(style));
-			
-			this.appManager.controlCenter.setState(StateManager.AUTO_COMPOUND,
-				false);
 		}
 		
 		public function printGraph():void
 		{
 			this.appManager.graphManager.graph.printGraph();
+		}
+		
+		public function printView():void
+		{
+			this.appManager.graphManager.view.printView();
 		}
 		
 		public function createTestGroup() : void

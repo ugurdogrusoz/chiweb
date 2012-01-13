@@ -16,6 +16,7 @@ package main
 	import flash.events.MouseEvent;
 	
 	import gui.RemoteLayoutOptions;
+	import gui.StylePanel;
 	
 	import ivis.controls.EventControl;
 	import ivis.controls.StateManager;
@@ -117,12 +118,33 @@ package main
 		public function handleMenuCommand(event:MenuEvent):void
 		{	
 			var label:String = event.label.toString().toLowerCase();
+			var window:IFlexDisplayObject;
 			
 			if(label == "remote layout properties")
 			{
-				var props:IFlexDisplayObject = 
-					this.showWindow(RemoteLayoutOptions);
+				 window = this.showWindow(RemoteLayoutOptions);
 			}
+			else if(label == "actual size")
+			{
+				this.actualSize();
+			}
+			else if(label == "zoom in")
+			{
+				this.zoomIn();
+			}
+			else if(label == "zoom out")
+			{
+				this.zoomOut();
+			}
+			else if(label == "fit in canvas")
+			{
+				this.fitInCanvas();
+			}
+			else if(label == "gradient node style")
+			{
+				this.rootContainer.addChild(new StylePanel("Test"));
+			}
+			
 			
 			// TODO handle other commands..
 		}
@@ -433,6 +455,18 @@ package main
 			
 			// perform layout
 			//this.appManager.graphManager.performLayout();
+		}
+		
+		// TODO: Debug
+		
+		public function printGraph():void
+		{
+			this.appManager.graphManager.graph.printGraph();
+		}
+		
+		public function printView():void
+		{
+			this.appManager.graphManager.view.printView();
 		}
 		
 		//------------------------ PROTECTED FUNCTIONS -------------------------
