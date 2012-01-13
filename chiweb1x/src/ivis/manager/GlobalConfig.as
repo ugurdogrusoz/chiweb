@@ -35,7 +35,7 @@ package ivis.manager
 		/** Increase or decrease in the zoom scale */
 		public static const ZOOM_SCALE:String = "zoomScale";
 		
-		// TODO canvasSize, toolTipDelay, cursorType for specific events
+		// TODO canvasSize, toolTipDelay
 		
 		/**
 		 * Map for attaching configuration values.

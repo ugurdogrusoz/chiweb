@@ -52,6 +52,21 @@ package ivis.view.ui
 		}
 		
 		/**
+		 * Unregisters the given node UI by removing corresponding instance from
+		 * the UI map.
+		 * 
+		 * @param name		name of the UI (used as a map key)
+		 */
+		public static function unregisterUI(name:String):INodeUI
+		{
+			var ui:INodeUI = _uiMap[name];
+			
+			delete _uiMap[name];
+			
+			return ui;
+		}
+		
+		/**
 		 * Retrieves the node UI instance corresponding to the given name.
 		 * 
 		 * @param name	name of the UI

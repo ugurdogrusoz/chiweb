@@ -49,6 +49,21 @@ package ivis.view.ui
 		}
 		
 		/**
+		 * Unregisters the given edge UI by removing corresponding instance from
+		 * the UI map.
+		 * 
+		 * @param name		name of the UI (used as a map key)
+		 */
+		public static function unregisterUI(name:String):IEdgeUI
+		{
+			var ui:IEdgeUI = _uiMap[name];
+			
+			delete _uiMap[name];
+			
+			return ui;
+		}
+		
+		/**
 		 * Retrieves the edge UI instance corresponding to the given name.
 		 * 
 		 * @param name	name of the UI

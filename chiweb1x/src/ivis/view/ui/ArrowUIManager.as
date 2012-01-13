@@ -47,6 +47,21 @@ package ivis.view.ui
 		}
 		
 		/**
+		 * Unregisters the given arrow UI by removing corresponding instance
+		 * from the UI map.
+		 * 
+		 * @param name		name of the UI (used as a map key)
+		 */
+		public static function unregisterUI(name:String):IArrowUI
+		{
+			var ui:IArrowUI = _uiMap[name];
+			
+			delete _uiMap[name];
+			
+			return ui;
+		}
+		
+		/**
 		 * Retrieves the arrow UI instance corresponding to the given name.
 		 * 
 		 * @param name	name of the UI

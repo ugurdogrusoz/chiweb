@@ -649,41 +649,54 @@ package ivis.model
 		
 		//------------------------- DEBUG FUNCTIONS ----------------------------
 		
-		
+		/**
+		 * Prints the graph topology.
+		 */
 		public function printGraph():void
 		{
 			var node:Node;
 			var edge:Edge;
 			
-			trace ("===== Compound Nodes =====");
+			trace("===== Simple Nodes =====");
+			
+			for each (node in this.graphData.nodes)
+			{
+				if (!node.isInitialized())
+				{
+					trace(node.toString());
+				}
+			}
+			
+			
+			trace("===== Compound Nodes =====");
 			
 			for each (node in this.graphData.group(Groups.COMPOUND_NODES))
 			{
 				trace(node.toString());
 			}
 			
-			trace ("===== Bend Nodes =====");
+			trace("===== Bend Nodes =====");
 			
 			for each (node in this.graphData.group(Groups.BEND_NODES))
 			{
 				trace(node.toString());
 			}
 			
-			trace ("===== Selected Nodes =====");
+			trace("===== Selected Nodes =====");
 			
 			for each (node in this.graphData.group(Groups.SELECTED_NODES))
 			{
 				trace(node.toString());
 			}
 			
-			trace ("===== Regular Edges =====");
+			trace("===== Regular Edges =====");
 			
 			for each (edge in this.graphData.group(Groups.REGULAR_EDGES))
 			{
 				trace(edge.toString());
 			}
 			
-			trace ("===== Selected Edges =====");
+			trace("===== Selected Edges =====");
 			
 			for each (edge in this.graphData.group(Groups.SELECTED_EDGES))
 			{

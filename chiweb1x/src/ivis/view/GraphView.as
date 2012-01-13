@@ -145,10 +145,6 @@ package ivis.view
 			var x:Number;
 			var y:Number;
 			
-			trace("[GraphView] parent w&h: " + 
-				this.parent.width + "," + this.parent.height + "\n" +
-				"visualization coordinates: " + this.vis.x + "," + this.vis.y);
-			
 			// adjust width & height of the hit area with respect to width &
 			// height of the parent container
 			
@@ -179,8 +175,9 @@ package ivis.view
 			// set bounds for the hit area 
 			bounds = new Rectangle(x, y, width, height);
 			
-			trace ("[GraphView.updateHitArea] bounds: " + bounds.x + "," +
-				  bounds.y + "," + bounds.width + "," + bounds.height);
+			trace ("[GraphView.updateHitArea] bounds: (" + bounds.x + "," +
+				  bounds.y + "," + ") ["+ bounds.width + "x" + 
+				  bounds.height + "]");
 			
 			this.vis.updateHitArea(bounds);
 		}
@@ -463,7 +460,7 @@ package ivis.view
 			var bounds:Rectangle = this.vis.contentBounds();
 			
 			trace("[GraphView.centerView] content bounds: (" + bounds.x + "," +
-				bounds.y + ") " + bounds.width + ".." + bounds.height);
+				bounds.y + ") " + bounds.width + "x" + bounds.height);
 			
 			var centerX:Number = bounds.x + bounds.width / 2;
 			var centerY:Number = bounds.y + bounds.height / 2;
@@ -505,8 +502,6 @@ package ivis.view
 			// both this.vis.scaleX and this.vis.scaleY should be 1.0 when the
 			// zoom level is actual.
 			this.zoomBy(1.0 / this.vis.scaleX);
-			
-			trace ("[GraphView.zoomToActual] scale: " + this.vis.scaleX);
 		}
 		
 		//---------------------- PROTECTED FUNCTIONS ---------------------------
@@ -693,6 +688,40 @@ package ivis.view
 			}
 			
 			edge.props.$filtered = false;
+		}
+		
+		//------------------------- DEBUG FUNCTIONS ----------------------------
+		
+		/**
+		 * Prints geometric information of the view components.
+		 */
+		public function printView():void
+		{
+			var info:String = new String();
+			var bounds:Rectangle = this.vis.contentBounds();
+			
+			info += "====VIEW PROPERTIES====\n";
+			info += "GraphView: ("+ this.x + "," + this.y + ") " +
+				"[" + this.width + "x" + this.height + "]\n";
+			info += "Parent: (" + this.parent.x + "," + this.parent.y + ") " +
+				"[" + this.parent.width + "x" + this.parent.height + "]\n";
+			info += "GraphVis: (" + this.vis.x + "," + this.vis.y + ") " +
+				"[" + this.vis.width + "x" + this.vis.height + "]\n";
+			info += "GraphVis Scale: (" + this.vis.scaleX + "," +
+				this.vis.scaleY + ")\n";
+			
+			if (this.vis.hitArea != null)
+			{
+				info += "GrapVis HitArea: (" + this.vis.hitArea.x + "," + 
+					this.vis.hitArea.y + ") " +
+					"[" + this.vis.hitArea.width + "x" + 
+					this.vis.hitArea.height + "]\n";
+			}
+			
+			info += "VisibleBounds: (" + bounds.x + "," + bounds.y + ") " +
+				"[" + bounds.width + "x" + bounds.height + "]\n";
+			
+			trace(info);
 		}
 	}
 }
