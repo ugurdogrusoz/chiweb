@@ -55,7 +55,7 @@ package main
 		//---------------------------- VARIABLES -------------------------------
 		
 		public var appManager:ApplicationManager;
-		protected var _rootContainer:Container;
+		protected var _rootContainer:SampleApp;
 		public var remoteLayout:RemoteLayout;
 		
 		protected var _nodeState:String;
@@ -76,17 +76,17 @@ package main
 		/**
 		 * Root container of the application.
 		 */
-		public function get rootContainer():Container
+		public function get rootContainer():SampleApp
 		{
 			return _rootContainer;
 		}
 		
-		public function set rootContainer(value:Container):void
+		public function set rootContainer(value:SampleApp):void
 		{
 			// set container
 			_rootContainer = value;
 			
-			// also init button control for the root container
+			// init button control for the root container
 			var buttonControl:EventControl = new ButtonControl(_rootContainer);
 			this.appManager.controlCenter.addControl(buttonControl);
 		}
@@ -140,9 +140,36 @@ package main
 			{
 				this.fitInCanvas();
 			}
+				
+			else if(label == "compound node style")
+			{
+				this.showStylePanel(this.rootContainer.compoundStylePanel,
+					Groups.COMPOUND_NODES);
+			}
 			else if(label == "gradient node style")
 			{
-				this.rootContainer.addChild(new StylePanel("Test"));
+				this.showStylePanel(this.rootContainer.gradientStylePanel,
+					Constants.GRADIENT_RECT);
+			}
+			else if(label == "image node style")
+			{
+				this.showStylePanel(this.rootContainer.imageStylePanel,
+					Constants.IMAGE_NODE);
+			}
+			else if(label == "circular node style")
+			{
+				this.showStylePanel(this.rootContainer.circleStylePanel,
+					Constants.CIRCULAR_NODE);
+			}
+			else if(label == "simple edge style")
+			{
+				this.showStylePanel(this.rootContainer.regularStylePanel,
+					Groups.EDGES);
+			}
+			else if(label == "dashed edge style")
+			{
+				this.showStylePanel(this.rootContainer.dashedStylePanel,
+					Constants.DASHED_EDGE);
 			}
 			
 			
@@ -655,6 +682,23 @@ package main
 			props.y = (this.rootContainer.height - props.height) / 2;
 			
 			return props;
+		}
+		
+		/**
+		 * Shows the specified style panel for the given data group.
+		 * 
+		 * @param panel	style panel to display
+		 * @param group	name of the data group
+		 */
+		protected function showStylePanel(panel:StylePanel,
+			group:String):void
+		{
+			//this.rootContainer.addChild(panel);
+			panel.visualStyle = 
+				this.appManager.graphManager.graphStyleManager.getGroupStyle(
+					group);
+			
+			panel.visible = true;
 		}
 	}
 }

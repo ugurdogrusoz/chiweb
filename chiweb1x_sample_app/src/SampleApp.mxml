@@ -3,7 +3,7 @@
 				initialize="main()" xmlns:ivis="ivis.*"
 				width="1024" height="768"
 				verticalScrollPolicy="off" horizontalScrollPolicy="off"
-				pageTitle="ChiWeb Sample Application">
+				pageTitle="ChiWeb Sample Application" xmlns:gui="gui.*">
 
 	<mx:Style source="sample.css"/>
 	
@@ -18,10 +18,9 @@
 				autoLayout="true"/>
 	</mx:Canvas>
 	
-	<mx:MenuBar id="mainMenu"
+	<mx:MenuBar id="mainMenu" width="100%"
 				dataProvider="{menuItems}"
 				labelField="label"
-				width="100%"
 				itemClick="app.handleMenuCommand(event)"/>
 	
 	<mx:HBox id="buttonBox" width="100%"
@@ -180,6 +179,30 @@
 				   click="app.printView()"/>
 		
 	</mx:HBox>
+	
+	<gui:StylePanel id="compoundStylePanel"
+					title="Compound Node Style"
+					visible="false"/>
+	
+	<gui:StylePanel id="gradientStylePanel"
+					title="Gradient Node Style"
+					visible="false"/>
+	
+	<gui:StylePanel id="imageStylePanel"
+					title="Image Node Style"
+					visible="false"/>
+	
+	<gui:StylePanel id="circleStylePanel"
+					title="Circular Node Style"
+					visible="false"/>
+	
+	<gui:StylePanel id="regularStylePanel"
+					title="Regular Edge Style"
+					visible="false"/>
+	
+	<gui:StylePanel id="dashedStylePanel"
+					title="Dashed Edge Style"
+					visible="false"/>
 	
 <mx:Script>
 	<![CDATA[
