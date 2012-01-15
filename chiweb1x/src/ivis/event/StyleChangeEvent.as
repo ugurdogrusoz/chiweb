@@ -8,12 +8,19 @@ package ivis.event
 	 */
 	public class StyleChangeEvent extends ChiWebEvent
 	{
+		/** Style Events. */
 		public static const ADDED_STYLE_PROP:String = "addedStyleProperty";
 		public static const REMOVED_STYLE_PROP:String = "removedStyleProperty";
+		
+		/** GlobalConfig Events. */
 		public static const ADDED_GLOBAL_CONFIG:String = "addedGlobalConfig";
 		public static const REMOVED_GLOBAL_CONFIG:String = "removedGlobalConfig";
+		
+		/** Constants for event listener priorities. */
 		public static const HIGH_PRIORITY:int = 10;
 		public static const LOW_PRIORITY:int = 0;
+		
+		// -------------------------- CONSTRUCTOR ------------------------------
 		
 		public function StyleChangeEvent(type:String,
 			information:Object = null,

@@ -9,15 +9,16 @@ package ivis.model
 	import flash.events.EventDispatcher;
 	
 	import ivis.event.DataChangeEvent;
-	import ivis.util.Groups;
 	import ivis.model.util.Nodes;
+	import ivis.util.Groups;
 
 	/**
-	 * This class represents the graph model. 
+	 * This class represents the graph model. Extends EventDispatcher to notify
+	 * listeners for a DataChangeEvent.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
-	public class Graph
+	public class Graph extends EventDispatcher
 	{
 		/**
 		 * Array of non-selected child nodes of selected compound nodes.
@@ -25,8 +26,6 @@ package ivis.model
 		private var _missingChildren:Array;
 		
 		protected var _graphData:Data;
-		
-		protected var _dispatcher:EventDispatcher;
 		
 		/**
 		 * Node map for quick access to nodes by their ids.
@@ -51,14 +50,6 @@ package ivis.model
 		public function get graphData():Data
 		{
 			return _graphData;
-		}
-		
-		/**
-		 * Event dispatcher to notify listeners for a DataChangeEvent
-		 */
-		public function get dispatcher():EventDispatcher
-		{
-			return _dispatcher;
 		}
 		
 		/**
@@ -167,7 +158,6 @@ package ivis.model
 			this._nodeMap = new Object();
 			this._edgeMap = new Object();
 			this._idGen = new Object();
-			this._dispatcher = new EventDispatcher();
 			
 			// initialize the graph data
 			if (data == null)
@@ -394,7 +384,7 @@ package ivis.model
 				}
 				else
 				{
-					this.dispatcher.dispatchEvent(
+					this.dispatchEvent(
 						new DataChangeEvent(DataChangeEvent.ADDED_GROUP,
 							{group: group}));
 				}
@@ -437,7 +427,7 @@ package ivis.model
 			// dispatch a DataChangeEvent if group is successfully removed			
 			if (result)
 			{
-				this.dispatcher.dispatchEvent(
+				this.dispatchEvent(
 					new DataChangeEvent(DataChangeEvent.REMOVED_GROUP,
 						{group: group, elements: elements}));
 			}
@@ -472,7 +462,7 @@ package ivis.model
 			// dispatch a DataChangeEvent if group is successfully cleared
 			if (result)
 			{
-				this.dispatcher.dispatchEvent(
+				this.dispatchEvent(
 					new DataChangeEvent(DataChangeEvent.CLEARED_GROUP,
 						{group: group, elements: elements}));
 			}
@@ -501,7 +491,7 @@ package ivis.model
 			sprite = this.graphData.group(group).add(ds);
 			
 			// dispatch a DataChangeEvent with required information
-			this.dispatcher.dispatchEvent(
+			this.dispatchEvent(
 				new DataChangeEvent(DataChangeEvent.DS_ADDED_TO_GROUP,
 					{ds: ds, group: group}));
 			
@@ -524,7 +514,7 @@ package ivis.model
 				result = this.graphData.group(group).remove(ds);
 			
 				// dispatch a DataChangeEvent with required information
-				this.dispatcher.dispatchEvent(
+				this.dispatchEvent(
 					new DataChangeEvent(DataChangeEvent.DS_REMOVED_FROM_GROUP,
 						{ds: ds, group: group}));
 			}

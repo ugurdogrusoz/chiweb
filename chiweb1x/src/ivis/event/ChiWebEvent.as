@@ -4,6 +4,8 @@ package ivis.event
 
 	/**
 	 * Base class for other Event classes.
+	 * 
+	 * @author Selcuk Onur Sumer
 	 */
 	public class ChiWebEvent extends Event
 	{

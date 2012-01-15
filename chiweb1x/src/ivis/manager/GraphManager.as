@@ -429,7 +429,6 @@ package ivis.manager
 			if (removed && update)
 			{
 				this.view.update();
-				//this.view.updateAllCompoundBounds();
 			}
 			
 			return removed;
@@ -454,7 +453,6 @@ package ivis.manager
 			if (removed)
 			{
 				this.view.update();
-				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -497,7 +495,7 @@ package ivis.manager
 				result = this.view.deselectElement(eventTarget as DataSprite);
 			}
 			
-			return result
+			return result;
 		}
 		
 		/**
@@ -559,7 +557,6 @@ package ivis.manager
 			if (deleted)
 			{
 				this.view.update();
-				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -587,7 +584,6 @@ package ivis.manager
 			if (filtered && update)
 			{
 				this.view.update();
-				//this.view.updateAllCompoundBounds();
 			}
 			
 			return filtered;
@@ -614,7 +610,6 @@ package ivis.manager
 			{
 				this.view.updateVisibility();
 				this.view.update();
-				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -648,7 +643,6 @@ package ivis.manager
 			{
 				this.view.updateVisibility();
 				this.view.update();
-				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -661,7 +655,6 @@ package ivis.manager
 			
 			this.view.updateVisibility();
 			this.view.update();
-			//this.view.updateAllCompoundBounds();
 		}
 		
 		/**
@@ -1176,16 +1169,13 @@ package ivis.manager
 		{
 			// register listeners for graph data changes
 			
-			this.graph.dispatcher.addEventListener(
-				DataChangeEvent.REMOVED_GROUP,
+			this.graph.addEventListener(DataChangeEvent.REMOVED_GROUP,
 				onRemoveGroup);
 			
-			this.graph.dispatcher.addEventListener(
-				DataChangeEvent.DS_ADDED_TO_GROUP,
+			this.graph.addEventListener(DataChangeEvent.DS_ADDED_TO_GROUP,
 				onAddToGroup);
 			
-			this.graph.dispatcher.addEventListener(
-				DataChangeEvent.DS_REMOVED_FROM_GROUP,
+			this.graph.addEventListener(DataChangeEvent.DS_REMOVED_FROM_GROUP,
 				onRemoveFromGroup);
 			
 			// register listeners for style manager
@@ -1243,7 +1233,6 @@ package ivis.manager
 				}
 				
 				this.view.update();
-				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -1275,7 +1264,6 @@ package ivis.manager
 				Styles.reApplyStyles(element);
 				
 				this.view.update();
-				//this.view.updateAllCompoundBounds();
 			}
 			
 		}
@@ -1310,7 +1298,6 @@ package ivis.manager
 				Styles.reApplyStyles(element);
 				
 				this.view.update();
-				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -1361,7 +1348,6 @@ package ivis.manager
 					}
 					
 					this.view.update();
-					//this.view.updateAllCompoundBounds();
 				}
 			}
 			
@@ -1410,7 +1396,6 @@ package ivis.manager
 				}
 				
 				this.view.update();
-				//this.view.updateAllCompoundBounds();
 			}
 		}
 		
@@ -1429,7 +1414,6 @@ package ivis.manager
 		{
 			trace("[GraphManager.onStyleChange] updating view..");
 			this.view.update();
-			//this.view.updateAllCompoundBounds();
 		}
 		
 		/**

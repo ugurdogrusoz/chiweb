@@ -30,12 +30,12 @@ package ivis.model
 			if (style == null)
 			{
 				// initialize an empty style map if none is provided
-				_style = new Object();
+				this._style = new Object();
 			}
 			else
 			{
 				// set style map
-				_style = style;
+				this._style = style;
 			}
 		}
 		
@@ -62,10 +62,10 @@ package ivis.model
 		 * @param name	name of the property
 		 * @param value	value of the property
 		 */
-		public function addProperty(name:String, value:*) : void
+		public function addProperty(name:String, value:*):void
 		{
 			// add property to the map
-			_style[name] = value;
+			this._style[name] = value;
 			
 			// dispatch a StyleChangeEvent
 			this.dispatchEvent(
@@ -78,10 +78,10 @@ package ivis.model
 		 *  
 		 * @param name	name of the property to be removed
 		 */
-		public function removeProperty(name:String) : void
+		public function removeProperty(name:String):void
 		{
 			// remove property from the map
-			delete _style[name];
+			delete this._style[name];
 			
 			// dispatch a StyleChangeEvent
 			this.dispatchEvent(
@@ -92,9 +92,26 @@ package ivis.model
 		/**
 		 * Gets the value of the property for the specified property name.
 		 */
-		public function getProperty(name:String) : *
+		public function getProperty(name:String):*
 		{
-			return _style[name];
+			return this._style[name];
+		}
+		
+		/**
+		 * Retrieves names of style properties as an array.
+		 * 
+		 * @return	array of property names
+		 */
+		public function getPropNames():Array
+		{
+			var props:Array = new Array();
+			
+			for (var name:String in this._style)
+			{
+				props.push(name);
+			}
+			
+			return props;
 		}
 		
 		/**
@@ -103,20 +120,20 @@ package ivis.model
 		 * 
 		 * @param element	a graph element to apply settings
 		 */
-		public function apply(element:Object) : void
+		public function apply(element:Object):void
 		{
-			for (var field:String in _style)
+			for (var field:String in this._style)
 			{
 				// if the element has a field with the given name set the value
 				// of that field
 				if (element.hasOwnProperty(field))
 				{
-					element[field] = _style[field];
+					element[field] = this._style[field];
 				}
 				// if no field with the current name set props.name
 				else
 				{
-					element.props[field] = _style[field];
+					element.props[field] = this._style[field];
 				}
 			}
 		}
