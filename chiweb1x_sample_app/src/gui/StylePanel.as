@@ -226,6 +226,8 @@ package gui
 		 */
 		protected function onUpdate(evt:MouseEvent = null):void
 		{
+			var props:Object = new Object();
+			
 			for (var name:String in this._inputMap)
 			{
 				var value:* = (this._inputMap[name] as TextInput).text;
@@ -239,8 +241,10 @@ package gui
 					value = true;
 				}
 				
-				this._visualStyle.addProperty(name, value);
+				props[name] = value;
 			}
+			
+			this._visualStyle.mergeProps(props);
 		}
 		
 		/**

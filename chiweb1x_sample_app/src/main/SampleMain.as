@@ -511,7 +511,7 @@ package main
 			style = {shape: Constants.GRADIENT_RECT,
 				w: 80,
 				h: 60,
-				alpha: 0.6,
+				alpha: 0.7,
 				fillColor: 0xff3e66f0,
 				lineWidth: 2,
 				labelFontWeight: "bold",
@@ -527,7 +527,7 @@ package main
 			// add group style for dashed edge
 			
 			style = {shape: Constants.DASHED_EDGE,				
-				fillColor: 0xff000000,
+				//fillColor: 0xff000000,
 				alpha: 0.8,
 				//sourceArrowType: ArrowUIManager.SIMPLE_ARROW,
 				targetArrowType: ArrowUIManager.SIMPLE_ARROW,
@@ -593,7 +593,7 @@ package main
 			
 			style = {shape: CompoundUIManager.ROUND_RECTANGLE,
 				buttonMode: true, // enables hand cursor when mouse over
-				alpha: 0.7,
+				alpha: 0.6,
 				fillColor: 0xffa21be0,
 				lineWidth: 2,
 				labelFontWeight: "bold"};
