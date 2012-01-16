@@ -208,7 +208,9 @@ package ivis.manager
 				h: 50,
 				alpha: 0.9,
 				fillColor: 0xff8a1b0b,
+				fillAlpha: 0.9,
 				lineColor: 0xff333333,
+				lineAlpha: 0.9,
 				lineWidth: 1,
 				labelText: "",
 				labelTextMode: TextSprite.DEVICE,
@@ -236,7 +238,9 @@ package ivis.manager
 				h: 50,
 				alpha: 0.9,
 				fillColor: 0xff9ed1dc,
+				fillAlpha: 0.9,
 				lineColor: 0xff333333,
+				lineAlpha: 0.9,
 				lineWidth: 1,
 				labelText: "",
 				labelTextMode: TextSprite.DEVICE,
@@ -263,8 +267,9 @@ package ivis.manager
 			// init default edge style
 			
 			style = {shape: EdgeUIManager.LINE,				
-				fillColor: 0xff000000,
 				alpha: 0.8,
+				fillColor: 0xff000000,
+				fillAlpha: 0.8,
 				lineColor: 0xff000000,
 				lineAlpha: 0.8,
 				lineWidth: 1,
@@ -291,11 +296,12 @@ package ivis.manager
 			// init default bendpoint style 
 			
 			style = {shape: NodeUIManager.CIRCLE,				
-				size: 4,
+				size: 6,
 				alpha: 1.0,
-				fillColor: 0xff000000,
-				lineColor: 0xff000000,
-				lineWidth: 1,
+				inheritColor: true, // inherit color from parent edge
+				fillColor: 0xff000000, // not used when inheritColor is true 
+				fillAlpha: 1.0, // not used when inheritColor is true
+				lineWidth: 0,
 				labelText: "",
 				labelTextMode: TextSprite.DEVICE,
 				labelOffsetX: 0,
@@ -313,7 +319,6 @@ package ivis.manager
 				selectionGlowStrength: 6};
 			
 			this._defaultBendStyle = new Style(style);
-			//_groupStyleMap[Groups.BEND_NODES] = new Style(style);
 		}
 	}
 }

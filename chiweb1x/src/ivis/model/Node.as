@@ -406,6 +406,11 @@ package ivis.model
 					false,
 					StyleChangeEvent.HIGH_PRIORITY);
 				
+				style.addEventListener(StyleChangeEvent.MERGED_STYLE_PROPS,
+					onStyleChange,
+					false,
+					StyleChangeEvent.HIGH_PRIORITY);
+				
 				style.addEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
 					onStyleChange,
 					false,
@@ -427,6 +432,9 @@ package ivis.model
 					onStyleChange);
 				
 				style.removeEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
+					onStyleChange);
+				
+				style.removeEventListener(StyleChangeEvent.MERGED_STYLE_PROPS,
 					onStyleChange);
 				
 				// remove style from the style manager

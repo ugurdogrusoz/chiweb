@@ -87,7 +87,7 @@ package ivis.model.util
 		internal static function _reApplyEdgeStyles(edge:Edge,
 			propagate:Boolean = true):void
 		{
-			Styles._reApplyStyles(edge);
+			var dirty:Boolean = Styles._reApplyStyles(edge);
 			
 			if (propagate &&
 				edge.hasBendPoints())
@@ -96,6 +96,15 @@ package ivis.model.util
 				for each (var segment:Edge in edge.getSegments())
 				{
 					Styles._reApplyStyles(segment);
+				}
+			}
+			
+			if (dirty)
+			{
+				// mark bendpoints of the edge as dirty
+				for each (var node:Node in edge.getBendNodes())
+				{
+					node.dirty();
 				}
 			}
 		}

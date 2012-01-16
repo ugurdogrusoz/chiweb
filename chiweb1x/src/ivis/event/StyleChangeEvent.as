@@ -11,6 +11,7 @@ package ivis.event
 		/** Style Events. */
 		public static const ADDED_STYLE_PROP:String = "addedStyleProperty";
 		public static const REMOVED_STYLE_PROP:String = "removedStyleProperty";
+		public static const MERGED_STYLE_PROPS:String = "mergedStyleProps";
 		
 		/** GlobalConfig Events. */
 		public static const ADDED_GLOBAL_CONFIG:String = "addedGlobalConfig";

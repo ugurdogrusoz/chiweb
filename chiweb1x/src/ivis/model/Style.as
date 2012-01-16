@@ -90,6 +90,31 @@ package ivis.model
 		}
 		
 		/**
+		 * Adds all property pairs provided by the props object to the style.
+		 * This function overwrites existing property values if the provided 
+		 * props object contains a property with a name that is already included
+		 * within this style.
+		 * 
+		 * This function is useful when it is required to add more than one
+		 * style property at a time.
+		 * 
+		 * @param props	object containing name and value pairs
+		 */
+		public function mergeProps(props:Object):void
+		{
+			for (var name:String in props)
+			{
+				// add property to the map
+				this._style[name] = props[name];
+			}
+			
+			// dispatch a StyleChangeEvent
+			this.dispatchEvent(
+				new StyleChangeEvent(StyleChangeEvent.MERGED_STYLE_PROPS,
+					{style: this, props: props}));
+		}
+		
+		/**
 		 * Gets the value of the property for the specified property name.
 		 */
 		public function getProperty(name:String):*

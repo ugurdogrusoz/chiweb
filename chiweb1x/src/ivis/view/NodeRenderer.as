@@ -7,6 +7,7 @@ package ivis.view
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	
+	import ivis.model.Node;
 	import ivis.view.ui.INodeUI;
 	import ivis.view.ui.NodeUIManager;
 
@@ -39,6 +40,7 @@ package ivis.view
 			
 			var lineAlpha:Number = d.lineAlpha;
 			var fillAlpha:Number = d.fillAlpha;
+			var fillColor:Number = d.fillColor;
 			
 			var g:Graphics = d.graphics;
 			g.clear();
@@ -60,6 +62,14 @@ package ivis.view
 				// nodeUI = NodeUIManager.getUI(NodeUIManager.RECTANGLE);
 			}
 			
+			if (d is Node &&
+				(d as Node).isBendNode &&
+				d.props.inheritColor)
+			{
+				fillAlpha = (d as Node).parentE.lineAlpha;
+				fillColor = (d as Node).parentE.lineColor;
+			}
+			
 			if (lineAlpha > 0 && d.lineWidth > 0)
 			{
 				nodeUI.setLineStyle(d);
@@ -70,7 +80,7 @@ package ivis.view
 			{
 				// using a bit mask to avoid transparency
 				// when fillcolor is 0xffffffff.
-				g.beginFill(0xffffff & d.fillColor, fillAlpha);
+				g.beginFill(0xffffff & fillColor, fillAlpha);
 				nodeUI.draw(d);
 				g.endFill();
 			}

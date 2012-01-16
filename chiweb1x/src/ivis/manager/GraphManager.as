@@ -1326,6 +1326,11 @@ package ivis.manager
 					false,
 					StyleChangeEvent.LOW_PRIORITY);
 				
+				style.addEventListener(StyleChangeEvent.MERGED_STYLE_PROPS,
+					onStyleChange,
+					false,
+					StyleChangeEvent.LOW_PRIORITY);
+				
 				style.addEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
 					onStyleChange,
 					false,
@@ -1372,6 +1377,9 @@ package ivis.manager
 			if (style != null)
 			{
 				style.removeEventListener(StyleChangeEvent.ADDED_STYLE_PROP,
+					onStyleChange);
+				
+				style.removeEventListener(StyleChangeEvent.MERGED_STYLE_PROPS,
 					onStyleChange);
 			
 				style.removeEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
