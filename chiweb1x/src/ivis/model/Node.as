@@ -213,15 +213,39 @@ package ivis.model
 		/**
 		 * Initializes the map of children for this compound node.
 		 */
-		public function initialize() : void
+		public function initialize():void
 		{
 			this._nodesMap = new Object();
 		}
 		
 		/**
+		 * Resets an empty compound node so that it becomes a simple node.
+		 * If this function is invoked on a compound that has children, it
+		 * does not reset the node.
+		 * 
+		 * @return		true if reset successful, false otherwise 
+		 */
+		public function reset():Boolean
+		{
+			var reset:Boolean = false;
+			
+			if (!this.isInitialized())
+			{
+				reset = true;
+			}
+			else if (this.getNodes().length == 0)
+			{
+				this._nodesMap = null;
+				reset = true;
+			}
+			
+			return reset;
+		}
+		
+		/**
 		 * Indicates whether the children map is initialized for this node.
 		 */
-		public function isInitialized() : Boolean
+		public function isInitialized():Boolean
 		{
 			var initialized:Boolean;
 			
@@ -245,7 +269,7 @@ package ivis.model
 		 * 
 		 * @param node	child node to be added
 		 */
-		public function addNode(node:Node) : void
+		public function addNode(node:Node):void
 		{
 			// check if the node is initialized
 			if (!this.isInitialized())
@@ -267,7 +291,7 @@ package ivis.model
 		 * 
 		 * @param node	child node sprite to be removed
 		 */ 
-		public function removeNode(node:Node) : void
+		public function removeNode(node:Node):void
 		{
 			// check if given node is a child of this compound
 			if (this._nodesMap != null &&
@@ -287,7 +311,7 @@ package ivis.model
 		 * 
 		 * @param invisible	indicates whether invisible nodes will be collected
 		 */
-		public function getNodes(invisible:Boolean = true) : Array
+		public function getNodes(invisible:Boolean = true):Array
 		{
 			var nodeList:Array = new Array();
 			
@@ -310,7 +334,7 @@ package ivis.model
 		 * This function is designed to update the bounds of a compound node
 		 * and it has no effect on simple and bend nodes.
 		 */
-		public function updateBounds(bounds:Rectangle) : void
+		public function updateBounds(bounds:Rectangle):void
 		{
 			// extend bounds by adding padding width & height
 			bounds.x -= this.paddingLeft;
@@ -330,7 +354,7 @@ package ivis.model
 		/**
 		 * Resets the compound bounds.
 		 */
-		public function resetBounds() : void
+		public function resetBounds():void
 		{
 			this._bounds = null;
 		}
@@ -372,26 +396,26 @@ package ivis.model
 		}
 		
 		/** @inheritDoc */
-		public function getStyle(name:String) : Style
+		public function getStyle(name:String):Style
 		{
 			return this._styleManager.getStyle(name);
 		}
 		
 		/** @inheritDoc */
-		public function get allStyles() : Array
+		public function get allStyles():Array
 		{
 			return this._styleManager.allStyles;
 		}
 		
 		/** @inheritDoc */
-		public function get groupStyles() : Array
+		public function get groupStyles():Array
 		{
 			return this._styleManager.groupStyles;
 		}
 		
 		/** @inheritDoc */
 		public function attachStyle(name:String,
-			style:Style) : void
+			style:Style):void
 		{
 			if (style != null &&
 				name != null)
@@ -420,7 +444,7 @@ package ivis.model
 		}
 		
 		/** @inheritDoc */
-		public function detachStyle(name:String) : void
+		public function detachStyle(name:String):void
 		{
 			var style:Style = this._styleManager.getStyle(name); 
 			
@@ -454,7 +478,7 @@ package ivis.model
 		 *  
 		 * @param event	StyleChangeEvent triggered the action
 		 */
-		protected function onStyleChange(event:StyleChangeEvent) : void
+		protected function onStyleChange(event:StyleChangeEvent):void
 		{
 			var style:Style = event.info.style;
 			

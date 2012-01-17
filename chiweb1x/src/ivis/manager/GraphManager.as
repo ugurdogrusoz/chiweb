@@ -168,19 +168,7 @@ package ivis.manager
 				
 				if (!compound.isInitialized())
 				{
-					// initialize visual properties of compound
-					this._styleManager.initCompoundStyle(compound);
-					
-					// add node to the group of compound nodes
-					this.graph.addToGroup(Groups.COMPOUND_NODES, compound);
-					
-					Styles.reApplyStyles(compound);
-					
-					//compound.props.labelText = compound.data.id;
-					
-					// update node renderer
-					compound.renderer = CompoundNodeRenderer.instance;
-					
+					this.initCompound(compound);
 				}
 				
 				// add the node as a child
@@ -287,6 +275,60 @@ package ivis.manager
 			}
 			
 			return edge;
+		}
+		
+		/**
+		 * Initializes the given node as a compound node by adding the node to
+		 * the corresponding data group, initializing its style, and updating
+		 * its renderer.
+		 * 
+		 * @param node	node to be initialized as a compound 
+		 */
+		public function initCompound(node:Node):void
+		{
+			// init compound
+			node.initialize();
+			
+			// initialize visual properties of compound
+			this._styleManager.initCompoundStyle(node);
+			
+			// add node to the group of compound nodes
+			this.graph.addToGroup(Groups.COMPOUND_NODES, node);
+			
+			Styles.reApplyStyles(node);
+			
+			//compound.props.labelText = compound.data.id;
+			
+			// update node renderer
+			node.renderer = CompoundNodeRenderer.instance;
+		}
+		
+		/**
+		 * Resets an empty compound node to revert it to a simple node. If the
+		 * given compound node has children, reset operation fails.
+		 * 
+		 * @param node	node to be reverted to a simple node
+		 * @return		true if successful, false otherwise 
+		 */
+		public function resetCompound(node:Node):Boolean
+		{
+			var reset:Boolean = node.reset();
+			
+			if (reset)
+			{
+				// remove node from the group of compound nodes
+				this.graph.removeFromGroup(Groups.COMPOUND_NODES, node);
+				
+				// re-initialize node as a simple node
+				this._styleManager.initNodeStyle(node);
+				
+				Styles.reApplyStyles(node);
+				
+				// update node renderer
+				node.renderer = NodeRenderer.instance;
+			}
+			
+			return reset;
 		}
 		
 		/**

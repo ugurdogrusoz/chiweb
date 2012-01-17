@@ -294,13 +294,23 @@ package ivis.view
 			{
 				// compound has no visible child,
 				// update bounds with default width and height values
-				compound.bounds.width = compound.w;
-				compound.bounds.height = compound.h;
-				compound.bounds.x = compound.x - compound.w/2;
-				compound.bounds.y = compound.y - compound.h/2;
+				bounds = new Rectangle();
+				bounds.width = compound.w;
+				bounds.height = compound.h;
+				bounds.x = compound.x - compound.w/2;
+				bounds.y = compound.y - compound.h/2;
+				
+				// this will ignore padding values...
+//				compound.bounds = new Rectangle();
+//				compound.bounds.width = compound.w;
+//				compound.bounds.height = compound.h;
+//				compound.bounds.x = compound.x - compound.w/2;
+//				compound.bounds.y = compound.y - compound.h/2;
+
+				compound.updateBounds(bounds);
 				
 				// update compound node labels
-				compoundLabeler.operate();
+				//compoundLabeler.operate();
 			}
 		}
 		
