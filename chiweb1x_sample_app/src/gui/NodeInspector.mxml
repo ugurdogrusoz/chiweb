@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+* An inspector window to display node information.
+* Authors: Selcuk Onur Sumer
+*
+* Copyright: i-Vis Research Group, Bilkent University, 2011 - present 
+-->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+				layout="vertical"
+				width="180"
+				title="Node Inspector"
+				showCloseButton="true"
+				close="onClose(event)">
+	
+	<mx:VBox width="100%" height="100%"
+			 creationComplete="onCreation(event)">
+		<mx:HBox>
+			<mx:Label id="labelLabel" width="70" text="Label:"/>
+			<mx:TextInput id="labelValue" width="80"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label id="shapeLabel" width="70" text="Shape:"/>
+			<mx:TextInput id="shapeValue" width="80"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label id="xLabel" width="70" text="x:"/>
+			<mx:TextInput id="xValue" width="80"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label id="yLabel" width="70" text="y:"/>
+			<mx:TextInput id="yValue" width="80"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label id="widthLabel" width="70" text="Width:"/>
+			<mx:TextInput id="widthValue" width="80"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label id="heightLabel" width="70" text="Height:"/>
+			<mx:TextInput id="heightValue" width="80"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label id="sizeLabel" width="70" text="Size:"/>
+			<mx:TextInput id="sizeValue" width="80"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label id="alphaLabel" width="70" text="Alpha:"/>
+			<mx:TextInput id="alphaValue" width="80"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label id="fillColorLabel" width="70" text="Fill color:"/>
+			<mx:ColorPicker id="fillColorValue" width="80"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label id="lineWidthLabel" width="70" text="Line width:"/>
+			<mx:TextInput id="lineWidthValue" width="80"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label id="lineColorLabel" width="70" text="Line color:"/>
+			<mx:ColorPicker id="lineColorValue" width="80"/>
+		</mx:HBox>
+	</mx:VBox>
+	
+	<mx:ControlBar width="100%">
+		<mx:Spacer width="100%" />
+		<mx:Button id="okButton" label="OK" width="70" click="onClose(event)"/>
+	</mx:ControlBar>
+	
+	<mx:Script>
+		<![CDATA[
+			import flare.vis.data.NodeSprite;
+			
+			import ivis.view.ui.NodeUIManager;
+			
+			import mx.managers.PopUpManager;
+			
+			public static var targetNode:NodeSprite = null;
+			
+			protected var node:NodeSprite;
+			
+			/**
+			 * Updates inspector content when window creation is completed.
+			 */
+			private function onCreation(e: Event):void
+			{
+				// update inspector content using target node info
+				if (targetNode != null)
+				{
+					node = targetNode;
+					
+					this.title = node.data.id;
+					
+					this.labelValue.text = node.props.labelText;
+					this.shapeValue.text = node.shape;
+					
+					this.xValue.text = node.x.toFixed(1);
+					this.yValue.text = node.y.toFixed(1);
+					this.sizeValue.text = node.size.toString();
+					this.widthValue.text = node.w.toString();
+					this.heightValue.text = node.h.toString();
+					
+					this.fillColorValue.selectedColor = node.fillColor;
+					this.lineWidthValue.text = node.lineWidth.toString();
+					this.lineColorValue.selectedColor = node.lineColor;
+					this.alphaValue.text = node.alpha.toFixed(2);
+				}
+			}
+			
+			/**
+			 * Closes the inspector.
+			 */
+			private function onClose(e: Event):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+		]]>
+	</mx:Script>
+</mx:TitleWindow>
+

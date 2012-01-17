@@ -55,3 +55,8 @@ mx|Panel {
 	shadowDistance: 1;
 	dropShadowColor: #330000;
 }
+
+mx|Label
+{
+	font-weight: bold;
+}

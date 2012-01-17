@@ -25,6 +25,7 @@ package util
 		public static const ADD_GRADIENT:String = "addGradient";
 		public static const ADD_CIRCULAR_NODE:String = "addCircularNode";
 		public static const ADD_IMAGE_NODE:String = "addImageNode";
+		public static const ADD_COMPOUND_NODE:String = "addCompoundNode";
 		public static const ADD_DASHED_EDGE:String = "addDashedEdge";
 		public static const ADD_DEFAULT_EDGE:String = "addDefaultEdge";
 		

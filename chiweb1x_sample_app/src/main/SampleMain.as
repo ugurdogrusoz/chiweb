@@ -15,6 +15,7 @@ package main
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import gui.NodeInspector;
 	import gui.RemoteLayoutOptions;
 	import gui.StylePanel;
 	
@@ -55,12 +56,13 @@ package main
 		//---------------------------- VARIABLES -------------------------------
 		
 		public var appManager:ApplicationManager;
-		protected var _rootContainer:SampleApp;
 		public var remoteLayout:RemoteLayout;
 		
+		protected var _rootContainer:SampleApp;
 		protected var _nodeState:String;
 		protected var _edgeState:String;
 		protected var _selectedLayout:Object;
+		
 		
 		private static var _instance:SampleMain = new SampleMain();
 		
@@ -653,6 +655,9 @@ package main
 			
 			this.appManager.controlCenter.setState(
 				Constants.ADD_IMAGE_NODE, false);
+			
+			this.appManager.controlCenter.setState(
+				Constants.ADD_COMPOUND_NODE, false);
 		}
 		
 		/**
@@ -661,11 +666,16 @@ package main
 		 */
 		protected function showInspector(event:MouseEvent):void
 		{
-			//var evt:MouseEvent = evt as MouseEvent;
+			trace ("[inspector] node: " + event.target.data.id);
 			
-			trace ("double click listener: " + event.localX + ", " + event.localY);
+			// set target node before creation
+			NodeInspector.targetNode = event.target as NodeSprite;
 			
-			// TODO open an inspector window for nodes
+			var inspector:IFlexDisplayObject = this.showWindow(NodeInspector,
+				false);
+			
+			inspector.x = this.rootContainer.mouseX;
+			inspector.y = this.rootContainer.mouseY;
 		}
 		
 		/**
@@ -673,15 +683,16 @@ package main
 		 * 
 		 * @param window	Class of the window to be instantiated
 		 */
-		protected function showWindow(window:Class):IFlexDisplayObject
+		protected function showWindow(window:Class,
+			modal:Boolean = true):IFlexDisplayObject
 		{
-			var props: IFlexDisplayObject = 
-				PopUpManager.createPopUp(this.rootContainer, window, true);
+			var panel:IFlexDisplayObject = 
+				PopUpManager.createPopUp(this.rootContainer, window, modal);
 			
-			props.x = (this.rootContainer.width - props.width) / 2;
-			props.y = (this.rootContainer.height - props.height) / 2;
+			panel.x = (this.rootContainer.width - panel.width) / 2;
+			panel.y = (this.rootContainer.height - panel.height) / 2;
 			
-			return props;
+			return panel;
 		}
 		
 		/**

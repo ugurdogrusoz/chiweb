@@ -114,6 +114,14 @@ package controls
 				this.graphManager.graph.addToGroup(Constants.IMAGE_NODE,
 					node);
 			}
+			else if (this.stateManager.checkState(Constants.ADD_COMPOUND_NODE))
+			{
+				trace ("[AddNodeControl.onAddNode] compound node: " +
+					node.data.id);
+				
+				// initializes node as an empty compound node
+				this.graphManager.initCompound(node);
+			}
 			
 			
 			// this style is actually to define a node-specific label using

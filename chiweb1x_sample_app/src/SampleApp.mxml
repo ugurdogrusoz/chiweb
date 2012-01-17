@@ -43,6 +43,7 @@
 					<mx:Object label="Circle" state="{Constants.ADD_CIRCULAR_NODE}"/>
 					<mx:Object label="Gradient" state="{Constants.ADD_GRADIENT}"/>
 					<mx:Object label="Image" state="{Constants.ADD_IMAGE_NODE}"/>
+					<mx:Object label="Compound" state="{Constants.ADD_COMPOUND_NODE}"/>
 				</mx:ArrayCollection>
 			</mx:ComboBox>
 		</mx:VBox>

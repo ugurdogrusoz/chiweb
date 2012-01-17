@@ -13,6 +13,7 @@ package gui
 	import mx.controls.Label;
 	import mx.controls.Spacer;
 	import mx.controls.TextInput;
+	import mx.core.SpriteAsset;
 	import mx.events.FlexEvent;
 	
 //	import spark.components.Label;
@@ -134,7 +135,7 @@ package gui
 				
 				var input:TextInput = new TextInput();
 				input.width = 100;
-				input.text = this._visualStyle.getProperty(name);
+				input.text = String(this._visualStyle.getProperty(name));
 				
 				var hb:HBox = new HBox();
 				hb.addChild(propLabel);
@@ -152,8 +153,8 @@ package gui
 		 * Updates the title of the editor panel.
 		 */
 		protected function updateTitleContent():void
-		{
-			// TODO add a close button!
+		{			
+			
 		}
 		
 		/**
