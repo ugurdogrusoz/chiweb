@@ -33,6 +33,7 @@ package ivis.view
 			return _instance;
 		}
 		
+		/** @inheritDoc */
 		public override function render(d:DataSprite):void
 		{
 			var edge:Edge;
@@ -83,9 +84,8 @@ package ivis.view
 				{
 					d.graphics.clear();
 					
-					// calculate clipping points
-					var points:Array = this.clippingPoints(edge.source,
-						edge.target);
+					// calculate clipping points for the edge
+					var points:Array = this.clippingPoints(edge);
 					
 					// set the default line style
 					this.setLineStyle(edge, edge.graphics);
@@ -128,6 +128,7 @@ package ivis.view
 			}
 		}
 		
+		/** @inheritDoc */
 		protected override function setLineStyle(e:EdgeSprite,
 			g:Graphics):void
 		{
@@ -147,35 +148,25 @@ package ivis.view
 		}
 		
 		/**
-		 * Calculate clipping points of the edge for the given source and target
-		 * nodes. If the shapes of source or target cannot be handled by the
-		 * intersect function, then the resulting array will be null.
+		 * Calculates clipping points of the given edge for its source and 
+		 * target nodes. If the shapes of source or target cannot be handled
+		 * by the intersect function, then the resulting array will be null.
 		 * 
-		 * @param source	source of the edge
-		 * @param target	target of the edge
-		 * @return			array of two clipping points if success, null o.w. 
+		 * @param edge	edge to intersect with its node and target	
+		 * @return		array of two clipping points if success, null o.w. 
 		 */
-		protected function clippingPoints(source:NodeSprite,
-			target:NodeSprite):Array
+		protected function clippingPoints(edge:Edge):Array
 		{
 			var points:Array = null;
-			var sourcePoint:Point;
-			var targetPoint:Point;
 			
-			// find intersection points of the line (joining the centers of
-			// source and target nodes) and the nodes (according to the node
-			// shape)
+			var source:Node = edge.source as Node; 
+			var target:Node = edge.target as Node;
 			
-			var sourceCenter:Point = new Point(source.x, source.y);
-			var targetCenter:Point = new Point(target.x, target.y);
+			// find intersection points of the edge and the nodes
+			// (according to the node shapes)
 			
-			sourcePoint = this.intersection(source as Node,
-				sourceCenter,
-				targetCenter);
-			
-			targetPoint = this.intersection(target as Node,
-				sourceCenter,
-				targetCenter);
+			var sourcePoint:Point = this.intersection(source, edge);
+			var targetPoint:Point = this.intersection(target, edge);
 			
 			if (sourcePoint != null &&
 				targetPoint != null)
@@ -189,19 +180,16 @@ package ivis.view
 		}
 		
 		/**
-		 * Calculates the intersection point of the given Node with the line
-		 * specified by the points p1 and p2. If the shape of the node is not
-		 * a shape that can be handled by this function, then the return value
-		 * will be null.
+		 * Calculates the intersection point of the given node with the given
+		 * edge. If the shape of the node is not a shape that can be handled
+		 * by this function, then the return value will be null.
 		 * 
-		 * @param node	Node to intersect
-		 * @param p1	start point of the line
-		 * @param p2	end point of the line
+		 * @param node	node to intersect
+		 * @param edge	edge to intersect
 		 * @return		intersection point if successful, null otherwise
 		 */
 		protected function intersection(node:Node,
-			p1:Point,
-			p2:Point):Point
+			edge:Edge):Point
 		{
 			var interPoint:Point = null;
 			
@@ -231,7 +219,7 @@ package ivis.view
 				}
 			}
 						
-			interPoint = nodeUI.intersection(node, p1, p2);
+			interPoint = nodeUI.intersection(node, edge);
 			
 			return interPoint;
 		}

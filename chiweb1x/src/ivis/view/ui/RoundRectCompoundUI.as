@@ -6,6 +6,7 @@ package ivis.view.ui
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import ivis.model.Edge;
 	import ivis.model.Node;
 	import ivis.model.util.Nodes;
 
@@ -90,11 +91,10 @@ package ivis.view.ui
 		}
 		
 		public override function intersection(node:Node,
-			p1:Point,
-			p2:Point):Point
+			edge:Edge):Point
 		{
 			// TODO calculate clipping points correctly for rounded corners
-			return super.intersection(node, p1, p2);
+			return super.intersection(node, edge);
 		}
 	}
 }

@@ -3,7 +3,9 @@ package ivis.util
 	import flare.display.TextSprite;
 
 	/**
-	 * Utility class for node and edge labels.
+	 * Utility class for node and edge labels. To calculate a border value for a
+	 * label, it is also required to consider the text field of the label,
+	 * since width & height of the label depend on its text field.
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
@@ -20,41 +22,64 @@ package ivis.util
 		
 		//---------------------- PUBLIC FUNCTIONS ------------------------------
 		
+		/**
+		 * Calculates the leftmost x-coordiante of the given label.
+		 * 
+		 * @param label	label as a TextSprite
+		 * @return		leftmost x-coordiante of the label  
+		 */
 		public static function leftBorder(label:TextSprite):Number
 		{
-			//var left:Number = label.x - (label.width / 2);
-			//var left:Number = label.x + label.textField.x;
-			var left:Number = label.x + label.textField.x - label.width;
+			var left:Number = label.x + label.textField.x;
 			
 			return left;
 		}
 		
+		/**
+		 * Calculates the rightmost x-coordiante of the given label.
+		 * 
+		 * @param label	label as a TextSprite
+		 * @return		rightmost x-coordiante of the label  
+		 */
 		public static function rightBorder(label:TextSprite):Number
 		{
-			//var right:Number = label.x + (label.width / 2);
 			var right:Number = label.x + label.textField.x + label.width;
 			
 			return right;
 		}
 		
+		/**
+		 * Calculates the topmost y-coordiante of the given label.
+		 * 
+		 * @param label	label as a TextSprite
+		 * @return		topmost y-coordiante of the label  
+		 */
 		public static function topBorder(label:TextSprite):Number
 		{
-			//var top:Number = label.y - (label.height / 2);
-			//var top:Number = label.y + label.textField.y;
-			//var top:Number = label.y + label.textField.y - (label.textField.height / 2);
-			var top:Number = label.y + label.textField.y - label.height;
+			var top:Number = label.y + label.textField.y;
 			
 			return top;
 		}
 		
+		/**
+		 * Calculates the bottommost y-coordiante of the given label.
+		 * 
+		 * @param label	label as a TextSprite
+		 * @return		bottommost y-coordiante of the label  
+		 */
 		public static function bottomBorder(label:TextSprite):Number
 		{
-			//var bottom:Number = label.y + (label.height / 2);
-			//var bottom:Number = label.y + label.textField.y + label.height;			
-			//var bottom:Number = label.y + label.textField.y + (label.textField.height / 2);
 			var bottom:Number = label.y + label.textField.y + label.height;
 			
 			return bottom;
 		}
+		
+		/*
+		fld = lbl.textField;
+		minX = Math.min(minX, lbl.x + fld.x);
+		maxX = Math.max(maxX, (lbl.x + lbl.width + fld.x));
+		minY = Math.min(minY, lbl.y + fld.y);
+		maxY = Math.max(maxY, (lbl.y + lbl.height + fld.y));
+		*/
 	}
 }

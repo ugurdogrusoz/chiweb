@@ -4,6 +4,7 @@ package ivis.view.ui
 	
 	import flash.geom.Point;
 	
+	import ivis.model.Edge;
 	import ivis.model.Node;
 
 	/**
@@ -31,19 +32,16 @@ package ivis.view.ui
 		
 		
 		/**
-		 * Calculates the intersection point of the given node and the line
-		 * specified by the points p1 and p2. If no intersection point is found, 
-		 * then the center of the given node is returned as an intersection 
-		 * point.
+		 * Calculates the intersection point of the given node and the given
+		 * edge. If no intersection point is found, then the center of 
+		 * the given node is returned as an intersection point.
 		 * 
 		 * @param node	node with an arbitrary shape
-		 * @param p1	start point of the line
-		 * @param p2	end point of the line
-		 * @return		intersection point 
+		 * @param edge	edge whose source or target is the given node
+		 * @return		intersection point
 		 */
 		function intersection(node:Node,
-			p1:Point,
-			p2:Point):Point;
+			edge:Edge):Point;
 		
 	}
 }

@@ -477,16 +477,25 @@ package ivis.view
 		 */
 		public function zoomToFit():void
 		{
+			// bounds of visible content
 			var bounds:Rectangle = this.vis.contentBounds();
 
-			// TODO if graph is not centered, bounds should be adjusted
+			// center coordinates of content bounds
+			var centerX:Number = bounds.x + bounds.width / 2;
+			var centerY:Number = bounds.y + bounds.height / 2;
 			
+			// distance of content center to visibile area center??
+			var dx:Number = Math.abs(-this.vis.x - centerX); 
+			var dy:Number = Math.abs(-this.vis.y - centerY);
+			
+			// TODO if graph is not centered, scales should be adjusted
 			var scaleX:Number = this.parent.width / bounds.width;
 			var scaleY:Number = this.parent.height / bounds.height;
 			
-			this.vis.x this.vis.y
+			// TODO below code does not work properly yet
+			//var scaleX:Number = this.parent.width / (bounds.width + 2 * dx) ;
+			//var scaleY:Number = this.parent.height / (bounds.height + 2 * dy);
 			
-			// TODO this works only if the view is centered!
 			this.zoomBy(Math.min(scaleX, scaleY) / this.vis.scaleX);
 		}
 		

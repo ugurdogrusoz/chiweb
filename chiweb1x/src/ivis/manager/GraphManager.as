@@ -150,9 +150,7 @@ package ivis.manager
 			node.y = y;
 			
 			// initialize visual properties (size, shape, etc) of node
-			// TODO render the node before updating compound bounds?
 			this._styleManager.initNodeStyle(node);
-			//node.props.labelText = node.data.id;
 			
 			Styles.reApplyStyles(node);
 			
@@ -166,16 +164,13 @@ package ivis.manager
 			{
 				compound = eventTarget as Node;
 				
-				if (!compound.isInitialized())
-				{
-					this.initCompound(compound);
-				}
+				// try to init compound in case it is not initialized before
+				this.initCompound(compound, false);
 				
 				// add the node as a child
 				compound.addNode(node);
 				
 				// update bounds of the target compound node up to the root
-				
 				while (compound != null)
 				{
 					// update the bounds of the compound node
@@ -192,6 +187,7 @@ package ivis.manager
 			// update the visualization
 			this.view.update(false);
 			
+			// return the created node
 			return node;
 		}
 		
@@ -213,8 +209,6 @@ package ivis.manager
 			
 			// update edge renderer
 			edge.renderer = EdgeRenderer.instance;
-			
-			// edge.props.labelText = edge.data.id;
 			
 			// bring the new edge to the front
 			GeneralUtils.bringToFront(edge);
@@ -282,25 +276,39 @@ package ivis.manager
 		 * the corresponding data group, initializing its style, and updating
 		 * its renderer.
 		 * 
-		 * @param node	node to be initialized as a compound 
+		 * @param node		node to be initialized as a compound
+		 * @param update 	indicates whether to update view or not
+		 * @return			true if node is initialized
 		 */
-		public function initCompound(node:Node):void
+		public function initCompound(node:Node,
+			update:Boolean = true):Boolean
 		{
-			// init compound
-			node.initialize();
+			// try to initialize the node
+			var initialized:Boolean = node.initialize();
 			
-			// initialize visual properties of compound
-			this._styleManager.initCompoundStyle(node);
+			// continue if initialization is successful
+			if (initialized)
+			{
+				// initialize visual properties of compound
+				this._styleManager.initCompoundStyle(node);
+				
+				// add node to the group of compound nodes
+				this.graph.addToGroup(Groups.COMPOUND_NODES, node);
+				
+				// update node renderer
+				node.renderer = CompoundNodeRenderer.instance;
 			
-			// add node to the group of compound nodes
-			this.graph.addToGroup(Groups.COMPOUND_NODES, node);
+				// re-apply styles
+				Styles.reApplyStyles(node);
+			}
 			
-			Styles.reApplyStyles(node);
+			// update view
+			if (initialized && update)
+			{
+				this.view.update();
+			}
 			
-			//compound.props.labelText = compound.data.id;
-			
-			// update node renderer
-			node.renderer = CompoundNodeRenderer.instance;
+			return initialized;
 		}
 		
 		/**
@@ -322,10 +330,11 @@ package ivis.manager
 				// re-initialize node as a simple node
 				this._styleManager.initNodeStyle(node);
 				
-				Styles.reApplyStyles(node);
-				
 				// update node renderer
 				node.renderer = NodeRenderer.instance;
+				
+				// re-apply styles
+				Styles.reApplyStyles(node);
 			}
 			
 			return reset;
@@ -855,6 +864,17 @@ package ivis.manager
 		}
 		
 		/**
+		 * Fits the graph content to visible area without centering. 
+		 */
+		public function zoomToFit():void
+		{
+			// TODO does not work, if not centered..
+			this.view.zoomToFit();
+			this.view.updateHitArea();
+			this.view.update(false);
+		}
+		
+		/**
 		 * Centers the view and zooms to fit the visible area.
 		 */
 		public function fitInVisibleArea():void
@@ -862,6 +882,7 @@ package ivis.manager
 			this.view.centerView();
 			this.view.zoomToFit();
 			this.view.updateHitArea();
+			this.view.update(false);
 		}
 		
 		/**

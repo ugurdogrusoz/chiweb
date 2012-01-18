@@ -6,6 +6,7 @@ package ivis.view.ui
 	import flash.display.Graphics;
 	import flash.geom.Point;
 	
+	import ivis.model.Edge;
 	import ivis.model.Node;
 	import ivis.util.GeometryUtils;
 
@@ -73,24 +74,32 @@ package ivis.view.ui
 		}
 		
 		/**
-		 * Calculates the intersection point of the given node and the line
-		 * specified by the points p1 and p2. This function assumes the shape
-		 * of the given node as circular. If no intersection point is found,
-		 * then the center of the given node is returned as an intersection 
-		 * point.
+		 * Calculates the intersection point of the given node and the given
+		 * edge. This function assumes the shape of the given node as circular,
+		 * and the shape of the given edge as linear.
+		 * 
+		 * If no intersection point is found, then the center of the given node
+		 * is returned as an intersection point.
 		 * 
 		 * @param node	circular Node
-		 * @param p1	start point of the line
-		 * @param p2	end point of the line
+		 * @param edge	linear edge
 		 * @return		intersection point 
 		 */
 		public function intersection(node:Node,
-			p1:Point,
-			p2:Point):Point
+			edge:Edge):Point
 		{
 			var interPoint:Point = null;
+			
+			// center of the node
 			var center:Point = new Point(node.x, node.y);
 			
+			// centers of source and target nodes (considered as start & end
+			// points of the line)
+			var p1:Point = new Point(edge.source.x, edge.source.y);
+			var p2:Point = new Point(edge.target.x, edge.target.y);
+			
+			// calculate intersection of the line passing through p1 and p2, and
+			// the circle defined by the node
 			var result:Object = GeometryUtils.lineIntersectCircle(
 				p1, p2, center, node.width / 2);
 			

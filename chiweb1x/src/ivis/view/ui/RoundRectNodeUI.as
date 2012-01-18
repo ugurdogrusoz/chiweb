@@ -7,6 +7,7 @@ package ivis.view.ui
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import ivis.model.Edge;
 	import ivis.model.Node;
 
 	/**
@@ -76,11 +77,12 @@ package ivis.view.ui
 		}
 		
 		/**
-		 * Calculates the intersection point of the given node and the line
-		 * specified by the points p1 and p2. This function assumes the shape
-		 * of the given node as round rectangle. If no intersection point is
-		 * found, then the center of the given node is returned as an
-		 * intersection point.
+		 * Calculates the intersection point of the given node and the given
+		 * edge. This function assumes the shape of the given node as a round
+		 * rectangle, and the shape of the given edge as a line.
+		 * 
+		 * If no intersection point is found, then the center of the given node
+		 * is returned as an intersection point.
 		 * 
 		 * @param node	round rectangular Node
 		 * @param p1	start point of the line
@@ -88,16 +90,23 @@ package ivis.view.ui
 		 * @return		intersection point 
 		 */
 		public function intersection(node:Node,
-			p1:Point,
-			p2:Point):Point
+			edge:Edge):Point
 		{
 			// TODO consider rounded corners!! this is identical to rectangle
 			
 			var interPoint:Point = null;
 			
+			// centers of source and target nodes (considered as start & end
+			// points of the line)
+			var p1:Point = new Point(edge.source.x, edge.source.y);
+			var p2:Point = new Point(edge.target.x, edge.target.y);
+			
+			// used as parameters for the utiliy function to store intersection
+			// points
 			var ip0:Point = new Point();
 			var ip1:Point = new Point();
 			
+			// construct the rectangle defined by the node
 			var rect:Rectangle = new Rectangle(node.left, node.top,
 				node.width, node.height);
 			

@@ -211,11 +211,23 @@ package ivis.model
 		//------------------------- PUBLIC FUNCTIONS ---------------------------
 		
 		/**
-		 * Initializes the map of children for this compound node.
+		 * Initializes the map of children for this compound node, if it is not
+		 * initialized before. In order to re-initialize a node, first it
+		 * should be reset with reset method.
+		 * 
+		 * @return	true if successfully initialized, false otherwise.
 		 */
-		public function initialize():void
+		public function initialize():Boolean
 		{
-			this._nodesMap = new Object();
+			var result:Boolean = false;
+			
+			if (!this.isInitialized())
+			{
+				this._nodesMap = new Object();
+				result = true;
+			}
+			
+			return result;
 		}
 		
 		/**
@@ -271,12 +283,8 @@ package ivis.model
 		 */
 		public function addNode(node:Node):void
 		{
-			// check if the node is initialized
-			if (!this.isInitialized())
-			{
-				// initialize the node
-				this.initialize();
-			}
+			// initialize the node (if not initialized before)
+			this.initialize();			
 			
 			// add the node to the child node list of this node
 			this._nodesMap[node.data.id] = node;
