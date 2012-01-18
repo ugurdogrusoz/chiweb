@@ -7,6 +7,7 @@ package main
 	
 	import ivis.controls.StateManager;
 	import ivis.manager.ApplicationManager;
+	import ivis.model.Node;
 	import ivis.model.Style;
 	import ivis.util.Groups;
 	import ivis.view.ui.CompoundUIManager;
@@ -33,6 +34,8 @@ package main
 				Groups.NODES, new Style(style));
 			
 			style = {shape: CompoundUIManager.ROUND_RECTANGLE,
+				labelHorizontalAnchor: TextSprite.RIGHT,
+				labelVerticalAnchor: TextSprite.TOP,
 				paddingLeft: 16,
 				paddingRight: 16,
 				paddingTop: 16,
@@ -152,5 +155,30 @@ package main
 		}
 		
 		// TODO also test specific styles
+		
+		
+		public function convertSelected() : void
+		{
+			for each (var node:Node in
+				this.appManager.graphManager.graph.selectedNodes)
+			{
+				if (!node.isInitialized())
+				{
+					this.appManager.graphManager.initCompound(node);
+				}
+			}
+		}
+		
+		public function revertSelected() : void
+		{
+			for each (var node:Node in
+				this.appManager.graphManager.graph.selectedNodes)
+			{
+				if (node.isInitialized())
+				{
+					this.appManager.graphManager.resetCompound(node);
+				}
+			}
+		}
 	}
 }

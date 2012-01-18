@@ -168,12 +168,6 @@
 				   toolTip="Enable Compound"
 				   click="app.controlCenter.toggleState(StateManager.AUTO_COMPOUND)"/>
 		
-		<mx:Button id="enablePan" 
-				   label="EP"
-				   width="44"
-				   toolTip="Enable Pan"
-				   click="app.controlCenter.toggleState(StateManager.PAN)"/>
-		
 		<mx:Button id="deleteSelected" 
 				   label="D"
 				   width="32"
@@ -192,11 +186,31 @@
 				   toolTip="Reset all filters"
 				   click="app.graphManager.resetFilters()"/>
 		
+		<mx:Button id="convertSelected"
+				   label="C"
+				   width="32"
+				   toolTip="Convert Selected to Compound"
+				   click="testMain.convertSelected()"/>
+		
+		<mx:Button id="revertSelected"
+				   label="S"
+				   width="32"
+				   toolTip="Convert Selected to Simple"
+				   click="testMain.revertSelected()"/>
+		
+		<mx:Spacer width="5"/>
+		
 		<mx:Button id="performLayout" 
 				   label="L"
 				   width="32"
 				   toolTip="Perform Layout"
 				   click="app.graphManager.performLayout()"/>
+		
+		<mx:Button id="enablePan" 
+				   label="EP"
+				   width="44"
+				   toolTip="Enable Pan"
+				   click="app.controlCenter.toggleState(StateManager.PAN)"/>
 		
 		<mx:Button id="zoomToActual"
 				   label="ZA"
@@ -220,7 +234,15 @@
 				   label="ZF"
 				   width="44"
 				   toolTip="Fit in Canvas"
-				   click="app.graphManager.fitInVisibleArea()"/>
+				   click="app.graphManager.zoomToFit()"/>
+		
+		<mx:Button id="centerView"
+				   label="CV"
+				   width="44"
+				   toolTip="Center View"
+				   click="app.graphManager.centerView()"/>
+		
+		<mx:Spacer width="5"/>
 		
 		<mx:Button id="createTestGroup"
 				   label="T"
