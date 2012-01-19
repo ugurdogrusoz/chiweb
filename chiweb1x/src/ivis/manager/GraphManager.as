@@ -40,6 +40,10 @@ package ivis.manager
 		protected var _styleManager:GraphStyleManager;
 		protected var _globalConfig:GlobalConfig;		
 		protected var _rootContainer:Container;
+		
+		/**
+		 * Source node used for the edge creating process.
+		 */
 		protected var _sourceNode:Node;
 		
 		//--------------------------- ACCESSORS --------------------------------
@@ -66,14 +70,6 @@ package ivis.manager
 		public function get view():GraphView
 		{
 			return _view;
-		}
-		
-		/**
-		 *  Source node used for the edge creating process.
-		 */
-		public function get sourceNode():Node
-		{
-			return _sourceNode;
 		}
 		
 		// TODO it may be better to make graph inaccessible outside GraphManager
@@ -220,15 +216,21 @@ package ivis.manager
 		 * If the event target is a simple or compound node (but not a bend
 		 * node) and if the source node is set, this function adds and edge
 		 * between the target node and the source node. If no source is set yet,
-		 * then this function sets the source node as the event target. 
+		 * then this function sets the source node as the event target.
+		 * 
+		 * This function returns the new created edge, if add operation is
+		 * completed. If no edge is added but source node is set, then returns
+		 * the source node. If neither an edge added, nor the source node is
+		 * set, then returns null.  
 		 * 
 		 * @param eventTarget	target object of the event
-		 * @return				newly added edge if successful, null otherwise
+		 * @return				new edge if added, source node if set, null o.w.
 		 */
 		public function addEdgeFor(eventTarget:Object):DataSprite
 		{
 			var node:Node = null;
 			var edge:DataSprite = null;
+			var ds:DataSprite;
 			var data:Object;
 			
 			if ((eventTarget is Node)
@@ -239,12 +241,16 @@ package ivis.manager
 			
 			if (node == null)
 			{
-				edge = null;
+				// set return value as null
+				ds = null;
 			}
 			else if (this._sourceNode == null)
 			{
 				// event target will be the source of the edge
 				this._sourceNode = node;
+				
+				// set return value as the source node
+				ds = node;
 			}
 			else
 			{
@@ -260,6 +266,9 @@ package ivis.manager
 				
 				// reset source node
 				this._sourceNode = null;
+				
+				// set return value as the new edge
+				ds = edge;
 			}
 			
 			// update the visualization
@@ -268,7 +277,7 @@ package ivis.manager
 				this.view.update(false);
 			}
 			
-			return edge;
+			return ds;
 		}
 		
 		/**
@@ -1403,7 +1412,7 @@ package ivis.manager
 				{
 					// visit all data sprites in the group to apply new style
 					for each (var ds:DataSprite in group)
-					{	
+					{
 						if (ds is IStyleAttachable)
 						{
 							// attach style to the sprite
@@ -1418,8 +1427,6 @@ package ivis.manager
 					this.view.update();
 				}
 			}
-			
-			
 		}
 		
 		/**

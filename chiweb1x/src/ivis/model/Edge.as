@@ -210,6 +210,7 @@ package ivis.model
 			}
 		}
 		
+		/** @inheritDoc */
 		public override function toString():String
 		{
 			var parentEdge:String = "N/A";
@@ -247,26 +248,26 @@ package ivis.model
 		}
 		
 		/** @inheritDoc */
-		public function getStyle(name:String) : Style
+		public function getStyle(name:String):Style
 		{
 			return this._styleManager.getStyle(name);
 		}
 		
 		/** @inheritDoc */
-		public function get allStyles() : Array
+		public function get allStyles():Array
 		{
 			return this._styleManager.allStyles;
 		}
 		
 		/** @inheritDoc */
-		public function get groupStyles() : Array
+		public function get groupStyles():Array
 		{
 			return this._styleManager.groupStyles;
 		}
 		
 		/** @inheritDoc */
 		public function attachStyle(name:String,
-									style:Style) : void
+			style:Style):void
 		{
 			if (style != null &&
 				name != null)
@@ -304,7 +305,7 @@ package ivis.model
 		}
 		
 		/** @inheritDoc */
-		public function detachStyle(name:String) : void
+		public function detachStyle(name:String):void
 		{
 			var style:Style = this._styleManager.getStyle(name); 
 			
@@ -347,11 +348,11 @@ package ivis.model
 		 *  
 		 * @param event	StyleChangeEvent triggered the action
 		 */
-		protected function onStyleChange(event:StyleChangeEvent) : void
+		protected function onStyleChange(event:StyleChangeEvent):void
 		{
-			var style:Style = event.info.style;
+			//var style:Style = event.info.style;
 			
-			Styles.reApplyStyles(this, false);
+			Styles.reApplyStyles(this);
 			
 			/*
 			if (event.type == StyleChangeEvent.ADDED_STYLE_PROP)

@@ -488,9 +488,7 @@ package ivis.model
 		 */
 		protected function onStyleChange(event:StyleChangeEvent):void
 		{
-			var style:Style = event.info.style;
-			
-			trace("[Node.onStyleChange] " + event.type);
+			//var style:Style = event.info.style;
 			
 			Styles.reApplyStyles(this);
 			

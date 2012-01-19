@@ -121,7 +121,6 @@ package ivis.controls
 					ds = target as DataSprite;
 					eventType = ControlEvent.TOGGLED_SELECTION;
 				}
-				
 			}
 			
 			// ADD_NODE flag is on
@@ -165,14 +164,17 @@ package ivis.controls
 			// ADD_EDGE flag is on
 			if (this.stateManager.checkState(StateManager.ADD_EDGE))
 			{
-				// if the event target is a node, then add an edge for the
-				// target node
-				if (target is Node)
+				// try to add an edge for the event target
+				ds = this.graphManager.addEdgeFor(target);
+				
+				// if the event target is not a node, or it is a bend point,
+				// then the return value (ds) will be null
+				if (ds != null)
 				{
-					ds = this.graphManager.addEdgeFor(target);
-					
-					if (ds == null)
+					if (ds is Node)
 					{
+						// if ds is Node, it means source node is set, so
+						// the event to dispatch should be ADDING_EDGE
 						eventType = ControlEvent.ADDING_EDGE;
 						
 						this.stateManager.setState(StateManager.ADDING_EDGE,
@@ -183,8 +185,10 @@ package ivis.controls
 							ControlEvent.RESET_STATES,
 							onResetStates);
 					}
-					else
+					else // ds is Edge
 					{
+						// if ds is Edge, it means edge added successfully, so
+						// the event to dispatch should be ADDED_EDGE
 						eventType = ControlEvent.ADDED_EDGE;
 						
 						this.stateManager.setState(StateManager.ADDING_EDGE,
@@ -195,9 +199,10 @@ package ivis.controls
 							ControlEvent.RESET_STATES,
 							onResetStates);
 					}
-					
 				}
 			}
+			
+			// bring target sprite to front 
 			
 			if (target is Node)
 			{
@@ -221,7 +226,7 @@ package ivis.controls
 				}
 			}
 			
-			// TODO debug click information
+			// DEBUG: click information
 			if (target is Node)
 			{
 				trace("[ClickControl.onClick] node: " + target);
@@ -246,7 +251,6 @@ package ivis.controls
 			}
 			
 			// dispatch a new control event
-			
 			if (eventType != null
 				&& this.object.hasEventListener(eventType))
 			{
