@@ -1,6 +1,8 @@
 package controls
 {
 	
+	import flare.vis.data.DataSprite;
+	
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Graphics;
 	import flash.display.InteractiveObject;
@@ -29,6 +31,11 @@ package controls
 		 * Shape to animate edge adding process.
 		 */
 		protected var _previewEdge:Shape;
+		
+		/**
+		 * Source node required as a starting point to animate edge adding.
+		 */
+		protected var _sourceNode:DataSprite;
 		
 		//-------------------------- CONSTRUCTOR -------------------------------
 		
@@ -182,10 +189,10 @@ package controls
 			// its id property as label text
 			var style:Object = {labelText: edge.data.id};
 			
-			// attach node-specific style to this node
+			// attach edge-specific style to this edge
 			edge.attachStyle(Styles.SPECIFIC_STYLE, new Style(style));
 			
-			// re-apply styles for the node to reflect the changes
+			// re-apply styles for the edge to reflect the changes
 			Styles.reApplyStyles(edge);
 			this.graphManager.view.update();
 		}
@@ -202,23 +209,25 @@ package controls
 			if (this.object != null &&
 				this.object is DisplayObjectContainer)
 			{
-				// add mouse listener for the animation of preview edge
+				// update source node
+				this._sourceNode = evt.info.sprite;
+				
+				// enable preview edge
+				(this.object as DisplayObjectContainer).addChild(
+					this._previewEdge);
+				
+				// add mouse listener for the animation of the preview edge
 				this.object.addEventListener(MouseEvent.MOUSE_MOVE,
 					onMouseMove);
 				
 				// add listener for state manager to reset edge animation when
-				// states reset.
+				// states reset
 				if (this.stateManager != null)
 				{
 					this.stateManager.addEventListener(
 						ControlEvent.RESET_STATES,
 						onResetStates);
 				}
-				
-				// enable preview edge
-				
-				(this.object as DisplayObjectContainer).addChild(
-					this._previewEdge);
 			}
 		}
 		
@@ -233,8 +242,8 @@ package controls
 		{
 			var g:Graphics = this._previewEdge.graphics;
 			
-			var startX:Number = this.graphManager.sourceNode.x;
-			var startY:Number = this.graphManager.sourceNode.y;
+			var startX:Number = this._sourceNode.x;
+			var startY:Number = this._sourceNode.y;
 			
 			var endX:Number = this.object.mouseX;
 			var endY:Number = this.object.mouseY;
