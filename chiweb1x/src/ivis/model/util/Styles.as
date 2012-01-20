@@ -46,15 +46,15 @@ package ivis.model.util
 		{
 			if (element is Node)
 			{
-				Styles._reApplyNodeStyles(element as Node);
+				Styles.reApplyNodeStyles(element as Node);
 			}
 			else if (element is Edge)
 			{
-				Styles._reApplyEdgeStyles(element as Edge, propagate);
+				Styles.reApplyEdgeStyles(element as Edge, propagate);
 			}
 			else
 			{
-				Styles._reApplyStyles(element);
+				Styles.applyStyles(element);
 			}
 			
 		}
@@ -64,9 +64,9 @@ package ivis.model.util
 		 * 
 		 * @param node	node to re-apply styles
 		 */
-		internal static function _reApplyNodeStyles(node:Node):void
+		private static function reApplyNodeStyles(node:Node):void
 		{
-			var dirty:Boolean = Styles._reApplyStyles(node);
+			var dirty:Boolean = Styles.applyStyles(node);
 			
 			if (dirty)
 			{
@@ -84,10 +84,10 @@ package ivis.model.util
 		 * @param edge		edge to re-apply styles
 		 * @param propagate	indicates whether to propagate to child segments
 		 */
-		internal static function _reApplyEdgeStyles(edge:Edge,
+		private static function reApplyEdgeStyles(edge:Edge,
 			propagate:Boolean = true):void
 		{
-			var dirty:Boolean = Styles._reApplyStyles(edge);
+			var dirty:Boolean = Styles.applyStyles(edge);
 			
 			if (propagate &&
 				edge.hasBendPoints())
@@ -95,7 +95,7 @@ package ivis.model.util
 				// propagate style to the child segments
 				for each (var segment:Edge in edge.getSegments())
 				{
-					Styles._reApplyStyles(segment);
+					Styles.applyStyles(segment);
 				}
 			}
 			
@@ -110,13 +110,12 @@ package ivis.model.util
 		}
 		
 		/**
-		 * Re-applies all styles attached to the given element.
+		 * Applies all styles attached to the given element.
 		 * 
 		 * @param element	element to re-apply styles
 		 * @return			return true if any style is re-applied, false o.w.	
 		 */
-		internal static function _reApplyStyles(
-			element:IStyleAttachable):Boolean
+		private static function applyStyles(element:IStyleAttachable):Boolean
 		{
 			var style:Style;
 			var dirty:Boolean = false;

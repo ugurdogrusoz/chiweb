@@ -284,8 +284,10 @@ package ivis.manager
 				labelDistanceFromNode: 30,
 				//sourceArrowType: ArrowUIManager.SIMPLE_ARROW,
 				//targetArrowType: ArrowUIManager.SIMPLE_ARROW,
-				arrowTipAngle: 0.3,
-				arrowTipDistance: 15,
+				sourceArrowTipAngle: 0.3,
+				sourceArrowTipDistance: 15,
+				targetArrowTipAngle: 0.3,
+				targetArrowTipDistance: 15,
 				selectionGlowColor: 0x00ffff33, // "#ffff33"
 				selectionGlowAlpha: 0.8,
 				selectionGlowBlur: 4,

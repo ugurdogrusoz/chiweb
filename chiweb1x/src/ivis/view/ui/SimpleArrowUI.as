@@ -42,8 +42,8 @@ package ivis.view.ui
 		public function drawSourceArrow(edge:Edge,
 			points:Array):Array
 		{
-			var angle:Number = edge.props.arrowTipAngle;
-			var distance:Number = edge.props.arrowTipDistance;
+			var angle:Number = edge.props.sourceArrowTipAngle;
+			var distance:Number = edge.props.sourceArrowTipDistance;
 			
 			var slopeAngle: Number = GeometryUtils.slopeAngle(points[0],
 				points[1]);
@@ -77,8 +77,8 @@ package ivis.view.ui
 		public function drawTargetArrow(edge:Edge,
 			points:Array):Array
 		{
-			var angle:Number = edge.props.arrowTipAngle;
-			var distance:Number = edge.props.arrowTipDistance;
+			var angle:Number = edge.props.targetArrowTipAngle;
+			var distance:Number = edge.props.targetArrowTipDistance;
 			
 			var slopeAngle: Number = GeometryUtils.slopeAngle(points[0],
 				points[1]);

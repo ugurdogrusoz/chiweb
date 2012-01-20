@@ -73,13 +73,5 @@ package ivis.util
 			
 			return bottom;
 		}
-		
-		/*
-		fld = lbl.textField;
-		minX = Math.min(minX, lbl.x + fld.x);
-		maxX = Math.max(maxX, (lbl.x + lbl.width + fld.x));
-		minY = Math.min(minY, lbl.y + fld.y);
-		maxY = Math.max(maxY, (lbl.y + lbl.height + fld.y));
-		*/
 	}
 }
