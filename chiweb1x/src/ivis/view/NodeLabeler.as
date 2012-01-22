@@ -19,17 +19,39 @@ package ivis.view
 	 */
 	public class NodeLabeler extends Labeler
 	{
+		
+		//------------------------- CONSTRUCTOR --------------------------------
+		
+		/**
+		 * Instantiates a labeler for nodes.
+		 * 
+		 * @param source	source property of the label text
+		 * 					(default value is "props.labelText")
+		 * @param access	target property to store node's label
+		 * 					(default value is "props.$label")
+		 * @param group		the data group
+		 * 					(default value is Groups.NODES)
+		 * @param format	optional text formatting information
+		 * @param filter	function determining which nodes to be labelled
+		 */
 		public function NodeLabeler(source:* = Labels.DEFAULT_TEXT_SOURCE,
+			access:String = Labels.DEFAULT_LABEL_ACCESS,
 			group:String = Groups.NODES,
 			format:TextFormat = null,
 			filter:* = null)
 		{
+			// create a labeler with a layer policy
 			var policy:String = Labeler.LAYER;
-			
 			super(source, group, format, filter, policy);
 			
+			this.access = access;
+			
+			// never cache text, otherwise it won't refresh label text when
+			// source property (it is props.labelText by default) changes.
 			this.cacheText = false;
 		}
+		
+		//---------------------- PUBLIC FUNCTIONS ------------------------------
 		
 		/** @inheritDoc */
 		public override function setup():void
@@ -76,6 +98,8 @@ package ivis.view
 			}
 		}
 		
+		//---------------------- PROTECTED FUNCTIONS ---------------------------
+		
 		/** @inheritDoc */
 		protected override function process(d:DataSprite):void
 		{
@@ -97,14 +121,26 @@ package ivis.view
 			create:Boolean=false,
 			visible:Boolean=true):TextSprite
 		{
+			var label:TextSprite;
+			
 			this.updateTextFormat(d);
 			
-			var label:TextSprite = super.getLabel(d, create, visible);
-			
-			// do not create label for empty strings
-			if (label.text.length <= 0)
+			// do not create a label for null or empty strings
+			if (this.getLabelText(d) == null ||
+				this.getLabelText(d).length <= 0)
 			{
-				label = null;
+				label = super.getLabel(d, false);
+				
+				// remove the previous label if any
+				if (label != null)
+				{
+					this._labels.removeChild(label);
+					label = null;
+				}
+			}
+			else
+			{
+				label = super.getLabel(d, create, visible);
 			}
 			
 			if (label && !cacheText)
@@ -122,6 +158,13 @@ package ivis.view
 			return label;
 		}
 		
+		/**
+		 * Updates the position of the given label with respect to its owner
+		 * data sprite.
+		 * 
+		 * @param label	label to be updated
+		 * @param d		owner data sprite of the label
+		 */
 		protected function updateLabelPosition(label:TextSprite,
 			d:DataSprite):void
 		{
@@ -159,6 +202,12 @@ package ivis.view
 			label.y = y + yOff;
 		}
 		
+		/**
+		 * Updates the text format of the label with respect to the given
+		 * owner data sprite.
+		 * 
+		 * @param d	owner data sprite of the label
+		 */
 		protected function updateTextFormat(d:DataSprite):void
 		{
 			this.textFormat.font = d.props.labelFontName;

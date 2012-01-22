@@ -231,9 +231,9 @@ package ivis.controls
 			{
 				trace("[ClickControl.onClick] node: " + target);
 				
-				if ((target as Node).props.label != null)
+				if ((target as Node).props.$label != null)
 				{
-					var label:TextSprite = (target as Node).props.label
+					var label:TextSprite = (target as Node).props.$label
 						as TextSprite;
 					
 					trace("\t" + "lx: " + label.x + " ly: " + label.y +

@@ -32,34 +32,34 @@ package ivis.manager
 		private var _defaultCompoundStyle:Style;
 		private var _defaultBendStyle:Style;
 		
+		/**
+		 * Map to store group styles.
+		 */
 		protected var _groupStyleMap:Object;
 		
-		/**
-		 * Default visual styles for nodes.
-		 */
-		public function get defaultNodeStyle():Style
-		{
-			return _defaultNodeStyle;
-		}
+		//----------------------------- ACCESSORS ------------------------------
 		
 		/**
-		 * Default visual styles for edges.
+		 * Returns names of all groups registered for a style.
 		 */
-		public function get defaultEdgeStyle():Style
+		public function get groupStyleNames():Array
 		{
-			return _defaultEdgeStyle;
-		}
-		
-		/**
-		 * Default visual styles for compound nodes.
-		 */
-		public function get defaultCompoundStyle():Style
-		{
-			return _defaultCompoundStyle;
+			var names:Array = new Array();
+			
+			for (var name:String in this._groupStyleMap)
+			{
+				names.push(name);
+			}
+			
+			return names;
 		}
 		
 		//------------------------- CONSTRUCTOR --------------------------------
 		
+		/**
+		 * Instantiates a new GraphStyleManager by initializing its default
+		 * styles.
+		 */
 		public function GraphStyleManager()
 		{
 			// initialize group style map
@@ -72,10 +72,7 @@ package ivis.manager
 		//---------------------- PUBLIC FUNCTIONS ------------------------------
 		
 		/**
-		 * Attaches visual styles required for the initialization to the
-		 * given node. Default node style is always attached to the given
-		 * node and if there is a custom style defined for NODES group it is
-		 * also attached.
+		 * Attaches default visual style to the given node.
 		 * 
 		 * @param node	node to attach visual styles
 		 */
@@ -87,12 +84,12 @@ package ivis.manager
 			
 			// attach custom style specific to Groups.NODES
 			
-			var style:Style = this.getGroupStyle(Groups.NODES);
-			
-			if (style != null)
-			{
-				node.attachStyle(Groups.NODES, style);
-			}
+//			var style:Style = this.getGroupStyle(Groups.NODES);
+//			
+//			if (style != null)
+//			{
+//				node.attachStyle(Groups.NODES, style);
+//			}
 		}
 		
 		/**
@@ -108,8 +105,7 @@ package ivis.manager
 		}
 		
 		/**
-		 * Attaches visual styles to the given edge. First attaches the default
-		 * node style, then attaches custom style for the EDGES group.
+		 * Attaches default visual style to the given edge.
 		 * 
 		 * @param edge	edge to attach visual styles
 		 */
@@ -120,12 +116,12 @@ package ivis.manager
 				this._defaultEdgeStyle);
 			
 			// attach custom style specific to Groups.EDGES
-			var style:Style = this.getGroupStyle(Groups.EDGES);
-			
-			if (style != null)
-			{
-				edge.attachStyle(Groups.EDGES, style);
-			}
+//			var style:Style = this.getGroupStyle(Groups.EDGES);
+//			
+//			if (style != null)
+//			{
+//				edge.attachStyle(Groups.EDGES, style);
+//			}
 		}
 		
 		/**
@@ -212,7 +208,7 @@ package ivis.manager
 				lineColor: 0xff333333,
 				lineAlpha: 0.9,
 				lineWidth: 1,
-				labelText: "",
+				//labelText: "", // empty label by default
 				labelTextMode: TextSprite.DEVICE,
 				labelOffsetX: 0,
 				labelOffsetY: 0,
@@ -242,7 +238,7 @@ package ivis.manager
 				lineColor: 0xff333333,
 				lineAlpha: 0.9,
 				lineWidth: 1,
-				labelText: "",
+				//labelText: "", // empty label by default
 				labelTextMode: TextSprite.DEVICE,
 				labelOffsetX: 0,
 				labelOffsetY: 0,
@@ -273,7 +269,7 @@ package ivis.manager
 				lineColor: 0xff000000,
 				lineAlpha: 0.8,
 				lineWidth: 1,
-				labelText: "",
+				//labelText: "", // empty label by default
 				labelTextMode: TextSprite.DEVICE,
 				labelPos: EdgeLabeler.MIDDLE,
 				labelOffsetX: 0,
@@ -304,12 +300,12 @@ package ivis.manager
 				fillColor: 0xff000000, // not used when inheritColor is true 
 				fillAlpha: 1.0, // not used when inheritColor is true
 				lineWidth: 0,
-				labelText: "",
+				//labelText: "",
 				labelTextMode: TextSprite.DEVICE,
 				labelOffsetX: 0,
 				labelOffsetY: 0,
 				labelHorizontalAnchor: TextSprite.CENTER,
-				labelVerticalAnchor: TextSprite.MIDDLE,
+				labelVerticalAnchor: TextSprite.BOTTOM,
 				labelFontName: "Arial",
 				labelFontSize: 0,
 				labelFontColor: 0xff000000,

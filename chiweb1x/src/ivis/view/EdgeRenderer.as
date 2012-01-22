@@ -44,8 +44,7 @@ package ivis.view
 				edge = d as Edge;
 				edgeUI = EdgeUIManager.getUI(edge.shape);
 				
-				if (edge == null ||
-					edge.source == null ||
+				if (edge.source == null ||
 					edge.target == null)
 				{
 					// cannot render

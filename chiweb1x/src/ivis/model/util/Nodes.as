@@ -120,10 +120,10 @@ package ivis.model.util
 			{
 				for each (node in nodes)
 				{
-					if (node.props.label != null)
+					if (node.props.$label != null)
 					{
 						value = Labels.leftBorder(
-							node.props.label as TextSprite);
+							node.props.$label as TextSprite);
 						
 						values.push(value);
 					}
@@ -135,10 +135,10 @@ package ivis.model.util
 			{
 				for each (node in nodes)
 				{
-					if (node.props.label != null)
+					if (node.props.$label != null)
 					{
 						value = Labels.rightBorder(
-							node.props.label as TextSprite);
+							node.props.$label as TextSprite);
 						
 						values.push(value);
 					}
@@ -150,10 +150,10 @@ package ivis.model.util
 			{
 				for each (node in nodes)
 				{
-					if (node.props.label != null)
+					if (node.props.$label != null)
 					{
 						value = Labels.topBorder(
-							node.props.label as TextSprite);
+							node.props.$label as TextSprite);
 						
 						values.push(value);
 					}
@@ -165,10 +165,10 @@ package ivis.model.util
 			{
 				for each (node in nodes)
 				{
-					if (node.props.label != null)
+					if (node.props.$label != null)
 					{
 						value = Labels.bottomBorder(
-							node.props.label as TextSprite);
+							node.props.$label as TextSprite);
 						
 						values.push(value);
 					}

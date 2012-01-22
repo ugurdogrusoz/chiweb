@@ -210,7 +210,7 @@ package ivis.model
 			}
 			else
 			{
-				// search for the style withing the group styles
+				// search for the style within the group styles
 				for (name in this._groupStyleMap)
 				{
 					if (style == this._groupStyleMap[name])

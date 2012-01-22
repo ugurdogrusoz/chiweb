@@ -13,7 +13,8 @@ package ivis.view
 	import ivis.util.Labels;
 	
 	/**
-	 * Labeler for edge sprites.
+	 * Labeler for edge sprites. This labeler is designed to render edges
+	 * in the REGULAR_EDGES data group by default.
 	 * 
 	 * @author Selcuk Onur Sumer 
 	 */
@@ -26,36 +27,54 @@ package ivis.view
 		public static const PERCENT_DISTANCE:String = "percent";
 		public static const FIXED_DISTANCE:String = "fixed";
 		
+		//------------------------- CONSTRUCTOR --------------------------------
+		
+		/**
+		 * Instantiates a labeler for edges. To enable labels also for segment
+		 * edges, pass Groups.EDGES instead of Groups.REGULAR_EDGES as the group
+		 * parameter. 
+		 * 
+		 * @param source	source property of the label text
+		 * 					(default value is "props.labelText")
+		 * @param access	target property to store edge's label
+		 * 					(default value is "props.$label")
+		 * @param group		the data group
+		 * 					(default value is Groups.REGULAR_EDGES)
+		 * @param format	optional text formatting information
+		 * @param filter	function determining which edges to be labelled
+		 */
 		public function EdgeLabeler(source:* = Labels.DEFAULT_TEXT_SOURCE,
-			group:String = Groups.EDGES,
+			access:String = Labels.DEFAULT_LABEL_ACCESS,
+			group:String = Groups.REGULAR_EDGES,
 			format:TextFormat = null,
 			filter:* = null)
 		{
-			super(source, group, format, filter);
+			super(source, access, group, format, filter);
 		}
+		
+		//---------------------- PROTECTED FUNCTIONS ---------------------------
 		
 		/** @inheritDoc */
 		protected override function process(d:DataSprite):void
 		{
+			var label:TextSprite = null;
+			
+			// process only Edge instances
+			// (since this labeler is not compatible with other data sprites)
 			if (d is Edge)
 			{
-				var edge:Edge = d as Edge;
-				
-				if (!edge.isSegment && edge.props.$startPoint != null &&
-					edge.props.$endPoint != null)
-				{
-					var label:TextSprite = this.getLabel(d, true);
-					
-					if (label != null)
-					{
-						label.filters = null; // filters(d); TODO get filters
-						label.alpha = d.alpha;
-						label.visible = d.visible;
-					
-						this.updateLabelPosition(label, d);
-						label.render();
-					}
-				}
+				label = this.getLabel(d, true);
+			}
+			
+			// continue only if label can be obtained successfully
+			if (label != null)
+			{
+				label.filters = null; // filters(d); TODO get filters
+				label.alpha = d.alpha;
+				label.visible = d.visible;
+			
+				this.updateLabelPosition(label, d);
+				label.render();
 			}
 		}
 		
@@ -72,8 +91,8 @@ package ivis.view
 		 */
 		protected function endPoints(d:DataSprite):Array
 		{
-			var startPoint:Point = d.props.$startPoint as Point;
-			var endPoint:Point = d.props.$endPoint as Point;
+			var startPoint:Point = d.props.$startPoint;
+			var endPoint:Point = d.props.$endPoint;
 			var adjacentToSrc:Edge;
 			var adjacentToTgt:Edge;
 			
@@ -125,7 +144,15 @@ package ivis.view
 				}
 			}
 			
-			return [startPoint, endPoint];
+			var points:Array = null;
+			
+			if (startPoint != null &&
+				endPoint != null)
+			{
+				points = [startPoint, endPoint]
+			}
+			
+			return points;
 		}
 		
 		/** @inheritDoc */
@@ -134,12 +161,22 @@ package ivis.view
 		{
 			if (label == null)
 			{
+				// cannot update label position
 				return;
 			}
 			
 			var endPoints:Array = this.endPoints(d);
-			var startPoint:Point = endPoints[0] as Point;
-			var endPoint:Point = endPoints[1] as Point;
+			
+			if (endPoints != null)
+			{
+				var startPoint:Point = endPoints[0] as Point;
+				var endPoint:Point = endPoints[1] as Point;
+			}
+			else
+			{
+				// cannot update label position
+				return;
+			}
 			
 			// label coordinates
 			var x:Number;

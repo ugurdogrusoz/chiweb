@@ -7,6 +7,7 @@ package ivis.view
 	import flare.vis.data.NodeSprite;
 	
 	import flash.display.DisplayObject;
+	import flash.display.Sprite;
 	import flash.filters.GlowFilter;
 	import flash.geom.Rectangle;
 	
@@ -42,6 +43,22 @@ package ivis.view
 			return _graph;
 		}
 		
+		public function set graph(value:Graph):void
+		{
+			// update graph value
+			_graph = value;
+			
+			// also update data to be visualized
+			if (value != null)
+			{
+				this.vis.data = value.graphData;
+			}
+			else
+			{
+				this.vis.data = null;
+			}
+		}
+		
 		/**
 		 * Visualization instance for this graph.
 		 */
@@ -59,6 +76,7 @@ package ivis.view
 		 */
 		public function GraphView(graph:Graph)
 		{
+			// update graph
 			this._graph = graph;
 			
 			// init visualization
@@ -190,6 +208,34 @@ package ivis.view
 		public function removeLabel(label:DisplayObject):void
 		{
 			this._vis.labels.removeChild(label);
+		}
+		
+		/**
+		 * Removes all visible and invisible labels from the view.
+		 */
+		public function clearLabels():void
+		{
+			// TODO it may be better to remove all labels inside the sprite instead of resetting
+			
+			/*
+			var numOfChildren:int = this._vis.labels.numChildren;
+			
+			for (var index:int=0; index<numOfChildren; index++)
+			{
+			this._vis.labels.removeChildAt(index);
+			}
+			*/
+			
+			// reset label sprite of the visualization
+			var labels:Sprite = new Sprite();
+			labels.mouseChildren = false;
+			labels.mouseEnabled = false;
+			this._vis.labels = labels;
+			
+			// update labelers
+			this._vis.nodeLabeler.setup();
+			this._vis.compoundLabeler.setup();
+			this._vis.edgeLabeler.setup();
 		}
 		
 		/**

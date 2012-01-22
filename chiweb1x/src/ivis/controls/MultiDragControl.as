@@ -216,10 +216,10 @@ package ivis.controls
 				n.y += amountY;
 				
 				// move node labels, bacause they have "LAYER" policy
-				if (n.props.label != null)
+				if (n.props.$label != null)
 				{
-					n.props.label.x += amountX;
-					n.props.label.y += amountY;
+					n.props.$label.x += amountX;
+					n.props.$label.y += amountY;
 				}
 				
 				var parent:Node;

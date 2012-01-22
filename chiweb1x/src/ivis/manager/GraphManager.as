@@ -8,6 +8,8 @@ package ivis.manager
 	import flare.vis.operator.IOperator;
 	import flare.vis.operator.layout.Layout;
 	
+	import flash.display.Sprite;
+	
 	import ivis.event.DataChangeEvent;
 	import ivis.event.StyleChangeEvent;
 	import ivis.model.Edge;
@@ -72,7 +74,6 @@ package ivis.manager
 			return _view;
 		}
 		
-		// TODO it may be better to make graph inaccessible outside GraphManager
 		/**
 		 * Graph model.
 		 */
@@ -102,25 +103,31 @@ package ivis.manager
 		 */
 		public function GraphManager(graph:Graph = null)
 		{
-			if (this.graph == null)
-			{
-				this._graph = new Graph();
-			}
-			else
-			{
-				this._graph = graph;
-			}
-			
-			this._view = new GraphView(this.graph);
-			
-			this._styleManager = new GraphStyleManager();
-			this._globalConfig = new GlobalConfig();
+			this.initStyleManager();
+			this.initGlobalConfig();
 			this._sourceNode = null;
 			
-			this.initListeners();
+			this.initGraph(graph);
+			this._view = new GraphView(this.graph);
 		}
 		
 		//---------------------- PUBLIC FUNCTIONS ------------------------------
+		
+		/**
+		 * Discards current graph by replacing it with the given one.
+		 * 
+		 * @param graph	new graph to be replaced with the old one
+		 */
+		public function resetGraph(graph:Graph = null):void
+		{
+			// discard current graph, and initializes a new one
+			this.initGraph(graph);
+			
+			// also update view
+			this.view.graph = this.graph;
+			this.centerView();
+			this.view.update();
+		}
 		
 		/**
 		 * Creates a new Node instance and adds it to the location specified by
@@ -147,6 +154,15 @@ package ivis.manager
 			
 			// initialize visual properties (size, shape, etc) of node
 			this._styleManager.initNodeStyle(node);
+			
+			// attach custom style specific to Groups.NODES (it is not attached
+			// automatically, since flare internally adds the node to the group)
+			var style:Style = this._styleManager.getGroupStyle(Groups.NODES);
+			
+			if (style != null)
+			{
+				node.attachStyle(Groups.NODES, style);
+			}
 			
 			Styles.reApplyStyles(node);
 			
@@ -201,6 +217,16 @@ package ivis.manager
 			
 			// initialize visual properties of the edge
 			this._styleManager.initEdgeStyle(edge);
+			
+			// attach custom style specific to Groups.EDGES (it is not attached
+			// automatically, since flare internally adds the edge to the group)
+			var style:Style = this._styleManager.getGroupStyle(Groups.EDGES);
+			
+			if (style != null)
+			{
+				edge.attachStyle(Groups.EDGES, style);
+			}
+			
 			Styles.reApplyStyles(edge);
 			
 			// update edge renderer
@@ -930,6 +956,157 @@ package ivis.manager
 		//---------------------- PROTECTED FUNCTIONS ---------------------------
 		
 		/**
+		 * Initializes the global configuration.
+		 */
+		protected function initGlobalConfig():void
+		{
+			// init global config
+			this._globalConfig = new GlobalConfig();
+			
+			// resigter listeners for global config
+			
+			this._globalConfig.addEventListener(
+				StyleChangeEvent.ADDED_GLOBAL_CONFIG,
+				onConfigChange);
+			
+			this._globalConfig.addEventListener(
+				StyleChangeEvent.REMOVED_GLOBAL_CONFIG,
+				onConfigChange);
+		}
+		
+		/**
+		 * Initializes the graph style manager.
+		 */
+		protected function initStyleManager():void
+		{
+			// init style manager
+			this._styleManager = new GraphStyleManager();
+			
+			// register listeners for style manager
+			
+			this._styleManager.addEventListener(
+				DataChangeEvent.ADDED_GROUP_STYLE,
+				onAddGroupStyle);
+			
+			this._styleManager.addEventListener(
+				DataChangeEvent.REMOVED_GROUP_STYLE,
+				onRemoveGroupStyle);
+		}
+		
+		/**
+		 * Initializes the view and visualization for the given graph.
+		 * 
+		 * @param graph	graph to be initialized
+		 */
+		protected function initGraph(graph:Graph):void
+		{
+			if (this.graph != null)
+			{
+				// remove the previous graph from the manager and the view
+				this.removeGraph();
+				
+				// remove old labels from view
+				this.view.clearLabels();
+			}
+			
+			if (graph == null)
+			{
+				// initialize an empty graph
+				this._graph = new Graph();
+			}
+			else
+			{
+				var node:Node;
+				var edge:Edge;
+				var group:String;
+				var style:Style;
+				var element:IStyleAttachable;
+				
+				// init default style and renderer of each node
+				for each (node in graph.graphData.nodes)
+				{
+					this.graphStyleManager.initNodeStyle(node);
+					node.renderer = NodeRenderer.instance;
+				}
+				
+				// init default style and renderer of each compound
+				for each (node in graph.graphData.group(Groups.COMPOUND_NODES))
+				{
+					this.graphStyleManager.initCompoundStyle(node);
+					node.renderer = CompoundNodeRenderer.instance;
+				}
+				
+				// init default style of each bend node
+				for each (node in graph.graphData.group(Groups.BEND_NODES))
+				{
+					this.graphStyleManager.initBendStyle(node);
+				}
+				
+				// init default style and renderer of each edge
+				for each (edge in graph.graphData.edges)
+				{
+					this.graphStyleManager.initEdgeStyle(edge);
+					edge.renderer = EdgeRenderer.instance;
+				}
+				
+				// re-apply styles for all graph elements
+				
+				for each (node in graph.graphData.nodes)
+				{
+					Styles.reApplyStyles(node);
+				}
+				
+				for each (edge in graph.graphData.edges)
+				{
+					Styles.reApplyStyles(edge);
+				}
+				
+				// set graph
+				this._graph = graph;
+			}
+			
+			// register listeners for graph data changes
+			
+			this.graph.addEventListener(DataChangeEvent.REMOVED_GROUP,
+				onRemoveGroup);
+			
+			this.graph.addEventListener(DataChangeEvent.DS_ADDED_TO_GROUP,
+				onAddToGroup);
+			
+			this.graph.addEventListener(DataChangeEvent.DS_REMOVED_FROM_GROUP,
+				onRemoveFromGroup);
+		}
+		
+		/**
+		 * Removes the current graph both from the manager and from the view 
+		 * and performs necessary clean-ups.
+		 */
+		protected function removeGraph():void
+		{
+			if (this.graph != null)
+			{
+				// remove event listeners from the previous graph
+				this.graph.removeEventListener(
+					DataChangeEvent.REMOVED_GROUP,
+					onRemoveGroup);
+				
+				this.graph.removeEventListener(
+					DataChangeEvent.DS_ADDED_TO_GROUP,
+					onAddToGroup);
+				
+				this.graph.removeEventListener(
+					DataChangeEvent.DS_REMOVED_FROM_GROUP,
+					onRemoveFromGroup);
+				
+				// reset graph
+				this._graph = null;
+				
+				// also reset view's graph reference
+				this.view.graph = null;
+			}
+		}
+		
+		/**
 		 * Creates a Node instance and initializes its position according to the
 		 * start&end points of the target edge. Also, initializes visual
 		 * properties of the bend node.
@@ -1058,10 +1235,10 @@ package ivis.manager
 				result = this.graph.removeNode(node) || result;
 				
 				// remove its label
-				if (node.props.label != null)
+				if (node.props.$label != null)
 				{
-					this.view.removeLabel(node.props.label);
-					node.props.label = null;
+					this.view.removeLabel(node.props.$label);
+					node.props.$label = null;
 				}
 				
 			}
@@ -1074,10 +1251,10 @@ package ivis.manager
 				result = this.graph.removeEdge(edge) || result;
 				
 				// remove its label
-				if (edge.props.label != null)
+				if (edge.props.$label != null)
 				{
-					this.view.removeLabel(edge.props.label);
-					edge.props.label = null;
+					this.view.removeLabel(edge.props.$label);
+					edge.props.$label = null;
 				}
 			}
 			
@@ -1150,10 +1327,10 @@ package ivis.manager
 				result = this.graph.removeNode(node) || result;
 				
 				// remove its label
-				if (node.props.label != null)
+				if (node.props.$label != null)
 				{
-					this.view.removeLabel(node.props.label);
-					node.props.label = null;
+					this.view.removeLabel(node.props.$label);
+					node.props.$label = null;
 				}
 			}
 			
@@ -1164,10 +1341,10 @@ package ivis.manager
 				result = this.graph.removeEdge(edge) || result;
 				
 				// remove its label
-				if (edge.props.label != null)
+				if (edge.props.$label != null)
 				{
-					this.view.removeLabel(edge.props.label);
-					edge.props.label = null;
+					this.view.removeLabel(edge.props.$label);
+					edge.props.$label = null;
 				}
 			}
 			
@@ -1209,10 +1386,10 @@ package ivis.manager
 					result = this.graph.removeNode(node) || result;
 					
 					// remove its label
-					if (node.props.label != null)
+					if (node.props.$label != null)
 					{
-						this.view.removeLabel(node.props.label);
-						node.props.label = null;
+						this.view.removeLabel(node.props.$label);
+						node.props.$label = null;
 					}
 				}
 				
@@ -1223,52 +1400,15 @@ package ivis.manager
 					result = this.graph.removeEdge(edge) || result;
 					
 					// remove its label
-					if (edge.props.label != null)
+					if (edge.props.$label != null)
 					{
-						this.view.removeLabel(edge.props.label);
-						edge.props.label = null;
+						this.view.removeLabel(edge.props.$label);
+						edge.props.$label = null;
 					}
 				}
 			}
 			
 			return result;
-		}
-		
-		/**
-		 * Initializes event listeners.
-		 */
-		protected function initListeners() : void
-		{
-			// register listeners for graph data changes
-			
-			this.graph.addEventListener(DataChangeEvent.REMOVED_GROUP,
-				onRemoveGroup);
-			
-			this.graph.addEventListener(DataChangeEvent.DS_ADDED_TO_GROUP,
-				onAddToGroup);
-			
-			this.graph.addEventListener(DataChangeEvent.DS_REMOVED_FROM_GROUP,
-				onRemoveFromGroup);
-			
-			// register listeners for style manager
-			
-			this._styleManager.addEventListener(
-				DataChangeEvent.ADDED_GROUP_STYLE,
-				onAddGroupStyle);
-			
-			this._styleManager.addEventListener(
-				DataChangeEvent.REMOVED_GROUP_STYLE,
-				onRemoveGroupStyle);
-			
-			// resigter listeners for global config
-			
-			this._globalConfig.addEventListener(
-				StyleChangeEvent.ADDED_GLOBAL_CONFIG,
-				onConfigChange);
-			
-			this._globalConfig.addEventListener(
-				StyleChangeEvent.REMOVED_GLOBAL_CONFIG,
-				onConfigChange);
 		}
 		
 		/**
