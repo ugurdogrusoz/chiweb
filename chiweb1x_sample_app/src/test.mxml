@@ -162,6 +162,12 @@
 			   toolTip="Add Edge"
 			   click="app.controlCenter.toggleState(StateManager.ADD_EDGE)"/>
 		
+		<mx:Button id="reloadGraph" 
+				   label="RL"
+				   width="44"
+				   toolTip="Reload graph"
+				   click="testMain.reloadGraph(this.sampleGraph())"/>
+		
 		<mx:Button id="enableCompound" 
 				   label="EC"
 				   width="44"
@@ -315,11 +321,16 @@
 	
 <mx:Script>
 	<![CDATA[
+		import flare.vis.data.Data;
 		import flare.vis.operator.layout.CircleLayout;
 		import flare.vis.operator.layout.ForceDirectedLayout;
 		
 		import ivis.controls.StateManager;
 		import ivis.manager.ApplicationManager;
+		import ivis.model.Edge;
+		import ivis.model.Graph;
+		import ivis.model.Node;
+		import ivis.util.Groups;
 		
 		import main.TestMain;
 		
@@ -331,7 +342,13 @@
 		{
 			trace("main function started...");
 			
-			app = new ApplicationManager();
+			//app = new ApplicationManager();
+			
+			// create the application directly with a sample graph
+			app = new ApplicationManager(this.sampleGraph());
+			
+			//trace("after app manager init::");
+			app.graphManager.graph.printGraph();
 			
 			//graphBox.addChild(controller.manager.view);
 			app.setGraphContainer(graphBox);
@@ -361,65 +378,76 @@
 			//	showInspector,
 			//	NodeSprite);
 			
-			/*
+			
+		}
+		
+		/**
+		 * Creates a sample graph with 3 nodes and 1 edge.
+		 */
+		private function sampleGraph():Graph
+		{
 			var nodeData:Object;
 			var edgeData:Object;
-			var node:DataSprite;
-			var compound:DataSprite;
-			var edge:DataSprite;
+			var node:Node;
+			var compound:Node;
+			var edge:Edge;
+			var graph:Graph = new Graph();
 			
 			nodeData = new Object();
 			nodeData.id = "n1";
-			node = view.addNode(nodeData, 0, 0);
+			node = graph.addNode(nodeData);
+			compound = node;
+			
+			graph.addToGroup(Groups.COMPOUND_NODES, compound);
+			
+			if (this.app != null)
+			{
+				compound.attachStyle(Groups.NODES,
+					this.app.graphManager.graphStyleManager.getGroupStyle(
+						Groups.NODES));
+				
+				compound.attachStyle(Groups.COMPOUND_NODES,
+					this.app.graphManager.graphStyleManager.getGroupStyle(
+						Groups.COMPOUND_NODES));
+			}
 			
 			nodeData = new Object();
 			nodeData.id = "n2";
-			node = view.addNode(nodeData, 50, 50);
-			compound = node;
+			node = graph.addNode(nodeData);
+			node.x = 40;
+			node.y = 40;
+			compound.addNode(node);
+			
+			if (this.app != null)
+			{
+				node.attachStyle(Groups.NODES,
+					this.app.graphManager.graphStyleManager.getGroupStyle(
+						Groups.NODES));
+			}
 			
 			nodeData = new Object();
 			nodeData.id = "n3";
-			node = view.addNode(nodeData, 60, 60, compound);
+			node = graph.addNode(nodeData);
+			node.x = -40;
+			node.y = -40;
+			compound.addNode(node);
 			
-			nodeData = new Object();
-			nodeData.id = "n4";
-			node = view.addNode(nodeData, 15, 25, compound);
-			compound = node;
-			
-			nodeData = new Object();
-			nodeData.id = "n5";
-			node = view.addNode(nodeData, 19, 34, compound);
-			
-			nodeData = new Object();
-			nodeData.id = "n6";
-			node = view.addNode(nodeData, 19, 34, compound);
+			if (this.app != null)
+			{
+				node.attachStyle(Groups.NODES,
+					this.app.graphManager.graphStyleManager.getGroupStyle(
+						Groups.NODES));
+			}
 			
 			edgeData = new Object();
 			edgeData.id = "e1";
-			edgeData.sourceId = "n1";
-			edgeData.targetId = "n2";
-			view.addEdge(edgeData);
-			
-			edgeData = new Object();
-			edgeData.id = "e2";
-			edgeData.sourceId = "n3";
-			edgeData.targetId = "n4";
-			view.addEdge(edgeData);
-			
-			edgeData = new Object();
-			edgeData.id = "e3";
-			edgeData.sourceId = "n5";
-			edgeData.targetId = "n6";
-			view.addEdge(edgeData);
-			
-			edgeData = new Object();
-			edgeData.id = "e4";
-			edgeData.sourceId = "n1";
+			edgeData.sourceId = "n2";
 			edgeData.targetId = "n3";
-			edge = view.addEdge(edgeData);
+			edge = graph.addEdge(edgeData);
 			
-			view.addBendPoint(edge);
-			*/
+			graph.addToGroup(Groups.REGULAR_EDGES, edge);
+			
+			return graph;
 		}
 	]]>
 	</mx:Script>

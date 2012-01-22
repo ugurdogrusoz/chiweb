@@ -7,6 +7,7 @@ package main
 	
 	import ivis.controls.StateManager;
 	import ivis.manager.ApplicationManager;
+	import ivis.model.Graph;
 	import ivis.model.Node;
 	import ivis.model.Style;
 	import ivis.util.Groups;
@@ -179,6 +180,11 @@ package main
 					this.appManager.graphManager.resetCompound(node);
 				}
 			}
+		}
+		
+		public function reloadGraph(graph:Graph):void
+		{
+			this.appManager.graphManager.resetGraph(graph);
 		}
 	}
 }

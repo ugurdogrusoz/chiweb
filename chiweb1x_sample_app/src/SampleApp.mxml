@@ -240,6 +240,7 @@
 				{ label: "File", children:
 					[
 						{ label: "New" },
+						{ label: "Sample"},
 						{ label: "Load" },
 						{ label: "Save" }
 					]

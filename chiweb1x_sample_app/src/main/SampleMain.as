@@ -21,20 +21,17 @@ package main
 	
 	import ivis.controls.EventControl;
 	import ivis.controls.StateManager;
-	import ivis.manager.ApplicationManager;
-	import ivis.manager.GlobalConfig;
+	import ivis.manager.ApplicationManager;	
+	import ivis.model.Graph;
 	import ivis.model.Style;
 	import ivis.util.Groups;
 	import ivis.view.ui.ArrowUIManager;
 	import ivis.view.ui.CompoundUIManager;
 	import ivis.view.ui.EdgeUIManager;
-	import ivis.view.ui.IEdgeUI;
-	import ivis.view.ui.INodeUI;
 	import ivis.view.ui.NodeUIManager;
 	
 	import layout.RemoteLayout;
 	
-	import mx.core.Container;
 	import mx.core.IFlexDisplayObject;
 	import mx.events.MenuEvent;
 	import mx.managers.PopUpManager;
@@ -45,6 +42,7 @@ package main
 	
 	import util.Constants;
 	import util.CursorUtils;
+	import util.GraphGenerator;
 
 	/**
 	 * Main initializer for the Sample application (sample.mxml).
@@ -122,56 +120,64 @@ package main
 			var label:String = event.label.toString().toLowerCase();
 			var window:IFlexDisplayObject;
 			
-			if(label == "remote layout properties")
+			if (label == "remote layout properties")
 			{
 				 window = this.showWindow(RemoteLayoutOptions);
 			}
-			else if(label == "actual size")
+			else if (label == "actual size")
 			{
 				this.actualSize();
 			}
-			else if(label == "zoom in")
+			else if (label == "zoom in")
 			{
 				this.zoomIn();
 			}
-			else if(label == "zoom out")
+			else if (label == "zoom out")
 			{
 				this.zoomOut();
 			}
-			else if(label == "fit in canvas")
+			else if (label == "fit in canvas")
 			{
 				this.fitInCanvas();
 			}
 				
-			else if(label == "compound node style")
+			else if (label == "compound node style")
 			{
 				this.showStylePanel(this.rootContainer.compoundStylePanel,
 					Groups.COMPOUND_NODES);
 			}
-			else if(label == "gradient node style")
+			else if (label == "gradient node style")
 			{
 				this.showStylePanel(this.rootContainer.gradientStylePanel,
 					Constants.GRADIENT_RECT);
 			}
-			else if(label == "image node style")
+			else if (label == "image node style")
 			{
 				this.showStylePanel(this.rootContainer.imageStylePanel,
 					Constants.IMAGE_NODE);
 			}
-			else if(label == "circular node style")
+			else if (label == "circular node style")
 			{
 				this.showStylePanel(this.rootContainer.circleStylePanel,
 					Constants.CIRCULAR_NODE);
 			}
-			else if(label == "simple edge style")
+			else if (label == "simple edge style")
 			{
 				this.showStylePanel(this.rootContainer.regularStylePanel,
 					Groups.EDGES);
 			}
-			else if(label == "dashed edge style")
+			else if (label == "dashed edge style")
 			{
 				this.showStylePanel(this.rootContainer.dashedStylePanel,
 					Constants.DASHED_EDGE);
+			}
+			else if (label == "new")
+			{
+				this.appManager.graphManager.resetGraph();
+			}
+			else if (label == "sample")
+			{
+				this.sampleGraph();
 			}
 			
 			
@@ -484,6 +490,18 @@ package main
 			
 			// perform layout
 			//this.appManager.graphManager.performLayout();
+		}
+		
+		/**
+		 * Creates a sample graph.
+		 */
+		public function sampleGraph():void
+		{
+			var graph:Graph = GraphGenerator.sampleGraph(
+				this.appManager.graphManager.graphStyleManager);
+			
+			// set new graph
+			this.appManager.graphManager.resetGraph(graph);
 		}
 		
 		// TODO: Debug
