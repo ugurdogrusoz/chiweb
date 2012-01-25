@@ -108,14 +108,14 @@ package ivis.controls
 				this._enclosingRect.x = this.object.mouseX;
 				this._enclosingRect.y = this.object.mouseY;
 				this._enclosingRect.width = 0;
-				this._enclosingRect.height = 1;
+				this._enclosingRect.height = 0;
 				
 				this._enclosing = true;
 				
 				(this.object as DisplayObjectContainer).addChild(
 					this._enclosingShape);
 				
-				this.renderEncloser(this._enclosingShape);
+				this.renderEncloser();
 				
 				/*
 				if (fireImmediately) {
@@ -182,9 +182,11 @@ package ivis.controls
 				(this.object as DisplayObjectContainer).removeChild(
 					this._enclosingShape);
 				
+				// remove listeners
 				this.object.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				this.object.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
 				
+				// reset SELECTING state
 				this.stateManager.setState(StateManager.SELECTING, false);
 				
 				if (this.object.hasEventListener(ControlEvent.SELECT_END))
@@ -213,7 +215,7 @@ package ivis.controls
 				this._enclosingRect.height = this.object.mouseY - 
 					this._enclosingRect.y;
 			
-				this.renderEncloser(this._enclosingShape);
+				this.renderEncloser();
 				
 				/*
 				if (fireImmediately) {
@@ -224,11 +226,28 @@ package ivis.controls
 		}
 		
 		/**
-		 * Renders the given shape (enclosing rectangle).
-		 * 
-		 * @param shape	shape (rectangle) to render 
+		 * Initializes the enclosing rectangle.
 		 */
-		protected function renderEncloser(shape:Shape):void
+		protected function initEncloser():void
+		{
+			this._enclosingRect.x = this.object.mouseX;
+			this._enclosingRect.y = this.object.mouseY;
+			this._enclosingRect.width = 1;
+			this._enclosingRect.height = 1;
+			
+			this._enclosing = true;
+			
+			(this.object as DisplayObjectContainer).addChild(
+				this._enclosingShape);
+			
+			this.renderEncloser();
+		}
+		
+		/**
+		 * Renders the enclosing rectangle. This function gets
+		 * the visual properties of the shape from the global config.
+		 */
+		protected function renderEncloser():void
 		{
 			var lineColor:uint = this.graphManager.globalConfig.getConfig(
 				GlobalConfig.ENCLOSING_LINE_COLOR);
@@ -245,7 +264,34 @@ package ivis.controls
 			var fillAlpha:Number = this.graphManager.globalConfig.getConfig(
 				GlobalConfig.ENCLOSING_FILL_ALPHA);			
 			
-			
+			this.renderShape(this._enclosingShape,
+				this._enclosingRect,
+				lineColor,
+				lineAlpha,
+				lineWidth,
+				fillColor,
+				fillAlpha);
+		}
+		
+		/**
+		 * Renders the given shape by using the provided visual properties.
+		 * 
+		 * @param shape		shape (rectangle) to render
+		 * @param rectangle	rectangle defining shape bounds
+		 * @param lineColor line color of the shape
+		 * @param lineAlpha line alpha of the shape
+		 * @param lineWidth	line widht of the shape
+		 * @param fillColor	fill color of the shape
+		 * @param fillAlpha	fill alpha of the shape
+		 */
+		protected function renderShape(shape:Shape,
+			rectangle:Rectangle,
+			lineColor:uint,
+			lineAlpha:Number,
+			lineWidth:Number,
+			fillColor:uint,
+			fillAlpha:Number):void
+		{
 			shape.graphics.clear();
 			
 			shape.graphics.beginFill(fillColor, fillAlpha);
@@ -256,10 +302,10 @@ package ivis.controls
 				true,
 				"none");
 			
-			shape.graphics.drawRect(_enclosingRect.x,
-				_enclosingRect.y,
-				_enclosingRect.width,
-				_enclosingRect.height);
+			shape.graphics.drawRect(rectangle.x,
+				rectangle.y,
+				rectangle.width,
+				rectangle.height);
 			
 			shape.graphics.endFill();
 		}

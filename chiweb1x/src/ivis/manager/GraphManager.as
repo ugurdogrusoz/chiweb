@@ -1652,7 +1652,10 @@ package ivis.manager
 				GlobalConfig.BACKGROUND_COLOR);
 			
 			// init style of the root container
-			this._rootContainer.setStyle("backgroundColor", bgColor);
+			if (this._rootContainer != null)
+			{
+				this._rootContainer.setStyle("backgroundColor", bgColor);
+			}
 		}
 	}
 }
