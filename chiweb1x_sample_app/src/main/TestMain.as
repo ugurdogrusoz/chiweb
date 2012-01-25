@@ -155,9 +155,6 @@ package main
 			trace("TEST property 'w' removed");
 		}
 		
-		// TODO also test specific styles
-		
-		
 		public function convertSelected() : void
 		{
 			for each (var node:Node in

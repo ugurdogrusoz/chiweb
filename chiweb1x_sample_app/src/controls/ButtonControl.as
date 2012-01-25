@@ -9,6 +9,7 @@ package controls
 	
 	import mx.core.Container;
 	
+	import util.Constants;
 	import util.CursorUtils;
 
 	/**
@@ -108,6 +109,8 @@ package controls
 				this.stateManager.checkState(StateManager.ADD_BENDPOINT);
 			this._app.enablePan.selected = 
 				this.stateManager.checkState(StateManager.PAN);
+			this._app.marqueeZoom.selected = 
+				this.stateManager.checkState(Constants.MARQUEE_ZOOM);
 			
 			// also reset custom cursors
 			if (!this._app.enablePan.selected)

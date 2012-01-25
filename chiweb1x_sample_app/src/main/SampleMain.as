@@ -3,6 +3,8 @@ package main
 	import controls.ButtonControl;
 	import controls.CreationControl;
 	import controls.CursorControl;
+	import controls.KeyPanControl;
+	import controls.MarqueeZoomControl;
 	
 	import flare.display.TextSprite;
 	import flare.vis.data.DataSprite;
@@ -21,7 +23,7 @@ package main
 	
 	import ivis.controls.EventControl;
 	import ivis.controls.StateManager;
-	import ivis.manager.ApplicationManager;	
+	import ivis.manager.ApplicationManager;
 	import ivis.model.Graph;
 	import ivis.model.Style;
 	import ivis.util.Groups;
@@ -45,7 +47,7 @@ package main
 	import util.GraphGenerator;
 
 	/**
-	 * Main initializer for the Sample application (sample.mxml).
+	 * Main initializer for the Sample application (SampleApp.mxml).
 	 * 
 	 * @author Selcuk Onur Sumer
 	 */
@@ -55,6 +57,7 @@ package main
 		
 		public var appManager:ApplicationManager;
 		public var remoteLayout:RemoteLayout;
+		// TODO public var localLayout: ...
 		
 		protected var _rootContainer:SampleApp;
 		protected var _nodeState:String;
@@ -64,6 +67,8 @@ package main
 		
 		private static var _instance:SampleMain = new SampleMain();
 		
+		//----------------------------- ACCESSORS ------------------------------
+		
 		/**
 		 * Singleton instance. 
 		 */
@@ -71,7 +76,6 @@ package main
 		{
 			return _instance;
 		} 
-		
 		
 		/**
 		 * Root container of the application.
@@ -245,6 +249,22 @@ package main
 		{
 			var state:Boolean = this.appManager.controlCenter.toggleState(
 				StateManager.SELECT);
+			
+			if (event != null)
+			{
+				// change selected prop of the target button
+				event.target.selected = state;
+			}
+		}
+		
+		/**
+		 * Activates ADD_BENDPOINT state. (Bend is created upon clicking on
+		 * an edge).
+		 */
+		public function marqueeZoom(event:Event = null):void
+		{
+			var state:Boolean = this.appManager.controlCenter.toggleState(
+				Constants.MARQUEE_ZOOM);
 			
 			if (event != null)
 			{
@@ -620,6 +640,19 @@ package main
 			
 			this.appManager.graphManager.graphStyleManager.addGroupStyle(
 				Groups.COMPOUND_NODES, new Style(style));
+			
+			// add custom global config values
+			this.appManager.graphManager.globalConfig.addConfig(
+				Constants.PAN_AMOUNT, 20);
+			
+			this.appManager.graphManager.globalConfig.addConfig(
+				Constants.MARQUEE_FILL_COLOR, 0xF8B584);
+			
+			this.appManager.graphManager.globalConfig.addConfig(
+				Constants.MARQUEE_LINE_COLOR, 0xFACAA6);
+			
+			this.appManager.graphManager.globalConfig.addConfig(
+				Constants.MARQUEE_LINE_WIDTH, 2);
 		}
 		
 		/**
@@ -644,9 +677,13 @@ package main
 		{
 			var creationControl:EventControl = new CreationControl();
 			var cursorControl:EventControl = new CursorControl();
+			var marqueeZoomControl:EventControl = new MarqueeZoomControl();
+			var keyPanControl:EventControl = new KeyPanControl();
 			
 			this.appManager.controlCenter.addControl(creationControl);
 			this.appManager.controlCenter.addControl(cursorControl);
+			this.appManager.controlCenter.addControl(marqueeZoomControl);
+			this.appManager.controlCenter.addControl(keyPanControl);
 			
 			this.appManager.controlCenter.addCustomListener("showInspector",
 				MouseEvent.DOUBLE_CLICK,
@@ -676,6 +713,9 @@ package main
 			
 			this.appManager.controlCenter.setState(
 				Constants.ADD_COMPOUND_NODE, false);
+			
+			this.appManager.controlCenter.setState(
+				Constants.MARQUEE_ZOOM, false);
 		}
 		
 		/**

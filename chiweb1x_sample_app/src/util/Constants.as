@@ -28,6 +28,13 @@ package util
 		public static const ADD_COMPOUND_NODE:String = "addCompoundNode";
 		public static const ADD_DASHED_EDGE:String = "addDashedEdge";
 		public static const ADD_DEFAULT_EDGE:String = "addDefaultEdge";
+		public static const MARQUEE_ZOOM:String = "marqueeZoom";
+		
+		/** Constants for custom global config values */
+		public static const MARQUEE_LINE_COLOR:String = "marqueeLineColor";
+		public static const MARQUEE_LINE_WIDTH:String = "marqueeLineWidth";		
+		public static const MARQUEE_FILL_COLOR:String = "marqueeFillColor";
+		public static const PAN_AMOUNT:String = "panAmount";
 		
 		public function Constants()
 		{

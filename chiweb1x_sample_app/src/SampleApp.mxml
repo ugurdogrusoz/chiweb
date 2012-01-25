@@ -89,6 +89,12 @@
 		
 		<mx:Spacer width="10" />
 		
+		<mx:Button id="marqueeZoom"
+				   icon="@Embed(source='assets/buttons/zoom-marquee.png')"
+				   width="32"
+				   toolTip="Marquee Zoom"
+				   click="app.marqueeZoom(event)"/>
+		
 		<mx:Button id="zoomToActual"
 				   icon="@Embed(source='assets/buttons/fit-to-100.png')"
 				   width="32"
@@ -227,11 +233,6 @@
 			app.rootContainer = this;
 			app.appManager.setGraphContainer(graphBox);
 			app.appManager.setRootContainer(this);
-			
-			// TODO:
-			// 1) replace button text with icons
-			// 2) add a slider for zoom operation
-			// 3) add another interface for pan
 		}
 		
 		[Bindable]
