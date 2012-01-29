@@ -15,7 +15,10 @@ package main
 	import flash.display.InterpolationMethod;
 	import flash.display.SpreadMethod;
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
+	import flash.net.FileReference;
+	import flash.utils.IDataOutput;
 	
 	import gui.NodeInspector;
 	import gui.RemoteLayoutOptions;
@@ -26,6 +29,7 @@ package main
 	import ivis.manager.ApplicationManager;
 	import ivis.model.Graph;
 	import ivis.model.Style;
+	import ivis.persist.GraphMLPorter;
 	import ivis.util.Groups;
 	import ivis.view.ui.ArrowUIManager;
 	import ivis.view.ui.CompoundUIManager;
@@ -182,6 +186,10 @@ package main
 			else if (label == "sample")
 			{
 				this.sampleGraph();
+			}
+			else if (label == "save")
+			{
+				this.saveGraph();
 			}
 			
 			
@@ -512,18 +520,6 @@ package main
 			//this.appManager.graphManager.performLayout();
 		}
 		
-		/**
-		 * Creates a sample graph.
-		 */
-		public function sampleGraph():void
-		{
-			var graph:Graph = GraphGenerator.sampleGraph(
-				this.appManager.graphManager.graphStyleManager);
-			
-			// set new graph
-			this.appManager.graphManager.resetGraph(graph);
-		}
-		
 		// TODO: Debug
 		
 		public function printGraph():void
@@ -662,8 +658,10 @@ package main
 		{
 			NodeUIManager.registerUI(Constants.IMAGE_NODE,
 				ImageNodeUI.instance);
+			
 			NodeUIManager.registerUI(Constants.GRADIENT_RECT,
 				GradientRectUI.instance);
+			
 			EdgeUIManager.registerUI(Constants.DASHED_EDGE,
 				DashedEdgeUI.instance);
 			
@@ -768,6 +766,45 @@ package main
 					group);
 			
 			panel.visible = true;
+		}
+		
+		/**
+		 * Creates a sample graph.
+		 */
+		protected function sampleGraph():void
+		{
+			var graph:Graph = GraphGenerator.sampleGraph(
+				this.appManager.graphManager.graphStyleManager);
+			
+			// set new graph
+			this.appManager.graphManager.resetGraph(graph);
+		}
+		
+		/**
+		 * Saves the graph as a GraphML.
+		 */
+		protected function saveGraph():void
+		{
+			var data:Object = 
+				this.appManager.graphManager.exportGraph(new GraphMLPorter());
+			
+			var fr:FileReference = new FileReference();
+			
+			fr.addEventListener(Event.COMPLETE, function(e:Event):void {
+				var fileName: String = fr.name.replace(/\..*/, "")  
+				//BrowserManager.getInstance().setTitle("i-Vis Layout Demo - " + fileName);
+				trace("file saved successfully");
+			});
+			
+			fr.addEventListener(IOErrorEvent.IO_ERROR, function():void {
+				trace("error saving file");
+			});
+			
+			fr.addEventListener(Event.SELECT, function(e:Event):void {
+				trace("saving file");
+			});
+			
+			fr.save(data, "graph.graphml");
 		}
 	}
 }

@@ -130,16 +130,18 @@ package controls
 				this.graphManager.initCompound(node);
 			}
 			
+			// define a node-specific label using its id property
+			node.data.label = node.data.id;
 			
-			// this style is actually to define a node-specific label using
-			// its id property as label text
-			var style:Object = {labelText: node.data.id};
+			// define a node-specific style
+			//var style:Object = {labelText: node.data.id};
 			
 			// attach node-specific style to this node
-			node.attachStyle(Styles.SPECIFIC_STYLE, new Style(style));
+			//node.attachStyle(Styles.SPECIFIC_STYLE, new Style(style));
 			
 			// re-apply styles for the node to reflect the changes
-			Styles.reApplyStyles(node);
+			//Styles.reApplyStyles(node);
+			
 			this.graphManager.view.update();
 		}
 		
@@ -185,15 +187,18 @@ package controls
 					edge);
 			}
 			
-			// this style is actually to define an edge-specific label using
-			// its id property as label text
-			var style:Object = {labelText: edge.data.id};
+			// define an edge-specific label using its id property
+			edge.data.label = edge.data.id;
+			
+			// define an edge-specific style
+			//var style:Object = {labelText: edge.data.id};
 			
 			// attach edge-specific style to this edge
-			edge.attachStyle(Styles.SPECIFIC_STYLE, new Style(style));
+			//edge.attachStyle(Styles.SPECIFIC_STYLE, new Style(style));
 			
 			// re-apply styles for the edge to reflect the changes
-			Styles.reApplyStyles(edge);
+			//Styles.reApplyStyles(edge);
+			
 			this.graphManager.view.update();
 		}
 		

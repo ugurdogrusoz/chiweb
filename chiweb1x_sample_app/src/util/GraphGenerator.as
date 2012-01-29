@@ -117,14 +117,9 @@ package util
 		{
 			var nodeData:Object = new Object();
 			nodeData.id = id;
+			nodeData.label = label;
 			
 			var node:Node = graph.addNode(nodeData);
-			
-			if (label != null)
-			{
-				node.attachStyle(Styles.SPECIFIC_STYLE,
-					new Style({labelText: label}));
-			}
 			
 			var style:Style;
 			
@@ -184,14 +179,9 @@ package util
 			edgeData.id = id;
 			edgeData.sourceId = source;
 			edgeData.targetId = target;
+			edgeData.label = label;
 			
 			var edge:Edge = graph.addEdge(edgeData);
-			
-			if (label != null)
-			{
-				edge.attachStyle(Styles.SPECIFIC_STYLE,
-					new Style({labelText: label}));
-			}
 			
 			var style:Style;
 			

@@ -395,6 +395,7 @@
 			
 			nodeData = new Object();
 			nodeData.id = "n1";
+			nodeData.label = "compound";
 			node = graph.addNode(nodeData);
 			compound = node;
 			
@@ -413,6 +414,7 @@
 			
 			nodeData = new Object();
 			nodeData.id = "n2";
+			nodeData.label = "node2";
 			node = graph.addNode(nodeData);
 			node.x = 40;
 			node.y = 40;
@@ -427,6 +429,7 @@
 			
 			nodeData = new Object();
 			nodeData.id = "n3";
+			nodeData.label = "node3";
 			node = graph.addNode(nodeData);
 			node.x = -40;
 			node.y = -40;
@@ -443,6 +446,7 @@
 			edgeData.id = "e1";
 			edgeData.sourceId = "n2";
 			edgeData.targetId = "n3";
+			edgeData.label = "edge1";
 			edge = graph.addEdge(edgeData);
 			
 			graph.addToGroup(Groups.REGULAR_EDGES, edge);

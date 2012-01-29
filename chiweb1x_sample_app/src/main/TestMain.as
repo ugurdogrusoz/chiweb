@@ -28,8 +28,7 @@ package main
 			var style:Object;
 			
 			style = {labelHorizontalAnchor: TextSprite.LEFT,
-				labelVerticalAnchor: TextSprite.BOTTOM,
-				labelText: "node"};
+				labelVerticalAnchor: TextSprite.BOTTOM};
 			
 			this.appManager.graphManager.graphStyleManager.addGroupStyle(
 				Groups.NODES, new Style(style));
@@ -40,8 +39,7 @@ package main
 				paddingLeft: 16,
 				paddingRight: 16,
 				paddingTop: 16,
-				paddingBottom: 16,
-				labelText: "compound"};
+				paddingBottom: 16};
 			
 			this.appManager.graphManager.graphStyleManager.addGroupStyle(
 				Groups.COMPOUND_NODES, new Style(style));
@@ -91,7 +89,6 @@ package main
 				fillColor: 0xff4cbae8,
 				lineColor: 0xffff0606,
 				lineWidth: 5,
-				labelText: "test",
 				labelOffsetX: 0,
 				labelOffsetY: 0,
 				labelHorizontalAnchor: TextSprite.BOTTOM,

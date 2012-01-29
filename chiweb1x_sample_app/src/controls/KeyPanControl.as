@@ -40,22 +40,22 @@ package controls
 			if (evt.keyCode == Keyboard.RIGHT)
 			{
 				// pan to right by the amount set in global config 
-				this.graphManager.panView(amount, 0);
+				this.graphManager.panView(-amount, 0);
 			}
 			else if (evt.keyCode == Keyboard.LEFT)
 			{
 				// pan to left by the amount set in global config
-				this.graphManager.panView(-amount, 0);
+				this.graphManager.panView(amount, 0);
 			}
 			else if (evt.keyCode == Keyboard.UP)
 			{
 				// pan to up by the amount set in global config
-				this.graphManager.panView(0, -amount);
+				this.graphManager.panView(0, amount);
 			}
 			else if (evt.keyCode == Keyboard.DOWN)
 			{
 				// pan to down by the amount set in global config
-				this.graphManager.panView(0, amount);
+				this.graphManager.panView(0, -amount);
 			}
 		}
 		
