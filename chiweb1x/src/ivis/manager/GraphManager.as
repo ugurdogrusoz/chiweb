@@ -9,6 +9,7 @@ package ivis.manager
 	import flare.vis.operator.layout.Layout;
 	
 	import flash.display.Sprite;
+	import flash.utils.IDataOutput;
 	
 	import ivis.event.DataChangeEvent;
 	import ivis.event.StyleChangeEvent;
@@ -20,6 +21,8 @@ package ivis.manager
 	import ivis.model.util.Nodes;
 	import ivis.model.util.Styles;
 	import ivis.operators.LayoutOperator;
+	import ivis.persist.GraphMLPorter;
+	import ivis.persist.IGraphPorter;
 	import ivis.util.GeneralUtils;
 	import ivis.util.Groups;
 	import ivis.view.CompoundNodeRenderer;
@@ -127,6 +130,61 @@ package ivis.manager
 			this.view.graph = this.graph;
 			this.centerView();
 			this.view.update();
+		}
+		
+		/**
+		 * Creates a new graph for the given data object by using the provided
+		 * graph importer. If no importer is provided a default GraphML importer
+		 * is used.
+		 * 
+		 * @param data		input data object to process
+		 * @param importer	an IGraphPorter instance for import operation 
+		 */
+		public function importGraph(data:Object,
+			importer:IGraphPorter = null):Boolean
+		{
+			var imported:Boolean = false;
+			
+			// if no importer is provided, try to import with GraphML importer
+			if (importer == null)
+			{
+				importer = new GraphMLPorter();
+			}
+			
+			var graph:Graph = importer.importGraph(data,
+				this._styleManager,
+				this._globalConfig);
+			
+			// reset graph if successfully imported 
+			if (graph != null)
+			{
+				imported = true;
+				this.resetGraph(graph);
+			}
+			
+			return imported;
+		}
+		
+		/**
+		 * Creates a new data output for the graph by using the provided
+		 * graph exporter. If no exporter is provided a default GraphML
+		 * exporter is used.
+		 * 
+		 * @param exporter	an IGraphPorter instance for export operation
+		 * @return			output data object 
+		 */
+		public function exportGraph(exporter:IGraphPorter = null):Object
+		{
+			// if no exporter is provided, try to export with a GraphML exporter
+			if (exporter == null)
+			{
+				exporter = new GraphMLPorter();
+			}
+			
+			// export with the provided exporter
+			return exporter.exportGraph(this.graph,
+				this._styleManager,
+				this._globalConfig);
 		}
 		
 		/**
@@ -841,6 +899,9 @@ package ivis.manager
 			
 			// update hit area of the view
 			this.view.updateHitArea();
+			
+			// update view without updating compound bounds
+			this.view.update(false);
 		}
 		
 		/**
@@ -896,6 +957,7 @@ package ivis.manager
 		{
 			this.view.zoomToActual();
 			this.view.updateHitArea();
+			this.view.update(false);
 		}
 		
 		/**

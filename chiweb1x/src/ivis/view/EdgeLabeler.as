@@ -35,7 +35,7 @@ package ivis.view
 		 * parameter. 
 		 * 
 		 * @param source	source property of the label text
-		 * 					(default value is "props.labelText")
+		 * 					(default value is "data.label")
 		 * @param access	target property to store edge's label
 		 * 					(default value is "props.$label")
 		 * @param group		the data group

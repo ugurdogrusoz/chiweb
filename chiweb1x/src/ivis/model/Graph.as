@@ -38,6 +38,11 @@ package ivis.model
 		protected var _edgeMap:Object;
 		
 		/**
+		 * Group map for added group names.
+		 */
+		protected var _groupMap:Object;
+		
+		/**
 		 * Object used to generate ids for nodes and edges. 
 		 */
 		protected var _idGen:Object;
@@ -92,7 +97,7 @@ package ivis.model
 		 * 
 		 * @return		array of selected nodes
 		 */
-		public function get missingChildren() : Array
+		public function get missingChildren():Array
 		{
 			// this map is used to avoid duplicates
 			var childMap:Object;
@@ -146,6 +151,21 @@ package ivis.model
 			return children;
 		}
 		
+		/**
+		 * Names of all groups in the graph data.
+		 */
+		public function get groupNames():Array
+		{
+			var names:Array = new Array();
+			
+			for (var name:String in this._groupMap)
+			{
+				names.push(name);
+			}
+			
+			return names;
+		}
+		
 		//-------------------------- CONSTRUCTOR -------------------------------
 		
 		/**
@@ -157,6 +177,7 @@ package ivis.model
 		{
 			this._nodeMap = new Object();
 			this._edgeMap = new Object();
+			this._groupMap = new Object();
 			this._idGen = new Object();
 			
 			// initialize the graph data
@@ -179,7 +200,7 @@ package ivis.model
 		 * @param data	data to be associated with the new Node instance
 		 * @return		newly created Node
 		 */
-		public function addNode(data:Object = null) : Node
+		public function addNode(data:Object = null):Node
 		{
 			// check id for null & duplicate values
 			
@@ -218,7 +239,7 @@ package ivis.model
 		 * @param data	data to be associated with the new Edge instance
 		 * @return		newly created Edge if successful, null otherwise
 		 */
-		public function addEdge(data:Object) : Edge
+		public function addEdge(data:Object):Edge
 		{
 			// check id for null & duplicate values
 			
@@ -371,7 +392,7 @@ package ivis.model
 		 * @param group	name of the group to be added
 		 * @return		true if a new group is added, false otherwise 
 		 */
-		public function addGroup(group:String) : Boolean
+		public function addGroup(group:String):Boolean
 		{
 			var result:Boolean = true;
 			
@@ -384,6 +405,9 @@ package ivis.model
 				}
 				else
 				{
+					// add group to the maps of group for future access
+					this._groupMap[group] = true;
+					
 					this.dispatchEvent(
 						new DataChangeEvent(DataChangeEvent.ADDED_GROUP,
 							{group: group}));
@@ -404,7 +428,7 @@ package ivis.model
 		 * @param group	name of the group to be removed
 		 * @return		true if the group is removed, false otherwise 
 		 */
-		public function removeGroup(group:String) : Boolean
+		public function removeGroup(group:String):Boolean
 		{
 			var result:Boolean = true;
 			var elements:DataList;
@@ -424,9 +448,12 @@ package ivis.model
 				result = false;
 			}
 			
-			// dispatch a DataChangeEvent if group is successfully removed			
+			// dispatch a DataChangeEvent if group is successfully removed
 			if (result)
 			{
+				// delete group from the map
+				delete this._groupMap[group];
+				
 				this.dispatchEvent(
 					new DataChangeEvent(DataChangeEvent.REMOVED_GROUP,
 						{group: group, elements: elements}));
@@ -441,7 +468,7 @@ package ivis.model
 		 * @param group	name of the data group to be cleared
 		 * @return		true if success, false otherwise
 		 */
-		public function clearGroup(group:String) : Boolean
+		public function clearGroup(group:String):Boolean
 		{
 			var result:Boolean = false;
 			var elements:Array;
@@ -477,7 +504,7 @@ package ivis.model
 		 * @return		the added DataSprite, or null if add fails
 		 */
 		public function addToGroup(group:String,
-			ds:DataSprite) : DataSprite
+			ds:DataSprite):DataSprite
 		{
 			var sprite:DataSprite = null;
 			
@@ -505,7 +532,7 @@ package ivis.model
 		 * @return		true if removed, false otherwise
 		 */
 		public function removeFromGroup(group:String,
-			ds:DataSprite) : Boolean
+			ds:DataSprite):Boolean
 		{
 			var result:Boolean = false;
 			
@@ -526,7 +553,7 @@ package ivis.model
 		 * Resets the missing children array in order to enable re-calculation
 		 * of missing child nodes in the getter method of missingChildren.
 		 */ 
-		public function resetMissingChildren() : void
+		public function resetMissingChildren():void
 		{
 			_missingChildren = null;
 		}
@@ -550,6 +577,12 @@ package ivis.model
 			this.graphData.addGroup(Groups.SELECTED_NODES);
 			this.graphData.addGroup(Groups.SELECTED_EDGES);
 			this.graphData.addGroup(Groups.REGULAR_EDGES);
+			
+			this._groupMap[Groups.COMPOUND_NODES] = true;
+			this._groupMap[Groups.BEND_NODES] = true;
+			this._groupMap[Groups.SELECTED_NODES] = true;
+			this._groupMap[Groups.SELECTED_EDGES] = true;
+			this._groupMap[Groups.REGULAR_EDGES] = true;
 			
 			// reset and populate the node map
 			
@@ -651,7 +684,8 @@ package ivis.model
 			
 			for each (node in this.graphData.nodes)
 			{
-				if (!node.isInitialized())
+				if (!node.isInitialized() &&
+					!node.isBendNode)
 				{
 					trace(node.toString());
 				}

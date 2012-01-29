@@ -12,7 +12,7 @@ package ivis.util
 	public class Labels
 	{
 		public static const DEFAULT_LABEL_ACCESS:String = "props.$label";
-		public static const DEFAULT_TEXT_SOURCE:String = "props.labelText";
+		public static const DEFAULT_TEXT_SOURCE:String = "data.label";
 		
 		//-----------------------CONSTRUCTOR------------------------------------
 		

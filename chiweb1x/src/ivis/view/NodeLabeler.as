@@ -26,7 +26,7 @@ package ivis.view
 		 * Instantiates a labeler for nodes.
 		 * 
 		 * @param source	source property of the label text
-		 * 					(default value is "props.labelText")
+		 * 					(default value is "data.label")
 		 * @param access	target property to store node's label
 		 * 					(default value is "props.$label")
 		 * @param group		the data group
@@ -47,7 +47,7 @@ package ivis.view
 			this.access = access;
 			
 			// never cache text, otherwise it won't refresh label text when
-			// source property (it is props.labelText by default) changes.
+			// source property (it is data.label by default) changes.
 			this.cacheText = false;
 		}
 		

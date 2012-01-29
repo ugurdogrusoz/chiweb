@@ -255,6 +255,9 @@ package ivis.controls
 			
 			// update hit area of the visualization
 			this.graphManager.view.updateHitArea();
+			
+			// update view without updating compound bounds
+			this.graphManager.view.update(false);
 		}
 	}
 }
