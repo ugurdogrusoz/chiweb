@@ -40,7 +40,7 @@ package ivis.manager
 		//----------------------------- ACCESSORS ------------------------------
 		
 		/**
-		 * Returns names of all groups registered for a style.
+		 * Names of all groups registered for a style.
 		 */
 		public function get groupStyleNames():Array
 		{
@@ -63,7 +63,7 @@ package ivis.manager
 		public function GraphStyleManager()
 		{
 			// initialize group style map
-			_groupStyleMap = new Object();
+			this._groupStyleMap = new Object();
 			
 			// initialize default styles
 			this.initDefaultStyles();
@@ -145,8 +145,10 @@ package ivis.manager
 		public function addGroupStyle(name:String,
 			style:Style):void
 		{
-			_groupStyleMap[name] = style;
+			// add group to the style map
+			this._groupStyleMap[name] = style;
 			
+			// dispatch event to notify listeners
 			this.dispatchEvent(
 				new DataChangeEvent(DataChangeEvent.ADDED_GROUP_STYLE,
 					{group: name, style: style}));
@@ -160,12 +162,14 @@ package ivis.manager
 		 */
 		public function removeGroupStyle(name:String):Style
 		{
-			var style:Style = _groupStyleMap[name];
+			var style:Style = this._groupStyleMap[name];
 			
 			if (style != null)
 			{
-				delete _groupStyleMap[name];
+				// remove group from the style map
+				delete this._groupStyleMap[name];
 				
+				// dispatch event to notify listeners
 				this.dispatchEvent(new DataChangeEvent(
 					DataChangeEvent.REMOVED_GROUP_STYLE,
 					{group: name, style:style}));
@@ -182,9 +186,26 @@ package ivis.manager
 		 */
 		public function getGroupStyle(name:String):Style
 		{
-			return _groupStyleMap[name];
+			return this._groupStyleMap[name];
 		}
 		
+		
+		/**
+		 * Removes all group styles from the graph style manager.
+		 */
+		public function clearGroupStyles():void
+		{
+			// collect removed style information
+			var styles:Object = this._groupStyleMap;
+			
+			// reset group style map
+			this._groupStyleMap = new Object();
+			
+			// dispatch event to notify listeners
+			this.dispatchEvent(new DataChangeEvent(
+				DataChangeEvent.CLEARED_GROUP_STYLES,
+				{styles:styles}));
+		}
 		
 		//---------------------- PROTECTED FUNCTIONS ---------------------------
 		

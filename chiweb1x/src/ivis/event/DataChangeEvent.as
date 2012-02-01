@@ -20,6 +20,7 @@ package ivis.event
 		/** Event types related to group styles. */
 		public static const ADDED_GROUP_STYLE:String = "addedGroupStyle";
 		public static const REMOVED_GROUP_STYLE:String = "removedGroupStyle";
+		public static const CLEARED_GROUP_STYLES:String = "clearedGroupStyles";
 		
 		// -------------------------- CONSTRUCTOR ------------------------------
 		

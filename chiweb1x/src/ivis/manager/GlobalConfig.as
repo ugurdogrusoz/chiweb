@@ -42,6 +42,23 @@ package ivis.manager
 		 */
 		protected var _settings:Object;
 		
+		//----------------------------- ACCESSORS ------------------------------
+		
+		/**
+		 * Names of all config parameters as an array.
+		 */
+		public function get configNames():Array
+		{
+			var names:Array = new Array();
+			
+			for (var name:String in this._settings)
+			{
+				names.push(name);
+			}
+			
+			return names;
+		}
+		
 		//------------------------- CONSTRUCTOR --------------------------------
 		
 		public function GlobalConfig(settings:Object = null)

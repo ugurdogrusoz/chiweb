@@ -40,6 +40,8 @@ package ivis.manager
 	 */
 	public class GraphManager
 	{
+		//--------------------------- VARIABLES --------------------------------
+		
 		protected var _graph:Graph;
 		protected var _view:GraphView;
 		protected var _styleManager:GraphStyleManager;
@@ -1053,6 +1055,10 @@ package ivis.manager
 			this._styleManager.addEventListener(
 				DataChangeEvent.REMOVED_GROUP_STYLE,
 				onRemoveGroupStyle);
+			
+			this._styleManager.addEventListener(
+				DataChangeEvent.CLEARED_GROUP_STYLES,
+				onClearGroupStyles);
 		}
 		
 		/**
@@ -1676,6 +1682,56 @@ package ivis.manager
 				}
 				
 				this.view.update();
+			}
+		}
+		
+		/**
+		 * This function is designed as a listener for the action
+		 * DataChangeEvent.CLEARED_GROUP_STYLES and to be called when all
+		 * group styles are removed from style manager.
+		 * 
+		 * This function detaches all group styles of all nodes or edges. 
+		 * 
+		 * @param event	DataChangeEvent triggered the action
+		 */
+		protected function onClearGroupStyles(event:DataChangeEvent):void
+		{
+			var styles:Object = event.info.styles;
+			var style:Style;
+			var name:String;
+			
+			// remove listeners of deleted styles
+			for (name in styles)
+			{
+				style = styles[name];
+				
+				style.removeEventListener(StyleChangeEvent.ADDED_STYLE_PROP,
+					onStyleChange);
+				
+				style.removeEventListener(StyleChangeEvent.MERGED_STYLE_PROPS,
+					onStyleChange);
+				
+				style.removeEventListener(StyleChangeEvent.REMOVED_STYLE_PROP,
+					onStyleChange);
+			}
+			
+			// detach all group styles of all nodes
+			for each (var node:Node in this.graph.graphData.nodes)
+			{
+				for (name in styles)
+				{
+					node.detachStyle(name);
+				}
+			}
+			
+			// detach all group styles of all regular edges
+			for each (var edge:Edge in
+				this.graph.graphData.group(Groups.REGULAR_EDGES))
+			{
+				for (name in styles)
+				{
+					edge.detachStyle(name);
+				}
 			}
 		}
 		
