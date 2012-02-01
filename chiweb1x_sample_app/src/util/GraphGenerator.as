@@ -136,17 +136,20 @@ package util
 			
 			// add the node to the given data groups and
 			// attach corresponding styles
-			if (groups != null && styles != null)
+			if (groups != null)
 			{
 				for each (var group:String in groups)
 				{
 					graph.addToGroup(group, node);
 					
-					style = styles.getGroupStyle(group);
-					
-					if (style != null)
+					if (styles != null)
 					{
-						node.attachStyle(group, style);
+						style = styles.getGroupStyle(group);
+						
+						if (style != null)
+						{
+							node.attachStyle(group, style);
+						}
 					}
 				}
 			}
@@ -198,17 +201,20 @@ package util
 			
 			// add the edge to the given data groups and
 			// attach corresponding styles
-			if (groups != null && styles != null)
+			if (groups != null)
 			{
 				for each (var group:String in groups)
 				{
 					graph.addToGroup(group, edge);
 					
-					style = styles.getGroupStyle(group);
-					
-					if (style != null)
+					if (styles != null)
 					{
-						edge.attachStyle(group, style);
+						style = styles.getGroupStyle(group);
+						
+						if (style != null)
+						{
+							edge.attachStyle(group, style);
+						}
 					}
 				}
 			}

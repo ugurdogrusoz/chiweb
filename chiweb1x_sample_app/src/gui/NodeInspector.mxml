@@ -91,7 +91,7 @@
 					
 					this.title = node.data.id;
 					
-					this.labelValue.text = node.props.labelText;
+					this.labelValue.text = node.data.label;
 					this.shapeValue.text = node.shape;
 					
 					this.xValue.text = node.x.toFixed(1);

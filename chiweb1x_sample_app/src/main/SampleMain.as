@@ -17,6 +17,7 @@ package main
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
+	import flash.net.FileFilter;
 	import flash.net.FileReference;
 	import flash.utils.IDataOutput;
 	
@@ -190,6 +191,10 @@ package main
 			else if (label == "save")
 			{
 				this.saveGraph();
+			}
+			else if (label == "load")
+			{
+				this.loadGraph();
 			}
 			
 			
@@ -791,20 +796,51 @@ package main
 			var fr:FileReference = new FileReference();
 			
 			fr.addEventListener(Event.COMPLETE, function(e:Event):void {
-				var fileName: String = fr.name.replace(/\..*/, "")  
+				//var fileName: String = fr.name.replace(/\..*/, "");  
 				//BrowserManager.getInstance().setTitle("i-Vis Layout Demo - " + fileName);
-				trace("file saved successfully");
+				trace("[SampleMain.saveGraph] File saved successfully!");
 			});
 			
 			fr.addEventListener(IOErrorEvent.IO_ERROR, function():void {
-				trace("error saving file");
+				trace("[SampleMain.saveGraph] Error saving file!");
 			});
 			
 			fr.addEventListener(Event.SELECT, function(e:Event):void {
-				trace("saving file");
+				trace("[SampleMain.saveGraph] saving file...");
 			});
 			
+			// TODO generate a filename with a timestamp
 			fr.save(data, "graph.graphml");
+		}
+		
+		/**
+		 * Loads a GraphML file.
+		 */
+		protected function loadGraph():void
+		{
+			var fr:FileReference = new FileReference();
+			
+			fr.addEventListener(Event.COMPLETE, function(e:Event):void {
+				trace("[SampleMain.loadGraph] Data loaded successfully!");
+				appManager.graphManager.importGraph(fr.data,
+					new GraphMLPorter());
+				//var fileName: String = fr.name.replace(/\..*/, "");  
+				//BrowserManager.getInstance().setTitle("i-Vis Layout Demo - " + fileName);
+			});
+			
+			fr.addEventListener(IOErrorEvent.IO_ERROR, function():void {
+				trace("[SampleMain.loadGraph] Error loading file!");
+			});
+			
+			fr.addEventListener(Event.SELECT, function(e:Event):void {
+				trace("[SampleMain.loadGraph] loading file...");
+				fr.load();
+			});
+			
+			var typeFilter:Array = [new FileFilter("GraphML(*.xml, *graphml)",
+				"*.xml; *.graphml")]
+			
+			fr.browse(typeFilter);
 		}
 	}
 }
