@@ -330,7 +330,10 @@
 		import ivis.model.Edge;
 		import ivis.model.Graph;
 		import ivis.model.Node;
+		import ivis.model.Style;
+		import ivis.model.util.Styles;
 		import ivis.util.Groups;
+		import ivis.view.ui.ArrowUIManager;
 		
 		import main.TestMain;
 		
@@ -395,7 +398,7 @@
 			
 			nodeData = new Object();
 			nodeData.id = "n1";
-			nodeData.label = "compound";
+			nodeData.label = "c1";
 			node = graph.addNode(nodeData);
 			compound = node;
 			
@@ -414,7 +417,7 @@
 			
 			nodeData = new Object();
 			nodeData.id = "n2";
-			nodeData.label = "node2";
+			nodeData.label = "n2";
 			node = graph.addNode(nodeData);
 			node.x = 40;
 			node.y = 40;
@@ -429,7 +432,7 @@
 			
 			nodeData = new Object();
 			nodeData.id = "n3";
-			nodeData.label = "node3";
+			nodeData.label = "n3";
 			node = graph.addNode(nodeData);
 			node.x = -40;
 			node.y = -40;
@@ -442,11 +445,37 @@
 						Groups.NODES));
 			}
 			
+			nodeData = new Object();
+			nodeData.id = "n4";
+			nodeData.label = "n4";
+			node = graph.addNode(nodeData);
+			node.x = 160;
+			node.y = 0;
+			
+			if (this.app != null)
+			{
+				node.attachStyle(Groups.NODES,
+					this.app.graphManager.graphStyleManager.getGroupStyle(
+						Groups.NODES));
+			}
+			
 			edgeData = new Object();
 			edgeData.id = "e1";
 			edgeData.sourceId = "n2";
 			edgeData.targetId = "n3";
-			edgeData.label = "edge1";
+			edgeData.label = "e1";
+			edge = graph.addEdge(edgeData);
+			
+			edge.attachStyle(Styles.SPECIFIC_STYLE, new Style(
+				{targetArrowType: ArrowUIManager.SIMPLE_ARROW}));
+			
+			graph.addToGroup(Groups.REGULAR_EDGES, edge);
+			
+			edgeData = new Object();
+			edgeData.id = "e2";
+			edgeData.sourceId = "n1";
+			edgeData.targetId = "n4";
+			edgeData.label = "e2";
 			edge = graph.addEdge(edgeData);
 			
 			graph.addToGroup(Groups.REGULAR_EDGES, edge);
