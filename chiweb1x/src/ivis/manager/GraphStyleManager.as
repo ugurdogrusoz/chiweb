@@ -92,6 +92,7 @@ package ivis.manager
 //			}
 		}
 		
+		
 		/**
 		 * Attaches default visual style to the given compound node.
 		 * 
@@ -103,6 +104,7 @@ package ivis.manager
 			node.attachStyle(Styles.DEFAULT_STYLE,
 				this._defaultCompoundStyle);
 		}
+		
 		
 		/**
 		 * Attaches default visual style to the given edge.
@@ -124,6 +126,7 @@ package ivis.manager
 //			}
 		}
 		
+		
 		/**
 		 * Attaches default visual style to the given bend node.
 		 * 
@@ -136,6 +139,7 @@ package ivis.manager
 				this._defaultBendStyle);
 		}
 		
+		
 		/**
 		 * Adds a custom visual style for the specified group.
 		 * 
@@ -145,14 +149,19 @@ package ivis.manager
 		public function addGroupStyle(name:String,
 			style:Style):void
 		{
-			// add group to the style map
-			this._groupStyleMap[name] = style;
-			
-			// dispatch event to notify listeners
-			this.dispatchEvent(
-				new DataChangeEvent(DataChangeEvent.ADDED_GROUP_STYLE,
-					{group: name, style: style}));
+			if (name != null &&
+				style != null)
+			{
+				// add group to the style map
+				this._groupStyleMap[name] = style;
+				
+				// dispatch event to notify listeners
+				this.dispatchEvent(
+					new DataChangeEvent(DataChangeEvent.ADDED_GROUP_STYLE,
+						{group: name, style: style}));
+			}
 		}
+		
 		
 		/**
 		 * Removes a custom visual style for the specified group.
@@ -177,6 +186,7 @@ package ivis.manager
 			
 			return style;
 		}
+		
 		
 		/**
 		 * Gets the visual style defined for the given group name.
@@ -221,12 +231,12 @@ package ivis.manager
 			
 			style = {shape: NodeUIManager.RECTANGLE,
 				size: 50,
-				w: 100,
-				h: 50,
-				alpha: 0.9,
-				fillColor: 0xff8a1b0b,
+				w: 60,
+				h: 40,
+				alpha: 0.8,
+				fillColor: 0xFFCF76A8,
 				fillAlpha: 0.9,
-				lineColor: 0xff333333,
+				lineColor: 0xFF333333,
 				lineAlpha: 0.9,
 				lineWidth: 1,
 				//labelText: "", // empty label by default
@@ -295,8 +305,13 @@ package ivis.manager
 				labelPos: EdgeLabeler.MIDDLE,
 				labelOffsetX: 0,
 				labelOffsetY: 0,
-				labelHorizontalAnchor: TextSprite.CENTER,
-				labelVerticalAnchor: TextSprite.MIDDLE,
+				labelHorizontalAnchor: TextSprite.LEFT,
+				labelVerticalAnchor: TextSprite.BOTTOM,
+				labelFontName: "Arial",
+				labelFontSize: 11,
+				labelFontColor: 0xff000000,
+				labelFontWeight: "normal",
+				labelFontStyle: "normal",
 				labelDistanceCalculation: EdgeLabeler.PERCENT_DISTANCE,
 				labelDistanceFromNode: 30,
 				//sourceArrowType: ArrowUIManager.SIMPLE_ARROW,
