@@ -105,17 +105,7 @@ package ivis.controls
 				this.object.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				this.object.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
 				
-				this._enclosingRect.x = this.object.mouseX;
-				this._enclosingRect.y = this.object.mouseY;
-				this._enclosingRect.width = 0;
-				this._enclosingRect.height = 0;
-				
-				this._enclosing = true;
-				
-				(this.object as DisplayObjectContainer).addChild(
-					this._enclosingShape);
-				
-				this.renderEncloser();
+				this.initEncloser();
 				
 				/*
 				if (fireImmediately) {
