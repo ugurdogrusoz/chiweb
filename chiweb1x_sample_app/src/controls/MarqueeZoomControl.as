@@ -77,10 +77,10 @@ package controls
 			
 			// zoom to fit to the scale of enclosing rectangle
 			var scaleX:Number = this.graphManager.view.parent.width /
-				this._enclosingRect.width;
+				Math.abs(this._enclosingRect.width);
 			
 			var scaleY:Number = this.graphManager.view.parent.height /
-				this._enclosingRect.height;
+				Math.abs(this._enclosingRect.height);
 			
 			this.graphManager.zoomView(Math.min(scaleX, scaleY) /
 				this.object.scaleX);
@@ -119,7 +119,7 @@ package controls
 			
 			if (this.object != null)
 			{
-				trace ("[MarqueeZoomControl.onDown] " + this._enclosingRect);
+				trace ("[MarqueeZoomControl.onUp] " + this._enclosingRect);
 				
 				// remove the shape
 				(this.object as DisplayObjectContainer).removeChild(
@@ -128,7 +128,6 @@ package controls
 				// remove listeners
 				this.object.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				this.object.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
-				
 				
 				this.marqueeZoom();
 			}
