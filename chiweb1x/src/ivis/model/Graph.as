@@ -58,8 +58,7 @@ package ivis.model
 		}
 		
 		/**
-		 * Retrieves the selected nodes from the graph data and returns an array
-		 * containing all of the selected nodes. 
+		 * List of all selected nodes.
 		 */
 		public function get selectedNodes():Array
 		{
@@ -75,8 +74,7 @@ package ivis.model
 		}
 		
 		/**
-		 * Retrieves the selected edges from the graph data and returns an array
-		 * containing all of the selected edges. 
+		 * List of all selected edges. 
 		 */
 		public function get selectedEdges():Array
 		{
@@ -92,10 +90,7 @@ package ivis.model
 		}
 		
 		/**
-		 * Finds non-selected children of the compound nodes in the given
-		 * node array, and returns the collected children in an array of nodes.
-		 * 
-		 * @return		array of selected nodes
+		 * List of non-selected children of the selected compound nodes.
 		 */
 		public function get missingChildren():Array
 		{

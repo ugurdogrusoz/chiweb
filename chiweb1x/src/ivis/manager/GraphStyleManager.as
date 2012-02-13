@@ -239,7 +239,6 @@ package ivis.manager
 				lineColor: 0xFF333333,
 				lineAlpha: 0.9,
 				lineWidth: 1,
-				//labelText: "", // empty label by default
 				labelTextMode: TextSprite.DEVICE,
 				labelOffsetX: 0,
 				labelOffsetY: 0,
@@ -269,7 +268,6 @@ package ivis.manager
 				lineColor: 0xff333333,
 				lineAlpha: 0.9,
 				lineWidth: 1,
-				//labelText: "", // empty label by default
 				labelTextMode: TextSprite.DEVICE,
 				labelOffsetX: 0,
 				labelOffsetY: 0,
@@ -300,7 +298,6 @@ package ivis.manager
 				lineColor: 0xff000000,
 				lineAlpha: 0.8,
 				lineWidth: 1,
-				//labelText: "", // empty label by default
 				labelTextMode: TextSprite.DEVICE,
 				labelPos: EdgeLabeler.MIDDLE,
 				labelOffsetX: 0,
@@ -336,7 +333,6 @@ package ivis.manager
 				fillColor: 0xff000000, // not used when inheritColor is true 
 				fillAlpha: 1.0, // not used when inheritColor is true
 				lineWidth: 0,
-				//labelText: "",
 				labelTextMode: TextSprite.DEVICE,
 				labelOffsetX: 0,
 				labelOffsetY: 0,
