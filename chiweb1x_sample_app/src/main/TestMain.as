@@ -25,6 +25,7 @@ package main
 		{
 			this.appManager = app;
 			
+			/*
 			var style:Object;
 			
 			style = {labelHorizontalAnchor: TextSprite.LEFT,
@@ -43,6 +44,7 @@ package main
 			
 			this.appManager.graphManager.graphStyleManager.addGroupStyle(
 				Groups.COMPOUND_NODES, new Style(style));
+			*/
 		}
 		
 		public function printGraph():void

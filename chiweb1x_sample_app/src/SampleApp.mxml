@@ -23,7 +23,7 @@
 				labelField="label"
 				itemClick="app.handleMenuCommand(event)"/>
 	
-	<mx:HBox id="buttonBox" width="100%"
+	<mx:HBox id="toolBar" width="100%"
 			 horizontalGap="1" paddingBottom="5" paddingTop="22">
 		
 		<mx:Button id="select" 
@@ -76,10 +76,10 @@
 		<mx:Spacer width="5" />
 		
 		<mx:Button id="addBendPoint" 
-			   label="BP"
-			   width="40"
-			   toolTip="Create Bendpoint"
-			   click="app.addBendPoint(event)"/>
+				   icon="@Embed(source='assets/buttons/create-bendpoint.png')"
+				   width="32"
+				   toolTip="Create Bendpoint"
+				   click="app.addBendPoint(event)"/>
 		
 		<mx:Button id="deleteSelected" 
 				   icon="@Embed(source='assets/buttons/delete.png')"
@@ -122,20 +122,20 @@
 		<mx:Spacer width="10" />
 		
 		<mx:Button id="enablePan" 
-				   label="EP"
-				   width="40"
+				   icon="@Embed(source='assets/buttons/enable-pan.png')"
+				   width="32"
 				   toolTip="Enable Pan"
 				   click="app.enablePan(event)"/>
 		
 		<mx:Button id="hideSelected" 
-				   label="H"
+				   icon="@Embed(source='assets/buttons/hide-selected.png')"
 				   width="32"
 				   toolTip="Hide Selected Elements"
 				   click="app.hideSelected()"/>
 		
 		<mx:Button id="showAll" 
-				   label="SH"
-				   width="40"
+				   icon="@Embed(source='assets/buttons/show-all.png')"
+				   width="32"
 				   toolTip="Show All Elements"
 				   click="app.showAll()"/>
 		
