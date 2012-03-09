@@ -114,6 +114,7 @@ package ivis.manager
 			
 			this.initGraph(graph);
 			this._view = new GraphView(this.graph);
+			this._view.update();
 		}
 		
 		//---------------------- PUBLIC FUNCTIONS ------------------------------

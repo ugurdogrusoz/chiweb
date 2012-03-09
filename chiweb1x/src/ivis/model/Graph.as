@@ -332,8 +332,13 @@ package ivis.model
 			}
 			
 			// remove edge from all data groups
-			this.graphData.group(Groups.SELECTED_EDGES).remove(edge);
-			this.graphData.group(Groups.REGULAR_EDGES).remove(edge);
+			for (var name:String in this._groupMap)
+			{
+				this.graphData.group(name).remove(edge);
+			}
+			
+			//this.graphData.group(Groups.SELECTED_EDGES).remove(edge);
+			//this.graphData.group(Groups.REGULAR_EDGES).remove(edge);
 			
 			// remove edge from graph data
 			return this.graphData.remove(edge);
@@ -371,11 +376,16 @@ package ivis.model
 			}
 			
 			// remove node from all data groups
-			this.graphData.group(Groups.SELECTED_NODES).remove(node);
-			this.graphData.group(Groups.BEND_NODES).remove(node);
-			this.graphData.group(Groups.COMPOUND_NODES).remove(node);
+			for (var name:String in this._groupMap)
+			{
+				this.graphData.group(name).remove(node);
+			}
 			
-			// remove edge from graph data
+			//this.graphData.group(Groups.SELECTED_NODES).remove(node);
+			//this.graphData.group(Groups.BEND_NODES).remove(node);
+			//this.graphData.group(Groups.COMPOUND_NODES).remove(node);
+			
+			// remove node from graph data
 			return this.graphData.remove(node);
 		}
 		

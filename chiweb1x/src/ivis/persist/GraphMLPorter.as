@@ -702,6 +702,12 @@ package ivis.persist
 			
 			nodeData.id = xml.@["id"].toString();
 			
+			if (nodeData.id == null ||
+				nodeData.id.length == 0)
+			{
+				nodeData.id = null;
+			}
+			
 			for each (var dataXml:XML in xml.data)
 			{
 				var key:String = dataXml.@["key"].toString();
@@ -807,6 +813,12 @@ package ivis.persist
 			edgeData.id = xml.@["id"].toString();
 			edgeData.sourceId = xml.@["source"].toString();
 			edgeData.targetId = xml.@["target"].toString();
+			
+			if (edgeData.id == null ||
+				edgeData.id.length == 0)
+			{
+				edgeData.id = null;
+			}
 			
 			for each (var dataXml:XML in xml.data)
 			{
